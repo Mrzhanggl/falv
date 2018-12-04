@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>意见反馈</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=24">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'home'">
+            <div class="m-suggest-box m-main m-padB30">
+                <div class="m-suggest-title"><strong>问题和意见</strong></div>
+                <div class="m-suggest-inputList">
+                    <textarea v-model="form.content" maxlength="200" class="m-suggest-input m-suggest-textarea" placeholder="请填写10个字以上的问题描述以便我们提供更好的帮助..."></textarea>
+                    <div class="m-suggest-textarea-sum">{{ form.content.length }}/200</div>
+                </div>
+            </div>
+
+            <div class="m-suggest-box m-main">
+                <div class="m-suggest-title">
+                    <strong>图片</strong><span class="c1">（选填、提供问题截图）</span><span class="d2">{{ form.feedback_image.length }}/4</span>
+                </div>
+                <div class="clearfix">
+                    <div v-for="(list, index) in form.feedback_image" class="m-suggest-picItem">
+                        <img :src="list">
+                        <a @click="deletePic(index)" href="javascript:;" class="m-suggest-picClose"></a>
+                    </div>
+                    <label v-show="form.feedback_image.length<4" class="m-suggest-picUpload" for="JS_pic">
+                        <input id="JS_pic" type="file" class="input-hidden">
+                    </label>
+                </div>
+            </div>
+
+            <div class="m-suggest-box m-main m-padB30">
+                <div class="m-suggest-title"><strong>联系电话</strong></div>
+                <div class="m-suggest-inputList">
+                    <input v-model="form.feedback_phone" class="m-suggest-input" type="text" placeholder="选填，便于我们与你联系">
+                </div>
+            </div>
+
+            <div class="m-suggest-action">
+                <a @click="add()" class="m-btn m-btn_1" href="javascript:;"><strong>提交</strong></a>
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/exif.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+
+                form: {
+                    content: '',
+                    feedback_phone: '',
+                    feedback_image: []
+                }
+            },
+            created: function() {
+                var _this = this;
+                
+                APP.getInfo(this, function(res) {
+                   if (res.errno == '0') {
+                        _this.form.feedback_phone = res.data.username;
+                    }
+                    _this.page.show = 'home';
+                });
+            },
+            mounted: function() {
+                var _this = this;
+            
+                 $('#JS_pic').change(function() {
+                     $.showLoading("数据提交中");
+                     //图片压缩处理
+                     APP.changePic("#JS_pic", function(formdata) {
+                         _this.upLoad(formdata)
+                     })
+                 })
+            },
+            methods: {
+                add: function() {
+                    var _this = this;
+                    var _json = _this.form;
+                    
+                    // console.log(_json);
+                    // return;
+                    if (!_json.content) {
+                        $.toast("请描述问题", "text")
+                        return;
+                    }
+                    if (_json.content.length < 10) {
+                        $.toast("请填写10个字以上", "text")
+                        return;
+                    }
+                    if (!_json.feedback_phone) {
+                        $.toast("请填写联系电话", "text")
+                        return;
+                    }
+                    $.showLoading("数据提交中")
+                    APP.send('/PC/WxUser/recordFeed.json', _json, function(res) {
+                        //console.log(res);
+                        $.hideLoading()
+                        if (res.errno == '0') {                  
+                            $.toast("提交成功","text");
+                            _this.form.content = '';
+                            _this.form.feedback_image = [];
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                },
+                deletePic: function(index) {
+                    this.form.feedback_image.splice(index, 1);
+                },
+                upLoad: function(formdata) {
+                    var _this = this;
+
+                    var head_src_url = 'http://120.55.165.146';
+                    if (ajax_url ==="http://mest.7anb.com") {
+                        head_src_url = "http://mest.7anb.com";
+                    }
+
+                    $.hideLoading();
+                    $.showLoading('数据提交中');
+                    
+                    APP.imgToUrl(formdata, function(res) {
+                        //console.log(res);
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            $('#JS_pic').val('');
+                            _this.form.feedback_image.push(head_src_url+res.url)
+                            
+                        } else {
+                            $.toast(res.msg, 'text');
+                        }
+                    })
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我的Live</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/Live/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/Live/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/main.css?v=14">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <div v-show="page.show == 'home'">
+
+            <div class="s-search-box">
+                <div @click="window.location.href='/Member/liveSearch.html'" class="s-search-bd unactive">
+                    <i class="i"></i>
+                    <input class="s-search-input" type="text" placeholder="搜索视频名称、热门讲师">
+                </div>
+            </div>
+
+
+            <div class="s-content">
+                <a @click="nextPage('main_details', '合集详情', list.name, '/Member/liveDetails.html?id='+list.id)" href="javascript:;" v-for="list in live.data" class="s-live-item clearfix">
+                    <div class="s-live-item-cover">
+                        <!--<i class="s-live-item-newIcon">免费</i>-->
+                        <img :src="src_url+list.image">
+                    </div>
+                    <div class="s-live-item-info">
+                        <div class="s-live-item-title">
+                            {{ list.name }}
+                        </div>
+                        <div class="s-live-item-name">
+                            <span v-for="(list2, index2) in list.author">{{ index2==0 || index2==list.author.length-1 ? list2.author_name : list2.author_name +'、' }}</span><span v-show="list.author && list.author.length>0"> | </span><span>{{ APP.calcSum(list.view_counts) }}次播放</span>
+                        </div>
+                        <div class="s-live-item-price clearfix">
+                            <div class="s-live-item-class"><img :class="'bg'+list.category" :src="APP.getLiveClassIcon[list.category]"></div>
+                            <span class="col999">{{ list.is_videos }}个视频</span></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        
+
+            <div class="s-index-blank">
+                <span v-show="live.loadingEnd==2">正在加载更多数据</span>
+                <span v-show="live.loadingEnd==3">我是有底线的</span>
+                <span v-show="live.loadingEnd==4">加载失败</span>
+            </div>
+
+
+            <!--<div class="weui-tabbar s-tabbar">
+                <a href="/Member/liveIndex.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
+                    <p class="weui-tabbar__label">首页</p>
+                </a>
+                <a href="/Member/liveList.html?tab=1" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon2"></div>
+                    <p class="weui-tabbar__label">列表</p>
+                </a>
+                <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+                    <div class="weui-tabbar__icon weui-tabbar__icon3"></div>
+                    <p class="weui-tabbar__label">我的</p>
+                </a>
+
+            </div>-->
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/Live/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/Live/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/Live/js/vue.min.js"></script>
+    <script src="/Public/Home/Live/js/fastclick.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/Live/js/main.js?v=216"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                },
+
+                live: {
+                    loading: true,
+                    loadingEnd: 0, //1准备 2 加载中 3 加载完 4error
+                    loadingMoreState: false,
+                    page: 1,
+                    data: []
+                }
+
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                   if (res.errno == '0') {
+                        _this.page.show = 'home';
+                    }
+                });
+                _this.getList(_this.live.page);
+                
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "我的视频"
+                })
+            },
+            mounted: function() {
+                
+            },
+            methods: {
+                nextPage: function(type, type_text, param, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "我的视频",
+                        parameter: param
+                    }, function() {
+                        window.location.href = url;
+                    })
+                },
+                getList: function(page, callback) {
+                    var _this = this;
+                    var _callback = callback ? callback : function(){};
+                    var _json = {
+                        page: page, //页
+                    }
+                    _this.live.loadingEnd = 2;
+
+                    APP.send("/PC/Video/myVideo.json", _json, function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            var _data = res.data.list;
+
+                            //第一页且总页数大于1 初始化滚动加载 0719 - 禁止翻页
+                            if (_data && _data.length>0 && _this.live.page == 1) {
+                                //_this.initPage(page);
+                            }
+
+                            //保存数据
+                            //_this.live.data = _this.live.data.concat(_data);
+                            // 0719
+                            _this.live.data = _data;
+                            
+                            //判断是否加载完所有页数
+                            if (_data && _data.length > 0) {
+                                _this.live.loading = false;
+                                _this.live.loadingEnd = 1;
+                            } else {
+                                _this.live.loading = true;
+                                _this.live.loadingEnd = 3;
+                            }
+
+                            //0719 - 禁止翻页
+                            _this.live.loading = true;
+                            _this.live.loadingEnd = 3;
+                            
+                        } else {
+                            _this.live.page--;
+                            _this.live.loading = false;
+                            _this.live.loadingEnd = 4;
+                        }
+
+                        _callback();
+                    });
+                },
+                initPage: function(page) {
+                    // var _this = this;
+                    // setTimeout(function() {
+                    //     // var _loading = false;
+                    //     var _h = $(document).height() - $(window).height();
+                    //     $(document).scroll(function() {
+                    //         if (_h <= 0) {_h = $(document).height() - $(window).height()};
+                    //         if (_h - $(this).scrollTop() <= 50) {
+                    //             if (_this.live.loading) return;
+                    //             _this.live.loading = true;
+                    //             if (_this.live.loadingEnd  == 3) {
+                    //                 //console.log("end");
+                    //                 _this.live.loading = true;
+                    //                 return;
+                    //             }
+                    //             _this.live.page++;
+                    //             _this.live.loadingEnd = 2;
+                    //             //console.log(_this.live.page)
+                    //             _this.getList(_this.live.page);
+                    //         }
+                    //     })
+                       
+                    // }, 100)
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

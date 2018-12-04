@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我的评论</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=26">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <div v-show="page.show == 'home'">
+            <div class="m-commentList-head clearfix">
+                <span>{{ comment.total_sum }}条评论</span>
+            </div>
+            <div class="JS_m_commentList m-commentList-height">行高</div>
+            <div class="m-commentList-content">
+                <div>
+
+                
+                <div v-for="(list, index) in comment.data" class="m-commentList-item clearfix">
+                    <div class="item-box">
+                        <h2 v-if="list.reply_article && !list.reply_subject" class="item-d1"><strong>{{ list.reply_article.list_title }}</strong></h2>
+                        <h2 v-if="list.reply_subject" class="item-d1"><strong>{{ list.reply_subject.title }}</strong></h2>
+                        <div class="item-d3">{{ list.content }}</div>
+                        <div v-if="list.reply_comment" class="item-d2">
+                            <div v-if="list.reply_comment.is_show == '1'">   
+                                <p class="item-d2-p1">引用{{ list.reply_comment.order_count }}楼@{{ list.user_info.name }}发表的</p>
+                                <p :class="'JS_list_text'+index" class="item-d2-p2">{{ list.reply_comment.content }}</p>
+                            
+                                <div @click="APP.showListHeight(index)" :class="'JS_list_text_more'+index" class="item-d2-p3"></div>
+                            </div>
+                            <div v-else>
+                                <span class="item-d2-p4">引用内容已删除</span>
+                            </div>
+                        </div>
+                        <div class="item-d4">{{ list.time }}<div @click="deleteComment(index)" class="item-d4-delete"></div></div>
+                    </div>
+                </div>
+                </div>
+                <div v-show="comment.loadingEnd==2" class="s-index-blank">
+                    <span>正在加载更多数据</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+
+                },
+
+
+                comment: {
+                    loading: true,
+                    loadingEnd: 0, //1准备 2 加载中 3 加载完 4error
+                    loadingMoreState: false,
+                    page: 1,
+                    data: [],
+                    total_sum: 0,
+                    line_height: 0,
+                },
+
+            },
+            created: function() {
+                var _this = this;
+                
+                APP.getInfo(this, function(res) {
+                   if (res.errno == '0') {
+                        _this.page.show = 'home';
+                    }
+                });
+                _this.getCommentList(this.comment.page);
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "我的评论页"
+                })
+            },
+            mounted: function() {
+                
+                //this.comment.line_height = $(".JS_m_commentList").height();
+
+            },
+            methods: {
+                deleteComment: function(index) {
+                    var _this = this;
+                    APP.modal.showLayer({
+                        //<a href="tel:'+_tel+'" class="s-orderDetails-dialog-btn">联系客服</a>
+                        btn: ['确定', '取消'],
+                        text: '评论删除后无法恢复，<br>确定要删除吗？',
+                        onOK: function() {
+                            APP.modal.hideLayer();
+                            _this.ajaxDelete(index)
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+                    APP.sendHm({
+                        action: "click",
+                        object: "delete_comment",
+                        chinese_object: "删除评论",
+                        chinese_url: "我的评论页"
+                    })
+                },
+                ajaxDelete: function(index) {
+                    //删除评论
+                    var _this = this
+                    var _id = _this.comment.data[index]["id"];
+                    $.showLoading()
+                    APP.send("/PC/WxUser/deleteComment.json?comment_id="+_id, function(res) {
+                        //console.log(res)
+                        $.hideLoading()
+                        if (res.errno == '0') {
+                            $.toast("删除成功", "text");
+                            _this.comment.data.splice(index, 1);
+                            parseFloat(_this.comment.total_sum) -- ;
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                },
+                getCommentList: function(page, callback) {
+                    var _this = this;
+
+                    var _callback = callback ? callback : function(){};
+                    var _json = {
+                        page: page, //页
+                    }
+                    _this.comment.loadingEnd = 2;
+
+                    APP.send("/PC/WxUser/myComment.json", _json, function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            var _data = res.data.list;
+                            if (_this.comment.page == 1) {
+                                _this.comment.total_sum = res.data.total;
+                            }
+                            // if (_data && _data.length == 0 && _this.comment.page >1) {
+                            //     _this.comment.page --;
+                            // }
+
+                            //第一页且总页数大于1 初始化滚动加载
+                            if (_data && _data.length>0 && _this.comment.page == 1) {
+                                _this.initPage(page);
+                            }
+
+                            //保存数据
+                            _this.comment.data = _this.comment.data.concat(_data);
+                            
+                            //判断是否加载完所有页数
+                            if (_data && _data.length > 0) {
+                                _this.comment.loading = false;
+                                _this.comment.loadingEnd = 1;
+                            } else {
+                                _this.comment.loading = true;
+                                _this.comment.loadingEnd = 3;
+                            }
+
+
+                            //超出隐藏
+                            setTimeout(function() {
+                                APP.listCheckHeight(_this.comment.page-1*10, _this.comment.data);
+                            }, 100)
+                            
+                        } else {
+                            _this.comment.page--;
+                            _this.comment.loading = false;
+                            _this.comment.loadingEnd = 4;
+                        }
+
+                        _callback();
+                    });
+
+                },
+                initPage: function(page) {
+                    var _this = this;
+                    setTimeout(function() {
+                        // var _loading = false;
+                        var _h = $(document).height() - $(window).height();
+                        $(document).scroll(function() {
+                            if (_this.page.navTab) return;
+
+                            _h = $(document).height() - $(window).height();
+
+                            //console.log(_h - $(this).scrollTop())
+                            //console.log(_this.comment.page)
+                            if (_h - $(this).scrollTop() <= 100) {
+                                if (_this.comment.loading) return;
+                                _this.comment.loading = true;
+                                if (_this.comment.loadingEnd  == 3) {
+                                    //console.log("end");
+                                    _this.comment.loading = true;
+                                    return;
+                                }
+                                _this.comment.page++;
+                                _this.comment.loadingEnd = 2;
+                                //console.log(_this.comment.page)
+                                _this.getCommentList(_this.comment.page);
+                            }
+                        })
+                       
+                    }, 100)
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

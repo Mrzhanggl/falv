@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>个人信息</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=26">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <div v-show="page.show == 'home'">
+
+            <div class="m-main m-info-box">
+                <div class="m-info-item m-info-headItem clearfix">
+                    <div class="item-left item-span">头像</div>
+                    <div class="item-right">
+                        <div class="item-headpic"><img :src="info.wechat_headimgurl"></div>
+                    </div>
+                </div>
+                <div @click="next('edit_nickName')" class="m-info-item clearfix">
+                    <div class="item-left item-span">昵称</div>
+                    <div class="item-right item-span colb3b">{{ info.nickname ? info.nickname : info.wechat_nickname }}</div>
+                    <div class="m-info-item-icon"></div>
+                </div>
+                <div class="m-info-item clearfix">
+                    <div class="item-left item-span">手机号</div>
+                    <div class="item-right item-span">{{ info.username }}</div>
+                </div>
+                <div class="m-info-item clearfix">
+                    <div class="item-left item-span">性别</div>
+                    <div class="item-right item-span">{{ weixin_sex[info.wechat_sex] }}</div>
+                </div>
+                <div class="m-info-item clearfix">
+                    <div class="item-left item-span">城市</div>
+                    <div class="item-right item-span">{{ info.wechat_city }}</div>
+                </div>
+            </div>
+
+            <div class="m-info-privacy-title">
+                <div class="privacy-title-bd">
+                    <span>隐私信息</span>
+                </div>
+            </div>
+
+            <div class="m-main m-info-box">
+                <div @click="next('edit_name')" class="m-info-item clearfix">
+                    <div class="item-left item-span">真实姓名</div>
+                    <div class="item-right item-span colb3b">{{ edit_form.name }}</div>
+                    <div class="m-info-item-icon"></div>
+                </div>
+                <div @click="next('edit_zy')" class="m-info-item clearfix">
+                    <div class="item-left item-span">职业</div>
+                    <div class="item-right item-span colb3b">{{ edit_form.job }}</div>
+                    <div class="m-info-item-icon"></div>
+                </div>
+                <div class="m-info-item clearfix">
+                    <div class="item-left item-span">出生日期</div>
+                    <!--<div class="item-right item-span colb3b">{{ info.birthday }}</div>-->
+                    <div class="m-info-item-icon"></div>
+                    <input @click="initBirthday()" id="JS_form_info_data" class="m-info-item-datetime" type="text">
+                </div>
+                <div class="m-info-item-tips">请谨慎填写隐私信息，以便法驴为您提供更好的服务。</div>
+            </div>
+
+            <div @click="unbind()" class="m-info-logout">
+                退出当前账号
+            </div>
+
+
+            
+        </div>
+
+        <div v-show="page.show == 'edit_name'">
+            <div class="m-main">
+                <div class="m-editInfo-list clearfix">
+                    <div class="item-left">
+                        <span>真实姓名</span>
+                    </div>
+                    <div class="item-right">
+                        <input v-model="edit_form.name" class="item-input" type="text">
+                    </div>
+                </div>
+                <div class="m-editInfo-tips">仅允许汉字、字母、数字、上限10个汉字</div>
+                <div class="m-editInfo-action">
+                    <a @click="editName()" href="javascript:;" class="m-btn m-btn_1">保存</a>
+                </div>
+            </div>
+        </div>
+
+        <div v-show="page.show == 'edit_zy'">
+            <div class="m-main">
+                <div class="m-editInfo-list clearfix">
+                    <div class="item-left w2">
+                        <span>职业</span>
+                    </div>
+                    <div class="item-right w2">
+                        <input v-model="edit_form.job" class="item-input" type="text">
+                    </div>
+                </div>
+                <div class="m-editInfo-tips">仅允许汉字、字母、数字、上限10个汉字</div>
+                <div class="m-editInfo-action">
+                    <a @click="editJob()" href="javascript:;" class="m-btn m-btn_1">保存</a>
+                </div>
+            </div>
+        </div>
+
+        <div v-show="page.show == 'edit_nickName'">
+            <div class="m-main">
+                <div class="m-editInfo-list clearfix">
+                    <div class="item-left">
+                        <span>设置昵称</span>
+                    </div>
+                    <div class="item-right">
+                        <input v-model="edit_form.nickname" class="item-input" type="text">
+                    </div>
+                </div>
+                <div class="m-editInfo-tips">仅允许汉字、字母、数字、上限10个汉字</div>
+                <div class="m-editInfo-action">
+                    <a @click="editNickName()" href="javascript:;" class="m-btn m-btn_1">保存</a>
+                </div>
+            </div>
+        </div>
+
+        <div v-show="datapick_state" class="weui-popup__overlay m-datetime-popup__overlay"></div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+
+                weixin_sex: {
+                    '0': '未知',
+                    '1': '男',
+                    '2': '女',
+                },
+
+                edit_form: {
+                    nickname: '',
+                    name: '',
+                    job: '',
+                    birthday: ''
+                },
+                datapick_state: false
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                   if (res.errno == '0') {
+                       var _data = res.data;
+
+
+                       var _page = APP.getParam("tab") ? APP.getParam("tab") : 'home';
+                        var _title = {
+                            "home": "个人信息",
+                            "edit_name": "真实姓名",
+                            "edit_zy": "职业",
+                            "edit_nickName": "设置昵称"
+                        }
+                        document.title = _title[_page];
+
+                        _this.page.show = _page;
+
+                        _this.edit_form.nickname = _data.nickname ? _data.nickname : _data.wechat_nickname;
+                        _this.edit_form.name = _data.name;
+                        _this.edit_form.job = _data.job;
+                        _this.edit_form.birthday = _data.birthday;
+                    
+
+                        $("#JS_form_info_data").val(_data.birthday && _data.birthday !="0000-00-00" ? _data.birthday : "");
+                        setTimeout(function() {
+                            $("#JS_form_info_data").datetimePicker({
+                                onClose: function() {
+                                    _this.datapick_state = false;
+                                }
+                            });
+                        }, 100)
+                    }
+                });
+
+                //class="ffffff"
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "个人信息"
+                })
+            },
+            mounted: function() {
+                //console.log(this.info)
+                var _this = this;
+                setTimeout(function() {
+                    $(document).on("click", ".JS_editInfo_birthday", function() {
+                        _this.editBirthday();
+                    })
+                    // $(document).on("click", ".JS_editInfo_birthday_cancal", function() {
+                    //     $("#JS_form_info_data").picker("close")
+                    // })
+                }, 100)
+            },
+            methods: {
+                next: function(page) {
+                    var _json = {
+                        edit_nickName: {
+                            object: "info_userName",
+                            chinese_object: "修改昵称"
+                        },
+                        edit_name: {
+                            object: "info_trueName",
+                            chinese_object: "修改真实姓名"
+                        },
+                        edit_zy: {
+                            object: "info_Occupation",
+                            chinese_object: "修改职业"
+                        }
+                    }
+                    if (page == "home") {
+                        window.location.href = "/Member/mInfo.html";
+                    } else {
+                        APP.sendHm({
+                            action: "click",
+                            object: _json[page]["object"],
+                            chinese_object: _json[page]["chinese_object"],
+                            chinese_url: "个人信息"
+                        }, function() {
+                            window.location.href = "/Member/mInfo.html?tab="+page
+                        })
+                        
+
+                    }
+                    
+                },
+                unbind: function() {
+                    var _this = this;
+                    APP.modal.showLayer({
+                        btn: ['确认', '取消'],
+                        text: '确定要退出登录?',
+                        onOK: function() {
+                            //console.log('ok');
+                            
+                            $.showLoading("数据提交中");
+                            APP.send("/PC/UserLogin/unbundling.json", function(res) {
+                                $.hideLoading();
+                                if (res.errno == '0') {
+                                    $.toast("操作成功", "text");
+                                    setTimeout(function() {
+                                        APP.modal.hideLayer();
+                                        if(APP.getOrderChannel()=='14'){
+                                             window.location.href = "/newVip/newmIndex.html";
+                                        }else{
+                                            window.location.href = "/Member/mIndex.html";
+                                        }
+                                        
+                                    }, 1000)
+                                } else {
+                                    $.toast(res.msg, "text");
+                                }
+                            })
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+                },
+                initBirthday: function() {
+                    if (!this.info.birthday) {
+                         $("#JS_form_info_data").val("1950-01-01");
+                    }
+                    if (this.datapick_state) {
+                        this.datapick_state = false;
+                    } else {
+                        this.datapick_state = true;
+                    }
+                   
+                   APP.sendHm({
+                        action: "click",
+                        object: "info_birth",
+                        chinese_object: "修改出生日期",
+                        chinese_url: "个人信息"
+                    })
+                },
+                tabEdit: function(page) {
+                    if (page == 'home') {
+                        $("html").removeClass("ffffff");
+                    } else {
+                        $("html").addClass("ffffff")
+                    }
+                    var _title = {
+                        "home": "个人信息",
+                        "edit_name": "真实姓名",
+                        "edit_zy": "职业",
+                        "edit_nickName": "设置昵称"
+                    }
+                    document.title = _title[page];
+                    this.page.show = page;
+                },
+                editBirthday: function() {
+                    var _this = this;
+                    var _json = {
+                        nickname: _this.info.nickname,
+                        name:  _this.info.name,
+                        job: _this.info.job,
+                        birthday: $("#JS_form_info_data").val(),
+                        no_reload: true
+                    }
+
+                    _this.edit(_json);
+                },
+                editNickName: function() {
+                    var _this = this;
+                    var _json = {
+                        nickname: _this.edit_form.nickname,
+                        name:  _this.info.name,
+                        job: _this.info.job,
+                        birthday: _this.info.birthday,
+                    }
+
+                    if (!_this.edit_form.nickname || _this.edit_form.nickname.length > 10 || !APP.isInfoName(_this.edit_form.nickname)) {
+                        $.toast("格式不正确", "text");
+                        return;
+                    }
+
+
+                    _this.edit(_json, function() {
+                        _this.info.nickname = _json.nickname;
+                    });
+                },
+                editName: function() {
+                    var _this = this;
+                    var _json = {
+                        nickname: _this.info.nickname,
+                        name:  _this.edit_form.name,
+                        job: _this.info.job,
+                        birthday: _this.info.birthday,
+                    }
+
+                    if (!_this.edit_form.name || _this.edit_form.name.length > 10 || !APP.isInfoName(_this.edit_form.name)) {
+                        $.toast("格式不正确", "text");
+                        return;
+                    }
+
+                    _this.edit(_json);
+                },
+                editJob: function() {
+                    var _this = this;
+                    var _json = {
+                        nickname: _this.info.nickname,
+                        name:  _this.info.name,
+                        job: _this.edit_form.job,
+                        birthday: _this.info.birthday,
+                    }
+
+
+                    if (!_this.edit_form.job || _this.edit_form.job.length > 10 || !APP.isInfoName(_this.edit_form.job)) {
+                        $.toast("格式不正确", "text");
+                        return;
+                    }
+
+                    _this.edit(_json);
+                },
+                edit: function(_json, callback) {
+                    var _this = this;
+                    var _callback = callback ? callback : function(){};
+                    $.showLoading("数据提交中")
+                    APP.send("/PC/WxUser/editUserInfo.json", _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading()
+                        if (res.errno == '0') {
+                            $.toast("修改成功", "text")
+                            if (_json.no_reload) {
+
+                            } else {
+                                _this.next("home");
+                            }
+                            
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                        _callback();
+                    });
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

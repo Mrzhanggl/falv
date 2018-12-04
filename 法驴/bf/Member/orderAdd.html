@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=32">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
+    
+</head>
+
+<body class="f5f5f5">
+    <div v-cloak id="app" :class="{ 's-infinite-scrolling' : page.show=='home' }" class="main s-infinite-main">
+        
+        <div v-show="page.show=='home'" class="main-page s-infinite-page main-page_b">
+            <div class="s-orderAdd-box">
+                <h2 class="s-orderAdd-h2">买家信息</h2>
+                <div class="s-orderAdd-con">
+                    <div class="s-orderAdd-list clearfix">
+                        <span class="s-orderAdd-list-icon"><i class="i1"></i></span>
+                        <div class="s-orderAdd-list-text">{{ info.wechat_nickname }}</div>
+                    </div>
+                    <div class="s-orderAdd-list clearfix">
+                        <span class="s-orderAdd-list-icon"><i class="i2"></i></span>
+                        <div class="s-orderAdd-list-text">{{ info.username }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="s-orderAdd-box">
+                <h2 class="s-orderAdd-h2">产品信息</h2>
+                <div class="s-orderAdd-con">
+                    <div class="s-orderAdd-list clearfix">
+                        <span class="s-orderAdd-list-w1">产品名称</span>
+                        <div class="s-orderAdd-list-text1"><strong>{{ goods.name }}</strong></div>
+                    </div>
+                    <div class="s-orderAdd-list clearfix">
+                        <span class="s-orderAdd-list-w2">传统机构价格</span>
+                        <div class="s-orderAdd-list-text2"><del>￥{{ goods.lsprice }}{{ goods.ls_unit }}</del></div>
+                    </div>
+                    <div v-if="!user_marketing_id" class="s-orderAdd-list clearfix">
+                        <span class="s-orderAdd-list-w2">法驴价格</span>
+                        <div class="s-orderAdd-list-text2">
+                            <del v-if="APP.getParam('id') != '100479'">￥{{ goods.flprice }}{{ goods.fl_unit }}</del>
+                            <span v-else>￥{{ goods.flprice }}{{ goods.fl_unit }}</span>
+                        </div>
+                    </div>
+                    <div v-if="APP.getParam('id') != '100479'" class="s-orderAdd-list clearfix">
+                        <span class="s-orderAdd-list-w2">渠道特惠价</span>
+                        <div class="s-orderAdd-list-text2 s-orderAdd-list-col3">￥{{ goods.channel_specification ? goods.channel_specification.price : '' }}{{ goods.channel_specification ? goods.channel_specification.unit : '' }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div v-if="form_goods.coupon_goods_use_state" class="s-orderAdd-box">
+                <h2 class="s-orderAdd-h2">
+                    是否使用优惠码
+                    <a @click="help=help?false:true" class="s-orderAdd-help" href="javascript:;">
+                        <div v-show="help" class="s-orderAdd-help-box">
+                            输入优惠码，验证通过后，可按照优惠码面额进行购买。
+                        </div>
+                    </a>
+                    <div class="weui-cell__ft s-cell__ft">
+                        <a @click="showCouponTips()" v-if="!form_goods.coupon_get_state" class="s-orderAdd-couponSwitch" href="javascript:;"></a>
+                        <input @click="closeDiscountCode()" v-model="form_goods.discount_code_state" class="weui-switch" type="checkbox">
+                    </div>
+                </h2>
+                <div class="s-orderAdd-con">
+                    <div class="s-orderAdd-list">
+                        <input :disabled="!form_goods.discount_code_state" @input="checkDiscountCode()" :class="{ 'success' : form_goods.discount_code_price_state && form_goods.discount_code_state, 'error' : !form_goods.discount_code_price_state && form_goods.discount_code_state }" v-model="form_goods.discount_code" class="s-orderAdd-discount" type="text" placeholder="输入优惠码">
+                    </div>
+                    <div v-if="form_goods.coupon_get_state" class="s-orderAdd-list">
+                        <a v-if="!form_goods.coupon" @click="addCoupon()" href="javascript:;" class="s-orderAdd-coupon">
+                            <div class="coupon-d1"><span>邮储专属优惠码</span></div>
+                            <div class="coupon-d2">剩余优惠码数量：<strong>{{ form_goods.coupon_sum }}</strong></div>
+                            <div class="coupon-icon"></div>
+                        </a>
+                        <div v-else class="s-orderAdd-coupon">
+                            <div class="coupon-d1"><span>{{ rTime.t_h < 10 ? '0'+rTime.t_h : rTime.t_h }}:{{ rTime.t_m < 10 ? '0'+rTime.t_m : rTime.t_m }}:{{ rTime.t_s < 10 ? '0'+rTime.t_s : rTime.t_s }}后失效，请尽快使用</span></div>
+                            <div class="coupon-d2">您的优惠码为：{{ form_goods.coupon.code }}</div>
+                            <div class="coupon-icon bg2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="s-orderAdd-box s-orderAdd-box_b">
+                <h2 class="s-orderAdd-h2">备注信息</h2>
+                <div class="s-orderAdd-con">
+                    <div class="s-orderAdd-list clearfix">
+                        <textarea v-model="form_goods.remarks" class="s-orderAdd-list-remarks" maxlength="50" placeholder="输入对此次服务的要求(50字内）..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="s-orderAdd-blank"></div>
+
+
+            <div class="weui-tabbar s-orderAdd-tabbar">
+                <a href="javascript:;" class="weui-tabbar__item s-orderAdd-btn1">
+                    应付总额：<span>¥{{ !form_goods.discount_code_price_state ? goods.channel_specification.price : form_goods.discount_code_price }}</span>
+                </a>
+                <a @click="add()" href="javascript:;" class="weui-tabbar__item s-orderAdd-btn2">去付款</a>
+            </div>
+           
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/member/js/main.js?v=080"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+
+                user_marketing_id: '',
+                goods: {},
+                help: false,
+                form_goods: {
+                    discount_code_price_state: false,
+                    discount_code_price: 0,
+                    discount_code_ajax: true,
+                    discount_code_ajax_intr: null,
+                    discount_code_state: false,
+                    discount_code: '',
+                    remarks: '',
+
+                    coupon: '',
+                    coupon_sum: 0,
+                    coupon_get_state: false,
+                    coupon_goods_use_state: false
+                },
+
+                rTime: {
+                    'end': '',
+                    't_d': 0,
+                    't_h': 0,
+                    't_m': 0,
+                    't_s': 0
+                },
+
+            },
+            created: function() {
+                this.user_marketing_id = APP.getParam("user_marketing_id") ? APP.getParam("user_marketing_id") : '';
+
+                APP.getInfo(this, function() {
+                    document.title = "请核对订单信息";
+                });
+                this.details();
+
+
+                APP.sendHm({action: "visits", chinese_url: "核对订单页"});
+            },
+            mounted: function() {
+                
+            },
+            watch: {
+                help: function (curVal, oldVal) {
+                    var _this = this;
+                    if (!oldVal) {
+                        setTimeout(function() {
+                            $("#app").one('click', function() {
+                                //console.log(233)
+                                _this.help = false;
+                            })
+                        }, 100)
+                    }
+                }
+            },
+            methods: {
+                closeDiscountCode: function() {
+                    var _this = this;
+                    setTimeout(function() {
+                        if (_this.form_goods.discount_code_state) {
+                            //_this.form_goods.discount_code_price_state = true;
+                            _this.ajaxCheckDiscountCode();
+                        } else {
+                            _this.form_goods.discount_code_price_state = false;
+                        }
+                    }, 10)
+                },
+                checkDiscountCode: function() {
+                    //console.log(233)
+                    var _this = this;
+                    if (this.form_goods.discount_code_state && this.form_goods.discount_code.length == 6) {
+                        clearTimeout(this.form_goods.discount_code_ajax_intr);
+                        
+                        this.form_goods.discount_code_ajax_intr = setTimeout(function() {
+                            _this.ajaxCheckDiscountCode();
+                            _this.form_goods.discount_code_ajax = false;
+                        }, 10);
+                    } else {
+                        _this.form_goods.discount_code_price_state = false;
+                    }
+                },
+                ajaxCheckDiscountCode: function() {
+                    //邮政收银优惠卷 优惠卷是否可用
+                    var _this = this;
+                    //var _channel = _this.goods.type3 ? APP.getText.order_type[_this.goods.type3] : '';
+                    var _channel = APP.getOrderChannel();
+                    var _json = {
+                        product_id: APP.getParam("id"),
+                        discount_code: this.form_goods.discount_code,
+                        channel: _channel
+                    }
+                    
+                    if (!this.form_goods.discount_code) {
+                        return;
+                    }
+                    APP.send("/PC/NEWOrder/checkDiscountCode.json", _json, function(res) {
+                        //console.log(1)
+                    //alert(233)
+                        if (res.errno =='0') {
+                            _this.form_goods.discount_code_price_state = true;
+                            _this.form_goods.discount_code_price = res.data;
+                        } else {
+                            //$.toast(res.msg, "text");
+                            _this.form_goods.discount_code_price_state = false;
+                            _this.form_goods.discount_code_price = 0;
+                            
+                        }
+                        _this.form_goods.discount_code_ajax = true;
+                    });
+                },
+                details: function() {
+                    var _this = this;
+                    var _tab_channel = APP.getOrderChannel();
+                    var _json = {
+                        id: APP.getParam("id")
+                    }
+                    if (_tab_channel) {
+                        _json['channel'] = _tab_channel
+                    }
+                    APP.send('/PC/Product/info.json', _json, function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            _this.goods = res.data;
+
+                            //邮储 优惠卷
+                            if (APP.getOrderChannel() == '0') {
+                                _this.checkCoupon();
+                                _this.getCouponSum();
+                                _this.getCouponState(function(res) {
+                                    _this.getCouponToday(res.errno, function() {
+                                        _this.page.show = 'home';
+                                    });
+                                });
+                            } else {
+                                _this.page.show = 'home';
+                            }
+                            
+                            _this.goods.flprice =  parseFloat(_this.goods.flprice).toFixed(2);
+
+                        }
+                    });
+                },
+                add: function() {
+                    var _this = this;
+                    if (_this.form_goods.discount_code_state && !_this.form_goods.discount_code) {
+                        $.toast("请输入优惠码", "text")
+                        return;
+                    }
+                    var _channel = APP.getOrderChannel();
+                    
+                    var _json = {
+                        product_data: [{id: _this.goods.id, count: 1}],
+                        note: _this.form_goods.remarks,
+                        invoice_state: 0,
+                        invoice: {
+                            header_content_type: '',
+                            header_content: '',
+                            identification_number: '',
+                            name: '',
+                            telephone: '',
+                            address: '',
+                        },
+                        company_name: '',
+                        customer_name: _this.info.wechat_nickname,
+                        phone: _this.info.username,
+                        channel: _channel,
+                        order_type: 1,
+                        discount_code: '', //优惠码
+                        customer_selected_supplier_id: '' //供应商id
+                    }
+                    if (_channel) {
+                        //渠道 0 邮政 1 东家会 2 环球黑卡 3腾讯
+                        _json['channel'] = _channel
+                    } else {
+                        //法驴会员
+                        _json['source'] = 14;
+                    }
+
+
+                    if (_this.form_goods.discount_code_state && _this.form_goods.coupon_goods_use_state) {
+                        _json.discount_code = _this.form_goods.discount_code;
+                    } else {
+                        _json.discount_code = "";
+                    }
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/create.json", _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //统计
+                            // return;
+                            window.location.href = "/Member/orderGoPay.html?oid=" + res.data;
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                
+                },
+                getCouponSum: function() {
+                    // 获取该渠道可领取数量
+                    var _this = this;
+                    var _channel = APP.getOrderChannel();
+                    APP.send('/PC/NEWOrder/getChannelUnboundedDiscountCodeNumber.json?channel=' + _channel, function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            _this.form_goods.coupon_sum = res.data.unbounded_count;
+                        }
+                    });
+                },
+                getCouponState: function(callback) {
+                    //获取用户是否使用过优惠码
+                    var _this = this;
+                    var _callback = callback ? callback : function(){};
+                    var _channel = APP.getOrderChannel();
+                    APP.send('/PC/NEWOrder/userAvailableChannelDiscountCode.json?channel=' + _channel, function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            _this.form_goods.coupon_get_state = true;
+                        }
+                        _callback(res);
+                    });
+                },
+                getCouponToday: function(state, callback) {
+                    //获取今日渠道领取的优惠卷 
+                    var _this = this;
+                    var _callback = callback ? callback : function(){};
+                    var _channel = APP.getOrderChannel();
+                    APP.send('/PC/NEWOrder/getTodayReceiveDiscountCode.json?channel=' + _channel, function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            if (res.data && res.data.length == 0) {
+
+                            } else {
+                                _this.form_goods.coupon = res.data;
+
+                                if (state == '0') {
+                                    _this.setInter(res.data.activation_time);
+                                    _this.form_goods.discount_code_state = true;
+                                    _this.form_goods.discount_code = res.data.code;
+                                    _this.ajaxCheckDiscountCode();
+                                }
+                                
+                            }
+                        }
+                        _callback();
+                    });
+                },
+                addCoupon: function() {
+                    //用户领取渠道优惠码
+                    var _this = this;
+                    var _channel = APP.getOrderChannel();
+                    $.showLoading("正在领取")
+                    APP.send('/PC/NEWOrder/userActivationDiscountCode.json?channel=' + _channel, function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        $.hideLoading()
+                        if (res.errno == '0') {                  
+                            _this.form_goods.coupon = res.data;
+                            _this.form_goods.discount_code_state = true;
+                            _this.form_goods.discount_code = res.data.code;
+                            _this.ajaxCheckDiscountCode();
+                            _this.setInter(res.data.generate_time);
+
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                },
+                checkCoupon: function() {
+                    //优惠卷是否可用
+                    var _this = this;
+                    var _id = _this.goods.id;
+                    var _channel = APP.getOrderChannel();
+                    APP.send('/PC/NEWOrder/checkProductChannelPrefix.json?product_id='+_id+'&channel=' + _channel, function(res) {
+                        if (res.errno == '0') {
+                            _this.form_goods.coupon_goods_use_state = true;
+                        }
+                    });
+                },
+                showCouponTips: function() {
+                    $.toast("您已使用过优惠码，不可再使用", "text")
+                },
+                setInter:function(actTime) {
+                    var _this = this;
+                    var setTime = "";
+                    setTime = setInterval(function() {
+                        _this.getRTime(actTime);
+                        if (_this.rTime.t_d <= 0 && _this.rTime.t_h <= 0 && _this.rTime.t_m <= 0 && _this.rTime.t_s <= 0) {
+                            clearTimeout(setTime);
+                            _this.getCouponSum();
+                            _this.getCouponState();
+                            _this.getCouponToday();
+                            // _this.getOrder(getParam("oid"));
+                            return;
+                        }
+                    }, 1000);
+                },
+                getRTime: function(actTime) {
+                    //time.replace(/\-/g, "/" 0000-00-00 00:00:00
+                    var _toDayState = false;
+                    var NowTime = new Date();
+                    if (actTime != '0000-00-00 00:00:00') {
+                        var _actTime = new Date(actTime.replace(/\-/g, "/"));
+                        //console.log(_actTime.getDate())
+                        if (parseFloat(_actTime.getDate()) < parseFloat(NowTime.getDate())) {
+                            _toDayState = true;
+                        }
+                    }
+                    var _this = this;
+                    //var EndTime = new Date(time.replace(/\-/g, "/"));
+                    
+                    var _end = NowTime.getFullYear() + '/' + Number(NowTime.getMonth() + 1) + '/' + NowTime.getDate() + ' ' + '23:59:59';
+                    var EndTime = new Date(_end);
+                    var t = EndTime.getTime() - NowTime.getTime();
+                    var d = Math.floor(t / 1000 / 60 / 60 / 24);
+                    var h = Math.floor(t / 1000 / 60 / 60 % 24);
+                    var m = Math.floor(t / 1000 / 60 % 60);
+                    var s = Math.floor(t / 1000 % 60);
+                    //console.log(d,h,m,s)
+                    if (!_toDayState) {
+                        h = h + 24;
+                    }
+                    _this.rTime.t_d = d;
+                    _this.rTime.t_h = h;
+                    _this.rTime.t_m = m;
+                    _this.rTime.t_s = s;
+
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

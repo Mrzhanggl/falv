@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html class="ffffff">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>抢单</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/Mob/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/Mob/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/LawyerTime.css?v=2">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    
+</head>
+
+<body class="ffffff">
+    <div v-cloak id="app" class="main main-tabbar">
+
+        <div v-show="page.show == 'matching'" class="m-main">
+            <div v-if="!order || order.length == 0" class="j-lawyerMatching-blank">
+                <img src="/Public/Home/Mob/supplier/34.png" alt="">
+                <p>暂无订单</p>
+            </div>
+
+
+            <div v-else class="j-lawyerMatching-content">
+
+                <div v-show="list.product_case_show" :class="{'active' : list.is_design =='1' }" v-for="(list, index) in order"  class="j-matchingStart-bd">
+                    <div class="j-matchingStart-head">
+                        <strong v-if="list.is_design =='1'">指定订单：用户已等待{{ list.count_down_start_time + list.count_down_time }}秒</strong>
+                        <strong v-if="list.is_design =='0'">用户已等待{{ list.count_down_start_time + list.count_down_time }}秒</strong>
+                    </div>
+                    <div class="j-matchingStart-content j-lawyerMatchingStart-content">
+                        <div class="j-lawyerMatching-icon">
+                            <img src="/Public/Home/Mob/supplier/35.png">
+                        </div>
+                        <div class="j-lawyerMatching-name">
+                            <strong>{{ APP.getText.product_case[list.products[0].product_case] }}</strong>
+                        </div>
+                        <div class="j-lawyerMatching-orderId">
+                            订单编号：{{ list.order_id }}
+                        </div>
+
+                        <a @click="setOrder(list.order_id, '0', index)" v-if="list.is_design =='1'" href="javascript:;" class="j-lawyerMatching-action"><strong>接单</strong></a>
+                        <a @click="setOrder(list.order_id, '1', index)" v-if="list.is_design =='0'" href="javascript:;" class="j-lawyerMatching-action"><strong>一键抢单</strong></a>
+                    </div>
+                </div>
+                
+            </div>
+
+
+        </div>
+
+        <div v-show="page.show== 'succ_matching'" class="m-main" data-title="抢单成功">
+
+            <div class="j-matchingStart-bd">
+                <div class="j-matchingStart-head">
+                    <strong>恭喜您抢单成功</strong>
+                </div>
+                <div class="j-matchingStart-content j-lawyerMatchingStart-content">
+                    <div class="j-lawyerMatching-icon">
+                        <img src="/Public/Home/Mob/supplier/35.png">
+                    </div>
+                    <div class="j-lawyerMatching-name">
+                        <strong>{{ set_order_details ? APP.getText.product_case[set_order_details.products[0].product_case] : '' }}</strong>
+                    </div>
+                    <div class="j-lawyerMatching-orderId">
+                        订单编号：{{ set_order_details.order_id }}
+                    </div>
+                    <div class="j-lawyerMatching-phone">
+                        <div class="phone-d1 clearfix">
+                            <div class="phone-d1-l">请留意平台来电</div>
+                            <div class="phone-d1-r">010-53153478</div>
+                        </div>
+                        <div class="phone-d2">
+                            接通后请耐心等待客户的应答<br>对客户隐藏您的真实手机号，保护您的隐私
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div v-show="page.show== 'fail_matching'" class="m-main" data-title="抢单失败">
+
+            <div class="j-matchingStart-bd">
+                <div class="j-matchingStart-head">
+                    <strong>已有律师捷足先登，看看其他的单子吧</strong>
+                </div>
+                <div class="j-matchingStart-content j-lawyerMatchingStart-content">
+                    <div class="j-lawyerMatching-icon">
+                        <img src="/Public/Home/Mob/supplier/35.png">
+                    </div>
+                    <div class="j-lawyerMatching-name">
+                        <strong>{{ set_order_details ? APP.getText.product_case[set_order_details.products[0].product_case] : '' }}</strong>
+                    </div>
+                    <div class="j-lawyerMatching-orderId">
+                        订单编号：{{ set_order_details.order_id }}
+                    </div>
+
+                    <a @click="reSetOrder()" href="javascript:;" class="j-lawyerMatching-action"><strong>确定</strong></a>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="weui-tabbar s-tabbar s-tabbar-more">
+            <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+                <div class="weui-tabbar__icon weui-tabbar__icon5"></div>
+                <p class="weui-tabbar__label weui-tabbar__label2">抢单</p>
+            </a>
+            <a href="/h5/lawyerreg/jLawyerPersonal.html" class="weui-tabbar__item">
+                <div class="weui-tabbar__icon weui-tabbar__icon6"></div>
+                <p class="weui-tabbar__label weui-tabbar__label2">我的</p>
+            </a>
+        </div>
+        
+
+    </div>
+    <script src="/Public/Home/Mob/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/Mob/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/Mob/js/vue.min.js"></script>
+    <script src="/Public/Home/Mob/js/lawyerCommon.js?v=04"></script>
+    <script src="/Public/Home/Mob/js/lawyerMain.js?v=06"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+
+                },
+
+                order: [],
+                order_info: '',
+                order_loading: false,
+                order_state: true,  //列表轮循
+                order_Intr: null,   //列表计时器
+                order_call_intr: null, //抢单成功订单详情
+                set_order: true,    //抢单按钮
+                set_Intr: null,     //计时器
+                set_order_details: '',  //抢单订单详情
+                sec: 0
+                
+
+            },
+            created: function() {
+                var _this = this;
+                
+                this.initOrderList();
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0') {
+                        _this.page.show = 'matching';
+                    } 
+                });
+
+
+                APP.sendHm('visits', '', '', '律师抢单')
+            },
+            mounted: function() {
+
+
+                
+            },
+            methods: {
+                getCountDown: function(time) {
+                    //时间计时起点处理 +3s 
+                    //-2s
+                    var _s = APP.calcCount(time) + 2;
+                    //_s = 10;
+                    if (_s > 60) {
+                        _s = 60;
+                    }
+                    if (_s<=3) {
+                        _s = 3;
+                    }
+                    return _s;
+                },              
+                getOrderList: function() {
+                    var _this = this;
+                    _this.order_state = false;
+                    APP.sendTimeOut("/PC/Lawyer/unorderedOrder.json", function(res) {
+                        _this.order_loading = true;
+                        _this.order_state = true;
+                        if (res.errno == '0') { 
+
+                            if (res.data.list && res.data.list.length == 0) {
+                                _this.order = [];
+                            }
+                            //console.log(_this.order.length)
+                            //order[]: 第一次获取接口数据
+                            if (_this.order && _this.order.length == 0) {
+                                for (var i=0, len=res.data.list.length; i<len; i++) {
+                                    //console.log(res.data.list[i]['create_time'], _this.getCountDown(res.data.list[i]['create_time']))
+                                    //订单创建时间是否大于60s
+                                    //过滤超时订单
+                                    if (_this.getCountDown(res.data.list[i]['create_time']) < 60) {
+                                        //保存数据order
+                                        _this.order.push(res.data.list[i]);
+                                    }
+                                }
+                                //数据处理 同领域只显示一条
+                                _this.reRepeat();
+                                //设置开始计时时间字段
+                                for (var i=0, len=_this.order.length; i<len; i++) {
+                                    _this.order[i]['count_down_start_time'] = _this.getCountDown(_this.order[i].create_time);
+                                    _this.order[i]['count_down_time'] = 0;
+                                }
+                            } 
+                            //本地有数据order 且接口有数据
+                            
+                            if (_this.order && _this.order.length > 0 && res.data.list && res.data.list.length > 0) {
+                                //本地数据与接口数据对比 去除已过期订单合并相同订单
+                                var _newList = _this.recomData(res.data.list);
+                                if (_newList.length > 0) {
+
+                                    ////设置开始计时时间字段: count_down_start_time
+                                    //已累加时间: count_down_time
+                                    for (var i=0, len=_newList.length; i<len; i++) {
+                                        _newList[i]['count_down_start_time'] = _this.getCountDown(_newList[i].create_time);
+                                        _newList[i]['count_down_time'] = 0;
+                                    }
+                                    //console.log(_newList);
+                                    //保存数据order
+                                    _this.order = _this.order.concat(_newList);
+                                }
+                            }
+                            
+                            _this.page.show = 'matching';
+                            //init
+                            //_this.sec = 0;
+                            //clearInterval(_this.set_Intr);
+
+                            //计时 轮循
+                            if (_this.set_Intr) {return;}
+                            _this.set_Intr = setInterval(function(){
+                                //console.log(2)
+                                //_this.sec++;
+                                var tmp = JSON.parse(JSON.stringify(_this.order))
+                                for (var i=0; i<tmp.length; i++) {
+                                    //已累加时间+1s
+                                    tmp[i]['count_down_time'] ++;
+                                    //console.log(_this.getCountDown(tmp[i].create_time) + _this.sec)
+                                    //超过60s 过滤超时订单
+                                    if (tmp[i]['count_down_start_time'] + tmp[i]['count_down_time'] > 60) {
+                                        tmp.splice(i, 1);
+                                        i--;
+                                    }
+                                }
+                                //保存数据
+                                _this.order = tmp;
+                                //同领域显示一条订单
+                                _this.reRepeat();
+                            },1000);
+                        }
+
+                    }, function() {
+                        //超时处理
+                        _this.order_state = true;
+                    })
+
+
+
+                },
+                reRepeat: function() {
+                    //数据处理 同领域只显示一条
+                    var _data = this.order;
+                    var _product_case = {};
+                    var _case = '';
+                    for (var i=0, len=_data.length; i<len; i++) {
+                        //console.log(_product_case)
+                        _case = _data[i]['products']['0']['product_case'];
+                        //console.log(_product_case[data[i]['product_case']])
+                        if (!_product_case[_case]) {
+                            this.order[i]['product_case_show'] = true;
+                        } else {
+                            this.order[i]['product_case_show'] = false;
+                        }
+                        _product_case[_case] = true;
+                    }
+                
+                },
+                recomData: function(data) {
+                    //本地数据与接口数据对比 去除已过期订单合并相同订单
+                    var _this = this;
+                    var _oldData = this.order;
+
+
+                    var _newData = data;
+
+                    var result = [];
+
+
+                    var json_old = {};
+                    var json_new = {}
+                    for(var i = 0; i < _oldData.length; i++){
+                        json_old[_oldData[i]['order_id']] = true;
+                    }
+                    for(var i = 0; i < _newData.length; i++){
+                        json_new[_newData[i]['order_id']] = true;
+
+                        var aj = _newData[i];
+                        var n = aj['order_id'];
+
+                        if (!json_old[n]) {
+                            result.push(aj)
+                        }
+                    }
+
+                    // console.log(json_new)
+                    for(var i = 0; i < _oldData.length; i++){
+                        var obj = _oldData[i];
+                        var num = obj['order_id'];
+                        
+                        
+                        if (!json_new[num]) {
+                            _oldData.splice(i, 1);
+                            i--;
+                            
+                        }
+                    }
+                    
+                    // console.log(result)
+                    // console.log(_oldData)
+
+                    return result;
+                },
+                recomData23333: function(data) {
+                    var _this = this;
+                    var _oldData = this.order;
+                    var _newData = data;
+                    var result = [];
+
+                    for(var i = 0; i < _newData.length; i++){
+                        var obj = _newData[i];
+                        var num = obj['order_id'];
+                        var isExist = false;
+                        for(var j = 0; j < _oldData.length; j++){
+                            var aj = _oldData[j];
+                            var n = aj['order_id'];
+                            if(n == num){
+                                isExist = true;
+                                break;
+                            }
+                        }
+                        if (!isExist) {
+                            result.push(obj);
+                        }
+                    }
+                    //console.log(result)
+                    return result;
+                },
+                initOrderList: function() {
+                    var _this = this;
+                    _this.order_loading = false;
+                    _this.order_state = true;
+                    _this.order = [];
+                    _this.set_Intr = null;
+                    _this.getOrderList();
+
+                    _this.order_Intr = setInterval(function() {
+                        if (!_this.order_state) {return}
+                        _this.getOrderList();
+                    }, 3000)
+
+                },
+                setOrder: function(oid, type, index) {
+                    //点击抢单
+                    var _this = this;
+                    if (!_this.set_order) {
+                        return;
+                    }
+                    _this.set_order_details = _this.order[index];
+                    _this.set_order = false;
+                    //停止倒计时
+                    clearInterval(_this.set_Intr);
+                    //停止轮循
+                    _this.order_state = false;
+                    clearInterval(_this.order_Intr);
+
+                    APP.send('/PC/Lawyer/grabTheOrder.json?order_id='+oid, function(res) {
+                        _this.set_order = true;
+                        //console.log(res);
+                        if (res.errno == '0') {
+                            _this.page.show = "succ_matching";
+                            document.title = '抢单成功';
+                            _this.getOrderCallState(oid);
+                        } else if (res.errno == '-2') {
+                            _this.page.show = "fail_matching";
+                            document.title = '抢单失败';
+                        } else {
+                            $.toast(res.msg, "text");
+                            _this.initOrderList();
+                        }
+                    })
+
+                    if (type == '0') {
+                        APP.sendHm('visits', 'givemeOrder', '接单', '律师端抢单', oid)
+                    } else {
+                        APP.sendHm('visits', 'wantOrder', '一键抢单', '律师端抢单')
+                    }
+                },
+                reSetOrder: function() {
+                    //继续抢单
+                    this.page.show = "matching";
+                    document.title = "抢单";
+                    this.initOrderList()
+                },
+                getOrderCallState: function(oid) {
+                    //获取接单订单通话状态
+                    var _this = this;
+                    var setIntCallState = true;
+
+                    //轮循
+                    _this.order_call_intr = setInterval(function() {
+                        if (!setIntCallState) {return}
+                        getState(oid);
+                    }, 3000)
+
+                    function getState(oid) {
+                        var _oid = oid;
+                        var _json = {
+                            order_id: _oid
+                        }
+                        setIntCallState = false;
+                        APP.sendTimeOut("/PC/NEWOrder/info.json", _json, function(res) {
+                            setIntCallState = true;
+                            if (res.errno == '0') {
+                                //console.log(res)
+                                var _data = res.data;
+                                _this.order_info = _data;
+                                //接通接通
+                                if (_data.clock_state == '2' && _data.call_record) {
+                                    //_this.reSetOrder();
+                                    window.location.href = "/h5/lawyerreg/jLawyerOrderDetails.html?oid="+_oid; 
+                                } 
+
+                            }
+                        }, function() {
+                            //超时处理
+                            console.log("net timeout");
+                            setIntCallState = true;
+                        })
+                    }
+                },
+                
+
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

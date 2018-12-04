@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>法驴会员</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=30">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'home'">
+
+            <div class="m-searchIndex-box">
+                <a @click.stop="page.navShow?page.navShow=false:page.navShow=true" class="m-searchIndex-menu" href="javascript:;"></a>
+                <div @click="window.location.href='/Member/mTopicSearch.html'" class="m-search-bd unactive">
+                    <i class="i"></i>
+                    <input class="m-search-input" type="text" placeholder="输入搜索内容">
+                </div>
+                <a href="/Member/mMessage.html" class="m-searchIndex-info">
+                   <div v-if="new_state" class="item-icon-new"></div> 
+                </a>
+
+
+                <!--下拉导航-->
+                <div @click.stop="page.navShow?page.navShow=false:page.navShow=true" v-show="page.navShow" class="m-navIndex-bg"></div>
+                <transition name="fadeIn">
+                    <div v-show="page.navShow" class="m-navIndex-box">
+                        <a href="/Member/mAbout.html" class="m-navIndex-item"><i class="item-icon item-icon1"></i>品牌故事</a>
+                        <!--<a href="javascript:;" class="m-navIndex-item"><i class="item-icon item-icon2"></i>我要合作</a>-->
+                        <a href="/h5/lawyerreg/quick_supplier.html" class="m-navIndex-item"><i class="item-icon item-icon3"></i>服务商认证</a>
+                        <a href="/Member/mSuggest.html" class="m-navIndex-item"><i class="item-icon item-icon4"></i>意见反馈</a>
+                        <a @click="page.navShow=false;APP.showActionKf()" href="javascript:;" class="m-navIndex-item"><i class="item-icon item-icon5"></i>联系客服</a>
+                    </div>
+                </transition>
+            </div>
+
+            
+
+            <div class="m-title m-magT88">
+                <a @click="nextPage('subject_list', '法驴精选专题', '', '/Member/mTopicList.html')" class="link" href="javascript:;">法驴精选专题</a>
+            </div>
+
+            <div class="m-index-swiper">
+                <div class="JS_swiper swiper-container m-swiper-container">
+                    <div class="swiper-wrapper">
+                        <div v-for="list in subject" class="swiper-slide">
+                            <a @click="nextPage('hot_subject', '查看专题', list.title, '/Member/mTopicDetails.html?id='+list.id)" href="javascript:;">
+                                <img class="m-index-swiper-img" :src="src_url+list.banner">
+                                <div class="m-swiper-bot">
+                                    <p class="d1 overText">{{ list.title }}</p>
+                                    <p class="d2 overText_2" v-html="list.description"></p>
+                                   
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="m-bd"></div>
+                </div>
+                
+                <!--<div class="m-swiper-bot">
+                    <div class="m-bd">
+                        <p class="d1">42天108家，P2P的连环爆</p>
+                        <p class="d2">挤兑 跑路 自首 清盘......过去半个月来，超过40家P2P平台相继“爆雷”......</p>
+                    </div>
+                </div>-->
+            </div>
+
+            <div class="m-title">
+                <a @click="nextPage('video_list', '热门视频', '', '/Member/liveIndex.html')" class="link" href="javascript:;">热门视频</a>
+            </div>
+
+            <div class="m-main">
+                <div class="m-liveMain m-bd">
+
+                <a @click="nextPage('hot_video', '查看视频', list.name, '/Member/liveDetails.html?id='+list.collection_id+'&vid='+list.id)" href="javascript:;" v-for="list in collection" class="m-liveIndex-item">
+                    <img :src="src_url+list.preview_image">
+                    <div class="d2">
+                        <div class="d2-text overText">
+                            {{ list.name }}
+                        </div>
+                        <div class="d2-sum">
+                            {{ APP.calcSum(list.view_counts) }} 次播放
+                        </div>
+                    </div>
+                </a>
+
+
+                </div>
+            </div>
+
+
+            <div class="m-title">
+                <a @click="nextPage('product_list', '热门产品', '', '/Member/mGoodsList.html')" class="link" href="javascript:;">热门产品</a>
+            </div>
+
+            <div class="m-main m-productMain">
+                <a @click="nextPage('hot_product', '查看产品', list.name, '/Member/goodsDetails.html?id='+list.id)" v-for="list in product" href="javascript:;" class="m-productIndex-item clearfix">
+                    <div class="item-cover">
+                        <img :src="src_url+list.icon">
+                    </div>
+                    <div class="item-box">
+                        <h2 class="item-box-d1 overText_2">{{ list.name }}</h2>
+                        <div class="item-box-d2 clearfix">
+                            <span class="d2-left">{{ list.sale_count }} 份已售</span>
+                            <span class="d2-right">￥{{ list.flprice }}起</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+
+
+            <div class="weui-tabbar s-tabbar s-tabbar-more">
+                <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+                    <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
+                    <p class="weui-tabbar__label">首页</p>
+                </a>
+                <a href="/Member/liveIndex.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon2"></div>
+                    <p class="weui-tabbar__label">视频</p>
+                </a>
+                <a @click="openMoreNav()" href="javascript:;" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon">
+                        <div class="j-tabbar_iconMore"></div>
+                    </div>
+                    <p class="weui-tabbar__label">问律师</p>
+                </a>
+                <a href="/Member/mGoodsList.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon3"></div>
+                    <p class="weui-tabbar__label">产品</p>
+                </a>
+                <a href="/Member/mPersonal.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon4"></div>
+                    <p class="weui-tabbar__label">我的</p>
+                </a>
+
+            </div>
+
+            <div id="JS_more" class="weui-popup__container">
+                <div class="weui-popup__modal m-popup j-navPopup-modal">
+                    
+                    <div class="j-navPopup-ban">
+                        <img src="/Public/Home/topic/img/31.png">
+                    </div>
+
+                    <div class="j-navPopup-nav clearfix">
+                        <div class="j-navPopup-item">
+                            <a @click="nextPageTime('Ask-marrige', '问律师-婚姻家事', '', '/Member/jTimeDetails.html?id=100491')" href="javascript:;" data-id="100491">
+                                <img class="item-d1" src="/Public/Home/topic/img/18.png">
+                                <div class="item-d2">婚姻家事</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a @click="nextPageTime('Ask-house', '问律师-房屋纠纷', '', '/Member/jTimeDetails.html?id=100493')" href="javascript:;" data-id="100493">
+                                <img class="item-d1" src="/Public/Home/topic/img/19.png">
+                                <div class="item-d2">房屋产权</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a @click="nextPageTime('Ask-labor', '问律师-劳动纠纷', '', '/Member/jTimeDetails.html?id=100494')" href="javascript:;" data-id="100494">
+                                <img class="item-d1" src="/Public/Home/topic/img/20.png">
+                                <div class="item-d2">劳动纠纷</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a @click="nextPageTime('Ask-traffic', '问律师-交通', '', '/Member/jTimeDetails.html?id=100495')" data-id="100495">
+                                <img class="item-d1" src="/Public/Home/topic/img/40.png">
+                                <div class="item-d2">交通</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a @click="nextPageTime('Ask-infringement', '问律师-消费者权益', '', '/Member/jTimeDetails.html?id=100496')" data-id="100496">
+                                <img class="item-d1" src="/Public/Home/topic/img/21.png">
+                                <div class="item-d2">消费者权益</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a @click="nextPageTime('Ask-other', '问律师-其他', '', '/Member/jTimeDetails.html?id=100497')" data-id="100497">
+                                <img class="item-d1" src="/Public/Home/topic/img/22.png">
+                                <div class="item-d2">其他</div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <a @click="closeMoreNav()" href="javascript:;" class="j-navPopup-close"></a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/swiper-3.4.2.jquery.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                    navShow: false
+                },
+
+
+                new_state: false,     //新消息
+
+                subject: [],    //专题
+                collection: [],     //视频
+                product: []     //产品
+
+
+
+            },
+            created: function() {
+                var _this = this;
+                
+
+                _this.getNewState();
+                _this.getHome();
+                APP.getInfo(this, function(res) {
+                    
+                });
+
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "法驴会员首页2.0"
+                })
+
+            },
+            mounted: function() {
+                //this.initBan();
+
+                $.smartScroll($("#JS_more"), '.weui-popup__modal');
+            },
+            methods: {
+                openMoreNav: function() {
+                    $('#JS_more').popup();
+                    APP.sendHm({
+                        action: "click",
+                        object: "Ask-all",
+                        chinese_object: "问律师",
+                        chinese_url: "首页"
+                    })
+
+                },
+                closeMoreNav: function () {
+                    $.closePopup();
+                    APP.sendHm({
+                        action: "click",
+                        object: "Ask-cancel",
+                        chinese_object: "问律师-取消",
+                        chinese_url: "首页"
+                    })
+
+                },
+                nextPage: function(type, type_text, param, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "法驴会员首页2.0",
+                        parameter: param
+                    }, function() {
+                        window.location.href = url;
+                    })
+
+                },
+                nextPageTime: function(type, type_text, param, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "首页",
+                        parameter: param
+                    }, function() {
+                        window.location.href = url;
+                    })
+                },
+                getNewState: function() {
+                    //获取消息
+                    var _this = this;
+                    var _json = {
+                        page: 1, //页
+                    }
+                    APP.send("/PC/WxUser/message.json", _json, function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            if (parseFloat(res.data.unread) > 0) {
+                                _this.new_state = true;
+                            }
+                        }
+                    });
+
+                },
+                getHome: function() {
+                    //获取首页展示产品
+                    var _this = this;
+                    APP.send("/PC/WxUser/home.json", function(res) {
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.subject = _data.subject;
+                            _this.collection = _data.collection;
+                            _this.product = _data.product;
+                        }
+
+                        _this.page.show = 'home';
+                        setTimeout(function(){
+                            _this.initBan();
+                        }, 100)
+                        
+                    })
+                },
+                initBan: function() {
+                    var s = new Swiper('.JS_swiper', {
+                        resistanceRatio: 0,
+                        spaceBetween: 7
+                    }); 
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

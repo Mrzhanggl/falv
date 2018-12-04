@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>产品中心</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=24">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'home'">
+
+
+            <div class="m-goodsList-swiper">
+                <div class="JS_swiper swiper-container m-swiper-container2">
+                    <div class="swiper-wrapper">
+                        <div v-for="list in banner" class="swiper-slide">
+                            <a @click="nextPage('product_topic', '查看专题', '/Member/mTopicDetails.html?id='+list.id)" href="javascript:;">
+                                <img :src="src_url+list.banner">
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="swiper-pagination m-swiper-pagination2 JS_swiper_pagination"></div>
+            </div>
+
+            <div class="m-main m-goodsList-bd clearfix" data-id="100487,100488">
+                <a @click="nextPage('product_marrige', '选择婚姻家事', '/Member/goodsDetails.html?id=100451')" href="javascript:;" class="m-goodsList-item">
+                    <div class="item-icon"><img src="/Public/Home/topic/img/list_icon_hunyin_default@2x.png" alt=""></div>
+                    <div class="item-box">
+                        <h2><strong>婚姻家事</strong></h2>
+                        <p><strong>限时优惠<span>{{ goods['100451'] }}元起</span></strong></p>
+                    </div>
+                </a>
+                <a @click="nextPage('product_house', '选择房屋纠纷', '/Member/goodsDetails.html?id=100454')" href="javascript:;" class="m-goodsList-item">
+                    <div class="item-icon"><img src="/Public/Home/topic/img/list_icon_fangwu_default@2x.png" alt=""></div>
+                    <div class="item-box">
+                        <h2><strong>房屋纠纷</strong></h2>
+                        <p><strong>限时优惠<span>{{  goods['100454'] }}元起</span></strong></p>
+                    </div>
+                </a>
+                <a @click="nextPage('product_infringement', '选择消费者权益', '/Member/goodsDetails.html?id=100448')" href="javascript:;" class="m-goodsList-item">
+                    <div class="item-icon"><img src="/Public/Home/topic/img/list_icon_xiaofei_default@2x.png" alt=""></div>
+                    <div class="item-box">
+                        <h2><strong>消费者权益</strong></h2>
+                        <p><strong>限时优惠<span>{{  goods['100448'] }}元起</span></strong></p>
+                    </div>
+                </a>
+                <a @click="nextPage('product_labor', '选择劳动纠纷', '/Member/goodsDetails.html?id=100474')" href="javascript:;" class="m-goodsList-item">
+                    <div class="item-icon"><img src="/Public/Home/topic/img/list_icon_laodong_default@2x.png" alt=""></div>
+                    <div class="item-box">
+                        <h2><strong>劳动纠纷</strong></h2>
+                        <p><strong>限时优惠<span>{{  goods['100474'] }}元起</span></strong></p>
+                    </div>
+                </a>
+                <a @click="nextPage('product_vip', '选择365包年', '/Member/goodsDetails.html?id=100481')" href="javascript:;" class="m-goodsList-item">
+                    <div class="item-icon"><img src="/Public/Home/topic/img/list_icon_baonian_default@2x.png" alt=""></div>
+                    <div class="item-box">
+                        <h2><strong>365包年服务</strong></h2>
+                        <p><strong>限时优惠<span>{{  goods['100481'] }}元起</span></strong></p>
+                    </div>
+                </a>
+                <a @click="nextPage('product_other', '选择非标咨询', '/Member/goodsDetails.html?id=100455')" href="javascript:;" class="m-goodsList-item">
+                    <div class="item-icon"><img src="/Public/Home/topic/img/list_icon_zixun_default@2x.png" alt=""></div>
+                    <div class="item-box">
+                        <h2><strong>非标咨询</strong></h2>
+                        <p><strong>限时优惠<span>{{  goods['100455'] }}元起</span></strong></p>
+                    </div>
+                </a>
+            </div>
+
+
+
+            <div class="weui-tabbar s-tabbar">
+                <a href="/Member/mIndex.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
+                    <p class="weui-tabbar__label">首页</p>
+                </a>
+                <a href="/Member/liveIndex.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon2"></div>
+                    <p class="weui-tabbar__label">视频</p>
+                </a>
+                <a @click="$('#JS_more').popup();" href="javascript:;" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon">
+                        <div class="j-tabbar_iconMore"></div>
+                    </div>
+                    <p class="weui-tabbar__label">问律师</p>
+                </a>
+                <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+                    <div class="weui-tabbar__icon weui-tabbar__icon3"></div>
+                    <p class="weui-tabbar__label">产品</p>
+                </a>
+                <a href="/Member/mPersonal.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon4"></div>
+                    <p class="weui-tabbar__label">我的</p>
+                </a>
+
+            </div>
+
+
+
+            <div id="JS_more" class="weui-popup__container">
+                <div class="weui-popup__modal m-popup j-navPopup-modal">
+                    
+                    <div class="j-navPopup-ban">
+                        <img src="/Public/Home/topic/img/31.png">
+                    </div>
+
+                    <div class="j-navPopup-nav clearfix">
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100536">
+                                <img class="item-d1" src="/Public/Home/topic/img/18.png">
+                                <div class="item-d2">婚姻家事</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100537">
+                                <img class="item-d1" src="/Public/Home/topic/img/19.png">
+                                <div class="item-d2">房屋产权</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100538">
+                                <img class="item-d1" src="/Public/Home/topic/img/20.png">
+                                <div class="item-d2">劳动纠纷</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100539">
+                                <img class="item-d1" src="/Public/Home/topic/img/40.png">
+                                <div class="item-d2">交通</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100540">
+                                <img class="item-d1" src="/Public/Home/topic/img/21.png">
+                                <div class="item-d2">消费者权益</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100541">
+                                <img class="item-d1" src="/Public/Home/topic/img/22.png">
+                                <div class="item-d2">其他</div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <a onclick="$.closePopup();" href="javascript:;" class="j-navPopup-close"></a>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/swiper-3.4.2.jquery.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                    navShow: false
+                },
+
+                banner: [],
+
+                goods: {
+                    '100451': '',
+                    '100454': '',
+                    '100448': '',
+                    '100474': '',
+                    '100481': '',
+                    '100455': ''
+                }
+            },
+            created: function() {
+                var _this = this;
+                _this.getGoodsList();
+                APP.getInfo(this, function(res) {
+                    
+                });
+                _this.getBanner();
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "产品中心"
+                })
+            },
+            mounted: function() {
+                $.smartScroll($("#JS_more"), '.weui-popup__modal');
+            },
+            methods: {
+                nextPage: function(type, type_text, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "产品中心",
+                    }, function() {
+                        window.location.href = url;
+                    })
+
+                },
+                getGoodsList: function() {
+                    var _this = this;
+                    var _ids = '100451,100454,100448,100474,100481,100455';
+                    var _json = {
+                        type2: '',
+                        page: 1,
+                        number: 999,
+                        ids: _ids,
+                        search: '',
+                        is_hide: 1
+                    }
+
+                    APP.send("/PC/Product/showAllV3.json", _json, function(res) {
+                        //console.log(res);
+                        //alert(res.data.count)
+                        if (res.errno == '0') {
+                            var _data = res.data.list;
+                            for (var i=0, len=_data.length; i<len; i++) {
+                                _this.goods[_data[i]['id']] = _data[i]['flprice'];
+                            }
+                                 
+                        }
+                    });
+                },
+                getBanner: function() {
+                    var _this = this;
+                    APP.send('/PC/WxUser/banner.json', function(res) {
+                        if (res.errno == '0') {
+                            _this.banner = res.data.list;
+
+                            setTimeout(function() {
+                                _this.initBan()
+                            },100)
+                        }
+                        _this.page.show = 'home';
+                    });
+                },
+                initBan: function() {
+                    var s = new Swiper('.JS_swiper', {
+                        pagination: '.JS_swiper_pagination',
+                        resistanceRatio: 0,
+                    }); 
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

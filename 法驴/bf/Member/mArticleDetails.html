@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>热门文章</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=36">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'home'">
+
+            <div class="m-main">
+                <h2 class="m-ArticleDetails-title"><strong>{{ news.list_title }}</strong></h2>
+                <div class="m-ArticleDetails-time">{{ news.published }}<span>&emsp;•&emsp;</span>{{ news.touch_count }} 阅读</div>
+            </div>
+
+            <!--<div class="m-details-cover">
+                <img style="max-height:auto" :src="src_url+news.list_pic" alt="">
+            </div>-->
+
+            <div v-html="news.list_content" class="m-ArticleDetails-html">
+                
+            </div>
+
+          
+            <h3 :class="{'padB30' : !comment.data || comment.data.length==0}" class="m-commentDetails-title"><strong>全部评论 {{ comment.total_sum }}</strong></h3>
+            <div class="JS_m_commentList m-commentList-height">行高</div>
+                
+            <div class="m-commentDetails-art">
+
+                <div v-for="(list, index) in comment.data" class="m-comment-item clearfix">
+                    <div class="item-headpic">
+                        <img :src="parseFloat(list.uid) < 0 ? src_url + list.untrue_image : list.user_info.wechat_headimgurl">
+                    </div>
+                    <div class="item-box">
+                        <div class="item-box-content">
+                            <!--<span class="s2">#{{ list.order_count }}</span>-->
+                            <div class="item-box-d1">{{ parseFloat(list.uid) < 0 ? list.untrue_name : list.user_info.name }}</div>
+                            <div class="item-box-d2">{{ list.time }}</div>
+                            <div class="item-box-d3">
+                                {{ list.content }}
+                            </div>
+
+                            <!--<div class="item-box-d5 overText">
+                                来自热门文章：论文章名称的重要性的评论 来自热门文章：论文章名称的重要性的评论 来自热门文章：论文章名称的重要性的评论
+                            </div>-->
+                            <div v-if="list.reply_comment" class="item-box-d6">
+                                <div v-if="list.reply_comment.is_show == '1'">
+                                    <p class="item-box-d6-p1">引用@{{ parseFloat(list.reply_comment.uid) < 0 ? list.reply_comment.untrue_name : list.reply_comment.user_info.name }}发表的</p>
+                                    <p :class="'JS_list_text'+index" class="item-box-d6-p2">{{ list.reply_comment.content }}</p>
+                                    <a @click="APP.showListHeight(index)" :class="'JS_list_text_more'+index" class="item-box-d6-p3" href="javascript:;"></a>
+                                </div>
+                                <div v-else>
+                                    <p class="item-box-d6-p2 colf93">引用内容已删除</p>
+                                </div>
+                            </div>
+
+                            <div class="item-box-d4">
+                                <a @click="checkComment(false, list.id, list.user_info.name, list.content)" class="link2" href="javascript:;">回复</a>
+                                <a @click="checkVote('data', index)" :class="{'active' : list.is_vote}" class="link1" href="javascript:;">
+                                    <i :class="{'active' : list.is_vote}" class="link1-icon"></i>点赞({{ list.vote_count }})
+                                    <span :class="'JS_data_list'+index"  class="link1-icon-add animated">+1</span>
+                                </a>
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div v-show="comment.loadingEnd==2" class="s-index-blank">
+                <span>正在加载更多数据</span>
+            </div>
+
+
+            <div class="m-comment-tabbar">
+                <div class="m-comment-tabbar-page">第{{ comment.scroll_page }}页</div>
+                <div @click="checkComment(true)" class="m-search-bd m-details-search-bd unactive">
+                    <i class="i"></i> 
+                    <input type="text" placeholder="我来评论..." class="m-search-input">
+                </div>
+            </div>
+
+
+            <!--输入评论-->
+            <div id="JS_comment" class="weui-popup__container">
+                <div class="weui-popup__modal m-popup">
+
+                    <div class="weui-popup__overlay"></div>
+                    <div class="m-main m-popup-comment">
+                        <textarea v-model="form.comment" maxlength="400" class="m-popup-comment-textarea" placeholder="说说你的看法..."></textarea>
+
+                        <div class="m-popup-comment-action">
+                            <div class="action-w1">
+                                <a @click="$.closePopup();" href="javascript:;" class="m-btn m-btn_2"><strong>取消</strong></a>
+                            </div>
+                            <div class="action-w2">
+                                <a @click="setComment()" href="javascript:;" class="m-btn m-btn_1">发表</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--回复-->
+            <div id="JS_reply_comment" class="weui-popup__container">
+                
+                <div class="weui-popup__modal m-popup">
+                    <div class="weui-popup__overlay"></div>
+
+                    <div class="m-main m-popup-comment">
+                        <textarea v-model="form.re_comment" maxlength="400" class="m-popup-comment-textarea" :placeholder="'引用@'+form.re_name+'发表的：'+form.re_content"></textarea>
+
+                        <div class="m-popup-comment-action">
+                            <div class="action-w1">
+                                <a @click="$.closePopup();" href="javascript:;" class="m-btn m-btn_2"><strong>取消</strong></a>
+                            </div>
+                            <div class="action-w2">
+                                <a @click="setReComment()" href="javascript:;" class="m-btn m-btn_1">发表</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+
+                topic: '',
+
+                news: '',
+                isBanned: false,    //禁言
+
+                vote_state: true, //点赞state
+
+                comment: {
+                    loading: true,
+                    loadingEnd: 0, //1准备 2 加载中 3 加载完 4error
+                    loadingMoreState: false,
+                    page: 1,
+                    data: [],
+                    total_sum: 0,
+                    scroll_page: 1
+                },
+
+                form: {
+                    comment: '',    //评论
+                    re_comment: '',  //回复评论
+                    pid: '',
+                    re_name: '',
+                    re_content: ''
+                }
+            },
+            created: function() {
+                var _this = this;
+                
+                // this.getTopicDetails();
+                this.getDetails();
+                this.checkIsBanned();
+                APP.getInfo(this, function(res) {
+                    _this.page.show = 'home';
+                });
+                this.getCommentList(_this.comment.page)
+            },
+            mounted: function() {
+               
+            },
+            methods: {
+                getDetails: function() {
+                    var _this = this;
+                    var _id = APP.getParam("id");
+                    APP.send("/PC/List/listInfo.json?id="+_id, function(res) {
+                        if (res.errno == '0') {
+                            _this.news = res.data.info;
+                        }
+                    })
+                },
+                getTopicDetails: function() {
+                    var _this = this;
+                    var _id = APP.getParam("tid");
+                    APP.send('/PC/WxUser/info.json?id='+_id, function(res) {
+                        if (res.errno == '0') {
+                            _this.topic = res.data;
+                        }
+                    });
+                },
+                checkComment: function(type, pid, name, content) {
+                    
+                    if (!this.info_login) {
+                        this.checkLogin();
+                    } else {
+                        //被禁言
+                        if (this.isBanned) {
+                            this.showIsBannedModal();
+                        } else {
+                            if (type) {
+                                $("#JS_comment").popup();
+                            } else {
+                                this.form.pid = pid;
+                                this.form.re_name = name;
+                                this.form.re_content = content;
+                                $("#JS_reply_comment").popup();
+                            }
+                        }
+                    }
+                    
+                },
+                checkVote: function(type, index) {
+                    
+                    if (!this.info_login) {
+                        this.checkLogin();
+                    } else {
+                        this.setVote(type, index)
+                    }
+                },
+                setVote: function(type, index) {
+                    //点赞
+                    var _this = this;
+                    if (!_this.vote_state) {
+                        return;
+                    }
+                    var _id = _this.comment[type][index]['id'];
+                    var _is_vote = _this.comment[type][index]['is_vote'];
+                    //_this.vote_state = false;
+                    var _json = {
+                        comment_id: _id
+                    }
+                    // console.log(cid, index)
+                    // return 
+                    APP.send('/PC/WxUser/commentVote.json', _json, function(res) {
+                        _this.vote_state = true;
+                        if (res.errno == '0') {
+                            if (_this.comment[type][index]['is_vote']) {
+                                $(".JS_"+type+"_list"+index).removeClass("active");
+                                _this.comment[type][index]['is_vote'] = false;
+                                _this.comment[type][index]['vote_count'] = parseFloat(_this.comment[type][index]['vote_count']) - 1;
+                            } else {
+                                $(".JS_"+type+"_list"+index).addClass("active");
+                                _this.comment[type][index]['is_vote'] = true;
+                                _this.comment[type][index]['vote_count'] = parseFloat(_this.comment[type][index]['vote_count']) + 1;
+                            }
+                        } else {
+                            $.toast(res.msg, "text");
+                        }
+                    })
+                },
+                checkLogin: function() {
+                    var _this = this;
+                    //判断授权
+                    APP.init(function() {
+                        APP.WXLogin(_this);
+                    });
+                },
+                setReComment: function() {
+                    //回复评论
+                    var _this = this;
+                    var _json = {
+                        content: _this.form.re_comment,
+                        list_id: APP.getParam("id"),
+                        parent_id: _this.form.pid
+                    }
+                    if (!_json.content) {
+                        $.toast("说说你的看法", "text")
+                        return;
+                    }
+                    $.showLoading("数据提交中");
+                    APP.send('/PC/WxUser/addComment.json', _json, function(res) {
+                        $.hideLoading()
+                        if (res.errno == '0') {
+                            $.closePopup();
+                            $.toast("评论成功", "text");
+                            _this.form.re_comment = "";
+                            _this.comment.loading = true;
+                            _this.comment.page = 1;
+                            _this.comment.data = [];
+                            _this.comment.loadingEnd = 0;
+                            _this.comment.loadingMoreState = false;
+                            _this.getCommentList(_this.comment.page)
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    })
+                },
+                setComment: function() {
+                    //评论
+                    var _this = this;
+                    var _json = {
+                        content: _this.form.comment,
+                        list_id: APP.getParam("id")
+                    }
+                    if (!_json.content) {
+                        $.toast("说说你的看法", "text")
+                        return;
+                    }
+                    $.showLoading("数据提交中");
+                    APP.send('/PC/WxUser/addComment.json', _json, function(res) {
+                        $.hideLoading()
+                        if (res.errno == '0') {
+                            $.closePopup();
+                            $.toast("评论成功", "text");
+                            _this.form.comment = "";
+
+                            _this.comment.loading = true;
+                            _this.comment.page = 1;
+                            _this.comment.data = [];
+                            _this.comment.loadingEnd = 0;
+                            _this.comment.loadingMoreState = false;
+                            _this.getCommentList(_this.comment.page)
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    })
+                },
+                getCommentList: function(page, callback) {
+                    var _this = this;
+
+                    var _callback = callback ? callback : function(){};
+                    var _id = APP.getParam("id");
+                    var _json = {
+                        list_id: _id,
+                        page: page, //页
+                    }
+                    _this.comment.loadingEnd = 2;
+
+                    APP.send("/PC/WxUser/commentList.json", _json, function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            var _data = res.data.list;
+                            if (_this.comment.page == 1) {
+                                _this.comment.total_sum = res.data.total;
+                            }
+                            // if (_data && _data.length == 0 && _this.comment.page >1) {
+                            //     _this.comment.page --;
+                            // }
+
+                            //第一页且总页数大于1 初始化滚动加载
+                            if (_data && _data.length>0 && _this.comment.page == 1) {
+                                _this.initPage(page);
+                            }
+
+                            //保存数据
+                            _this.comment.data = _this.comment.data.concat(_data);
+                            
+                            //判断是否加载完所有页数
+                            if (_data && _data.length > 0) {
+                                _this.comment.loading = false;
+                                _this.comment.loadingEnd = 1;
+                            } else {
+                                _this.comment.loading = true;
+                                _this.comment.loadingEnd = 3;
+                            }
+                            
+                            //超出隐藏
+                            setTimeout(function() {
+                                APP.listCheckHeight(_this.comment.page-1*10, _this.comment.data);
+                            }, 100)
+
+                        } else {
+                            _this.comment.page--;
+                            _this.comment.loading = false;
+                            _this.comment.loadingEnd = 4;
+                        }
+
+                        _callback();
+                    });
+
+                },
+                initPage: function(page) {
+                    var _this = this;
+                    setTimeout(function() {
+                        // var _loading = false;
+                        var _h = $(document).height() - $(window).height();
+                        $(document).scroll(function() {
+                            if (_this.page.navTab) return;
+
+                            _h = $(document).height() - $(window).height();
+
+                            _this.setScrollPage($(this).scrollTop());
+                            //console.log(_h - $(this).scrollTop())
+                            //console.log(_this.comment.page)
+                            if (_h - $(this).scrollTop() <= 100) {
+                                if (_this.comment.loading) return;
+                                _this.comment.loading = true;
+                                if (_this.comment.loadingEnd  == 3) {
+                                    //console.log("end");
+                                    _this.comment.loading = true;
+                                    return;
+                                }
+                                _this.comment.page++;
+                                _this.comment.loadingEnd = 2;
+                                //console.log(_this.comment.page)
+                                _this.getCommentList(_this.comment.page);
+                            }
+                        })
+                       
+                    }, 100)
+                },
+                setScrollPage: function(scrollH) {
+                    //
+                    var _this = this;
+                    var _scrollH = scrollH + $(window).height();
+                    var _all = $(".m-comment-item");
+                    // console.log(Math.ceil(_all.length / 10))
+                    var _m = Math.ceil(_all.length / 10);
+                    var _l = _all.length;
+                    var _h = 0;
+                    var _index = 10;
+                    for (var i=1, len=_m; i<=len; i++) {
+                        _index = i * 10 - 1;
+
+                        if (i * 10 > _l) {
+                            _h = $(_all).eq(_l-1).offset().top;
+                        } else {
+                            _h = $(_all).eq(_index).offset().top + $(_all).eq(_index).height();
+                        }
+                        // console.log(scrollH)
+                        //console.log(_scrollH+'==='+ i +'==='+_h)
+                        
+                        if (_scrollH >= _h) {
+                            _this.comment.scroll_page = i+1;
+                            if (_this.comment.scroll_page > _m) {
+                                _this.comment.scroll_page = _m;
+                            }
+                            return;
+                        } else {
+                            _this.comment.scroll_page = i;
+                            return;
+                        }
+
+                        if (_this.comment.scroll_page > _m) {
+                            _this.comment.scroll_page = _m;
+                            return;
+                        }
+                        
+                    }
+
+                },
+                checkIsBanned: function() {
+                    //是否禁言
+                    var _this = this;
+                    APP.send('/PC/WxUser/queryIsBanned.json', function(res) {
+                        if (res.errno == '0') {
+                            _this.isBanned = false;
+                        } else {
+                            _this.isBanned = true;
+                        }
+                    });
+                },
+                showIsBannedModal: function() {
+                    APP.modal.showLayerTips({
+                        //<a href="tel:'+_tel+'" class="s-orderDetails-dialog-btn">联系客服</a>
+                        btn: ['意见反馈', '知道了'],
+                        text: '由于您发表了违规内容，系统已对您<br>作出禁言处理',
+                        onOK: function() {
+                            APP.modal.hideLayer();
+                            window.location.href = "/Member/mSuggest.html";
+    
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

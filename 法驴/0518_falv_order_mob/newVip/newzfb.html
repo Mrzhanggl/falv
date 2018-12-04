@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<style>
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    background: #f0f0f0;
+}
+    .all{
+        width: 100%;
+    }
+    .all>img{
+        width: 100%;
+    }
+</style>
+<body>
+    <div class="all" >
+        <img id="pic" src="/Public/Home/newVip/img/apple.png" alt="">
+    </div>
+</body>
+ 
+
+<script>
+    var ua = navigator.userAgent.toLowerCase();
+    if(ua.indexOf('iphone')!=-1||ua.indexOf('ipad')!=-1||ua.indexOf("ipod")!=-1){
+
+    }else{
+        var pic=document.getElementById("pic")
+        pic.src="/Public/Home/newVip/img/android.png"
+    }
+</script>
+</html>

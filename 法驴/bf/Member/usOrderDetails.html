@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/us/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/us/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/us/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/us/css/main.css?v=32">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        
+        <div v-show="page.show=='home'" class="main-page">
+           
+            <div class="wrap-main">
+                <div class="s-title_2">
+                    <h2>{{ APP.getText.service_state[order.service_state] }}&emsp;</h2>
+                </div>
+                <div class="s-orderDetails-bd">
+                    <!--@click="window.location.href='/Member/lawyerDetails.html?lawyer_id='+lawyer.lawyer_id"-->
+                    <div v-if="lawyer_state" class="orderDetails-d6 clearfix">
+                        <div class="d6-headpic"><img :src="lawyer.lawyer_info.lawyer_id ? lawyer.lawyer_info.app_lawyer_info.headimgurl : src_url+lawyer.lawyer_info.headimgurl"></div>
+                        <div class="d6-name">
+                            Lawyer {{ lawyer.lawyer_info.name }}
+                        </div>
+                        <div v-if="lawyer.lawyer_info.total_comments_number!=0" class="d6-score">
+                            <span class="d6-score-text">{{ (lawyer.lawyer_info.total_score / lawyer.lawyer_info.total_comments_number).toFixed(1) }}分</span>
+                            <span v-if="Number(lawyer.lawyer_info.total_score_text)>=5" class="d6-score-icon"></span>
+                            <span v-if="Number(lawyer.lawyer_info.total_score_text)>=4" class="d6-score-icon"></span>
+                            <span v-if="Number(lawyer.lawyer_info.total_score_text)>=3" class="d6-score-icon"></span>
+                            <span v-if="Number(lawyer.lawyer_info.total_score_text)>=2" class="d6-score-icon"></span>
+                            <span v-if="Number(lawyer.lawyer_info.total_score_text)>=1" class="d6-score-icon"></span>
+                        </div>
+                        <div v-else class="d6-score">
+                            <span class="d6-score-text-blank">No score yet</span>
+                        </div>
+                    </div>
+                    <div v-else class="orderDetails-d1">Reminder：purchase sevice succeeds，Falv customer service will contact you within 24 hours</div>
+                    <div class="orderDetails-d2">
+                        <p class="orderDetails-d2-p1">Order number：{{ order.order_id }}</p>
+                        <p class="orderDetails-d2-p2">{{ product.name }}</p>
+                    </div>
+                    <div @click="APP.showActionKf()" class="orderDetails-d3"><span class="s1">Customer sevice</span></div>
+                    <!--<div v-if="order.service_state=='1'" @click="sendLawyer()" class="orderDetails-d3"><span class="s1">咨询律师</span></div>-->
+                    <div @click="next('order-bill', '/Member/usOrderDetails.html?oid='+order.order_id+'&tab=cost')" class="orderDetails-d4">
+                        <p><span class="s1">￥{{ order.money }}</span></p>
+                        <p>Details of expenses></p>
+                    </div>
+                    <div @click="next('order-pay', '/Member/usOrderGoPay.html?oid='+order.order_id)" v-if="order.service_state=='0' && order.state == '0' || order.service_state=='0' && order.state == '2'" class="orderDetails-d5">To Pay></div>
+                    <div v-if="order.service_state=='0' && order.state == '0'" @click="cancalNoPay()" class="orderDetails-d5">Cancel order></div>
+                    <!--<div v-if="order.service_state=='0' && order.state != '0' && order.state != '2'" @click="cancal()" class="orderDetails-d5">取消订单></div>-->
+                    <div v-if="order.service_state=='1'" @click="complete()" class="orderDetails-d5">Confirm completion></div>
+                    <!--<div v-if="order.service_state=='2' && !order_call_comment.state" @click="showComment()" class="orderDetails-d5">评价本次服务></div>
+                    <div v-if="order.service_state=='2' && order_call_comment.state" @click="showComment()" class="orderDetails-d5">查看评价></div>-->
+                </div>
+            </div>
+
+            <div id="JS_comment" class="weui-popup__container popup-bottom">
+                <div class="weui-popup__overlay"></div>
+                <div class="weui-popup__modal">
+                    <div class="s-orderDetails-comment">
+                        <div class="comment-head">
+                            评价
+                            <a href="javascript:;" class="comment-close close-popup"></a>
+                        </div>
+                        <div class="comment-box">
+                            <div class="s-orderDetails-comment-item clearfix">
+                                <span class="d1">专业体验</span>
+                                <div class="d2 clearfix">
+                                    <span @click="selectStar('professional_experience', 1)" :class="{active:order_call_comment.professional_experience>=1}" class="s-comment-star"></span>
+                                    <span @click="selectStar('professional_experience', 2)" :class="{active:order_call_comment.professional_experience>=2}" class="s-comment-star"></span>
+                                    <span @click="selectStar('professional_experience', 3)" :class="{active:order_call_comment.professional_experience>=3}" class="s-comment-star"></span>
+                                    <span @click="selectStar('professional_experience', 4)" :class="{active:order_call_comment.professional_experience>=4}" class="s-comment-star"></span>
+                                    <span @click="selectStar('professional_experience', 5)" :class="{active:order_call_comment.professional_experience>=5}" class="s-comment-star"></span>
+                                </div>
+                            </div>
+                            <div class="s-orderDetails-comment-item clearfix">
+                                <span class="d1">响应速度</span>
+                                <div class="d2 clearfix">
+                                    <span @click="selectStar('service_speed', 1)" :class="{active:order_call_comment.service_speed>=1}" class="s-comment-star"></span>
+                                    <span @click="selectStar('service_speed', 2)" :class="{active:order_call_comment.service_speed>=2}" class="s-comment-star"></span>
+                                    <span @click="selectStar('service_speed', 3)" :class="{active:order_call_comment.service_speed>=3}" class="s-comment-star"></span>
+                                    <span @click="selectStar('service_speed', 4)" :class="{active:order_call_comment.service_speed>=4}" class="s-comment-star"></span>
+                                    <span @click="selectStar('service_speed', 5)" :class="{active:order_call_comment.service_speed>=5}" class="s-comment-star"></span>
+                                </div>
+                            </div>
+                            <div class="s-orderDetails-comment-item clearfix">
+                                <span class="d1">服务态度</span>
+                                <div class="d2 clearfix">
+                                    <span @click="selectStar('service_attitude', 1)" :class="{active:order_call_comment.service_attitude>=1}" class="s-comment-star"></span>
+                                    <span @click="selectStar('service_attitude', 2)" :class="{active:order_call_comment.service_attitude>=2}" class="s-comment-star"></span>
+                                    <span @click="selectStar('service_attitude', 3)" :class="{active:order_call_comment.service_attitude>=3}" class="s-comment-star"></span>
+                                    <span @click="selectStar('service_attitude', 4)" :class="{active:order_call_comment.service_attitude>=4}" class="s-comment-star"></span>
+                                    <span @click="selectStar('service_attitude', 5)" :class="{active:order_call_comment.service_attitude>=5}" class="s-comment-star"></span>
+                                </div>
+                            </div>
+                            <textarea :disabled="order_call_comment.state" v-model="order_call_comment.note" class="s-orderDetails-comment-input" placeholder="其他想说的..."></textarea>
+                            <div v-if="!order_call_comment.state" class="s-orderDetails-comment-action">
+                                <a @click="comment()" href="javascript:;" class="s-btn s-btn_1">提交</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div v-show="page.show=='cost'" class="main-page">
+            <div class="wrap-main">
+
+                <div class="s-orderCost-bd">
+                    <div class="s-orderCost-item clearfix">
+                        <div class="item-left">
+                            <p class="item-p1">Original order expenses：</p>
+                            <p class="item-p2"></p>
+                        </div>
+                        <div class="item-right">
+                            <p class="item-p1">￥{{ order_edit_reason.length!=0 ? order_edit_reason[0].original_price : order.money }}</p>
+                            <!--<p class="item-p2">支付方式：余额</p>-->
+                        </div>
+                    </div>
+                    <div v-for="(list, index) in order_edit_reason" class="s-orderCost-item clearfix">
+                        <div class="item-left">
+                            <p class="item-p1">Expense changes</p>
+                            <p class="item-p2">(理由：{{ list.reason }})</p>
+                        </div>
+                        <div class="item-right">
+                            <p class="item-p1">￥{{ list.price - list.original_price >= 0 ? '+' : '' }}{{ ((list.price * 100 - list.original_price * 100) / 100).toFixed(2) }}</p>
+                            <!--<p class="item-p2">支付方式：余额</p>-->
+                        </div>
+                    </div>
+                    
+                    <div class="s-orderCost-end">
+                        <p>Total amount</p>
+                        <p>￥{{ order.money }}</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/us/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/us/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/us/js/vue.min.js"></script>
+    <script src="/Public/Home/us/js/main.js?v=064"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '', //cost费用明细 editReason
+                },
+
+                order: {},
+                order_edit_reason: [],
+                order_call_comment: {
+                    state: false,
+                    professional_experience: 0,
+                    service_speed: 0,
+                    service_attitude: 0,
+                    note: ''
+                },
+                product: {},
+                lawyer_state: false,
+                lawyer: {}
+
+            },
+            created: function() {
+                APP.getInfo(this, function() {
+                    
+                });
+                var _tab = APP.getParam('tab') == 'cost' ? APP.getParam('tab') : 'home';
+                if (_tab == 'home') {
+                    this.details(APP.getParam('oid'));
+                    this.getOrderLawyer(APP.getParam('oid'));
+                } else {
+                    this.getOrderEditReason();
+                    this.details(APP.getParam('oid'));
+                }
+                this.page.show = _tab;
+            },
+            mounted: function() {
+
+            },
+            methods: {
+                next: function(type, url) {
+                    APP.sendHm("click", type, function() {
+                        window.location.href = url;
+                    });
+                },
+                details: function(oid) {
+                    var _this = this;
+                    var _json = {
+                        order_id: oid
+                    }
+                    APP.send("/PC/NEWOrder/info.json", _json, function(res) {
+                        if (res.errno == '0') {
+                            //console.log(res);
+                            _this.order = res.data;
+                            _this.product =  res.data.products[0];
+                        }
+                    })
+                },
+                getOrderEditReason: function() {
+                    var _this =  this;
+                    var _json = {
+                        order_id: APP.getParam('oid')
+                    } 
+                    APP.send("/PC/NEWOrder/getOrderEditReasonList.json", _json, function(res) {
+                        if (res.errno == '0') {
+                            _this.order_edit_reason = res.data;
+                        }
+                    })
+                },
+                getOrderLawyer: function(oid) {
+                    var _this = this;
+                    var _json = {
+                        order_id: oid
+                    }
+                    APP.send("/PC/NEWOrder/channelOrderLatestLawyer.json", _json, function(res) {
+                        if (res.errno == '0') {
+                            //console.log(res);
+                            
+                            if (res.data.lawyer_evaluation && res.data.lawyer_evaluation == 0) {
+                                
+                            } else {
+                                _this.order_call_comment.state = true;
+                                if (res.data.lawyer_evaluation) {
+                                    _this.order_call_comment.professional_experience = res.data.lawyer_evaluation.professional_experience;
+                                    _this.order_call_comment.service_speed = res.data.lawyer_evaluation.service_speed;
+                                    _this.order_call_comment.service_attitude = res.data.lawyer_evaluation.service_attitude;
+                                    _this.order_call_comment.note = res.data.lawyer_evaluation.note;
+                                }
+                                
+                            }
+
+                            if (res.data && res.data.length == 0) {
+                                //console.log(res);
+                            } else {
+                                _this.lawyer_state = true;
+                                _this.lawyer = res.data;
+                                _this.lawyer.lawyer_info['total_score_text'] = res.data.lawyer_info.total_score / res.data.lawyer_info.total_comments_number;
+                            }
+                            
+                        }
+                    })
+                },
+                cancalNoPay: function() {
+                    var _this = this;
+                    var _oid = _this.order.order_id;
+                    //order-cencel
+                    APP.sendHm("click", "order-cencel");
+                    APP.modal.showLayer({
+                        title: 'Reminder',
+                        btn: ['Yes', 'No'],
+                        text: 'Cancel non-payment order?',
+                        onOK: function() {
+                            //console.log('ok');
+                            $.showLoading("正在取消");
+                            APP.send("/PC/NEWOrder/cancel.json?order_id=" + _oid, function(res) {
+                                $.hideLoading();
+                                _this.details(_oid);
+                                _this.getOrderLawyer(_oid);
+                                if (res.errno == '0') {
+                                    APP.modal.hideLayer();
+                                    $.toast("取消成功", "text");
+                                } else {
+                                    $.toast(res.msg, "text")
+                                }
+                            });
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+                },
+                cancal: function() {
+                    var _this = this;
+                    var _oid = _this.order.order_id;
+                    APP.modal.showLayer({
+                        btn: ['取消', '再等等'],
+                        text: '正在帮您匹配律师,是否要取消?',
+                        onOK: function() {
+                            //console.log('ok');
+                            $.showLoading("正在取消");
+                            APP.send("/PC/NEWOrder/cancel.json?order_id=" + _oid, function(res) {
+                                $.hideLoading();
+                                _this.details(_oid);
+                                _this.getOrderLawyer(_oid);
+                                if (res.errno == '0') {
+                                    APP.modal.hideLayer();
+                                    $.toast("取消成功", "text");
+                                } else {
+                                    $.toast(res.msg, "text")
+                                }
+                            });
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+                },
+                complete: function() {
+                    var _this = this;
+                    var _oid = _this.order.order_id;
+                    APP.modal.showLayer({
+                        title: 'Order complete',
+                        btn: ['Confirm', 'Cancel'],
+                        text: 'Confirm completion of service?',
+                        onOK: function() {
+                            //console.log('ok');
+                            $.showLoading("正在完成服务");
+                            APP.send("/PC/NEWOrder/complete.json?order_id=" + _oid, function(res) {
+                                $.hideLoading();
+                                _this.details(_oid);
+                                _this.getOrderLawyer(_oid);
+                                if (res.errno == '0') {
+                                    APP.modal.hideLayer();
+                                    $.toast("操作成功", "text");
+                                } else {
+                                    $.toast(res.msg, "text")
+                                }
+                            });
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+                },
+                sendLawyer: function() {
+                    var _tel = this.lawyer.lawyer_info.phone;
+                    APP.modal.showLayer({
+                        title: '联系律师',
+                        btn: ['<a href="tel:'+_tel+'" class="s-orderDetails-dialog-btn">呼叫</a>', '取消'],
+                        text: _tel,
+                        onOK: function() {
+                            //console.log('ok');
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+                },
+                selectStar: function(type, num) {
+                    if (this.order_call_comment.state) {
+                        return;
+                    }
+                    this.order_call_comment[type] = num;
+                },
+                showComment: function() {
+                    $("#JS_comment").popup();
+                },
+                comment: function() {
+                    var _this = this;
+                    var _oid = _this.order.order_id;
+                    var _json = {
+                        order_id: _oid,
+                        professional_experience: _this.order_call_comment.professional_experience,
+                        service_speed: _this.order_call_comment.service_speed,
+                        service_attitude: _this.order_call_comment.service_attitude,
+                        note: _this.order_call_comment.note
+                    }
+                    if (_json.professional_experience <=0) {
+                        $.toast("评价专业体验", "text");
+                        return;
+                    }
+                    if ( _json.service_speed <=0) {
+                        $.toast("评价响应速度", "text");
+                        return;
+                    }
+                    if (_json.service_attitude <=0) {
+                        $.toast("评价服务态度", "text");
+                        return;
+                    }
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/evaluationSupplier.json", _json, function(res) {
+                        $.hideLoading();
+                        _this.details(_oid);
+                        _this.getOrderLawyer(_oid);
+                        if (res.errno == '0') {
+                            $.toast("评价成功", "text");
+                        } else {
+                            $.toast(res.msg, "text");
+                        }
+                    });
+                }
+
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

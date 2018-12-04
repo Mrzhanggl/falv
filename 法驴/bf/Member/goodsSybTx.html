@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=48">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+</head>
+
+<body>
+    <div v-cloak id="app" :class="{ 's-infinite-scrolling' : page.show=='home'}" class="main s-infinite-main bg-syb">
+        <!--首页-->
+
+
+        <div v-show="page.show == 'home'" class="wrap-main s-infinite-page">
+            <a @click="next('fall-center', '/Member/personal.html')" v-if="info_login" href="javascript:;" class="s-goodsList-per s2-goodsList-per">个人中心</a>
+            <div class="s2-goodsList-head">
+                    <div class="s2-goodsList-title">
+                    <img src="/Public/Home/member/img/m103.png" alt="">
+                </div>
+            </div>
+
+            <div class="s-goodsList-bd s2-goodsList-bd" style="margin-top: -.04rem;">
+
+                <div class="s-goodList-boxHead s-goodList-boxHead2"></div>
+                <div class="s-goodsList-box s3-goodList-box2">
+                    <div class="s3-goodList-head2">
+                        <div class="s-goodsList-box-title s2-goodsList-box-title">
+                            <span>《小驴说法》<div class="s2-title-bg s2-title-bg2"></div></span>
+                        </div>
+                        <div class="s-goodsList-box-item">
+                            <div class="s-goodsList-box-pic">
+                                <a href="/Member/liveDetails.html?id=7">
+                                    <img src="/Public/Home/member/img/m110.png" alt="">
+                                </a>
+                            </div>
+                            <div class="s-goodsList-box-text s3-goodsList-box-text">
+                                《小驴说法》第一季，特邀亚洲私人财富律师帮你揭秘婚姻家事中常遇到的各类难题。
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="s-goodsList-box s2-goodsList-box s3-goodList-box3">
+                    <div class="s-goodsList-box-line s2-goodsList-box-line s3-goodsList-box-line line1"></div>
+                    <div class="s-goodsList-box-line s2-goodsList-box-line s3-goodsList-box-line line2"></div>
+         
+                    <div class="s-goodsList-box-title s2-goodsList-box-title">
+                        <span>热门推荐<div class="s2-title-bg"></div></span>
+                    </div>
+                    <!--100328 100455-->
+                    <a @click="next('fall-prodoct1', '/Member/goodsDetails.html?id=100455')" href="javascript:;" class="s-goodsList-box-item">
+                        <div class="s-goodsList-box-pic">
+                            <img src="/Public/Home/member/img/m97.png" alt="">
+                        </div>
+                        <div class="s-goodsList-box-text s2-goodsList-box-text">
+                            <p class="h2"><strong>电话答疑</strong></p>
+                            <p class="p1">专业法律管家为您预诊</p>
+                            <p class="p2">电话沟通，不限时长</p>
+                            <div class="p3-btn"></div>
+                        </div>
+                    </a>
+                    
+                </div>
+
+
+                <div class="s-goodsList-box s2-goodsList-box">
+                    <div class="s-goodsList-box-line s2-goodsList-box-line s3-goodsList-box-line line1"></div>
+                    <div class="s-goodsList-box-line s2-goodsList-box-line s3-goodsList-box-line line2"></div>
+                    <div class="s-goodsList-box-title s2-goodsList-box-title">
+                        <span>更多服务<div class="s2-title-bg"></div></span>
+                    </div>
+                    <a @click="next('fall-prodoct2', '/Member/goodsDetails.html?id=100451')" href="javascript:;" class="s-goodsList-box-item">
+                        <div class="s-goodsList-box-pic">
+                            <img src="/Public/Home/member/img/m98.png" alt="">
+                        </div>
+                        <div class="s-goodsList-box-text s2-goodsList-box-text">
+                            <p class="h2"><strong>婚姻家事</strong></p>
+                            <p class="p1">婚姻遇难题，纠纷难处理</p>
+                            <p class="p2">详细咨询律师，从容以对！</p>
+                            <div class="p3-btn"></div>
+                        </div>
+                    </a>
+                    <a @click="next('fall-prodoct3', '/Member/goodsDetails.html?id=100448')" href="javascript:;" class="s-goodsList-box-item">
+                        <div class="s-goodsList-box-pic">
+                            <img src="/Public/Home/member/img/m99.png" alt="">
+                        </div>
+                        <div class="s-goodsList-box-text s2-goodsList-box-text">
+                            <p class="h2"><strong>消费者权益</strong></p>
+                            <p class="p1">商家套路多，知权好维权</p>
+                            <p class="p2">随时致电律师，清醒应对！</p>
+                            <div class="p3-btn"></div>
+                        </div>
+                    </a>
+                    <a @click="next('fall-prodoct4', '/Member/goodsDetails.html?id=100474')" href="javascript:;" class="s-goodsList-box-item">
+                        <div class="s-goodsList-box-pic">
+                            <img src="/Public/Home/member/img/m100.png" alt="">
+                        </div>
+                        <div class="s-goodsList-box-text s2-goodsList-box-text">
+                            <p class="h2"><strong>劳动纠纷</strong></p>
+                            <p class="p1">工作被压榨，权益受侵犯 </p>
+                            <p class="p2">立即致电律师，合理应对！</p>
+                            <div class="p3-btn"></div>
+                        </div>
+                    </a>
+                    <a @click="next('fall-prodoct5', '/Member/goodsDetails.html?id=100454')" href="javascript:;" class="s-goodsList-box-item">
+                        <div class="s-goodsList-box-pic">
+                            <img src="/Public/Home/member/img/m101.png" alt="">
+                        </div>
+                        <div class="s-goodsList-box-text s2-goodsList-box-text">
+                            <p class="h2"><strong>房屋产权</strong></p>
+                            <p class="p1">购房一大事，政策需明晰 </p>
+                            <p class="p2">提前致电律师，抢占先机！</p>
+                            <div class="p3-btn"></div>
+                        </div>
+                    </a>
+                </div>
+
+                
+            </div>
+
+
+            <div class="s2-goodsLb-botBg">
+
+            </div>
+        </div>
+       
+
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/member/js/main.js?v=080"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+
+                coupon: {
+                    unbounded_count: 0,
+                    not_expired_count: 0,
+                    coupon_use_state: false,
+                    coupon_get_state: false,
+                }
+
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0' && sessionStorage.getItem("coupon_from_login")) {
+                        sessionStorage.removeItem("coupon_from_login");
+                        _this.addCoupon();
+                    }
+
+                    _this.page.show = 'home';
+                    //console.log(res.errno)
+                });
+                this.getCouponSum();
+                this.getCouponState();
+                this.getCouponToday();
+                
+
+                //设置来源
+                APP.setFromChannel("29");
+                APP.setOrderChannel("8");
+
+                
+
+            },
+            mounted: function() {
+                
+            },
+            methods: {
+                next: function(type, url) {
+                    APP.sendHm({
+                        action: "click", 
+                        object: type
+                    }, function() {
+                        window.location.href = url;
+                    });
+                },
+                showStatement: function() {
+                    localStorage.setItem("first_mail_state", "true");
+                    APP.modal.showLayer({
+                        title: '免责声明',
+                        btnHide: true,
+                        text: '尊敬的用户,您正在前往第三方合作平台,如因您接受第三方服务而产生任何纠纷,邮储银行具有免责权利。',
+                        onOK: function() {
+                            //console.log('ok');
+                            APP.modal.hideLayer();
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+
+                    // setTimeout(function() {
+                    //     APP.modal.hideLayer();
+                    // }, 2000)
+                },
+                getCouponSum: function() {
+                    // 获取该渠道可领取数量
+                    var _this = this;
+                    APP.send('/PC/NEWOrder/getChannelUnboundedDiscountCodeNumber.json?channel=0', function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        // _this.page.show = 'home';
+                        if (res.errno == '0') {
+                            _this.coupon.unbounded_count = res.data.unbounded_count;
+                            _this.coupon.not_expired_count = res.data.not_expired_count;
+                        }
+                    });
+                },
+                getCouponState: function() {
+                    //获取用户是否使用过优惠码
+                    var _this = this;          
+                    APP.send('/PC/NEWOrder/userAvailableChannelDiscountCode.json?channel=0', function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            _this.coupon.coupon_use_state = true;
+                        }
+                    });
+                },
+                getCouponToday: function() {
+                    //获取今日渠道领取的优惠卷 
+                    var _this = this;
+                    APP.send('/PC/NEWOrder/getTodayReceiveDiscountCode.json?channel=0', function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            if (res.data && res.data.length == 0) {
+
+                            } else {
+                                _this.coupon.coupon_get_state = true;
+                            }
+                        }
+
+                    });
+                },
+                addCoupon: function() {
+                    //用户领取渠道优惠码
+                    var _this = this;
+                    $.showLoading("正在领取")
+                    APP.send('/PC/NEWOrder/userActivationDiscountCode.json?channel=0', function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        $.hideLoading()
+                        if (res.errno == '0') {
+                            $.toast("已领取成功，支付时会自动抵扣哦", "text")
+                            _this.getCouponSum();
+                            _this.getCouponState();
+                            _this.getCouponToday();
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                },
+                nextGetCoupon: function() {
+                    if (parseFloat(this.coupon.unbounded_count) == 0) {
+                        $.toast("已经被领取完了，请关注后续活动", "text");
+                        return;
+                    }
+                    if (this.info_login && !this.coupon.coupon_use_state) {
+                        $.toast("您已经使用过，请关注后续活动", "text");
+                        return;
+                    }
+                    if (this.info_login && this.coupon.coupon_get_state) {
+                        $.toast("已领取成功，支付时会自动抵扣哦", "text");
+                        return;
+                    }
+                    if (this.info_login) {
+                        this.addCoupon();
+                    } else {
+                        var _return_url = encodeURIComponent("/Member/goodsList.html");
+                        //sessionStorage.setItem("coupon_from", "true");
+                        var _loca_url = '/Member/login.html?from='+_return_url;
+                        sessionStorage.setItem("coupon_from_login", "0");
+                        //APP.WXLogin(_this, '/Member/goodsList.html');
+
+                        APP.init(function() {
+                            //alert(233)
+                           window.location.href = _loca_url;
+                        }, _loca_url);
+                    }
+
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,3735 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/Mob/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/Mob/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/quick-supplier.css?v=16">
+    <script src="/Public/Home/Mob/js/jquery-3.1.1.min.js"></script>
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <!--首页 卡-->
+        <div v-show="page.show=='home'" class="main-page">
+            <div class="s-home-top">
+                <a href="javascript:;" class="s-logo"><img src="/Public/Home/Mob/supplier/slogo.png" alt=""></a>
+            </div>
+            <div class="s-home-box">
+                <div class="wrap-main">
+                    <div class="s-home-intr">
+                        <div class="s-home-intr-title"><strong>权益介绍</strong></div>
+                        <div class="s-home-intr-box">
+                            <div class="s-home-intr-item">
+                                <div class="item-icon item-icon_1"></div>
+                                <p class="item-p1"><strong>收益加速</strong></p>
+                                <p class="item-p2">分成由80%提<br>升为90%</p>
+                            </div>
+                            <div class="s-home-intr-item">
+                                <div class="item-icon item-icon_2"></div>
+                                <p class="item-p1"><strong>收益保障</strong></p>
+                                <p class="item-p2">保障用户平台<br>流水达到10万<br>元</p>
+                            </div>
+                            <div class="s-home-intr-item">
+                                <div class="item-icon item-icon_3"></div>
+                                <p class="item-p1"><strong>叠加保障</strong></p>
+                                <p class="item-p2">未达到收益保<br>障，按比例退<br>还卡金</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="s-home-price clearfix">
+                        <span class="floatLeft">保障卡价格</span>
+                        <span class="floatRight">￥10000/年</span>
+                    </div>-->
+                </div>
+            </div>
+            <div class="s-tabbar s-home-tabbar">
+                <div class="s-tabbar-main clearfix">
+                    <div :class="{'active' : !weixin.state}" class="tabbar-d1" data-wx="active">
+                         <a @click="nextLogin()" href="javascript:;" class="s-btn s-btn_1">立即成为法驴供应商</a>
+                    </div>
+                    <a @click="weiXinTab(true)" v-if="weixin.state" class="tabbar-d2" href="javascript:;"></a>
+                </div>
+            </div>
+
+            <div v-show="weixin.show" @click="weiXinTab(false)" class="s-pop-bg">
+                <div class="s-share-icon"></div>
+                <div class="s-share-text">从微信中分享</div>
+            </div>
+
+        </div>
+        <!--权益卡 卡-->
+        <div v-show="page.show=='home_card'" class="main-page main-page-homeCard">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show='add'" href="javascript:;" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="s-home-top s-home-top2">
+                <a href="javascript:;" class="s-logo"><img src="/Public/Home/Mob/supplier/slogo.png" alt=""></a>
+            </div>
+            <div class="s-home-box">
+                <div class="wrap-main">
+                    <div class="s-home-intr">
+                        <div class="s-home-intr-title"><strong>权益介绍</strong></div>
+                        <div class="s-home-intr-box">
+                            <div class="s-home-intr-item">
+                                <div class="item-icon item-icon_1"></div>
+                                <p class="item-p1"><strong>收益加速</strong></p>
+                                <p class="item-p2">分成由80%提<br>升为90%</p>
+                            </div>
+                            <div class="s-home-intr-item">
+                                <div class="item-icon item-icon_2"></div>
+                                <p class="item-p1"><strong>收益保障</strong></p>
+                                <p class="item-p2">保障用户平台<br>流水达到10万<br>元</p>
+                            </div>
+                            <div class="s-home-intr-item">
+                                <div class="item-icon item-icon_3"></div>
+                                <p class="item-p1"><strong>叠加保障</strong></p>
+                                <p class="item-p2">未达到收益保<br>障，按比例退<br>还卡金</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="s-home-price clearfix">
+                        <span class="floatLeft">保障卡价格</span>
+                        <span class="floatRight">￥10000/年</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--登录或注册-->
+        <div v-show="page.show=='login'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="nextHome()" href="javascript:;" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>手机验证</h2>
+                </div>
+                <div class="s-login-intr">
+                    <p>请输入您的手机号码，</p>
+                    <p>登录或注册您的法驴账号</p>
+                </div>
+                <div class="s-login-form">
+                    <div class="s-input-item clearfix">
+                        <span class="item-d1">+86</span>
+                        <div class="item-d2">
+                            <input v-model="form_login.phone" oninput="if(value.length>11)value=value.slice(0,11)" type="tel" placeholder="请输入手机号" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="s-input-item s-input-itemCode clearfix">
+                        <span class="item-d1">验证码</span>
+                        <div class="item-d2">
+                            <input v-model="form_login.code" type="tel" placeholder="请输入验证码" autocomplete="off">
+                        </div>
+                        <a @click="loginCountDown()" :class="{'unactive': !form_login.code_state}" href="javascript:;" class="item-d3 unactive">
+                            {{ form_login.time }}
+                        </a>
+                    </div>
+                </div>
+                <div class="s-login-action">
+                    <a @click="login()" class="s-btn s-btn_1" href="javascript:;">下一步</a>
+                </div>
+                <div class="s1-login-tips">
+                    点击下一步，即表示已阅读并同意<a @click="nexAgreement()" href="javascript:;">《法律合作协议》</a>
+                </div>
+            </div>
+        </div>
+        <!--设置密码-->
+        <div v-show="page.show=='set_pass'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="nextHome()" href="javascript:;" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>设置密码</h2>
+                </div>
+                <div class="s-login-intr">
+                    <p>设置密码可登陆法驴APP</p>
+                </div>
+                <div class="s-setPass-form">
+                    <div class="s-input-item s-input-item2 clearfix">
+                        <span class="item-d1">设置密码</span>
+                        <div class="item-d2">
+                            <input v-model="form_set_pass.password" maxlength="" type="text" placeholder="输入密码（6-10为数字、字母）" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="s-input-item s-input-item2 clearfix">
+                        <span class="item-d1">密码</span>
+                        <div class="item-d2">
+                            <input v-model="form_set_pass.repassword" maxlength="" type="text" placeholder="重复密码" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="s-login-action">
+                    <a @click="setPassword()" class="s-btn s-btn_1" href="javascript:;">下一步</a>
+                </div>
+
+            </div>
+        </div>
+        <!--已选择了新的擅长领域、已购买完成保障卡-->
+        <div v-show="page.show=='super_user'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show='home'" href="javascript:;" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>提示！</h2>
+                </div>
+                <div class="s-super-box">
+                    <img class="s-super-icon" src="/Public/Home/Mob/supplier/s35.png">
+                    <p class="s-super-text">您已是法驴律师身份，请前去APP进行相关操作！</p>
+                    <div class="s-payEnd-code">
+                        <div class="s-payEnd-code-box">
+                            <img src="/Public/Home/Mob/supplier/scode.jpg">
+                        </div>
+                        <p class="s-super-code-text">{{ weixin.state ? '识别' : '保存' }}二维码，下载APP</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--填写资料 资料审核中 -->
+        <div v-show="page.show=='info_examine'" class="main-page">
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>提交成功</h2>
+                </div>
+                <div class="s-payEnd-box">
+                    <img class="s-payEnd-icon" src="/Public/Home/Mob/supplier/s33.png">
+                    <p class="s-payEnd-text">
+                        提交审核后，客服人员会及时处理，<br>
+                        详情咨询法驴平台客服（400-0183-693）
+                    </p>
+                    <div class="s2-payEnd-action">
+                        <a href="javascript:window.history.go(-1);" class="s-btn s-btn_1">返回</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--填写资料 :class="{'s-disabled-state' : info_type !='1' }" -->
+        <div v-show="page.show=='info'" class="main-page">
+
+            <div class="s2-header-tips">信息仅用于审核，绝不外泄!</div>
+
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>律师注册</h2>
+                </div>
+
+                <div class="s2-info-bd">
+
+                    <div class="s2-info-progress clearfix">
+                        <div :class="{'active' : form_info.page >= 0}" class="progress-item progress-item-1">
+                            <div class="progress-item-d1">
+                                <div class="progress-item-icon">1</div>
+                                <div class="progress-item-text">个人资料</div>
+                            </div>
+                        </div>
+                        <div :class="{'active' : form_info.page >= 1 }" class="progress-item progress-item-2">
+                            <div class="progress-item-d2">
+                                <div class="progress-item-icon">2</div>
+                                <div class="progress-item-text">执业信息</div>
+                            </div>
+                        </div>
+                        <div :class="{'active' : form_info.page >= 2 }" class="progress-item progress-item-2">
+                            <div class="progress-item-d2">
+                                <div class="progress-item-icon">3</div>
+                                <div class="progress-item-text">服务信息</div>
+                            </div>
+                        </div>
+                        <div class="progress-item progress-item-3">
+                            <div class="progress-item-d3">
+                                <div class="progress-item-icon">4</div>
+                                <div class="progress-item-text">支付押金</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div v-show="form_info.page == 0" class="s2-info-form">
+                        <div class="s-info-item s-info-item-link">
+                            <div class="item-d1">
+                                <span class="s1 c1">*</span>头像
+                                <label for="JS_from_headPic" class="s2-headPicUpload-btn">
+                                    <input id="JS_from_headPic" type="file" class="input-hidden">
+                                    <div v-show="!form_info.upload_headPic_url" class="headPic-box-blank">上传头像</div>
+                                    <div v-show="form_info.upload_headPic_url" class="headPic-box-pic">
+                                        <img :src="form_info.upload_headPic_url">
+                                        <div v-show="info_type =='1'" class="headPic-box-icon"></div>
+                                    </div>
+                                
+                                </label>
+                            </div>
+                        </div>
+                        <div class="s-info-item">  
+                            <div class="item-d2">
+                                <span class="s1">*</span>姓名
+                            </div>
+                            <div class="item-d3">
+                                <input v-model="form_info.name" class="item-input textR" placeholder="输入名称" type="text" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="s-info-item">  
+                            <div class="item-d2">
+                                <span class="s1 c1">*</span>身份证号
+                            </div>
+                            <div class="item-d3">
+                                <input v-model="form_info.id_card" class="item-input textR" placeholder="输入身份证号" type="text" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="s-info-item s-info-item-link">  
+                            <div class="item-d2">
+                                <span class="s1">*</span>性别
+                            </div>
+                            <div class="item-d6">
+                                <div class="item-select-text">
+                                    <span v-if="form_info.sex !='defalut'">{{ form_info.sex }}</span>
+                                    <span v-else class="item-c1">选择性别</span>
+                                </div>
+                                <select @click="setDefalutSelect('sex', '男')" @change="form_info.sex=event.target.value" class="item-select">
+                                    <option value="男">男</option>
+                                    <option value="女">女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="s-info-item s-info-item-link">  
+                            <div class="item-d2">
+                                <span class="s1">*</span>出生年月
+                            </div>
+                            <div class="item-d6">
+                                <input id="JS_form_info_data" class="item-input textR" placeholder="选择日期" type="text" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="s-info-item">  
+                            <div class="item-d2">
+                                <span class="s1">*</span>联系电话
+                            </div>
+                            <div class="item-d3">
+                                <div class="item-d3-text">{{ form_info.phone }}</div>
+                            </div>
+                        </div>
+                        <div class="s-info-item">  
+                            <div class="item-d2">
+                                <span class="s1 c1">*</span>邮箱
+                            </div>
+                            <div class="item-d3">
+                                <input v-model="form_info.email" class="item-input textR" placeholder="输入邮箱地址" type="text" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="s-info-item s-info-item-link">  
+                            <div class="item-d2">
+                                <span class="s1">*</span>学历
+                            </div>
+                            <div class="item-d6">
+                                <div class="item-select-text">
+                                    <span v-if="form_info.education !='defalut'">{{ form_info.education }}</span>
+                                    <span v-else class="item-c1">选择学历</span>
+                                </div>
+                                <select @click="setDefalutSelect('education', '专科')" @change="form_info.education=event.target.value" class="item-select">
+                                    <option value="专科">专科</option>
+                                    <option value="本科">本科</option>
+                                    <option value="研究生">研究生</option>
+                                    <option value="博士">博士</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="s-info-item">  
+                            <div class="item-d2">
+                                <span class="s1">*</span>毕业院校
+                            </div>
+                            <div class="item-d3">
+                                <input v-model="form_info.school" class="item-input textR" placeholder="输入毕业院校" type="text" autocomplete="off">
+                            </div>
+                        </div>
+                        
+                    </div>
+
+
+                    <div v-show="form_info.page == 1" class="s2-info-form">
+                        <div class="s-info-item">  
+                            <div class="item-d2">
+                                <span class="s1">*</span>执业证号
+                            </div>
+                            <div class="item-d3">
+                                <input v-model="form_info.license_number" class="item-input textR" placeholder="输入执业证编号" type="number" pattern="[0-9]*" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="s-info-item">  
+                            <div class="item-d2">
+                                <span class="s1">*</span>律所
+                            </div>
+                            <div class="item-d3">
+                                <input v-model="form_info.law_name" class="item-input textR" placeholder="输入律所名称" type="text" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="s-info-item s-info-item-link">  
+                            <div class="item-d2">
+                                <span class="s1">*</span>律所职位
+                            </div>
+                            <div class="item-d6">
+                                <div class="item-select-text">
+                                    <span v-if="form_info.law_position !='defalut'">{{ form_info.law_position }}</span>
+                                    <span v-else class="item-c1">选择职位</span>
+                                </div>
+                                <select @click="setDefalutSelect('law_position', '主任')" @change="form_info.law_position=event.target.value" class="item-select">
+                                    <option value="主任">主任</option>
+                                    <option value="合伙人">合伙人</option>
+                                    <option value="律师">律师</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="s-info-item">  
+                            <div class="item-d2 item-d7">
+                                <span class="s1">*</span>上传律证件照片
+                            </div>
+
+                            <div class="s-lawyerUpload-box">
+                                <label for="JS_from_lawyerFile" class="s-lawyerUpload-btn">
+                                    <input id="JS_from_lawyerFile" type="file" class="input-hidden">
+                                    <div v-show="!form_info.lawyerFile_url" class="s-lawyerUpload-btn-d1">
+                                        <div class="s-lawyerUpload-icon"></div>
+                                        <p class="s-lawyerUpload-text"><span>*</span>律师执业证首页</p>
+                                    </div>
+                                    <img v-show="form_info.lawyerFile_url" class="s-lawyerUpload-pic" :src="form_info.lawyerFile_url">
+                                </label>
+                            </div>
+                            <div class="s-lawyerUpload-tips">
+                                <a @click="page.show='lawyerFile_example'" href="javascript:;">查看范例</a>
+                            </div>
+
+                            <!--:class="{'s-disabled-state' : info_type !='1' && form_info.limitedFile_url }"-->
+                            <div class="s-lawyerUpload-box">
+                                <label for="JS_from_limitedFile" class="s-lawyerUpload-btn">
+                                    <input id="JS_from_limitedFile" type="file" class="input-hidden">
+                                    <div v-show="!form_info.limitedFile_url" class="s-lawyerUpload-btn-d1">
+                                        <div class="s-lawyerUpload-icon"></div>
+                                        <p class="s-lawyerUpload-text"><span>*</span>最新一次年审照片</p>
+                                    </div>
+                                    <img v-show="form_info.limitedFile_url" class="s-lawyerUpload-pic" :src="form_info.limitedFile_url">
+                                </label>
+                            </div>
+                            <div class="s-lawyerUpload-tips">
+                                <a @click="page.show='limited_example'" href="javascript:;">查看范例</a>
+                            </div>
+
+                            
+
+                        </div>
+
+
+                        <div class="s-info-item">  
+                            <div class="item-d2 item-d7">
+                                <span class="s1">&ensp;</span>上传其他执业证书
+                            </div>
+                            <!--<div v-for="list in form_info.otherFile_url" class="s-lawyerUpload-box s2-lawyerUpload-box">
+                                <div class="s-lawyerUpload-btn">   
+                                     <img class="s-lawyerUpload-pic" :src="list">
+                                </div>
+                            </div>-->
+                            <div class="s2-info-other-listBox">
+                                <div v-show="index <= form_info.otherFile_url_sum" v-for="(list, index) in form_info.otherFile_url" class="s2-info-other-list">   
+                                    <div class="s2-info-textarea s2-info-other-upload">
+                                        <textarea v-model="list.name" maxlength="30" placeholder="输入证书名称"></textarea>
+                                        <div class="textarea-sum">{{ list.name.length }}/30</div>
+                                    </div>
+                                    <div class="s-lawyerUpload-box">
+                                        
+                                        <label :for="'JS_from_otherFile'+index" class="s-lawyerUpload-btn">
+                                            <input :id="'JS_from_otherFile'+index" type="file" class="input-hidden">
+                                            <div v-show="!list.url" class="s-lawyerUpload-btn-d1">
+                                                <div class="s-lawyerUpload-icon"></div>
+                                                <p class="s-lawyerUpload-text">其他执业证书/更换</p>
+                                            </div>  
+                                            <img v-show="list.url" class="s-lawyerUpload-pic" :src="list.url">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+
+                            <div class="s-lawyerUpload-tips">
+                                <a @click="page.show='limited_example'" href="javascript:;">查看范例</a>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div v-show="form_info.page == 2" class="s2-info-form">
+                        <div class="s-info-item s-info-item-link">  
+                            <div class="item-d2">
+                                <span class="s1">*</span>业务类型
+                            </div>
+                            <div class="item-d6">
+                                <div class="item-select-text">
+                                    <span v-if="form_info.business_type !='defalut'">{{ form_info.business_type }}</span>
+                                    <span v-else class="item-c1">选择业务类型</span>
+                                </div>
+                                <select @click="setDefalutSelect('business_type', '只诉讼')" @change="form_info.business_type=event.target.value" class="item-select">
+                                    <option value="只诉讼">只诉讼</option>
+                                    <option value="只非诉">只非诉</option>
+                                    <option value="诉讼多">诉讼多</option>
+                                    <option value="非诉多">非诉多</option>
+                                    <option value="五五开">五五开</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="s-info-item s-info-item-link">  
+                            <div class="item-d2">
+                                <span class="s1">*</span><span class="s4">执业城市
+                                    <a @click="form_info_city ? form_info_city=false : form_info_city=true" href="javascript:;" class="s2-info-item-tips">
+                                        <div v-show="form_info_city" class="info-tips-bd">
+                                            律师工作的城市
+                                        </div>
+                                    </a>
+                                </span>
+                                
+                            </div>
+                            <div class="item-d6">
+                                <input id="JS_form_info_city" class="item-input textR" placeholder="选择执业城市" type="text" autocomplete="off">
+                            </div>
+                        </div>
+                        <div @click="page.show = 'field_language'" class="s-info-item s-info-item-link">
+                            <div class="item-d1">
+                                <span class="s1">*</span>擅长语言
+                                <div class="item-d1-field clearfix">
+                                    <div class="item-d1-field-text">
+                                        <span v-if="form_info.language">{{ form_info.language }}</span>
+                                        <span v-else class="item-c1">选择擅长语言</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div @click="nextSelectField()" class="s-info-item s-info-item-link">
+                            <div class="item-d1">
+                                <span class="s1">*</span>个人端擅长领域
+                                <div class="item-d1-field clearfix">
+                                    <div class="item-d1-field-text">
+                                        <span v-if="form_info.field">{{ form_info.field }}</span>
+                                        <span v-else class="item-c1">选择擅长领域</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div @click="page.show = 'field_enterprise'" class="s-info-item s-info-item-link">
+                            <div class="item-d1">
+                                <span class="s1">*</span>企业端擅长领域
+                                <div class="item-d1-field clearfix">
+                                    <div class="item-d1-field-text">
+                                        <span v-if="form_info.field_enterprise">{{ form_info.field_enterprise }}</span>
+                                        <span v-else class="item-c1">选择擅长领域</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div @click="page.show = 'field_other'" class="s-info-item s-info-item-link">
+                            <div class="item-d1">
+                                <span class="s1 c1">*</span>熟悉的行业
+                                <div class="item-d1-field clearfix">
+                                    <div class="item-d1-field-text">
+                                        <span v-if="form_info.field_know">{{ form_info.field_know }}</span>
+                                        <span v-else class="item-c1">其他</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="s-info-item s-info-item-link">  
+                            <div class="item-d2">
+                                <span class="s1">*</span><span class="s4">收费区间
+                                    <a @click="form_info_toll_range ? form_info_toll_range=false : form_info_toll_range=true" href="javascript:;" class="s2-info-item-tips">
+                                        <div v-show="form_info_toll_range" class="info-tips-bd">
+                                            10万标的的诉讼案件为参考
+                                        </div>
+                                    </a>
+                                </span>
+                            </div>
+                            <div class="item-d6">
+                                <div class="item-select-text">
+                                    <span v-if="form_info.toll_range !='defalut'">{{ form_info.toll_range }}</span>
+                                    <span v-else class="item-c1">选择收费区间</span>
+                                </div>
+                                <select @click="setDefalutSelect('toll_range', '7000-8000')" @change="form_info.toll_range=event.target.value" class="item-select">
+                                    <option value="7000-8000">7000-8000</option>
+                                    <option value="8000-9000">8000-9000</option>
+                                    <option value="9000-10000">9000-10000</option>
+                                    <option value="10000-11000">10000-11000</option>
+                                    <option value="11000-12000">11000-12000</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="s-info-item">  
+                            <div class="item-d2">
+                                <span class="s1">*</span>咨询价格
+                            </div>
+                            <div class="item-d8">
+                                <input v-model="form_info.consultation_price" class="item-input textR" placeholder="输入咨询价" type="text" autocomplete="off">
+                                <div class="s2-info-item-price">元/次</div>
+                            </div>
+                        </div>
+                        <div class="s2-info-item">
+                            <div class="item-d1 item-d2">
+                                各类案件承办数量(至今)：
+                            </div>
+                            <div id="JS_lawCase_bd" class="marT">
+
+                            </div>
+                            <!--<div class="s2-info-item-inputSum clearfix">
+                                <div class="inputSum-left">
+                                    <div class="inputSum-bd">
+                                        <input class="inputSum-input" placeholder="如：离婚案件" type="text">
+                                    </div>
+                                </div>
+                                <div class="inputSum-right">
+                                    <div class="inputSum-bd">
+                                        <input class="inputSum-input" placeholder="如：999" type="text">
+                                        <div class="inputSum-title2">件</div>
+                                    </div>
+                                </div>
+                                <a class="inputSum-btn add" href="javascript:;"></a>
+                            </div>
+                            <div class="s2-info-item-inputSum clearfix">
+                                <div class="inputSum-left">
+                                    <div class="inputSum-bd">
+                                        <input class="inputSum-input" placeholder="如：离婚案件" type="text">
+                                    </div>
+                                </div>
+                                <div class="inputSum-right">
+                                    <div class="inputSum-bd">
+                                        <input class="inputSum-input" placeholder="如：999" type="text">
+                                        <div class="inputSum-title2">件</div>
+                                    </div>
+                                </div>
+                                <a class="inputSum-btn sur" href="javascript:;"></a>
+                            </div>-->
+
+                            <div class="item-d1 item-d2">
+                               律师简介：
+                            </div>
+                            <div class="item-d2">
+
+                                <div class="s2-info-textarea s2-info-item-intr">
+                                    <textarea v-model="form_info.personal_profile" maxlength="200" placeholder="输入简介信息，让客户更了解您..."></textarea>
+                                    <div class="textarea-sum">{{ form_info.personal_profile.length }}/200</div>
+                                </div>
+                            </div>
+
+
+                            <div class="item-d1 item-d2">
+                                经典案例：
+                            </div>
+                            <div id="JS_case_bd" class="item-d2">
+
+                            </div>
+
+                        </div>
+                        
+                    </div>
+
+
+                    <!--<div class="s-info-action">
+                        <a v-if="info.is_approval == '0'" class="s-btn s-btn_3" href="javascript:;">审核中......</a>
+                        <a v-if="info_level != '4'" @click="submit()" class="s-btn s-btn_1" href="javascript:;">下一步</a>
+                    </div>-->
+
+                </div>
+
+            </div>
+            <div v-if="info_login" class="s-tabbar s-index-tabbar s2-index-tabbar">
+                <div class="s-tabbar-main clearfix">
+                    <div class="tabbar-d1">
+                         <a @click="blackSumbit()" href="javascript:;" class="s-btn s-btn_2 s2-btn_2">返回</a>
+                    </div>
+                    <div class="tabbar-d1">
+                         <a @click="nextSubmit()" href="javascript:;" class="s-btn s-btn_2">下一步</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--个人选择领域-->
+        <div v-show="page.show=='field'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>选择擅长领域</h2>
+                </div>
+                <div class="s-field-box clearfix">
+                    <div v-for="(list, index) in form_info.field_div" class="s-field-item">
+                        <a @click.stop="selectNavExt(list.id, list.nav_title, index)" :data-id="list.id" href="javascript:;" class="JS_field_item item-label">
+                            <div class="item-label-icon">
+                                <img class="img1" :src="list.nav_keyword.split(',')[0]">
+                                <img class="img2" :src="list.nav_keyword.split(',')[1]">
+                            </div>
+                            <div class="item-label-text">{{ list.nav_title }}</div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="s-field-tips">
+                    <div class="s-field-tips-main">
+                        <span class="s1">押金费用规则</span>
+                        <a @click="form_info.field_rule_show = form_info.field_rule_show ? false : true" href="javascript:;" class="s-field-tips-icon">
+                            <div v-html="form_info.field_rule" v-show="form_info.field_rule_show" class="s-field-tips-bd">
+                                
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="s-tabbar s-field-tabbar">
+                <div class="s-tabbar-main clearfix">
+                    <div class="field-tabbar-d1">
+                        押金合计<span>￥{{ form_info.total_price }}</span>
+                    </div>
+                    <div class="field-tabbar-d2">
+                        <a @click="confirmNavExt()" href="javascript:;" class="s-btn s-btn_2">确定</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!--企业选择领域-->
+        <div v-show="page.show=='field_enterprise'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>企业端擅长领域</h2>
+                </div>
+                <div class="s-field-box clearfix">
+                    <div class="s-field-item">
+                        <a @click="selectNavList('JS_item_field_enterprise', 0)" href="javascript:;" class="JS_item_field_enterprise item-label">
+                            <div class="item-label-icon">
+                                <img class="img1" src="/Public/Home/Mob/supplier/s39.png">
+                                <img class="img2" src="/Public/Home/Mob/supplier/s39ed.png">
+                            </div>
+                            <div class="item-label-text">股权投融资</div>
+                        </a>
+                    </div>
+                    <div class="s-field-item">
+                        <a @click="selectNavList('JS_item_field_enterprise', 1)" href="javascript:;" class="JS_item_field_enterprise item-label">
+                            <div class="item-label-icon">
+                                <img class="img1" src="/Public/Home/Mob/supplier/s40.png">
+                                <img class="img2" src="/Public/Home/Mob/supplier/s40ed.png">
+                            </div>
+                            <div class="item-label-text">知识产权</div>
+                        </a>
+                    </div>
+                    <div class="s-field-item">
+                        <a @click="selectNavList('JS_item_field_enterprise', 2)" href="javascript:;" class="JS_item_field_enterprise item-label">
+                            <div class="item-label-icon">
+                                <img class="img1" src="/Public/Home/Mob/supplier/s41.png">
+                                <img class="img2" src="/Public/Home/Mob/supplier/s41ed.png">
+                            </div>
+                            <div class="item-label-text">劳动人事</div>
+                        </a>
+                    </div>
+                    <div class="s-field-item">
+                        <a @click="selectNavList('JS_item_field_enterprise', 3)" href="javascript:;" class="JS_item_field_enterprise item-label">
+                            <div class="item-label-icon">
+                                <img class="img1" src="/Public/Home/Mob/supplier/s42.png">
+                                <img class="img2" src="/Public/Home/Mob/supplier/s42ed.png">
+                            </div>
+                            <div class="item-label-text">日常经营</div>
+                        </a>
+                    </div>
+                    <div class="s-field-item">
+                        <a @click="selectNavList('JS_item_field_enterprise', 4)" href="javascript:;" class="JS_item_field_enterprise item-label">
+                            <div class="item-label-icon">
+                                <img class="img1" src="/Public/Home/Mob/supplier/s43.png">
+                                <img class="img2" src="/Public/Home/Mob/supplier/s43ed.png">
+                            </div>
+                            <div class="item-label-text">公司治理</div>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="s-tabbar s-index-tabbar">
+                <div class="s-tabbar-main clearfix">
+                    <div class="tabbar-d1">
+                         <a @click="confirmNavList('JS_item_field_enterprise', 'field_enterprise')" href="javascript:;" class="s-btn s-btn_2">确定</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--熟悉行业-->
+        <div v-show="page.show=='field_other'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>选择熟悉行业</h2>
+                </div>
+                <div class="s-field-box">
+                    <div class="clearfix">
+                        <div class="s-field-item">
+                            <a @click="selectNavList('JS_item_field_other', 0)" href="javascript:;" class="JS_item_field_other item-label">
+                                <div class="item-label-icon">
+                                    <img class="img1" src="/Public/Home/Mob/supplier/s45.png">
+                                    <img class="img2" src="/Public/Home/Mob/supplier/s45ed.png">
+                                </div>
+                                <div class="item-label-text">建筑施工</div>
+                            </a>
+                        </div>
+                        <div class="s-field-item">
+                            <a @click="selectNavList('JS_item_field_other', 1)" href="javascript:;" class="JS_item_field_other item-label">
+                                <div class="item-label-icon">
+                                    <img class="img1" src="/Public/Home/Mob/supplier/s46.png">
+                                    <img class="img2" src="/Public/Home/Mob/supplier/s46ed.png">
+                                </div>
+                                <div class="item-label-text">医疗</div>
+                            </a>
+                        </div>
+                        <div class="s-field-item">
+                            <a @click="selectNavList('JS_item_field_other', 2)" href="javascript:;" class="JS_item_field_other item-label">
+                                <div class="item-label-icon">
+                                    <img class="img1" src="/Public/Home/Mob/supplier/s47.png">
+                                    <img class="img2" src="/Public/Home/Mob/supplier/s47ed.png">
+                                </div>
+                                <div class="item-label-text">保险</div>
+                            </a>
+                        </div>
+                        <div class="s-field-item">
+                            <a @click="selectNavList('JS_item_field_other', 3)" href="javascript:;" class="JS_item_field_other item-label">
+                                <div class="item-label-icon">
+                                    <img class="img1" src="/Public/Home/Mob/supplier/s48.png">
+                                    <img class="img2" src="/Public/Home/Mob/supplier/s48ed.png">
+                                </div>
+                                <div class="item-label-text">娱乐</div>
+                            </a>
+                        </div>
+                        <div class="s-field-item">
+                            <a @click="selectNavList('JS_item_field_other', 4)" href="javascript:;" class="JS_item_field_other item-label">
+                                <div class="item-label-icon">
+                                    <img class="img1" src="/Public/Home/Mob/supplier/s49.png">
+                                    <img class="img2" src="/Public/Home/Mob/supplier/s49ed.png">
+                                </div>
+                                <div class="item-label-text">投融资</div>
+                            </a>
+                        </div>
+                        <div class="s-field-item">
+                            <a @click="selectNavList('JS_item_field_other', 5)" href="javascript:;" class="JS_item_field_other item-label">
+                                <div class="item-label-icon">
+                                    <img class="img1" src="/Public/Home/Mob/supplier/s50.png">
+                                    <img class="img2" src="/Public/Home/Mob/supplier/s50ed.png">
+                                </div>
+                                <div class="item-label-text">能源</div>
+                            </a>
+                        </div>
+                        <div class="s-field-item">
+                            <a @click="selectNavList('JS_item_field_other', 6)" href="javascript:;" class="JS_item_field_other item-label">
+                                <div class="item-label-icon">
+                                    <img class="img1" src="/Public/Home/Mob/supplier/s51.png">
+                                    <img class="img2" src="/Public/Home/Mob/supplier/s51ed.png">
+                                </div>
+                                <div class="item-label-text">互联网</div>
+                            </a>
+                        </div>
+                        <div class="s-field-item">
+                            <a @click="selectNavList('JS_item_field_other', 7)" href="javascript:;" class="JS_item_field_other item-label">
+                                <div class="item-label-icon">
+                                    <img class="img1" src="/Public/Home/Mob/supplier/s52.png">
+                                    <img class="img2" src="/Public/Home/Mob/supplier/s52ed.png">
+                                </div>
+                                <div class="item-label-text">其他</div>
+                            </a>
+                        </div>
+                    </div>
+                    <div v-show="form_info.field_know_state" id="JS_otherField_bd" class="s2-fieldOthder-bd">
+                        <!--<div class="s2-fieldOthder-item">
+                            <input type="text" placeholder="输入熟悉行业">
+                            <a href="javascript:;" class="fieldOthder-btn add"></a>
+                        </div>-->
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="s-tabbar s-index-tabbar">
+                <div class="s-tabbar-main clearfix">
+                    <div class="tabbar-d1">
+                         <a @click="confirmNavList('JS_item_field_other', 'field_know')" href="javascript:;" class="s-btn s-btn_2">确定</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--擅长语言-->
+        <div v-show="page.show=='field_language'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>选择擅长语言</h2>
+                </div>
+                <div class="s-field-box clearfix">
+                    <div class="s-field-item s2-field-item">
+                        <a @click="selectNavList('JS_item_field_language', 0)" href="javascript:;" class="JS_item_field_language item-label">
+                            <div class="item-label-text">中文</div>
+                        </a>
+                    </div>
+                    <div class="s-field-item s2-field-item">
+                        <a @click="selectNavList('JS_item_field_language', 1)" href="javascript:;" class="JS_item_field_language item-label">
+                            <div class="item-label-text">英文</div>
+                        </a>
+                    </div>
+                    <div class="s-field-item s2-field-item">
+                        <a @click="selectNavList('JS_item_field_language', 2)" href="javascript:;" class="JS_item_field_language item-label">
+                            <div class="item-label-text">粤语</div>
+                        </a>
+                    </div>
+                    <div class="s-field-item s2-field-item">
+                        <a @click="selectNavList('JS_item_field_language', 3)" href="javascript:;" class="JS_item_field_language item-label">
+                            <div class="item-label-text">上海话</div>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="s-tabbar s-index-tabbar">
+                <div class="s-tabbar-main clearfix">
+                    <div class="tabbar-d1">
+                         <a @click="confirmNavList('JS_item_field_language', 'language')" href="javascript:;" class="s-btn s-btn_2">确定</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--律师执业证上传 范例 :class="{'s-disabled-state' : info_type !='1' }"-->
+        <div v-show="page.show=='lawyerFile_example'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>查看范例</h2>
+                </div>
+                <div class="s-lawyerUpload-box">
+                    <div class="s-lawyerUpload-btn">
+                        <img class="s-lawyerUpload-pic" src="/Public/Home/Mob/supplier/sexample-2.jpg">
+                    </div>
+                </div>
+                <div class="s-lawyerUpload-tips">
+                    上传要求：图片清晰，无涂改、遮盖痕迹。
+                </div>
+                <div class="s-lawyerUpload-action">
+                    <a @click="page.show='info'" href="javascript:;" class="s-btn s-btn_1">返回</a>
+                </div>
+            </div>
+        </div>
+        <!--年审照片上传 范例-->
+        <div v-show="page.show=='limited_example'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>查看范例</h2>
+                </div>
+                <div class="s-lawyerUpload-box">
+                    <div class="s-lawyerUpload-btn">
+                        <img class="s-lawyerUpload-pic" src="/Public/Home/Mob/supplier/sexample-1.jpg">
+                    </div>
+                </div>
+                <div class="s-lawyerUpload-tips">
+                    上传要求：图片清晰，无涂改、遮盖痕迹。
+                </div>
+                <div class="s-lawyerUpload-action">
+                    <a @click="page.show='info'" href="javascript:;" class="s-btn s-btn_1">返回</a>
+                </div>
+            </div>
+        </div>
+        <!--提交订单 支付费用-->
+        <div v-show="page.show=='add'" class="main-page">
+            <!--<header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
+                </div>
+            </header>-->
+            <div class="s2-header-tips">信息仅用于审核，绝不外泄!</div>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>支付费用</h2>
+                </div>
+                <div class="s-addOrder-box">
+                    <div :class="{'unactive': !form_add.state }" class="s-addOrder-item s-addOrder-item_1">
+                        <div class="item-d1 clearfix">
+                            <span class="floatLeft">入驻押金<span v-if="!form_add.state" class="item-d1-payEnd">(已支付)</span></span>
+                            <span class="floatRight"><strong>{{ form_add.state ? form_add.deposit : info.cash_pledge }}</strong>元</span>
+                        </div>
+                    </div>
+
+                    <div @click.stop="selectCard()" class="s-addOrder-item s-addOrder-item_2">
+                        <div :class="{'active': form_add.checked == '1' }" class="item-icon"></div>
+                        <div class="item-d1 clearfix">
+                            <span class="floatLeft">收益加速保障卡</span>
+                            <span class="floatRight"><strong>{{ form_add.card_price }}</strong>元</span>
+                        </div>
+                        <div class="item-d2">
+                            <a @click="page.show='home_card'" class="item-d2-link" href="javascript:;">点击查看<span>《收益保障卡权益》</span></a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="s-tabbar s-addOrder-tabbar">
+                <div class="s-tabbar-main clearfix">
+                    <div class="addOrder-tabbar-d1">
+                        ￥{{ form_add.total_price }}
+                    </div>
+                    <div class="addOrder-tabbar-d2">
+                        <a :class="{'unactive': !form_add.state && form_add.checked == '0'}" @click="addOrder()" href="javascript:;" class="s-btn s-btn_2">提交</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--支付订单 确认付费-->
+        <div v-show="page.show=='goPay'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a href="javascript:history.back(-1);" class="s-header-black"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>确认付费</h2>
+                </div>
+                <div class="s-goPay-box">
+                    <div class="s-goPay-price">
+                        <div class="goPay-price-1">应付总金额：<span>￥{{ form_goPay.total_price }}</span></div>
+                        <div class="goPay-price-2">实付金额： <span>{{ form_goPay.total_price }} 元</span></div>
+                    </div>
+                    <div class="s-goPay-mode">
+                        <h2>支付方式</h2>
+                        <a @click="form_goPay.mode='0'" :class="{'active': form_goPay.mode=='0'}" href="javascript:;"  class="s-goPayMode-item">
+                            <div class="item-label clearfix">
+                                <div class="item-label-radio"></div>
+                                <div class="item-label-icon item-label-icon_1"></div>
+                                <div class="item-label-text">微信支付</div>
+                            </div>
+                        </a>
+                        <a @click="form_goPay.mode='1'" :class="{'active': form_goPay.mode=='1'}" href="javascript:;" class="s-goPayMode-item">
+                            <div class="item-label clearfix">
+                                <div class="item-label-radio"></div>
+                                <div class="item-label-icon item-label-icon_2"></div>
+                                <div class="item-label-text">支付宝</div>
+                            </div>
+                        </a>
+                        <a @click="form_goPay.mode='2'" :class="{'active': form_goPay.mode=='2'}" href="javascript:;" class="s-goPayMode-item">
+                            <div class="item-label clearfix">
+                                <div class="item-label-radio"></div>
+                                <div class="item-label-icon item-label-icon_3"></div>
+                                <div class="item-label-text">其他方式支付</div>
+                            </div>
+                            <div v-show="form_goPay.mode == '2'" class="s-goPayQt-box">
+                                <div class="s-goPayQt-title">请将应付金额付款至下面银行账号</div>
+                                <div v-for="list in form_goPay.pay_account" class="s-goPayQt-info">
+                                    <div class="s-goPayQt-info-item clearfix">
+                                        <div class="item-d1">开户银行:</div>
+                                        <div class="item-d2">{{ list.bank_account }}</div>
+                                    </div>
+                                    <div class="s-goPayQt-info-item clearfix">
+                                        <div class="item-d1">银行账号:</div>
+                                        <div class="item-d2">{{ list.numbered }}</div>
+                                    </div>
+                                    <div class="s-goPayQt-info-item clearfix">
+                                        <div class="item-d1">账户名称:</div>
+                                        <div class="item-d2">{{ list.name }}</div>
+                                    </div>
+                                </div>
+                                <div class="s-goPayQt-title">填写付款凭证信息</div>
+                                <div class="s-goPayQt-item">
+                                    <h3>姓名或公司名称</h3>
+                                    <input v-model="form_goPay.name" type="text" placeholder="输入姓名或公司名称" autocomplete="off">
+                                </div>
+                                <div class="s-goPayQt-item">
+                                    <h3>付款账号</h3>
+                                    <input v-model="form_goPay.account" type="text" placeholder="输入付款账号" autocomplete="off">
+                                </div>
+                                <div class="s-goPayQt-item">
+                                    <h3>上传付款凭证</h3>
+                                    <div class="item-d1 clearfix">
+                                       <div v-show="form_goPay.uplaoad_pz" class="item-upload-pic">
+                                           <img :src="ajax_url+form_goPay.uplaoad_pz">
+                                        </div>
+                                       <label for="JS_from_pz" class="s-info-btn-upload">
+                                           <input id="JS_from_pz" type="file" class="input-hidden">
+                                        </label> 
+                                    </div>
+                                </div>
+                                <div class="s-goPayQt-item">
+                                    <textarea v-model="form_goPay.remarks" class="s-goPayQt-item-textarea" maxlength="100" placeholder="输入留言信息..."></textarea>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="s-goPay-action">
+                        <a v-show="!form_goPay.wx_pay_link && form_goPay.mode=='0' || form_goPay.mode!='0'" @click="goPay()" href="javascript:;" class="s-btn s-btn_2">确定</a>
+                        <a v-show="form_goPay.wx_pay_link && form_goPay.mode=='0'" :href="form_goPay.wx_pay_link" class="s-btn s-btn_2">点击打开微信进行支付</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--支付失败-->
+        <div v-show="page.show=='pay_fail'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show='goPay'" href="javascript:;" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>支付失败</h2>
+                </div>
+                <div class="s-payEnd-box">
+                    <img class="s-payEnd-icon" src="/Public/Home/Mob/supplier/s32.png">
+                    <p class="s-payEnd-text">支付失败</p>
+                    <div class="s-fail-action">
+                        <a @click="page.show='goPay'" href="javascript:;" class="s-btn s-btn_1">继续支付</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--支付完成 wx and zfb -->
+        <div v-show="page.show=='pay_succ_wx_zfb'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a href="/h5/lawyerreg/quick_supplier.html" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>支付完成</h2>
+                </div>
+                <div class="s-payEnd-box">
+                    <img class="s-payEnd-icon" src="/Public/Home/Mob/supplier/s33.png">
+                    <p class="s-payEnd-text">您已支付完成，当前状态为{{ form_goPay.state_text }}！<br>如有疑问请拨打<a href="tel:4000183693">4000183693</a></p>
+                    <div class="s-payEnd-code">
+                        <div class="s-payEnd-code-box">
+                            <img src="/Public/Home/Mob/supplier/scode.jpg">
+                        </div>
+                        <p class="s-payEnd-code-text">{{ weixin.state ? '识别' : '保存' }}二维码，下载APP</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--支付完成 qt -->
+        <div v-show="page.show=='pay_succ_qt'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a href="/h5/lawyerreg/quick_supplier.html" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>支付完成</h2>
+                </div>
+                <div class="s-payEnd-box">
+                    <img class="s-payEnd-icon" src="/Public/Home/Mob/supplier/s33.png">
+                    <p class="s-payEnd-text">您已支付完成，当前状态为{{ form_goPay.state_text }}！<br>如有疑问请拨打<a href="tel:4000183693">4000183693</a></p>
+                    <div class="s-payEnd-code">
+                        <div class="s-payEnd-code-box">
+                            <img src="/Public/Home/Mob/supplier/scode.jpg">
+                        </div>
+                        <p class="s-payEnd-code-text">{{ weixin.state ? '识别' : '保存' }}二维码，下载APP</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--选择领域成功 -->
+        <div v-show="page.show=='pay_succ_field'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a href="/h5/lawyerreg/quick_supplier.html" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>提交成功！</h2>
+                </div>
+                <div class="s-payEnd-box">
+                    <img class="s-payEnd-icon" src="/Public/Home/Mob/supplier/s33.png">
+                    <p class="s-payEnd-text">您已成功选择领域！</p>
+                    <div class="s-payEnd-code">
+                        <div class="s-payEnd-code-box">
+                            <img src="/Public/Home/Mob/supplier/scode.jpg">
+                        </div>
+                        <p class="s-payEnd-code-text">{{ weixin.state ? '识别' : '保存' }}二维码，下载APP</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--法律服务合作协议-->
+        <div v-show="page.show=='agreement'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show=page.agreement_last_page" href="javascript:;" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-agreement-box">
+                    <iframe src="20180419.html"></iframe>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/Mob/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/Mob/js/vue.min.js"></script>
+    <script src="/Public/Home/Mob/js/exif.js"></script>
+    <script src="/Public/Home/Mob/js/city.js"></script>
+    <script src="/Public/Home/Mob/js/city-picker.min.js"></script>
+    <script>
+        //toast 显示时间
+        $.toast.prototype.defaults.duration = 1000;
+        var ajax_url = "http://www.falv58.com";
+        var src_url = "http://www.falv58.com";
+        if (window.location.host!=="www.falv58.com") {
+            ajax_url = "http://mest.7anb.com";
+            src_url = "http://mest.7anb.com";
+        }
+
+        var APP = {
+            jssdk: null,
+            isPhoneNo: function(phone) {
+                var pattern = /^1[2345678]\d{9}$/;
+                return pattern.test(phone);
+            },
+            isEmail: function(emial) {
+                var pattern = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/;
+                return pattern.test(emial);
+            },
+            isLicenseNumber: function(num) {
+                //律师执业证号验证
+                var pattern = /^[0-9]*$/;
+                if (!pattern.test(num)) {
+                    return false;
+                }
+                if (num.length != 17) {
+                    return false;
+                }
+                var _year = num.slice(5, 9);
+                var _c1 = _year.slice(0, 1);
+                var _c2 = _year.slice(1, 2);
+                var _c3 = _year.slice(2, 3);
+                var _c4 = _year.slice(3, 4);
+                if (_c1 != 1 && _c1 !=2 ) {
+                    return false;
+                }
+                if (_c2 != 0 && _c2 !=8 && _c2 !=9) {
+                    return false;
+                }
+                if (_c3 != 0 && _c3 !=1 && _c3 !=7 && _c3 !=8 && _c3 !=9) {
+                    return false;
+                }
+                if (_c1 == 1 && _c2 == 8 && _c3 !=7 && _c3 !=8 && _c3 !=9 ) {
+                    return false;
+                }
+                if (_c1 == 1 && _c2 == 9 && _c3 !=7 && _c3 !=8 && _c3 !=9 ) {
+                    return false;
+                }
+                if (_c1 == 2 && _c2 == 0 && _c3 == 1 && _c4 == 9) {
+                    return false;
+                }
+                return true;
+
+            },
+            isWeiXin: function() {
+                var ua = window.navigator.userAgent.toLowerCase();
+                if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+            getParam: function(id) {
+                var url = location.href + "";
+                var regstr = "/(\\?|\\&)" + id + "=([^\\&]+)/";
+                var reg = eval(regstr);
+                var result = url.match(reg);
+                if (result && result[2]) {
+                    return result[2];
+                }
+            },
+            send: function(url, callback, data) {
+                var _callback = callback ? callback : function(){};
+                var _type = data ? 'post' : 'get';
+                var _data = data ? data : {};
+                var _url = ajax_url + url;
+                $.ajax({
+                    type: _type,
+                    url: _url,
+                    data: _data,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    success: function(res) { _callback(res); },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) { $.hideLoading();console.log(XMLHttpRequest, errorThrown, textStatus) },
+                })
+            },
+            imgToUrl: function(data, callback) {
+                $.ajax({
+                    url: ajax_url + '/Public/imgToUrl.json',
+                    type: 'POST',
+                    data: data,
+                    cache: false,
+                    contentType: false, //不可缺
+                    processData: false, //不可缺
+                    success: function(res) { callback(res); }
+                });
+            },
+            getJssdk: function() {
+                var _this = this;
+                APP.send('/PC/Wx/jssdkConf.json?source=2', function(res) {
+                    //alert(JSON.stringify(res));
+                    var data = res.data;
+                    _this.jssdk = data;
+                    if (res.errno == '0') {
+                        wx.config({
+                            debug: false,
+                            appId: data.appId,
+                            timestamp: data.timestamp,
+                            nonceStr: data.nonceStr,
+                            signature: data.signature,
+                            jsApiList: [
+                                'checkJsApi',
+                                'chooseWXPay',
+                                'onMenuShareAppMessage',
+                                'onMenuShareTimeline',
+                                'onMenuShareWeibo',
+                                'onMenuShareQQ',
+                                'onMenuShareQZone'
+                            ]
+                        });
+
+                        _this.setShare();
+
+                    }
+                });
+            },
+            setShare: function() {
+                var _link = window.location.origin + window.location.pathname;
+
+                var _configAll = {
+                    title: '想获得更多精准案源？上法驴APP！',
+                    desc: '',
+                    link: _link,
+                    imgUrl: 'http://www.falv58.com/Public/Home/Mob/supplier/slogo.jpg',
+                    success: function() {
+                        //alert('success')
+                        //console.log("success");
+                    },
+                    cancel: function() {
+                        //alert('cancel');
+                        //console.log("cancel");
+                    }
+                }
+            
+                wx.ready(function() {
+                    //分享给朋友
+                    //alert('ready')
+                    wx.onMenuShareAppMessage(_configAll);
+                    //QQ
+                    wx.onMenuShareQQ(_configAll);5
+                    //QQ微博
+                    wx.onMenuShareWeibo(_configAll);
+                    //QQ空间
+                    wx.onMenuShareQZone(_configAll);
+                    // _config.title = desc;
+                    //分享到朋友圈
+                    wx.onMenuShareTimeline(_configAll);
+                });
+            },
+            lawyerMarketing: function() {
+                //营销链接
+                var _id = this.getParam("lawyer_marketing_id")
+                if (!_id) return;
+                this.send("/PC/LawyerMarketing/openUrl.json?lawyer_marketing_id="+_id, function(res) {});
+            },
+            getCityName: function(val) {
+                var _val = val.split(",");
+                var _name = '';
+                if (_val[0]) {
+                    _name = provinceList['86'][_val[0]] ? provinceList['86'][_val[0]] : '北京';
+                }
+                if (_val[1]) {
+                    if (provinceList[_val[0]][_val[1]]) {
+                         _name = _name + ' ' + provinceList[_val[0]][_val[1]];
+                    } else {
+                         _name = _name + ' ' + '北京市';
+                    }
+                }
+                return _name;
+            }
+        }
+
+
+        //个人案例回显 添加删除操作
+        APP.case = {
+            data: [],
+            initInfoCaseDiv: function(d) {
+                var html = '';
+                var _val = '';
+                //console.log(d)
+                if (d) {
+                    this.data = d;
+                }
+                var _data = this.data;
+                if (_data.length == 0) {
+                    html += '<div class="s2-info-case">\
+                                <div class="info-case-title">\
+                                    案例1\
+                                    <a onclick="APP.case.operationCaseDive(\'add\', 0)" class="case-btn add" href="javascript:;"></a>\
+                                </div>\
+                                <div class="s2-info-textarea s2-info-item-case">\
+                                    <textarea maxlength="200" oninput="APP.case.setInputTextLength(0)" class="JS_case_item" placeholder="输入简介信息，让客户更了解您..." autocomplete="off"></textarea>\
+                                    <div class="textarea-sum"><span>0</span>/200</div>\
+                                </div>\
+                            </div>';
+                }
+                for (var i=0, len=_data.length; i<len; i++) {
+                    if (_data[i] == ' ') {
+                        _val = '';
+                    } else {
+                        _val = _data[i];
+                    }
+                    html += '<div class="s2-info-case">\
+                                <div class="info-case-title">\
+                                    案例'+(i+1);
+                        if  (i==len-1) {
+                            html += '<a onclick="APP.case.operationCaseDive(\'add\', '+i+')" class="case-btn add" href="javascript:;"></a>';
+                        } else {
+                            html += '<a onclick="APP.case.operationCaseDive(\'sur\', '+i+')" class="case-btn sur" href="javascript:;"></a>';
+                        }
+
+                        html+= '</div>\
+                                <div class="s2-info-textarea s2-info-item-case">\
+                                    <textarea maxlength="200" oninput="APP.case.setInputTextLength('+i+')" value="'+_val+'" class="JS_case_item" placeholder="输入简介信息，让客户更了解您..." autocomplete="off">'+_data[i]+'</textarea>\
+                                    <div class="textarea-sum"><span>'+_val.length+'</span>/200</div>\
+                                </div>\
+                            </div>';
+                }
+                $("#JS_case_bd").html(html);
+            },
+            initData: function() {
+                var _div = $(".JS_case_item");
+                this.data = [];
+                for (var i=0, len=_div.length; i<len; i++) {
+                    this.data.push($(_div[i]).val());
+                }
+            },
+            operationCaseDive: function(type, index) {
+                //console.log(this.data.length)
+                this.initData();
+                if (type == 'add') {
+                    this.data.push(" ");
+                    this.initInfoCaseDiv();
+                } else {
+                    //console.log(_i)
+                    this.data.splice(index, 1);
+                    this.initInfoCaseDiv();
+                    //$(".JS_case_bd .JS_case").eq(index).remove();
+                }
+            },
+            setInputTextLength: function(index) {
+                var _len = $(".JS_case_item").eq(index).val().length;
+                $(".JS_case_item").eq(index).next().find('span').html(_len)
+            },
+        };
+
+        //案件承办回显 添加删除操作
+        APP.lawCase= {
+            data: [],
+            initInfoCaseDiv: function(d) {
+                var html = '';
+                //console.log(d)
+                if (d) {
+                    this.data = d;
+                }
+                var _data = this.data;
+                if (_data.length == 0) {
+                    html += '<div class="JS_lawCase_item s2-info-item-inputSum clearfix">\
+                                <div class="inputSum-left">\
+                                    <div class="inputSum-bd">\
+                                        <input class="JS_lawCase_name inputSum-input" placeholder="如：离婚案件" type="text">\
+                                    </div>\
+                                </div>\
+                                <div class="inputSum-right">\
+                                    <div class="inputSum-bd">\
+                                        <input class="JS_lawCase_sum inputSum-input" placeholder="如：999" type="number" pattern="[0-9]*">\
+                                        <div class="inputSum-title2">件</div>\
+                                    </div>\
+                                </div>\
+                                <a onclick="APP.lawCase.operationCaseDive(\'add\', 0)" class="inputSum-btn add" href="javascript:;"></a>\
+                            </div>';
+                }
+                for (var i=0, len=_data.length; i<len; i++) {
+
+                    html += '<div class="JS_lawCase_item s2-info-item-inputSum clearfix">\
+                                <div class="inputSum-left">\
+                                    <div class="inputSum-bd">\
+                                        <input class="JS_lawCase_name inputSum-input" value="'+_data[i].describe+'" placeholder="如：离婚案件" type="text">\
+                                    </div>\
+                                </div>\
+                                <div class="inputSum-right">\
+                                    <div class="inputSum-bd">\
+                                        <input class="JS_lawCase_sum inputSum-input" value="'+_data[i].number+'" placeholder="如：999" type="number" pattern="[0-9]*">\
+                                        <div class="inputSum-title2">件</div>\
+                                    </div>\
+                                </div>';
+                        if  (i==len-1) {
+                            html += '<a onclick="APP.lawCase.operationCaseDive(\'add\', '+i+')" class="inputSum-btn add" href="javascript:;"></a>';
+                        } else {
+                            html += '<a onclick="APP.lawCase.operationCaseDive(\'sur\', '+i+')" class="inputSum-btn sur" href="javascript:;"></a>';
+                        }
+                    html += '</div>';
+
+                }
+                $("#JS_lawCase_bd").html(html);
+            },
+            initData: function() {
+                var _div = $(".JS_lawCase_item");
+                var div_lawCase_name;
+                var div_lawCase_sum;
+                this.data = [];
+                for (var i=0, len=_div.length; i<len; i++) {
+                    div_lawCase_name = $(_div[i]).find(".JS_lawCase_name").val() ? $(_div[i]).find(".JS_lawCase_name").val() : '';
+                    div_lawCase_sum = $(_div[i]).find(".JS_lawCase_sum").val() ? $(_div[i]).find(".JS_lawCase_sum").val() : '';
+                    this.data.push({
+                        describe: div_lawCase_name,
+                        number: div_lawCase_sum
+                    })
+                }
+            },
+            operationCaseDive: function(type, index) {
+                //console.log(this.data.length)
+                this.initData();
+                if (type == 'add') {
+                    this.initData();
+                    this.data.push({
+                        describe: '',
+                        number: ''
+                    });
+                    this.initInfoCaseDiv();
+                } else {
+                    //console.log(_i)
+                    this.data.splice(index, 1);
+                    this.initInfoCaseDiv();
+                    //$(".JS_case_bd .JS_case").eq(index).remove();
+                }
+            }
+        }
+
+        //熟悉行业 其它 回显 添加删除操作
+        APP.otherField = {
+            data: [],
+            initInfoCaseDiv: function(d) {
+                var html = '';
+                //console.log(d)
+                if (d) {
+                    this.data = d;
+                }
+                var _data = this.data;
+                if (_data.length == 0) {
+                    html += '<div class="s2-fieldOthder-item">\
+                                <input class="JS_otherField_item" type="text" placeholder="输入熟悉行业">\
+                                <a onclick="APP.otherField.operationCaseDive(\'add\', 0)" href="javascript:;" class="fieldOthder-btn add"></a>\
+                            </div>';
+                }
+                for (var i=0, len=_data.length; i<len; i++) {
+
+                    html += '<div class="s2-fieldOthder-item">\
+                                <input value="'+_data[i]+'" class="JS_otherField_item" type="text" placeholder="输入熟悉行业">';
+                    if  (i==len-1) {
+                        html += '<a onclick="APP.otherField.operationCaseDive(\'add\', '+i+')" href="javascript:;" class="fieldOthder-btn add"></a>';
+                    } else {
+                        html += '<a onclick="APP.otherField.operationCaseDive(\'sur\', '+i+')" href="javascript:;" class="fieldOthder-btn sur"></a>';
+                    }
+                    html += '</div>';
+                }
+
+                $("#JS_otherField_bd").html(html);
+            },
+            initData: function() {
+                var _div = $(".JS_otherField_item");
+                this.data = [];
+                for (var i=0, len=_div.length; i<len; i++) {
+                    this.data.push($(_div[i]).val());
+                }
+            },
+            operationCaseDive: function(type, index) {
+                //console.log(this.data.length)
+                this.initData();
+                if (type == 'add') {
+                    this.data.push(" ");
+                    this.initInfoCaseDiv();
+                } else {
+                    //console.log(_i)
+                    this.data.splice(index, 1);
+                    this.initInfoCaseDiv();
+                    //$(".JS_case_bd .JS_case").eq(index).remove();
+                }
+            }
+        };
+
+    </script>
+
+    <script>
+        //微信授权
+        if (APP.isWeiXin()) {
+            APP.send("/PC/Wx/authorizedStatusForFaLv.json", function(res) {
+                if (res.errno != '0') {
+                     window.location.href = ajax_url+'/PC/Wx/authorizedForFaLv.json?url='+encodeURIComponent(window.location.href);
+                } else {
+                    APP.getJssdk();
+                }
+            });
+        }
+
+
+        //营销链接
+        APP.lawyerMarketing();
+    </script>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                info_level: '1',
+                info_type: '1', //2审核中 1审核完成
+
+                weixin: {
+                    state: false,
+                    show: false,
+                },
+
+                page: {
+                    show: '',
+                    agreement_last_page: ''
+                },
+                form_login: {
+                    phone: '',
+                    code: '',
+                    time: '获取验证码',
+                    code_state: true
+                },
+                form_set_pass: {
+                    password: '',
+                    repassword: ''
+                },
+                form_info: {
+                    page: 0,
+                    first_state: false,
+                    lawyerFile_url: '', //执业证照片
+                    limitedFile_url: '', //年审照片
+                    otherFile_url_sum: 0,
+                    otherFile_url: [
+                        {
+                            name: '',
+                            url: '',
+                        },
+                        {
+                            name: '',
+                            url: '',
+                        },
+                        {
+                            name: '',
+                            url: '',
+                        },
+                        {
+                            name: '',
+                            url: '',
+                        },
+                        {
+                            name: '',
+                            url: '',
+                        }
+                    ],  //其它执业证 s2
+                    upload_headPic_url: '', //上传头像照片
+                    name: '',                   //姓名
+                    id_card: '',                //身份证 s2
+                    sex: 'defalut',             //性别 s2
+                    birthday: '',               //生日 s2
+                    phone: '',                  //手机 s2
+                    email: '',                  //邮箱 s2
+                    education: 'defalut',       //学历 s2
+                    school: '',          //毕业学校 s2
+
+                    license_number: '',         //执业证号
+                    law_name: '',               //律所名称
+                    law_position: 'defalut',    //律所职位 s2
+
+                    field: '',                  //选择擅长领域文案显示
+                    field_buy: [],              //已购买领域
+                    field_arr: [],              //选择擅长领域数组
+                    field_temporary: [],        //选择擅长领域临时数组
+                    field_div: [],              //所有擅长领域数组
+                    field_rule: '',
+                    field_rule_show: false,     //擅长领域规则
+                    total_price: 0,             //擅长领域计算金额
+
+                    personal_profile: '',       //个人简介
+                    case: [],                  //经典案例
+                    case_div: [0],           //经典案例input数组
+                    business_type: 'defalut', //业务类型 s2
+                    city: '',                 //城市s2
+                    language: '',             //擅长语言 s2
+                    field_enterprise: '',     //企业擅长领域 s2
+                    field_know: '',           //熟悉行业 s2
+                    field_know_state: false,  //熟悉行业 其它 s2
+                    toll_range: 'defalut',    //收费区间 s2
+                    consultation_price: '',   //咨询价 s2
+                    law_case: [],             //承办案件 s2
+                    law_case_div: [0],
+
+                },
+                form_info_city: false,
+                form_info_toll_range: false,
+                form_add: {
+                    checked: '1', //1默认选择购买保障卡
+                    deposit: 0,     //已支付押金 或 需要支付押金
+                    card_price: 0,  //保障卡价格
+                    total_price: 0,    //订单总价
+                    state: true     //按钮状态 false灰色禁止提交
+                },
+                form_goPay: {
+                    mode: '0', //0微信 1支付宝 2其它
+                    name: '',
+                    account: '',
+                    uplaoad_pz: '',
+                    remarks: '',
+                    pay_account: [],
+                    wx_pay_link: '',
+
+                    uuid: '',
+                    total_price: 0,
+                    timeset: null,
+                    timest_state: true,
+                    
+                    state_text: ''
+                }
+            },
+            created: function() {
+                this.weixin.state =  APP.isWeiXin();
+                this.init();
+            },
+            watch: {
+                form_info_city: function (curVal, oldVal) {
+                    var _this = this;
+                    if (!oldVal) {
+                        setTimeout(function() {
+                            $("#app").one('click', function() {
+                                //console.log(233)
+                                _this.form_info_city = false;
+                            })
+                        }, 100)
+                    }
+                },
+                form_info_toll_range: function (curVal, oldVal) {
+                    var _this = this;
+                    if (!oldVal) {
+                        setTimeout(function() {
+                            $("#app").one('click', function() {
+                                //console.log(233)
+                                _this.form_info_toll_range = false;
+                            })
+                        }, 100)
+                    }
+                }
+            },
+            mounted: function() {
+
+                // $(".main-page").css({'height':$(window).height()})
+                var _this = this;
+                var Orientation = null; 
+                var head_src_url = 'http://120.55.165.146';
+                if (ajax_url ==="http://mest.7anb.com") {
+                    head_src_url = "http://mest.7anb.com";
+                }
+                var maxsize = 100 * 1024;
+
+
+                //上传头像
+                $('#JS_from_headPic').change(function() {
+                    $.each($('#JS_from_headPic')[0].files, function(i, file) {
+                        if (!/\/(?:jpeg|png|gif)/i.test(file.type)) return;
+                        //获取照片方向角属性，用户旋转控制 
+                        EXIF.getData(file, function() { 
+                            EXIF.getAllTags(this);  
+                            Orientation = EXIF.getTag(this, 'Orientation'); 
+                        }); 
+                        
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            var result = this.result;
+                            var img = new Image();
+                            img.src = result;
+
+                            if (img.complete) {
+                                callback();
+                            } else {
+                                img.onload = callback;
+                            }
+                            function callback() {
+                                var data = _this.compressHeadPic(img, Orientation);
+                                _this.upload('upload_headPic_url', data, file.type, head_src_url);
+                                img = null;
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    });
+
+                });
+
+                //上传律师执业证首页
+                $('#JS_from_lawyerFile').change(function() {
+                    $.each($('#JS_from_lawyerFile')[0].files, function(i, file) {
+                        if (!/\/(?:jpeg|png|gif)/i.test(file.type)) return;
+                        //获取照片方向角属性，用户旋转控制 
+                        EXIF.getData(file, function() { 
+                            EXIF.getAllTags(this);  
+                            Orientation = EXIF.getTag(this, 'Orientation'); 
+                        }); 
+                        
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            var result = this.result;
+                            var img = new Image();
+                            img.src = result;
+
+                            if (img.complete) {
+                                callback();
+                            } else {
+                                img.onload = callback;
+                            }
+                            function callback() {
+                                var data = _this.compress('0', img, Orientation);
+                                _this.upload('lawyerFile_url', data, file.type, head_src_url);
+                                img = null;
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    });
+
+                });
+
+                //上传年审照片
+                $('#JS_from_limitedFile').change(function() {
+                    $.each($('#JS_from_limitedFile')[0].files, function(i, file) {
+                        if (!/\/(?:jpeg|png|gif)/i.test(file.type)) return;
+                        //获取照片方向角属性，用户旋转控制 
+                        EXIF.getData(file, function() { 
+                            EXIF.getAllTags(this);  
+                            Orientation = EXIF.getTag(this, 'Orientation'); 
+                        }); 
+                        
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            var result = this.result;
+                            var img = new Image();
+                            img.src = result;
+
+                            if (img.complete) {
+                                callback();
+                            } else {
+                                img.onload = callback;
+                            }
+                            function callback() {
+                                var data = _this.compress('0', img, Orientation);
+                                _this.upload('limitedFile_url', data, file.type, head_src_url);
+                                img = null;
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    });
+
+                });
+
+                
+                //上传其它执业证0
+                $('#JS_from_otherFile0').change(function() {
+                    $.each($('#JS_from_otherFile0')[0].files, function(i, file) {
+                        if (!/\/(?:jpeg|png|gif)/i.test(file.type)) return;
+                        //获取照片方向角属性，用户旋转控制 
+                        EXIF.getData(file, function() { 
+                            EXIF.getAllTags(this);  
+                            Orientation = EXIF.getTag(this, 'Orientation'); 
+                        }); 
+                        
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            var result = this.result;
+                            var img = new Image();
+                            img.src = result;
+
+                            if (img.complete) {
+                                callback();
+                            } else {
+                                img.onload = callback;
+                            }
+                            function callback() {
+                                var data = _this.compress('0', img, Orientation);
+                                _this.upload('otherFile_url0', data, file.type, head_src_url);
+                                img = null;
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    });
+
+                });
+                //上传其它执业证1
+                $('#JS_from_otherFile1').change(function() {
+                    $.each($('#JS_from_otherFile1')[0].files, function(i, file) {
+                        if (!/\/(?:jpeg|png|gif)/i.test(file.type)) return;
+                        //获取照片方向角属性，用户旋转控制 
+                        EXIF.getData(file, function() { 
+                            EXIF.getAllTags(this);  
+                            Orientation = EXIF.getTag(this, 'Orientation'); 
+                        }); 
+                        
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            var result = this.result;
+                            var img = new Image();
+                            img.src = result;
+
+                            if (img.complete) {
+                                callback();
+                            } else {
+                                img.onload = callback;
+                            }
+                            function callback() {
+                                var data = _this.compress('0', img, Orientation);
+                                _this.upload('otherFile_url1', data, file.type, head_src_url);
+                                img = null;
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    });
+
+                });
+                //上传其它执业证2
+                $('#JS_from_otherFile2').change(function() {
+                    $.each($('#JS_from_otherFile2')[0].files, function(i, file) {
+                        if (!/\/(?:jpeg|png|gif)/i.test(file.type)) return;
+                        //获取照片方向角属性，用户旋转控制 
+                        EXIF.getData(file, function() { 
+                            EXIF.getAllTags(this);  
+                            Orientation = EXIF.getTag(this, 'Orientation'); 
+                        }); 
+                        
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            var result = this.result;
+                            var img = new Image();
+                            img.src = result;
+
+                            if (img.complete) {
+                                callback();
+                            } else {
+                                img.onload = callback;
+                            }
+                            function callback() {
+                                var data = _this.compress('0', img, Orientation);
+                                _this.upload('otherFile_url2', data, file.type, head_src_url);
+                                img = null;
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    });
+
+                });
+                //上传其它执业证3
+                $('#JS_from_otherFile3').change(function() {
+                    $.each($('#JS_from_otherFile3')[0].files, function(i, file) {
+                        if (!/\/(?:jpeg|png|gif)/i.test(file.type)) return;
+                        //获取照片方向角属性，用户旋转控制 
+                        EXIF.getData(file, function() { 
+                            EXIF.getAllTags(this);  
+                            Orientation = EXIF.getTag(this, 'Orientation'); 
+                        }); 
+                        
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            var result = this.result;
+                            var img = new Image();
+                            img.src = result;
+
+                            if (img.complete) {
+                                callback();
+                            } else {
+                                img.onload = callback;
+                            }
+                            function callback() {
+                                var data = _this.compress('0', img, Orientation);
+                                _this.upload('otherFile_url3', data, file.type, head_src_url);
+                                img = null;
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    });
+
+                });
+                //上传其它执业证4
+                $('#JS_from_otherFile4').change(function() {
+                    $.each($('#JS_from_otherFile4')[0].files, function(i, file) {
+                        if (!/\/(?:jpeg|png|gif)/i.test(file.type)) return;
+                        //获取照片方向角属性，用户旋转控制 
+                        EXIF.getData(file, function() { 
+                            EXIF.getAllTags(this);  
+                            Orientation = EXIF.getTag(this, 'Orientation'); 
+                        }); 
+                        
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            var result = this.result;
+                            var img = new Image();
+                            img.src = result;
+
+                            if (img.complete) {
+                                callback();
+                            } else {
+                                img.onload = callback;
+                            }
+                            function callback() {
+                                var data = _this.compress('0', img, Orientation);
+                                _this.upload('otherFile_url4', data, file.type, head_src_url);
+                                img = null;
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    });
+
+                });
+                
+
+                //上传支付凭证
+                $('#JS_from_pz').change(function() {
+                    $.each($('#JS_from_pz')[0].files, function(i, file) {
+                        if (!/\/(?:jpeg|png|gif)/i.test(file.type)) return;
+                        //获取照片方向角属性，用户旋转控制 
+                        EXIF.getData(file, function() { 
+                            EXIF.getAllTags(this);  
+                            Orientation = EXIF.getTag(this, 'Orientation'); 
+                        }); 
+                        
+                        var reader = new FileReader();
+                        reader.onload = function () {
+                            var result = this.result;
+                            var img = new Image();
+                            img.src = result;
+
+                            if (img.complete) {
+                                callback();
+                            } else {
+                                img.onload = callback;
+                            }
+                            function callback() {
+                                var data = _this.compress('1', img, Orientation);
+                                _this.upload('uplaoad_pz', data, file.type, head_src_url);
+                                img = null;
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    });
+
+                });
+
+            },
+            methods: {
+                init: function() {
+                    //console.log( APP.getParam('lawyer_cash_pledge'));
+                    var _this = this;
+                    var _callback = function() {
+                        _this.getNavExt();
+                    }
+                    if (APP.getParam('tab') == 'goPay') {
+                        _callback = function() {
+                            _this.getNavExt();
+                            _this.initGoPay();
+                            _this.getOrderState();
+                        }
+                    } else if (APP.getParam('tab') == 'payEnd') {
+                        this.page.show = 'pay_succ_wx_zfb';
+                    } else if (APP.getParam('tab') == 'payEndQt') {
+                        this.page.show = 'pay_succ_qt';
+                    } else if (APP.getParam('tab') == 'payEndLy') {
+                        this.page.show = 'pay_succ_field';
+                    } else if (APP.getParam('tab') == 'add') {
+                        var _id = APP.getParam('fid') ? APP.getParam('fid').split(",") : [];
+                        this.form_info.field_arr = _id;
+                        this.nextAdd();
+                    } else if (APP.getParam('tab') == 'info') {
+                        
+                    } else {
+                        this.page.show = 'home';
+                    }
+                    
+                    this.checkIsSetPassword(function (res) {
+                        _this.getInfo(function() {
+                            _this.getLoginLawyerInfo(function(res_info) {   
+                                _callback();
+                            });
+                        })
+                    
+                        if (res.data) {
+                            _this.page.show = 'set_pass';
+                        }
+                    })
+                    this.getNavExtRule();
+                    this.getPayAccount();
+                },
+                weiXinTab: function(type) {
+                    this.weixin['show'] = type;
+                },
+                nextLogin: function() {
+                    var _this = this;
+                    this.logout(function() {
+                        _this.page.show = 'login';
+                    });
+                },
+                nextHome: function() {
+                    this.page.show = 'home';
+                },
+                nextInfo: function() {
+                    if (this.info.is_approval== '0') {
+                        $.toast("资料审核中...", "text");
+                    }
+                    this.page.show = 'info';
+                },
+                nexAgreement: function() {
+                    this.page.agreement_last_page = this.page.show;
+                    this.page.show='agreement';
+                },
+                nextSelectField: function() {
+                    this.initSelectNavExt();
+                    this.page.show = 'field';
+                },
+                nextAdd: function() {
+                    if (this.form_info.field_arr && this.form_info.field_arr.length == 0) {
+                        this.form_add.state = false;
+                    } else {
+                        this.form_add.state = true;
+                    }
+                    //console.log(this.form_info.state)
+                    //console.log(this.form_info.field_arr.length)
+                    this.calcAddOrderPrice();
+                    this.page.show = 'add';
+                },
+                nextSuper: function() {
+                    this.page.show='super_user';
+                },
+                checkIsSetPassword: function(callback) {
+                    //是否设置过密码
+                    var callback = callback ? callback : function(){};
+                    APP.send('/PC/User/passwordIsEmpty.json', function(res) {
+                        callback(res);
+                    });
+                },
+                getInfo: function(callback) {
+                    //个人信息
+                    var _this = this;
+                    var _callback = callback ? callback : function() {};
+                    APP.send("/PC/User/userInfo.json", function(res) {
+                        if (res.errno == '0') {
+                            _this.form_info.phone = res.data.username;
+                        }
+                       _callback();
+                    })
+                },
+                getLoginLawyerInfo: function(callback) {
+                    //律师信息
+                    var _this = this;
+                    var callback = callback ? callback : function() {};
+                    APP.send('/V2/Lawyer/showLawyer.json', function(res) {
+                        //console.log(res)
+                        if (res.errno == '0' || res.errno == '404') {
+                            var _data = res.data;
+                            _this.info = _data;
+                            _this.info_login = true;
+                            
+
+                            //审核状态
+                            if (_data && _data.length == 0) {
+                                //个人用户
+                                _this.info_type = '1';
+
+                                if (APP.getParam('tab') == 'info') {
+                                    _this.page.show = 'info';
+                                }
+                                
+                            } else if (_data.is_approval== '0'){
+                                //审核中
+                                 _this.info_type = '2';
+                                 if (APP.getParam('tab') == 'info') {
+                                    _this.page.show = 'info_examine';
+                                }
+                                 //console.log(233)
+                                // if (APP.getParam('tab') == 'info') {
+                                //     $.toast("资料审核中...", "text");
+                                // }
+                            } else if (_data.is_approval == '1' || _data.is_approval == '2') {
+                                _this.info_type = '1';
+                                if (APP.getParam('tab') == 'info') {
+                                    _this.page.show = 'info';
+                                }
+                                if (_data.is_approval == '2' && APP.getParam('tab') == 'info') {
+                                    $.toast("资料审核不通过,请重新填写...", "text");
+                                }
+                            }
+
+                            //记录用户类型
+                            if (_data && _data.length == 0) {
+                                //个人用户
+                                _this.info_level = '1';
+                                APP.lawCase.initInfoCaseDiv([]);
+                                APP.case.initInfoCaseDiv([]);
+                                APP.otherField.initInfoCaseDiv([]);
+
+                                setTimeout(function() {
+                                    //$("#JS_form_info_data").calendar();
+                                    $("#JS_form_info_data").datetimePicker();
+                                    $("#JS_form_info_city").cityPicker({
+                                        showDistrict: false
+                                    });
+                                }, 100)
+                            }
+                            if (_data && parseFloat(_data.cash_pledge) == 0) {
+                                //律师用户但未选择领域（老律师）
+                                _this.info_level = '2';
+                                _this.initFormInfo(_data);
+
+                                //未选择领域(购买) 无法修改资料
+                                //_this.info_type = '2';
+
+                            }
+                            if (_data && parseFloat(_data.cash_pledge) > 0) {
+                                //律师用户已选择领域未购买保障卡
+                                _this.info_level = '3';
+                                _this.initFormInfo(_data);
+                            }
+                            if (_data && parseFloat(_data.cash_pledge) > 0 && _data.rights_protection.length >0 && _data.is_approval== '0') {
+                                //律师用户已选择领域已经购买保障卡 审核中
+                                _this.info_level = '4';
+                            }
+                            if (_data && parseFloat(_data.cash_pledge) > 0 && _data.rights_protection.length >0 && _data.is_approval== '1') {
+                                //律师用户已选择领域已经购买保障卡 
+                                _this.info_level = '5';
+                                _this.nextSuper();
+                            }
+
+
+
+                            // _this.info_type = '1';
+                            
+                        } else {
+                            if (_this.page.show == 'goPay') {
+                                window.location.href = '/h5/lawyerreg/quick_supplier.html';
+                            }
+                        }
+                        callback(res);
+                    });
+                },
+                getNavExtRule: function() {
+                    //押金费用规则
+                    var _this = this;
+                    APP.send('/V2/Public/config.json?key=deposit_expense_rule', function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            _this.form_info.field_rule = res.data;
+                        }
+                    });
+                },
+                initFormInfo: function(data) {
+                    this.form_info.upload_headPic_url = data.headimgurl;
+                    this.form_info.name = data.name;
+                    this.form_info.id_card = data.id_no;
+                    this.form_info.sex = data.sex == '0' || data.sex == '男' ? '男' : '女';
+
+                    $("#JS_form_info_data").val(data.birthday && data.birthday !="0000-00-00" ? data.birthday : "");
+                    //$("#JS_form_info_data").val("2018-06-15")
+                    setTimeout(function() {
+                        // if (data.birthday && data.birthday != "0000-00-00") {
+                        //     $("#JS_form_info_data").calendar({
+                        //         value: [data.birthday]
+                        //     });
+                        // } else {
+                        //     $("#JS_form_info_data").calendar();
+                        // }
+                        $("#JS_form_info_data").datetimePicker();
+                    }, 100)
+                    
+                    this.form_info.email = data.email;
+                    this.form_info.education = data.education ? data.education : "defalut";
+                    this.form_info.school = data.graduated_school;
+
+                    this.form_info.license_number = data.license_number;
+                    this.form_info.law_name = data.law_firm_name;
+                    this.form_info.law_position = data.law_firm_position ? data.law_firm_position : 'defalut';
+                    this.form_info.lawyerFile_url = data.qualification.lawyer_certificate;
+                    this.form_info.limitedFile_url = data.qualification.lawyer_annual;
+                
+                    if (data.other_practice_certificates) {
+                        var _otherFile_subStr = new RegExp('&quot;','ig');
+                        var _otherFile = data.other_practice_certificates.replace(_otherFile_subStr,'"');
+                        _otherFile = JSON.parse(_otherFile);
+                        this.form_info.otherFile_url_sum = _otherFile.length == 0 ? 0 : _otherFile.length;
+                        for (var i=0, len=_otherFile.length; i<len; i++) {
+                            this.form_info.otherFile_url[i]['name'] = _otherFile[i]['name'];
+                            this.form_info.otherFile_url[i]['url'] = _otherFile[i]['url'];
+                        }
+                    }
+
+                    // if (data.is_approval =='1' || data.is_approval =='2') {
+                    //     APP.case.initInfoCaseDiv(data.classic_case);
+                    // }
+
+
+                    this.form_info.business_type = data.business_type ? data.business_type : 'defalut';
+                    if (data.practice_city) {
+                        $("#JS_form_info_city").attr("data-code", data.practice_city.split(",")[1])
+                        $("#JS_form_info_city").attr("data-codes", data.practice_city)
+                        $("#JS_form_info_city").val(APP.getCityName(data.practice_city))
+                    }
+                    setTimeout(function() {
+                        $("#JS_form_info_city").cityPicker({
+                            showDistrict: false
+                        });
+                    },100)
+                    
+                    //console.log(APP.getCityName(data.practice_city))
+                    //$("#JS_form_info_city").val(data.practice_city)
+                    // this.form_info.city = data.practice_city;
+                    this.form_info.language = data.language;
+                    this.form_info.field_buy = data.cash_pledge_lawyer_rights;
+                    this.form_info.field_enterprise = data.areas_of_expertise_to_b;
+                    this.form_info.field_know = data.familiar_with_the_industry;
+                    this.form_info.toll_range = data.charge_interval ? data.charge_interval : 'defalut';
+                    this.form_info.consultation_price = data.consult_price;
+                    this.form_info.law_case = data.case_description;
+                    this.form_info.personal_profile = data.introduction;
+                    this.form_info.case = data.classic_case;
+
+                    var _case_description = [];
+                    if (data.case_description) {
+                        var __case_description_subStr = new RegExp('&quot;','ig');
+                        _case_description = data.case_description.replace(__case_description_subStr,'"');
+                        _case_description = JSON.parse(_case_description);
+                    }
+                    APP.lawCase.initInfoCaseDiv(_case_description);
+                    APP.case.initInfoCaseDiv(data.classic_case);
+
+                    var _field_know = data.familiar_with_the_industry.split(",");
+                    var _loca_field_know = ['建筑施工', '医疗', '保险', '娱乐', '投融资', '能源', '互联网', '其他'];
+                    var _loca_field_know_json = {};
+                    for (i in _loca_field_know) {
+                        _loca_field_know_json[_loca_field_know[i]] = true;
+                    }
+                    //console.log(_loca_field_know_json)
+                    var _new_field_other_know = [];
+                    for (var i=0, len=_field_know.length; i<len; i++) {
+                        if (!_loca_field_know_json[_field_know[i]]) {
+                            _new_field_other_know.push(_field_know[i])
+                        }
+                    }
+                    //console.log(_new_field_other_know)
+                    APP.otherField.initInfoCaseDiv(_new_field_other_know);
+
+                    this.initSelectNavList('JS_item_field_language', 'language');
+                    this.initSelectNavList('JS_item_field_enterprise', 'field_enterprise');
+                    this.initSelectNavList('JS_item_field_other', 'field_know');
+                },
+                logout: function(callback) {
+                    var callback = callback ? callback : function() {};
+                    APP.send("/PC/User/logout.json", function(res) {
+                        callback();
+                        //  window.location.href = "/h5/lawyerreg/quick_supplier.html?timestamp="+Date.parse(new Date());
+                    });
+                },
+                login: function() {
+                    var _this = this;
+                    var _json = {
+                        phone: _this.form_login.phone,
+                        code: _this.form_login.code,
+                        type: 1,
+                        customer_source: localStorage.getItem('customer_source'),
+                        customer_source_parameter: localStorage.getItem('customer_source_parameter'),
+                        pre_registration_page: document.referrer
+                    };
+                    $.showLoading('数据提交中');
+                    APP.send('/PC/UserLogin/login.json', function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            //获取账号律师信息
+                            _this.info_login = true;
+                            _this.info = _data;
+                            _this.getInfo();
+                            //_this.getLoginLawyerInfo();
+
+                            if (_data.password_is_null) {
+                                _this.page.show = 'set_pass';
+                            } else {
+                                if (parseFloat(_data.cash_pledge) > 0 && _data.rights_protection.length > 0 && _data.is_approval== '1') {
+                                    _this.nextSuper();
+                                } else {
+                                    window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=info';
+                                    //_this.nextInfo(_data.is_approval);
+                                }
+                            }
+                            
+                        } else {
+                            $.toast(res.msg, "text");
+                        }
+                    },_json);
+
+                },
+                loginCountDown: function() {
+                    var _this = this;
+                    var _phone = _this.form_login.phone;
+
+                    if (!_this.form_login.code_state) return;
+                    if (!APP.isPhoneNo(_phone)) {
+                        $.toptip('请输入正确的手机号', 'error');
+                        return;
+                    }
+                         
+                    _this.form_login.code_state = false;
+                    _this.loginSendCode(_phone);
+                    _this.form_login.time = 60;
+                    var timest = setInterval(function() {
+                        if (typeof(_this.form_login.time) == 'string') {
+                            clearInterval(timest)
+                            return;
+                        }
+                        _this.form_login.time--;
+                        if (_this.form_login.time == 0) {
+                            _this.form_login.code_state = true;
+                            _this.form_login.time = '重新发送';
+                            clearInterval(timest)
+                        }
+                    }, 1000)
+                },
+                loginSendCode: function(phone) {
+                    //获取短信验证码
+                    var _this = this;
+                    var _json = {
+                        phone: phone
+                    }
+                    APP.send('/PC/UserLogin/sendShortMessageForFaLv.json', function(res) {
+                        //console.log(res);
+                        if (res.errno == '0') {
+                            $.toptip('发送成功！', 'success');
+                        } else {
+                            _this.form_login.code_state = true;
+                            _this.form_login.time = '重新发送';
+                            //$.toast(res.msg, "text");
+                        }
+                    }, _json);
+                },
+                setPassword: function() {
+                    var _this = this;
+                    var password = _this.form_set_pass.password;
+                    var repassword = _this.form_set_pass.repassword;
+
+                    if (!password) {
+                        $.toast("请输入密码", 'text');
+                        return;
+                    }
+                    if (!repassword) {
+                        $.toast("请再次输入密码", 'text');
+                        return;
+                    }
+                    if　(password !== repassword) {
+                        $.toast("两次输入的密码不一致", 'text');
+                        return;
+                    }
+                
+                    var _json = {
+                        password: password
+                    };
+                    $.showLoading('数据提交中');
+                    APP.send('/PC/User/loginEditPassword.json', function(res) {
+                        $.hideLoading();
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            $.toast("设置成功", "success", function() {
+                                window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=info';
+                                //_this.nextInfo();
+                            });
+                        } else {
+                            $.toast(res.msg, 'text');
+                        }
+                    },_json);
+                },
+                setDefalutSelect: function(type, val) {
+                    // if (this.form_info[type] != 'defalut') {
+                    //     return
+                    // }
+                    this.form_info[type] = val;
+                },
+                compressHeadPic: function(img, Orientation) {
+                    //    用于压缩图片的canvas
+                    var canvas = document.createElement("canvas");
+                    var ctx = canvas.getContext('2d');
+                    //    瓦片canvas
+                    var tCanvas = document.createElement("canvas");
+                    var tctx = tCanvas.getContext("2d");
+                
+
+                    var initSize = img.src.length;
+                    var width = img.width;
+                    var height = img.height;
+
+                    //
+                    //console.log(width, height)
+                    if (width>height) {
+                        width=height;
+                    }
+                    if (height>width) {
+                        width=height;
+                    }
+
+                    //如果图片大于四百万像素，计算压缩比并将大小压至400万以下
+                    var ratio;
+                    if ((ratio = width * height / 4000000)>1) {
+                        ratio = Math.sqrt(ratio);
+                        width /= ratio;
+                        height /= ratio;
+                    }else {
+                        ratio = 1;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    //alert(Orientation);
+
+                    // var degree =  90 * Math.PI / 180;   
+                    // ctx.rotate(degree); 
+                    // ctx.drawImage(img, 0, 0);
+                    //rotateImg(img,'left',canvas); 
+                    
+                    //修复ios 
+                    if (navigator.userAgent.match(/iphone/i)) {
+                        //console.log(Orientation); 
+                        //alert(expectWidth + ',' + expectHeight); 
+                        //如果方向角不为1，都需要进行旋转 added by lzk 
+                        if(Orientation != "" && Orientation != 1){ 
+                            //alert('旋转处理'); 
+                            switch(Orientation){ 
+                                case 6://需要顺时针（向左）90度旋转 
+                                    //alert('需要顺时针（向左）90度旋转'); 
+                                    rotateImg(ctx, img,'left',canvas); 
+                                    break; 
+                                case 8://需要逆时针（向右）90度旋转 
+                                    //alert('需要顺时针（向右）90度旋转'); 
+                                    rotateImg(ctx, img,'right',canvas); 
+                                    break; 
+                                case 3://需要180度旋转 
+                                    //alert('需要180度旋转'); 
+                                    rotateImg(ctx, img,'right',canvas);//转两次 
+                                    rotateImg(ctx, img,'right',canvas); 
+                                    break; 
+                            }        
+                        } 
+                    }
+
+                    function rotateImg(ctx, img, direction,canvas) {   
+                        //alert(img); 
+                        //最小与最大旋转方向，图片旋转4次后回到原方向   
+                        var min_step = 0;   
+                        var max_step = 3;   
+                        //var img = document.getElementById(pid);   
+                        if (img == null)return;   
+                        //img的高度和宽度不能在img元素隐藏后获取，否则会出错   
+                        var height = img.height;   
+                        var width = img.width;   
+                        if (width>height) {
+                            width=height;
+                        }
+                        if (height>width) {
+                            width=height;
+                        }
+                        //var step = img.getAttribute('step');   
+                        var step = 2;   
+                        if (step == null) {   
+                            step = min_step;   
+                        }   
+                        if (direction == 'right') {   
+                            step++;   
+                            //旋转到原位置，即超过最大值   
+                            step > max_step && (step = min_step);   
+                        } else {   
+                            step--;   
+                            step < min_step && (step = max_step);   
+                        }   
+                        //img.setAttribute('step', step);   
+                        /*var canvas = document.getElementById('pic_' + pid);   
+                        if (canvas == null) {   
+                            img.style.display = 'none';   
+                            canvas = document.createElement('canvas');   
+                            canvas.setAttribute('id', 'pic_' + pid);   
+                            img.parentNode.appendChild(canvas);   
+                        }  */ 
+                        //旋转角度以弧度值为参数   
+                        var degree = step * 90 * Math.PI / 180;   
+                        //alert(step)
+                        switch (step) {   
+                            case 0:   
+                                canvas.width = width;   
+                                canvas.height = height;   
+                                ctx.drawImage(img, 0, 0);   
+                                break;   
+                            case 1:   
+                                canvas.width = height;   
+                                canvas.height = width;   
+                                //alert(degree)
+                                ctx.rotate(degree);   
+                                ctx.drawImage(img, 0, -height);   
+                                break;   
+                            case 2:   
+                                canvas.width = width;   
+                                canvas.height = height;   
+                                ctx.rotate(degree);   
+                                ctx.drawImage(img, -width, -height);   
+                                break;   
+                            case 3:   
+                                canvas.width = height;   
+                                canvas.height = width;   
+                                ctx.rotate(degree);   
+                                ctx.drawImage(img, -width, 0);   
+                                break;   
+                        }   
+                    }   
+
+                    //铺底色
+                    ctx.fillStyle = "#fff";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    //如果图片像素大于100万则使用瓦片绘制
+                    var count;
+                    if ((count = width * height / 1000000) > 1) {
+                        count = ~~(Math.sqrt(count)+1); //计算要分成多少块瓦片
+                        //计算每块瓦片的宽和高
+                        var nw = ~~(width / count);
+                        var nh = ~~(height / count);
+
+                        tCanvas.width = nw;
+                        tCanvas.height = nh;
+                        for (var i = 0; i < count; i++) {
+                            for (var j = 0; j < count; j++) {
+                                tctx.drawImage(img, i * nw * ratio, j * nh * ratio, nw * ratio, nh * ratio, 0, 0, nw, nh);
+
+                                ctx.drawImage(tCanvas, i * nw, j * nh, nw, nh);
+                            }
+                        }
+                    } else {
+                        ctx.drawImage(img, 0, 0, width, height);
+                    }
+
+                    //进行最小压缩
+                    var ndata = canvas.toDataURL('image/jpeg', 0.2);
+
+                    // console.log('压缩前：' + initSize);
+                    // console.log('压缩后：' + ndata.length);
+                    // console.log('压缩率：' + ~~(100 * (initSize - ndata.length) / initSize) + "%");
+
+                    tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0;
+                    return ndata;
+                },
+                compress: function(type, img, Orientation) {
+                    //    用于压缩图片的canvas
+                    var canvas = document.createElement("canvas");
+                    var ctx = canvas.getContext('2d');
+                    //    瓦片canvas
+                    var tCanvas = document.createElement("canvas");
+                    var tctx = tCanvas.getContext("2d");
+                
+
+                    var initSize = img.src.length;
+                    var width = img.width;
+                    var height = img.height;
+
+                    
+
+                    //如果图片大于四百万像素，计算压缩比并将大小压至400万以下
+                    var ratio;
+                    if ((ratio = width * height / 4000000)>1) {
+                        ratio = Math.sqrt(ratio);
+                        width /= ratio;
+                        height /= ratio;
+                    } else {
+                        ratio = 1;
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    //console.log(width, height) 600 470
+                    var _new_times = 470 / 660;
+                    var _times = height / width;
+
+                    if (type == '0') {
+                        if (_new_times < _times) {
+                            canvas.height = _new_times * width;
+                        }
+                    }
+
+                    //修复ios 
+                    if (navigator.userAgent.match(/iphone/i)) {
+                        //console.log(Orientation); 
+                        //alert(expectWidth + ',' + expectHeight); 
+                        //如果方向角不为1，都需要进行旋转 added by lzk 
+                        if(Orientation != "" && Orientation != 1){ 
+                            //alert('旋转处理'); 
+                            switch(Orientation){ 
+                                case 6://需要顺时针（向左）90度旋转 
+                                    //alert('需要顺时针（向左）90度旋转'); 
+                                    rotateImg(ctx, img,'left',canvas); 
+                                    break; 
+                                case 8://需要逆时针（向右）90度旋转 
+                                    //alert('需要顺时针（向右）90度旋转'); 
+                                    rotateImg(ctx, img,'right',canvas); 
+                                    break; 
+                                case 3://需要180度旋转 
+                                    //alert('需要180度旋转'); 
+                                    rotateImg(ctx, img,'right',canvas);//转两次 
+                                    rotateImg(ctx, img,'right',canvas); 
+                                    break; 
+                            }        
+                        } 
+                    }
+
+                    function rotateImg(ctx, img, direction,canvas) {   
+                        //alert(img); 
+                        //最小与最大旋转方向，图片旋转4次后回到原方向   
+                        var min_step = 0;   
+                        var max_step = 3;   
+                        //var img = document.getElementById(pid);   
+                        if (img == null)return;   
+                        //img的高度和宽度不能在img元素隐藏后获取，否则会出错   
+                        var height = img.height;   
+                        var width = img.width;   
+                        if (width>height) {
+                            width=height;
+                        }
+                        if (height>width) {
+                            width=height;
+                        }
+                        //var step = img.getAttribute('step');   
+                        var step = 2;   
+                        if (step == null) {   
+                            step = min_step;   
+                        }   
+                        if (direction == 'right') {   
+                            step++;   
+                            //旋转到原位置，即超过最大值   
+                            step > max_step && (step = min_step);   
+                        } else {   
+                            step--;   
+                            step < min_step && (step = max_step);   
+                        }      
+
+                        //旋转角度以弧度值为参数   
+                        var degree = step * 90 * Math.PI / 180;   
+                        //alert(step)
+                        switch (step) {   
+                            case 0:   
+                                canvas.width = width;   
+                                canvas.height = height;   
+                                ctx.drawImage(img, 0, 0);   
+                                break;   
+                            case 1:   
+                                canvas.width = height;   
+                                canvas.height = width;   
+                                //alert(degree)
+                                ctx.rotate(degree);   
+                                ctx.drawImage(img, 0, -height);   
+                                break;   
+                            case 2:   
+                                canvas.width = width;   
+                                canvas.height = height;   
+                                ctx.rotate(degree);   
+                                ctx.drawImage(img, -width, -height);   
+                                break;   
+                            case 3:   
+                                canvas.width = height;   
+                                canvas.height = width;   
+                                ctx.rotate(degree);   
+                                ctx.drawImage(img, -width, 0);   
+                                break;   
+                        }   
+                    }   
+
+                    //铺底色
+                    ctx.fillStyle = "#fff";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    //如果图片像素大于100万则使用瓦片绘制
+                    var count;
+                    if ((count = width * height / 1000000) > 1) {
+                        count = ~~(Math.sqrt(count)+1); //计算要分成多少块瓦片
+                        //计算每块瓦片的宽和高
+                        var nw = ~~(width / count);
+                        var nh = ~~(height / count);
+
+                        tCanvas.width = nw;
+                        tCanvas.height = nh;
+                        for (var i = 0; i < count; i++) {
+                            for (var j = 0; j < count; j++) {
+                                tctx.drawImage(img, i * nw * ratio, j * nh * ratio, nw * ratio, nh * ratio, 0, 0, nw, nh);
+
+                                ctx.drawImage(tCanvas, i * nw, j * nh, nw, nh);
+                            }
+                        }
+                    } else {
+                        ctx.drawImage(img, 0, 0, width, height);
+                    }
+
+                    //进行最小压缩
+                    var ndata = canvas.toDataURL('image/jpeg', 0.8);
+
+                    // console.log('压缩前：' + initSize);
+                    // console.log('压缩后：' + ndata.length);
+                    // console.log('压缩率：' + ~~(100 * (initSize - ndata.length) / initSize) + "%");
+
+                    tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0;
+                    return ndata;
+                },
+                upload: function(div, basestr, type, head_src_url) {
+                    //console.log(type)
+                    var _this = this;
+                    var _div = div;
+                    var text = window.atob(basestr.split(",")[1]);
+
+                    var buffer = new Uint8Array(text.length);
+
+                    var pecent = 0, loop = null;
+
+                    for (var i = 0; i < text.length; i++) {
+                        buffer[i] = text.charCodeAt(i);
+                    }
+                    
+                    var blob = getBlob([buffer], type);
+                    
+
+                    function getBlob(buffer, format) {
+                        try {
+                            return new Blob(buffer, {type: format});
+                        } catch (e) {
+                        var bb = new (window.BlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder);
+                        buffer.forEach(function(buf) {
+                            bb.append(buf);
+                        });
+                            return bb.getBlob(format);
+                        }
+                    }
+                    function getFormData() {
+                        var isNeedShim = ~navigator.userAgent.indexOf('Android')
+                            && ~navigator.vendor.indexOf('Google')
+                            && !~navigator.userAgent.indexOf('Chrome')
+                            && navigator.userAgent.match(/AppleWebKit\/(\d+)/).pop() <= 534;
+                        return isNeedShim ? new FormDataShim() : new FormData()
+                    }
+
+                    function FormDataShim() {
+                        var o = this,
+                            parts = [],
+                            boundary = Array(21).join('-') + (+new Date() * (1e16 * Math.random())).toString(36),
+                            oldSend = XMLHttpRequest.prototype.send;
+                        this.append = function(name, value, filename) {
+                            parts.push('--' + boundary + '\r\nContent-Disposition: form-data; name="' + name + '"');
+                            if (value instanceof Blob) {
+                                parts.push('; filename="' + (filename || 'blob') + '"\r\nContent-Type: ' + value.type + '\r\n\r\n');
+                                parts.push(value);
+                            }
+                            else {
+                                parts.push('\r\n\r\n' + value);
+                            }
+                            parts.push('\r\n');
+                        };
+                        // Override XHR send()
+                        XMLHttpRequest.prototype.send = function(val) {
+                            var fr,
+                                data,
+                                oXHR = this;
+                            if (val === o) {
+                                // Append the final boundary string
+                                parts.push('--' + boundary + '--\r\n');
+                                // Create the blob
+                                data = getBlob(parts);
+                                // Set up and read the blob into an array to be sent
+                                fr = new FileReader();
+                                fr.onload = function() {
+                                oldSend.call(oXHR, fr.result);
+                                };
+                                fr.onerror = function(err) {
+                                throw err;
+                                };
+                                fr.readAsArrayBuffer(data);
+                                // Set the multipart content type and boudary
+                                this.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
+                                XMLHttpRequest.prototype.send = oldSend;
+                            }
+                            else {
+                                oldSend.call(this, val);
+                            }
+                        };
+                    }
+                    var formdata = getFormData();
+                    formdata.append('imagefile', blob, "headpic.png");
+                    $.hideLoading();
+                    $.showLoading('数据提交中');
+                    APP.imgToUrl(formdata, function(res) {
+                        //console.log(res);
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            if (_div == 'otherFile_url0') {
+                                _this.form_info.otherFile_url[0].url =  head_src_url+res.url;
+                                _this.form_info.otherFile_url_sum == 0 ? _this.form_info.otherFile_url_sum++ : _this.form_info.otherFile_url_sum;
+                            } else if (_div == 'otherFile_url1') {
+                                _this.form_info.otherFile_url[1].url =  head_src_url+res.url;
+                                _this.form_info.otherFile_url_sum == 1 ? _this.form_info.otherFile_url_sum++ : _this.form_info.otherFile_url_sum;
+                            } else if (_div == 'otherFile_url2') {
+                                _this.form_info.otherFile_url[2].url =  head_src_url+res.url;
+                                _this.form_info.otherFile_url_sum == 2 ? _this.form_info.otherFile_url_sum++ : _this.form_info.otherFile_url_sum;
+                            } else if (_div == 'otherFile_url3') {
+                                _this.form_info.otherFile_url[3].url =  head_src_url+res.url;
+                                _this.form_info.otherFile_url_sum == 3 ? _this.form_info.otherFile_url_sum++ : _this.form_info.otherFile_url_sum;
+                            } else if (_div == 'otherFile_url4') {
+                                _this.form_info.otherFile_url[4].url =  head_src_url+res.url;
+                            } else if (_div == 'uplaoad_pz') {
+                                _this.form_goPay[_div] = res.url;
+                            } else {
+                                _this.form_info[_div] = head_src_url+res.url;
+                            }
+                            
+                        } else {
+                            $.toast(res.msg, 'text');
+                        }
+                    })
+                },
+                confirmLawyerFile: function(type, upload_type) {
+                    this.form_info[type] =  this.form_info[upload_type];
+                    this.page.show = 'info';
+                },
+                addCaseDiv: function(type, index) {
+                    var _type = type ? type : 'add';
+                    if (_type == 'add') {
+                        this.form_info.case_div.push(index+1);
+                    } else {
+                        //console.log(index)
+                        this.form_info.case_div.splice(index, 1)
+                    }
+                },
+                getNavExt: function() {
+                    //获取可选律师擅长领域
+                    var _this = this;
+                    APP.send('/V2/Public/navExt.json', function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            _this.form_info.field_div  = res.data;
+
+                            var _field_div = res.data;
+                            var _data = _this.info.cash_pledge_lawyer_rights;
+                            if (_data && _data.length > 0) {
+                                for (var i=0, len=_data.length; i<len; i++) {
+                                    for (var a=0, lenA=_field_div.length; a<lenA; a++) {
+                                        if (_data[i] == _field_div[a]['id']) {
+                                            _this.form_info.field += _field_div[a]['nav_title'] + ',';
+                                        }
+                                    }
+                                }
+                            }
+
+                        } else {
+                            console.log(res.msg);
+                        }
+                    });
+                },
+                selectNavExt: function(id, nav_title, index) {
+                    //选择擅长领域
+                    var data_buy_length  = this.form_info.field_buy.length;
+                    var data_length  = this.form_info.field_temporary.length;
+                    // console.log(data_buy_length)
+                    // console.log(id)
+                    // console.log(index)
+                    if (data_buy_length+data_length >=3 && !$(".JS_field_item").eq(index).hasClass('active')) {
+                        $.toast("最多可添加3个领域", "text")
+                        return;
+                    }
+
+                    var _data = this.form_info.field_temporary;
+                    if (_data.length > 0 ) {
+                        for (var i=0, len=_data.length; i<len; i++) {  
+                            if (_data[i]['id'] == id && !$(".JS_field_item").eq(index).attr("data-checked")) {
+                                this.form_info.field_temporary.splice(i, 1);
+                                $(".JS_field_item").eq(index).removeClass('active');
+                                this.calcNavExtPrice();
+                                return;
+                            }
+                        }
+                    } 
+                    if (!$(".JS_field_item").eq(index).attr("data-checked")) {
+                        this.form_info.field_temporary.push({
+                            id: id,
+                            nav_title: nav_title
+                        });
+                        $(".JS_field_item").eq(index).addClass('active');
+                    }
+
+                    this.calcNavExtPrice();
+                    //console.log(this.form_info.field);
+                },
+                selectNavList: function(div, index) {
+                    //选中企业擅长领域
+                    var _all_div = $("."+div);
+                    if (div == 'JS_item_field_enterprise') {
+                        var _sum = 0;
+                        for (var i=0, len=_all_div.length; i<len; i++) {
+                            if ($(_all_div[i]).hasClass("active")) {
+                                _sum ++;
+                            }
+                        }
+                        if (_sum>=2 && !$("."+div).eq(index).hasClass('active')) {
+                            $.toast("最多选择两项", "text");
+                            return;
+                        }
+                    }
+                    if ($("."+div).eq(index).hasClass('active')) {
+                        $("."+div).eq(index).removeClass('active');
+                        if (div == 'JS_item_field_other' && $('.'+div).eq(index).find('.item-label-text').text() == '其他') {
+                            this.form_info.field_know_state = false;
+                        }
+                    } else {
+                        $("."+div).eq(index).addClass('active');
+                        if (div == 'JS_item_field_other' && $('.'+div).eq(index).find('.item-label-text').text() == '其他') {
+                            this.form_info.field_know_state = true;
+                        }
+                    }
+                },
+                confirmNavList: function(div, type) {
+                    var _div = $("."+div);
+                    var _other_div = $(".JS_otherField_item");
+                    this.form_info[type] = '';
+                    for (var i=0, len=_div.length; i<len; i++) {
+                        if ($(_div[i]).hasClass("active")) {
+                            if (div == 'JS_item_field_other' && $(_div[i]).find('.item-label-text').text() == '其他') {
+                                this.form_info[type] += '其他,';
+                                for (var a=0, lenA=_other_div.length; a<lenA; a++) {
+                                    if ($(_other_div[a]).val() && $(_other_div[a]).val() !=" ") {
+                                        this.form_info[type] += $(_other_div[a]).val()+',';
+                                    }
+                                }
+                            } else {
+                                this.form_info[type] += $(_div[i]).find('.item-label-text').text()+',';
+                            }
+                            
+                        };
+                    }
+                    //console.log(this.form_info[type])
+                    if (this.form_info[type]) {
+                        this.form_info[type] = this.form_info[type].substr(0, this.form_info[type].length-1)
+                    }
+                    this.page.show = 'info';
+                },
+                confirmNavExt: function() {
+                    //最多3条
+
+                    var _data = this.form_info.field_temporary;
+                    this.form_info.field = '';
+                    var _div = $(".JS_field_item");
+                    var _text = '';
+                    for (var i=0, len=_div.length; i<len; i++) {
+                        if ($(_div[i]).hasClass('active')) {
+                            _text = $(_div[i]).find('.item-label-text').text();
+                            this.form_info.field += _text+',';
+                        }
+                    }
+
+                    // for (var i=0, len=_data.length; i<len; i++) {
+                    //     if (i==0 ) {
+                    //         this.form_info.field += _data[i]['nav_title'];
+                    //     } else {
+                    //         this.form_info.field += ','+_data[i]['nav_title'];
+                    //     }
+                    // }
+                    this.form_info.field_arr = _data;
+                    this.page.show = 'info';
+                },
+                initSelectNavExt: function() {
+                    var _data = this.form_info.field_buy;
+                    var _div = $(".JS_field_item");
+                    for (var i=0, len=_data.length; i<len; i++) {
+                        for (var a=0, lenA=_div.length; a<lenA; a++) {
+                            if ($(_div[a]).attr("data-id") == _data[i]) {
+                                $(_div[a]).addClass("active");
+                                $(_div[a]).attr("data-checked", "checked");
+                            }
+                        }
+                    }
+                },
+                initSelectNavList: function(div, type) {
+                    //企业擅长领域
+                    var _data = this.form_info[type].split(",");
+                    var _div = $("."+div);
+
+                    for (var i=0, len=_data.length; i<len; i++) {
+                        for (var a=0, lenA=_div.length; a<lenA; a++) {
+                            if ($(_div[a]).find('.item-label-text').text() == _data[i]) {
+                                $(_div[a]).addClass("active");
+                            }
+                        }
+                    }
+
+                    if (div == 'JS_item_field_other') {
+                        var _field_know = _data;
+                        var _loca_field_know = ['建筑施工', '医疗', '保险', '娱乐', '投融资', '能源', '互联网', '其他'];
+                        var _loca_field_know_json = {};
+                        for (i in _loca_field_know) {
+                            _loca_field_know_json[_loca_field_know[i]] = true;
+                        }
+                        //console.log(_loca_field_know_json)
+                        var _new_field_other_know = [];
+                        for (var i=0, len=_field_know.length; i<len; i++) {
+                            if (!_loca_field_know_json[_field_know[i]]) {
+                                $(_div[7]).addClass("active");
+                                this.form_info.field_know_state = true;
+                            }
+                        }
+                    }
+
+
+                },
+                calcNavExtPrice: function() {
+                    //领域价格计算
+                    var _this = this;
+                    var _data = [];
+                    var data_temporary  = this.form_info.field_temporary;
+                    for (var i=0,len=data_temporary.length; i<len; i++) {
+                        _data.push(data_temporary[i]['id']);
+                    }
+                    var _json = {
+                        lawyer_cash_pledge: _data,
+                        is_rights_protection: 0,
+                    }
+                
+                    APP.send("/V2/Lawyer/calculatedAmount.json", function(res) {
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.form_info.total_price = _data.lawyer_cash_pledge;
+                           
+                        } else {
+                            //$.toast(res.msg, "text");
+                        }
+                    }, _json);
+
+                },
+                blackSumbit: function() {
+                    if (this.form_info.page == 0) {
+                        window.history.go(-1);
+                    } else if (this.form_info.page == 1) {
+                        this.form_info.page = 0;
+                    } else if (this.form_info.page == 2) {
+                        this.form_info.page = 1;
+                    }
+                    $(document).scrollTop(0)
+                },
+                nextSubmit: function() {
+                    if (this.info_type == '2') {
+                        $.toast("资料审核中", "text")
+                        return;
+                    }
+                    if (this.form_info.page == 0) {
+                        this.checkFirstSumbit();
+                    } else if (this.form_info.page == 1) {
+                        this.checkSecondSumbit();
+                    } else if (this.form_info.page == 2) {
+                        this.submit();
+                    }
+                },
+                checkFirstSumbit: function() {
+                    //第一页资料填写验证
+                    if (!this.form_info.name) {
+                        $.toast("请输入姓名", "text");
+                        return;
+                    }
+                    if (this.form_info.sex == 'defalut') {
+                        $.toast("请选择性别", "text");
+                        return;
+                    }
+                    if (!$("#JS_form_info_data").val() || $("#JS_form_info_data").val() == 'defalut' || $("#JS_form_info_data").val() == '0000-00-00') {
+                        $.toast("请选择出生日期", "text");
+                        return;
+                    }
+                    if (this.form_info.email && !APP.isEmail(this.form_info.email)) {
+                        $.toast("邮箱格式不正确", "text");
+                        return;
+                    }
+                    if (this.form_info.education == 'defalut') {
+                        $.toast("请选择学历", "text");
+                        return;
+                    }
+                    if (!this.form_info.school) {
+                        $.toast("请输入毕业院校", "text");
+                        return;
+                    }
+                    this.form_info.page = 1;
+                    $(document).scrollTop(0)
+                },
+                checkSecondSumbit: function() {
+                    //第二页资料填写验证
+                    if (!APP.isLicenseNumber(this.form_info.license_number)) {
+                        $.toast("执业证号格式不正确", "text");
+                        return;
+                    }
+                    if (!this.form_info.law_name) {
+                        $.toast("请输入律所名称", "text");
+                        return;
+                    }
+                    if (this.form_info.law_position == 'defalut') {
+                        $.toast("请选择律所职位", "text");
+                        return;
+                    }
+                    if (!this.form_info.lawyerFile_url) {
+                        $.toast("请上传律所执业证", "text");
+                        return;
+                    }
+                    if (!this.form_info.limitedFile_url) {
+                        $.toast("请上年审照片", "text");
+                        return;
+                    }
+                    this.form_info.page = 2;
+                    $(document).scrollTop(0)
+
+                },
+                submit: function() {
+                    //第三页资料填写验证及所有资料提交审核
+                    var _this = this;
+                    var _json = {
+                        headimgurl: _this.form_info.upload_headPic_url,//头像照片
+                        name: _this.form_info.name,                         //姓名
+                        id_no: _this.form_info.id_card,                         //身份证号
+                        sex: _this.form_info.sex,                         //身份证号
+                        birthday: $("#JS_form_info_data").val(),                 //生日
+                        phone: _this.form_info.phone,                       //联系电话
+                        email: _this.form_info.email,                       //邮箱
+                        education: _this.form_info.education,               //学历
+                        graduated_school: _this.form_info.school,           //毕业学校
+                        
+                        license_number: _this.form_info.license_number,     //执业证号
+                        law_firm_name: _this.form_info.law_name,            //律所名称
+                        law_firm_position: _this.form_info.law_position,    //律所职位
+                        lawyer_certificate: _this.form_info.lawyerFile_url,     //执业证照片
+                        lawyer_annual: _this.form_info.limitedFile_url,     //年审照片
+                        other_practice_certificates: '',                    //其它执业证书
+
+                        business_type: _this.form_info.business_type,       //业务类型
+                        practice_city: $("#JS_form_info_city").attr("data-codes"),                //城市
+                        language: _this.form_info.language,                //擅长语言
+                        areas_of_expertise_to_b: _this.form_info.field_enterprise,  //企业擅长领域
+                        familiar_with_the_industry: _this.form_info.field_know,  //熟悉行业
+                        charge_interval: _this.form_info.toll_range,  //收费区间
+                        consult_price: _this.form_info.consultation_price,  //咨询价
+                        case_description: '',  //承办案件
+                        introduction: _this.form_info.personal_profile, //个人简介
+                        classic_case: [],       //经典案例
+
+                        source: 3,               //h5来源
+                        level: 1,
+                        timing_price: 0,
+                        proxy_price: 4000
+                    }
+
+                    //其它执业证书
+                    var _other_practice_certificates = _this.form_info.otherFile_url;
+                    var _other_practice_certificates_json = [];
+                    for (var i=0, len=_other_practice_certificates.length; i<len; i++) {
+                        if (_other_practice_certificates[i].name || _other_practice_certificates[i].url) {
+                            _other_practice_certificates_json.push(_other_practice_certificates[i])
+                        }
+                    }
+                    _json.other_practice_certificates = JSON.stringify(_other_practice_certificates_json);
+
+
+
+                    //业务类型
+                    if (_this.form_info.business_type == 'defalut') {
+                        $.toast("请选择业务类型", "text");
+                        return;
+                    }
+                    if (!_json.practice_city) {
+                        $.toast("请选择城市", "text");
+                        return;
+                    }
+                    if (!_this.form_info.language) {
+                        $.toast("请选择擅长语言", "text");
+                        return;
+                    }
+                    //擅长领域
+                    if (_this.form_info.field_buy && _this.form_info.field_buy.length==0 && !_this.form_info.field) {
+                        $.toast("请选择擅长领域", "text");
+                        return;
+                    }
+                    //console.log(_json)
+                    var _fid = '';
+                    for (var i=0, len=_this.form_info.field_arr.length; i<len; i++) {
+                        if (i==_this.form_info.field_arr.length-1) {
+                            _fid += _this.form_info.field_arr[i]['id'];
+                        } else {
+                            _fid += _this.form_info.field_arr[i]['id'] + ','
+                        }
+                    }
+                    //企业领域
+                    if (!_this.form_info.field_enterprise) {
+                        $.toast("请选择企业端擅长领域", "text");
+                        return;
+                    }
+                    if (_this.form_info.toll_range == 'defalut') {
+                        $.toast("请选择收费区间", "text");
+                        return;
+                    }
+                    if (!_this.form_info.consultation_price) {
+                        $.toast("请输入咨询价", "text");
+                        return;
+                    }
+                    //承办案件
+                    var div_lawCase = $(".JS_lawCase_item");
+                    var div_lawCase_name,
+                        div_lawCase_sum;
+                    var div_lawCase_data = [];
+                    for (var i=0, len=div_lawCase.length; i<len; i++) {
+                        div_lawCase_name = $(div_lawCase[i]).find(".JS_lawCase_name").val();
+                        div_lawCase_sum = $(div_lawCase[i]).find(".JS_lawCase_sum").val();
+                        if (div_lawCase_name || div_lawCase_sum) {
+                            div_lawCase_data.push({
+                                describe: div_lawCase_name,
+                                number: div_lawCase_sum
+                            })
+                        }
+                    }
+                    if (div_lawCase_data.length>0) {
+                        _json.case_description = JSON.stringify(div_lawCase_data);
+                    }
+
+
+                    //经典案例
+                    var div_case = $(".JS_case_item");
+                    for (var i=0, len=div_case.length; i<len; i++) {
+                        if ($(div_case[i]).val()) {
+                            _json.classic_case.push($(div_case[i]).val());
+                        }
+                    }
+                    // if (_this.info_type == '1') {
+                    //     for (var i=0, len=div_case.length; i<len; i++) {
+                    //         if ($(div_case[i]).val()) {
+                    //             _json.classic_case.push($(div_case[i]).val());
+                    //         }
+                    //     }
+                    // } else {
+                    //     _json.classic_case = _this.form_info.case;
+                    // }
+
+                    // console.log(_json);
+                    // console.log(_fid);
+                    // return;
+                    $.showLoading("数据提交中");
+                    APP.send('/V2/Lawyer/joinLawyer.json', function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=add&fid='+_fid;
+                            // _this.nextAdd();
+                            // _this.getLoginLawyerInfo();
+                        } else {
+                            $.hideLoading();
+                            $.toast(res.msg, "text");
+                        }
+                    }, _json);
+                },
+                calcAddOrderPrice: function() {
+                    //价格计算
+                    // var deposit = parseFloat(this.form_add.deposit);
+                    // var card_price = parseFloat(this.form_add.card_price);
+                    // if (!this.form_add.state) {
+                    //     deposit = 0;
+                    // }
+                    // if (this.form_add.checked == '0') {
+                    //     card_price = 0;
+                    // }
+                    // this.form_add.total_price = (deposit + card_price).toFixed(2);
+
+                    var _this = this;
+                    var _json = {
+                        lawyer_cash_pledge: this.form_info.field_arr,
+                        is_rights_protection: this.form_add.checked
+                    }
+                    APP.send("/V2/Lawyer/calculatedAmount.json", function(res) {
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.form_add.deposit = (_data.lawyer_cash_pledge).toFixed(2);
+                            _this.form_add.card_price = _data.rights_protection.toFixed(2);
+                            if (_this.form_add.checked == '0') {
+                                _this.form_add.total_price = _data.lawyer_cash_pledge;
+                            } else {
+                                _this.form_add.total_price = (parseFloat(_data.lawyer_cash_pledge) + parseFloat(_data.rights_protection)).toFixed(2);
+                            }
+                           
+                        } else {
+                            //$.toast(res.msg, "text");
+                        }
+                    }, _json);
+
+                },
+                selectCard: function() {
+                    //收益加速保障卡
+                    this.form_add.checked = this.form_add.checked == '1' ? '0' : '1';
+                    if (this.form_add.checked == '0') {
+                        this.form_add.total_price = this.form_add.deposit;
+                    } else {
+                        this.form_add.total_price = (parseFloat(this.form_add.deposit) + parseFloat(this.form_add.card_price)).toFixed(2);
+                    }
+                },
+                addOrder: function() {
+                    //订单提交
+
+                    //没选择新领域 没选择购买保障卡
+                    if (!this.form_add.state && this.form_add.checked == '0') {
+                        return;
+                    }
+                    //只购买保障卡 没选择新领域 判断是否购买过保障卡
+                    if (this.form_add.checked == '1' && this.info.rights_protection && this.info.rights_protection.length != 0) {
+                        $.toast("已经购买了保障卡", "text");
+                        return;
+                    }
+
+                    var lawyer_cash_pledge = [];
+                    var is_rights_protection = this.form_add.checked;
+                    var _this = this;
+                    //this.form_info.field_arr
+                    var _data = APP.getParam("fid") ? APP.getParam("fid").split(",") : []; //格式 {id: 2, nav_title: ''}
+                    //没选择新领域 没选择购买保障卡
+                    if (this.form_add.checked == '0' && _data && _data.length==0) {
+                        return;
+                    }
+                    //重组新加领域数据id ['2', '3']
+                    for (var i=0, len=_data.length; i<len; i++) {
+                        lawyer_cash_pledge.push(_data[i]);
+                    }
+
+                    var _json = {
+                        lawyer_cash_pledge: lawyer_cash_pledge,  //新领域id[]
+                        is_rights_protection: is_rights_protection // 0不购买保障卡 1购买
+                    }
+
+                    var _json_change = {
+                        lawyer_cash_pledge: lawyer_cash_pledge  //新领域id[]
+                    }
+                    //console.log(_json)
+                    //已经添加过领域 需要添加新领域
+                    if (_data.length > 0 && this.form_add.deposit == 0) {
+                        //成功
+                        $.showLoading("数据提交中")
+                        //添加新领域
+                        APP.send("/V2/Lawyer/changeRights.json", function(res) {
+                            $.hideLoading()
+                            if (res.errno == '0') {
+                                //购买保障卡
+                               if (is_rights_protection == '1') {
+                                   //新领域为空 防止领域重复报错
+                                   _json.lawyer_cash_pledge = [];
+                                   _this.addOrderAjax(_json);
+                               } else {
+                                   //显示添加领域成功结果页面
+                                   window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=payEndLy';
+                               }
+                            }
+                        }, _json_change);
+                    } else {
+                        //第一次添加领域 或 没新添加领域去购买保障卡
+                        this.addOrderAjax(_json);
+                    }
+                    
+                },
+                addOrderAjax: function(_json) {
+                    //生成订单 跳转支付页面
+                    $.showLoading("数据提交中")
+                    APP.send("/V2/Lawyer/createOrder.json", function(res) {
+                        $.hideLoading()
+                        if (res.errno == '0') {                         
+                            window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=goPay&uuid='+res.data;
+                        }
+                    }, _json);
+                },
+                getPayAccount: function() {
+                    //获取其它支付收款账号
+                    var _this = this;
+                    APP.send("/PC/Order/lookAccount.json", function(res) {
+                        if (res.errno == '0') {
+                            _this.form_goPay.pay_account = res.data.account ? res.data.account : [];
+                        }
+                    });
+                },
+                initGoPay: function() {
+                    //获取订单详情
+                    var _this = this;
+                    var uuid = APP.getParam("uuid");
+                     _this.form_goPay.uuid = uuid;
+                    APP.send("/V2/Lawyer/getOrder.json?uuid="+uuid, function(res) {
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.form_goPay.info = _data;
+                            _this.form_goPay.total_price = _data.money;
+
+                            //PAY_TYPE_EXT_OFFLINE 已选择其它支付
+                            if (_data.pay_type == 'PAY_TYPE_EXT_OFFLINE') {
+                                //显示支付提交成功
+                                _this.page.show = 'pay_succ_qt';
+                                if (_data.state == 'STATE_SUCCESS') {
+                                    _this.form_goPay.state_text = '已完成';
+                                } else {
+                                    _this.form_goPay.state_text = '审核中';
+                                }
+                            } else {
+                                //未选择支付类型 或 已选择支付宝或微信 判断订单状态
+
+                                //未支付 state：STATE_ING 显示支付页
+                                _this.page.show = 'goPay';
+                                
+                                ////已经支付 STATE_SUCCESS 显示支付成功
+                                if (_data.state == 'STATE_SUCCESS') {
+                                    _this.page.show = 'pay_succ_wx_zfb';
+                                    _this.form_goPay.state_text = '已完成';
+                                } else {
+                                    _this.form_goPay.state_text = '审核中';
+                                }
+                            }
+                        }
+                        
+                    });
+                },
+                goPay: function() {
+                    //订单号
+                    var uuid = this.form_goPay.uuid ? this.form_goPay.uuid : APP.getParam("uuid");
+
+                    //支付类型
+                    if (this.form_goPay.mode == '0') {
+                        if (this.weixin.state) {
+                            //微信支付
+                            this.goPayWxJssdk(uuid);
+                            //this.goPayWx(uuid);
+                        } else {
+                            //微信H5支付
+                            this.goPayWx(uuid);
+                        }
+                        
+                    } else if (this.form_goPay.mode == '1') {
+                        this.goPayZfb(uuid);
+                    } else if (this.form_goPay.mode == '2') {
+                        this.goPayQt(uuid);
+                    }
+                },
+                goPayZfb: function(uuid) {
+                    //支付宝支付
+                    if (this.weixin.state) {
+                        $.toast("从浏览器中打开以完成支付宝付款");
+                    } else {
+                        window.location.href = ajax_url+'/V2/Lawyer/ailPay.json?uuid='+uuid;
+                    }
+                },
+                goPayWx: function(uuid) {
+                    //微信h5支付
+                    var _this = this;
+                    var _json = {
+                        uuid: uuid,
+                        type: 1                        
+                    }
+                    $.showLoading("数据提交中");
+                    APP.send("/V2/Lawyer/wxPay.json", function(res) {
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            //mweb_url 获取跳转链接 生成a标签按钮 用户再次点击跳转微信支付
+                            _this.form_goPay.wx_pay_link = _data.mweb_url;
+                            // window.location.href = _data.mweb_url;
+                        } else {
+                            _this.page.show = 'pay_fail';
+                            $.toast(res.msg, "text");
+                        }
+                    }, _json);
+                    //window.location.href = ajax_url+'/V2/Lawyer/wxPay.json?'+lawyer_cash_pledge+'is_rights_protection='+is_rights_protection;
+                },
+                goPayWxJssdk: function(uuid) {
+                    //微信支付
+                    var _this = this;
+                    var _json = {
+                        uuid: uuid,
+                        type: 0
+                    }
+                    $.showLoading("数据提交中");
+                    APP.send("/V2/Lawyer/wxPay.json", function(res) {
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                           
+                            wx.chooseWXPay({
+                                appId: _data.appId,
+                                timestamp: _data.timeStamp,
+                                nonceStr: _data.nonceStr,
+                                package: _data.package,
+                                signType: _data.signType,
+                                paySign: _data.paySign,
+                                success: function(res) {
+                                    // 支付成功后的回调函数
+                                    if (res.errMsg == "chooseWXPay:ok") {
+                                        //支付成功
+                                        _this.page.show = 'pay_succ_wx_zfb';
+                                        //window.location.href = "my-order.html?sta=0";
+                                    } else {
+                                        _this.page.show = 'pay_fail';
+                                        $.toast(res.errMsg, 'text');
+                                    }
+                                },
+                                cancel: function(res) {
+                                    //支付取消
+                                    //$.toast('支付取消', 'text');
+                                    _this.page.show = 'pay_fail';
+                                    $.toast('支付取消', 'text');
+                                }
+                            });
+                            
+                        } else {
+                            _this.page.show = 'pay_fail';
+                            $.toast(res.msg, "text");
+                        }
+                    }, _json);
+
+                },
+                goPayQt: function(uuid) {
+                    //其它支付
+                    var _this = this;
+                    var _json = {
+                        uuid: uuid,
+                        ext_data: {
+                            pay_name: this.form_goPay.name,
+                            pay_account: this.form_goPay.account,
+                            pay_pic: this.form_goPay.uplaoad_pz,
+                            pay_mark: this.form_goPay.remarks,
+                        }
+                    }
+                    if (!this.form_goPay.name) {
+                        $.toast("请填写姓名或公司名称", "text");
+                        return;
+                    }
+                    if (!this.form_goPay.account) {
+                        $.toast("请填写付款账号", "text");
+                        return;
+                    }
+                    if (!this.form_goPay.uplaoad_pz) {
+                        $.toast("请上传支付凭证", "text");
+                        return;
+                    }
+
+                    // console.log(_json)
+                    $.showLoading("数据提交中");
+                    APP.send('/V2/Lawyer/extPay.json', function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            _this.page.show = 'pay_succ_qt';
+                        } else {
+                            _this.page.show = 'pay_fail';
+                            $.toast(res.msg, "text");
+                        }
+                    }, _json);
+        
+                },
+                getOrderState: function() {
+                    //微信H5支付 需要轮循查看订单详情判断是否支付完成
+                    var _this = this;
+                    if (!_this.form_goPay.timest_state) return;
+                    _this.form_goPay.timeset = setTimeout(function() {
+                        var uuid = APP.getParam("uuid");
+                        _this.form_goPay.timest_state = false;
+                        APP.send("/V2/Lawyer/getOrder.json?uuid="+uuid, function(res) {
+                            
+                            if (res.errno == '0') {
+                                var _data = res.data;
+                                if (_data.state == 'STATE_SUCCESS') {
+                                    _this.page.show = 'pay_succ_wx_zfb';
+                                    _this.form_goPay.state_text = '已完成';
+                                    clearTimeout( _this.form_goPay.timeset)
+                                } else {
+                                    _this.form_goPay.state_text = '审核中';
+                                    if (_data.pay_type == 'PAY_TYPE_EXT_OFFLINE') {
+                                        //其它支付
+                                    } else {
+                                        _this.form_goPay.timest_state = true;
+                                        _this.getOrderState()
+                                    }
+                                    
+                                }
+                            } else {
+                                _this.form_goPay.timest_state = true;
+                                _this.getOrderState()
+                            }
+                        });
+                    }, 3000)
+                }
+            }
+        });      
+
+    </script>
+
+
+</body>
+</html>

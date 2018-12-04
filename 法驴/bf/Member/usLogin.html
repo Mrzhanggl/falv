@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/us/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/us/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/us/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/us/css/main.css?v=32">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <!--登录或注册javascript:WeixinJSBridge.call('closeWindow');-->
+        <div v-show="page.show=='login'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a href="javascript:window.history.back();" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>Log In</h2>
+                </div>
+                <div class="s-login-intr">
+                    <p>Please enter phone number,</p>
+                    <p>Available for purchase after log in</p>
+                </div>
+                <div class="s-login-form">
+                    <div class="s-input-item clearfix">
+                        <span class="item-d1">+86</span>
+                        <div class="item-d2">
+                            <input v-model="form_login.phone" oninput="if(value.length>11)value=value.slice(0,11)" type="tel" placeholder="Mobile number" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="s-input-item s-input-itemCode clearfix">
+                        <span class="item-d1">Code</span>
+                        <div class="item-d2">
+                            <input v-model="form_login.code" type="tel" placeholder="Enter code" autocomplete="off">
+                        </div>
+                        <a @click="loginCountDown()" :class="{'unactive': !form_login.code_state}" href="javascript:;" class="item-d3 unactive">
+                            {{ form_login.time }}
+                        </a>
+                    </div>
+                </div>
+                <div class="s-login-action">
+                    <a @click="login()" :class="{unactive : !form_login.code || !form_login.phone}" class="s-btn s-btn_1" href="javascript:;">Confirm</a>
+                </div>
+                <div class="s1-login-tips">
+                    Log in means you agree to the<a @click="nexAgreement()" href="javascript:;">《Terms of use for Falv member》</a>
+                </div>
+            </div>
+        </div>
+        <!--设置密码-->
+        <div v-show="page.show=='set_pass'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show='login'" href="javascript:;" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>Set up password</h2>
+                </div>
+                <div class="s-login-intr">
+                    
+                </div>
+                <div class="s-setPass-form">
+                    <div class="s-input-item s-input-item2 clearfix">
+                        <span class="item-d1">Set up password</span>
+                        <div class="item-d2">
+                            <input v-model="form_set_pass.password" maxlength="" type="password" placeholder="6-10 words" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="s-input-item s-input-item2 clearfix">
+                        <span class="item-d1">Confirm</span>
+                        <div class="item-d2">
+                            <input v-model="form_set_pass.repassword" maxlength="" type="password" placeholder="Re-input password" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="s-login-action">
+                    <a @click="setPassword()" class="s-btn s-btn_1" href="javascript:;">Next</a>
+                </div>
+
+            </div>
+        </div>
+        <!--法律服务合作协议-->
+        <div v-show="page.show=='agreement'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show=page.agreement_last_page" href="javascript:;" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-agreement-box">
+                    <iframe src="agreement.html"></iframe>
+                </div>
+            </div>
+        </div>
+
+
+        <!--领取优惠卷-->
+        <div v-show="page.show=='coupon_succ'" class="main-page">
+            <div class="wrap-main">
+                <div class="s-orderPayEnd-title">
+                    <h2>领取成功</h2>
+                </div>
+                <img class="s-orderPayEnd-icon s-orderPayEnd-icon2" src="/Public/Home/us/img/m47.png">
+                <p class="s-orderPayEnd-coupon-p1">赶快下单使用吧，<span>当日</span>有效哦！</p>
+                <div class="s-orderPayEnd-action">
+                    <a href="/Member/usGoodsList.html" class="s-btn s-btn_1">立即使用</a>
+                </div>
+            </div>
+        </div>
+        <!--领取优惠卷-->
+        <div v-show="page.show=='coupon_fail'" class="main-page">
+            <div class="wrap-main">
+                <div class="s-orderPayEnd-title">
+                    <h2>领取失败</h2>
+                </div>
+                <img class="s-orderPayEnd-icon s-orderPayEnd-icon2" src="/Public/Home/us/img/m48.png">
+                <p class="s-orderPayEnd-coupon-p1">赶快下单使用吧，<span>当日</span>有效哦！</p>
+                <div class="s-orderPayEnd-action">
+                    <a href="/Member/usGoodsList.html" class="s-btn s-btn_1">立即使用</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/us/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/us/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/us/js/vue.min.js"></script>
+    <script src="/Public/Home/us/js/exif.js"></script>
+    <script src="/Public/Home/us/js/main.js?v=064"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    agreement_last_page: ''
+                },
+
+
+                form_login: {
+                    phone: '',
+                    code: '',
+                    time: 'send',
+                    code_state: true
+                },
+                form_set_pass: {
+                    password: '',
+                    repassword: ''
+                },
+
+
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0') {
+                        _this.nextPage();
+                    }
+                   // _this.page.show = 'login';
+                });
+                
+            },
+            mounted: function() {
+
+            },
+            methods: {
+                nexAgreement: function() {
+                    this.page.agreement_last_page = this.page.show;
+                    this.page.show='agreement';
+                },
+                login: function() {
+                    var _this = this;
+                    if (!_this.form_login.phone) {
+                        $.toast('请输入正确的手机号', 'text');
+                        return;
+                    }
+                    if (!_this.form_login.code) {
+                        return;
+                    }
+                    var _customer_source = APP.getFromChannel();
+                    var _json = {
+                        phone: _this.form_login.phone,
+                        code: _this.form_login.code,
+                        type: 3,
+                        customer_source: _customer_source
+                    };
+                    $.showLoading('数据提交中');
+                    APP.send('/PC/UserLogin/login.json', _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            //获取账号信息
+                            _this.info_login = true;
+                            _this.info = _data;
+                            if (_data.new_registration) {
+                                APP.sendHm("click", "register");
+                            }
+                            if (_data.password_is_null) {
+                                _this.page.show = 'set_pass';
+                            } else {
+                                var _channel = sessionStorage.getItem("coupon_from_login");
+                                if (_channel) {
+                                    sessionStorage.removeItem("coupon_from_login");
+                                    _this.addCoupon(_channel);
+                                } else {
+                                    _this.nextPage();
+                                }
+                                
+                            }
+                            
+                        } else {
+                            $.toast(res.msg, "text");
+                        }
+                    });
+
+                },
+                loginCountDown: function() {
+                    var _this = this;
+                    var _phone = _this.form_login.phone;
+
+                    if (!_this.form_login.code_state) return;
+                    if (!_phone) {
+                        $.toast('请输入正确的手机号', 'text');
+                        return;
+                    }
+                         
+                    _this.form_login.code_state = false;
+                    _this.loginSendCode(_phone);
+                    _this.form_login.time = 60;
+                    var timest = setInterval(function() {
+                        if (typeof(_this.form_login.time) == 'string') {
+                            clearInterval(timest)
+                            return;
+                        }
+                        _this.form_login.time--;
+                        if (_this.form_login.time == 0) {
+                            _this.form_login.code_state = true;
+                            _this.form_login.time = '重新发送';
+                            clearInterval(timest)
+                        }
+                    }, 1000)
+                },
+                loginSendCode: function(phone) {
+                    //获取短信验证码
+                    var _this = this;
+                    var _json = {
+                        phone: phone,
+                        is_anyhelper: 1
+                    }
+                    APP.send('/PC/UserLogin/sendShortMessageForFaLv.json', _json, function(res) {
+                        //console.log(res);
+                        if (res.errno == '0') {
+                            $.toptip('发送成功！', 'success');
+                        } else {
+                            _this.form_login.code_state = true;
+                            _this.form_login.time = '重新发送';
+                            //$.toast(res.msg, "text");
+                        }
+                    });
+                },
+                setPassword: function() {
+                    var _this = this;
+                    var password = _this.form_set_pass.password;
+                    var repassword = _this.form_set_pass.repassword;
+
+                    if (!password) {
+                        $.toast("请输入密码", 'text');
+                        return;
+                    }
+                    if (password.length<6 || password.length>10) {
+                        $.toast("密码格式不正确", 'text');
+                        return;
+                    }
+                    if (!repassword) {
+                        $.toast("请再次输入密码", 'text');
+                        return;
+                    }
+                    if　(password !== repassword) {
+                        $.toast("两次输入的密码不一致", 'text');
+                        return;
+                    }
+                
+                    var _json = {
+                        password: password
+                    };
+                    $.showLoading('数据提交中');
+                    APP.send('/PC/User/loginEditPassword.json', _json, function(res) {
+                        $.hideLoading();
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            $.toast("设置成功", "success", function() {
+                                var _channel = sessionStorage.getItem("coupon_from_login");
+                                if (_channel) {
+                                    sessionStorage.removeItem("coupon_from_login");
+                                    _this.addCoupon(_channel);
+                                } else {
+                                    _this.nextPage();
+                                }
+
+                                //_this.nextInfo();
+                            });
+                        } else {
+                            $.toast(res.msg, 'text');
+                        }
+                    });
+                },
+                nextPage: function() {
+                    var _url = APP.getParam("from") ? decodeURIComponent(APP.getParam("from")) : '/Member/usPersonal.html';
+                     window.location.href = _url;
+                },
+                addCoupon: function(channel) {
+                    //用户领取渠道优惠码
+                    var _this = this;
+                    var _channel = channel;
+                    $.hideLoading();
+                    $.showLoading("正在领取");
+                    APP.send('/PC/NEWOrder/userActivationDiscountCode.json?channel=' + _channel, function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        $.hideLoading()
+                        if (res.errno == '0') {                  
+                            _this.page.show = 'coupon_succ';
+                            
+                        } else {
+                            _this.page.show = 'coupon_fail';
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

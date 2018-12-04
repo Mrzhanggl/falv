@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>服务评价</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=40">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main main-tabbar">
+
+        <div v-show="page.show == 'home'">
+
+            <div class="m-main j-comment-bd">
+                <div class="j-comment-star">
+                    <span @click="form.star=1" :class="{'active': form.star>=1}" class="j-comment-star-item"></span>
+                    <span @click="form.star=2" :class="{'active': form.star>=2}" class="j-comment-star-item"></span>
+                    <span @click="form.star=3" :class="{'active': form.star>=3}" class="j-comment-star-item"></span>
+                    <span @click="form.star=4" :class="{'active': form.star>=4}" class="j-comment-star-item"></span>
+                    <span @click="form.star=5" :class="{'active': form.star>=5}" class="j-comment-star-item"></span>
+                </div>
+                <div class="j-comment-starText">
+                    {{ APP.getText.score_text[form.star] }}
+                </div>
+                <div class="j-comment-textBd clearfix">
+                    <div class="clearfix">           
+                        <div @click="setText(index)" v-for="(list, index) in form.text" :class="{'active': list.checked }" class="j-comment-textItem">{{ list.name }}</div>
+
+                        <div @click="form.orther_text_select = form.orther_text_select ? false : true" :class="{'active': form.orther_text_select}" class="j-comment-textItem">其他</div>
+
+                    </div>
+
+                    <div v-show="form.orther_text_select" class="j-comment-texteara">
+                        <textarea v-model="form.orther_text" maxlength="300" placeholder="(选填) 我们想提供更好的服务，您有什么建议？"></textarea>
+                        <div class="j-comment-texteara-sum">{{ form.orther_text.length }}/300</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="m-main">
+                <div class="j-comment-ban clearfix">
+                    <div class="j-comment-ban-cover">
+                        <img src="/Public/Home/topic/img/28.png">
+                    </div>
+                    <div class="j-comment-ban-content">
+                        <div class="content-d1"><strong>如需律师后续服务，请选择</strong></div>
+                        <div class="content-d2">
+                            法驴将迅速与您联系，精准推荐专业领域的律师为您服务
+                        </div>
+                    </div>
+                </div> 
+                <div class="j-comment-addService clearfix">
+                    <div @click="form.user_willingness='打官司'" :class="{'active': form.user_willingness=='打官司'}" class="j-timeDetails-object-item"><strong>打官司</strong></div>
+                    <div @click="form.user_willingness='律师见面'" :class="{'active': form.user_willingness=='律师见面'}" class="j-timeDetails-object-item"><strong>律师见面</strong></div>
+                    <div @click="form.user_willingness='文书起草'" :class="{'active': form.user_willingness=='文书起草'}" class="j-timeDetails-object-item"><strong>文书起草</strong></div>
+                    <div @click="form.user_willingness='律师函'" :class="{'active': form.user_willingness=='律师函'}" class="j-timeDetails-object-item"><strong>律师函</strong></div>
+                </div>
+                <div class="clearfix">
+                    <div @click="form.willingness_of_lawyer = form.willingness_of_lawyer ? false : true" :class="{'active': form.willingness_of_lawyer }" class="j-comment-addService-label">
+                        希望{{ order.lawyer_id !='0' ? order.lawyer_info.name.slice(0,1) + '律师' : '' }}继续为我服务
+                    </div>
+                </div>
+            </div>
+
+            <div class="j-comment-action">
+                <a @click="comment()" href="javascript:;" class="m-btn m-btn_1">提交</a>
+            </div>
+
+        </div>
+        
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: 'home',
+                },
+
+                order: {},
+
+                form: {
+                    star: 0,
+                    text: [
+                        {
+                            checked: false,
+                            name: "比较满意，仍可改善"
+                        },
+                        {
+                            checked: false,
+                            name: "让自己免遭损失"
+                        },
+                        {
+                            checked: false,
+                            name: "律师解答仔细，态度好"
+                        },
+                        {
+                            checked: false,
+                            name: "下次再来咨询"
+                        },
+                        {
+                            checked: false,
+                            name: "律师解答很专业"
+                        },
+                    ],
+                    orther_text_select: false,
+                    orther_text: '',
+                    user_willingness: '',           //
+                    willingness_of_lawyer: false    // 
+
+                }
+
+            },
+            created: function() {
+                APP.getInfo(this, function() {
+                    
+                });
+                this.details();
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "评价"
+                })
+            },
+            mounted: function() {
+
+            },
+            watch:{
+
+　　　　　　},
+            methods: {
+                setText: function(index) {
+                    if (this.form.text[index]["checked"]) {
+                        this.form.text[index]["checked"] = false;
+                    } else {
+                        this.form.text[index]["checked"] = true;
+                    }
+                },
+                details: function() {
+                    var _this = this;
+                    var _oid = APP.getParam("oid");
+                    var _json = {
+                        order_id: _oid
+                    }
+                    APP.send("/PC/NEWOrder/info.json", _json, function(res) {
+                        if (res.errno == '0') {
+                            //console.log(res);
+                            _this.order = res.data;
+                            
+                            //console.log(res.data.service_state)
+                        }
+                    })
+                },
+                comment: function() {
+                    var _this = this;
+                    var _oid = APP.getParam("oid");
+                    var _json = {
+                        star: _this.form.star,
+                        order_id: _oid,
+                        ext_data: [],
+                        note: _this.form.orther_text,
+                        user_willingness: _this.form.user_willingness,
+                        willingness_of_lawyer: '0'
+                    }
+
+                    if (_this.form.willingness_of_lawyer) {
+                        _json['willingness_of_lawyer'] = '1';
+                    }
+
+                    if (_json.star == 0) {
+                        $.toast("请您评价律师的服务", "text");
+                        return;
+                    }
+                    if (_this.form.orther_text_select && !_this.form.orther_text) {
+                        $.toast("请输入评价内容", "text");
+                        return;
+                    }
+                    // if (!_this.form.user_willingness) {
+                    //     $.toast("请选择意愿", "text");
+                    //     return;
+                    // }
+                    
+                    for (var i=0, len=_this.form.text.length; i<len; i++) {
+                        if (_this.form.text[i]["checked"]) {
+                            _json.ext_data.push(_this.form.text[i]['name']);
+                        }
+                    }
+
+                    $.showLoading("数据提交中");
+                     //console.log(_json)
+                    // return;
+
+            
+    
+
+
+                    APP.send("/PC/WxUser/evaluation.json", _json, function(res) {
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //console.log(res);
+                            $.toast("评价成功", "text");
+                            setTimeout(function() {
+                                window.location.href = '/Member/orderList.html';
+                            }, 500)
+                            //console.log(res.data.service_state)
+                        } else {
+                            $.toast(res.msg, "text");
+                        }
+                    })
+
+
+                    APP.sendHm({
+                        action: "click",
+                        object: "stars",
+                        chinese_object: "星级",
+                        chinese_url: "评价",
+                        parameter: _json.star
+                    })
+
+                    if (_this.form.orther_text_select) {
+                        APP.sendHm({
+                            action: "click",
+                            object: "Input box",
+                            chinese_object: "输入框",
+                            chinese_url: "评价",
+                            parameter: _json.note
+                        })
+
+                    }
+                    if (_this.form.user_willingness) {
+                        APP.sendHm({
+                            action: "click",
+                            object: "more_serivces",
+                            chinese_object: "后续服务",
+                            chinese_url: "评价",
+                            parameter: _json.user_willingness
+                        })
+
+                    }
+                    if (_this.form.willingness_of_lawyer) {
+                        APP.sendHm({
+                            action: "click",
+                            object: "this_lawyer_again",
+                            chinese_object: "希望该律师继续为我服务",
+                            chinese_url: "评价"
+                        })
+
+                    } 
+
+                    if (_json.ext_data && _json.ext_data.length > 0) {
+                        var _p = '';
+                        for (var i=0, len=_json.ext_data.length; i<len; i++) {
+                            _p += _json.ext_data[i]+','
+                        }
+
+                        APP.sendHm({
+                            action: "click",
+                            object: "words",
+                            chinese_object: "词云",
+                            chinese_url: "评价",
+                            parameter: _p
+                        })
+
+                    }
+
+                    APP.sendHm({
+                        action: "click",
+                        object: "submit",
+                        chinese_object: "提交",
+                        chinese_url: "评价"
+                    })
+
+
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

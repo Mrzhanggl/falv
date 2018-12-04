@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我的</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=24">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body class="ffffff">
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'home'">
+
+            <div class="m-personal-top"></div>
+            <div class="m-personal-info">
+                <div @click="nextPage('personal_info', '个人信息', '/Member/mInfo.html')" class="info-box">
+                    <div class="info-box-left">
+                        <p class="info-name"><strong>{{ info.is_edit == '0' ? info.wechat_nickname : info.corporate }}</strong></p>
+                        <p class="info-tel">{{ APP.getNum(info.phone) }}</p>
+                    </div>
+                    <div class="info-box-right">
+                        <div class="info-headpic">
+                            <img :src="info.wechat_headimgurl">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-main">
+                <div class="m-personal-title"><strong>订单</strong></div>
+                <div class="m-personal-box m-personal-boxBor clearfix">
+                    <a @click="nextPage('personal_wait', '查看待支付列表', '/Member/orderList.html?tab=0')" class="m-personal-box-item" href="javascript:;">
+                        <div class="item-icon">
+                            <img src="/Public/Home/topic/img/list_icon_daifu_default@2x.png">
+                            <div v-if="parseInt(order.not_paid_count)!=0" class="item-sum">{{ order.not_paid_count }}</div>
+                        </div>
+                        <p class="item-text"><strong>待支付</strong></p>
+                    </a>
+                    <a @click="nextPage('personal_service', '查看服务中列表', '/Member/orderList.html?tab=1')" class="m-personal-box-item" href="javascript:;">
+                        <div class="item-icon">
+                            <img src="/Public/Home/topic/img/list_icon_fuwuzhong_default@2x.png">
+                            <div v-if="parseInt(order.service_count)!=0" class="item-sum">{{ order.service_count }}</div>
+                        </div>
+                        <p class="item-text"><strong>服务中</strong></p>
+                    </a>
+                    <a @click="nextPage('personal_orderCenter', '查看我的订单', '/Member/orderList.html')" class="m-personal-box-item" href="javascript:;">
+                        <div class="item-icon">
+                            <img src="/Public/Home/topic/img/list_icon_order_default@2x.png">
+                        </div>
+                        <p class="item-text"><strong>我的订单</strong></p>
+                    </a>
+                </div>
+                <div class="m-personal-title"><strong>其他</strong></div>
+                <div class="m-personal-box clearfix">
+                    <a v-if="GetQueryString('fromtype')!='ajk'" @click="nextPage('personal_comment', '查看我的评论', '/Member/mCommentList.html')" class="m-personal-box-item" href="javascript:;">
+                        <div class="item-icon">
+                            <img src="/Public/Home/topic/img/list_icon_pinglun_default@2x.png">
+                        </div>
+                        <p class="item-text"><strong>我的评论</strong></p>
+                    </a>
+                    <a v-else @click="nextPage('personal_comment', '意见反馈', '/Member/mSuggest.html')" class="m-personal-box-item" href="javascript:;">
+                        <div class="item-icon">
+                            <img src="/Public/Home/topic/img/list_icon_pinglun_default@2x.png">
+                        </div>
+                        <p class="item-text"><strong>意见反馈</strong></p>
+                    </a>
+                </div>
+            </div>
+
+
+            <div class="weui-tabbar s-tabbar" v-if="GetQueryString('fromtype')!='ajk'">
+                <a href="/Member/mIndex.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
+                    <p class="weui-tabbar__label">首页</p>
+                </a>
+                <a href="/Member/liveIndex.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon2"></div>
+                    <p class="weui-tabbar__label">视频</p>
+                </a>
+                <a @click="$('#JS_more').popup();" href="javascript:;" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon">
+                        <div class="j-tabbar_iconMore"></div>
+                    </div>
+                    <p class="weui-tabbar__label">问律师</p>
+                </a>
+                <a href="/Member/mGoodsList.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon3"></div>
+                    <p class="weui-tabbar__label">产品</p>
+                </a>
+                <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+                    <div class="weui-tabbar__icon weui-tabbar__icon4"></div>
+                    <p class="weui-tabbar__label">我的</p>
+                </a>
+
+            </div>
+
+            <div class="weui-tabbar s-tabbar" v-else>
+                <a href="/newVip/newmIndex.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
+                    <p class="weui-tabbar__label">首页</p>
+                </a>
+                
+                <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+                    <div class="weui-tabbar__icon weui-tabbar__icon4"></div>
+                    <p class="weui-tabbar__label">我的</p>
+                </a>
+
+            </div>
+
+
+            <div id="JS_more" class="weui-popup__container">
+                <div class="weui-popup__modal m-popup j-navPopup-modal">
+                    
+                    <div class="j-navPopup-ban">
+                        <img src="/Public/Home/topic/img/31.png">
+                    </div>
+
+                    <div class="j-navPopup-nav clearfix">
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100536">
+                                <img class="item-d1" src="/Public/Home/topic/img/18.png">
+                                <div class="item-d2">婚姻家事</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100537">
+                                <img class="item-d1" src="/Public/Home/topic/img/19.png">
+                                <div class="item-d2">房屋产权</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100538">
+                                <img class="item-d1" src="/Public/Home/topic/img/20.png">
+                                <div class="item-d2">劳动纠纷</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100539">
+                                <img class="item-d1" src="/Public/Home/topic/img/40.png">
+                                <div class="item-d2">交通</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100540">
+                                <img class="item-d1" src="/Public/Home/topic/img/21.png">
+                                <div class="item-d2">消费者权益</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100541">
+                                <img class="item-d1" src="/Public/Home/topic/img/22.png">
+                                <div class="item-d2">其他</div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <a onclick="$.closePopup();" href="javascript:;" class="j-navPopup-close"></a>
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+
+                },
+
+                order: { }
+
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                   if (res.errno == '0') {
+                        _this.page.show = 'home';
+                    }
+                });
+                this.getOrderSum();
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "个人中心2.0"
+                })
+
+            },
+            mounted: function() {
+                $.smartScroll($("#JS_more"), '.weui-popup__modal');
+            },
+            methods: {
+                GetQueryString:function (name) {
+                    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                    var r = window.location.search.substr(1).match(reg);
+                    if(r!=null)return  unescape(r[2]); return null;
+                },
+                nextPage: function(type, type_text, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "个人中心2.0",
+                    }, function() {
+                        window.location.href = url;
+                    })
+                },
+                getOrderSum: function() {
+                    //获取各订单状态数量
+                    var _this = this;
+                    APP.send("/PC/NEWOrder/channelOrderQuantity.json", function(res) {
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.order = _data;
+                        }
+                        
+                    })
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

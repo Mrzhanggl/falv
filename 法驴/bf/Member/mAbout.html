@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html class="ffffff">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>品牌故事</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=24">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body class="ffffff">
+    <div v-cloak id="app" class="main">
+        <div v-show="page.show == 'home'">
+            <div class="m-about-bd">
+                <div class="m-about-logo-main">
+                    <img class="m-about-logo" src="/Public/Home/topic/img/16.png">
+                </div>
+                <div class="m-about-text">
+                    <p>法驴网是晓法网络科技（上海）有限公司旗下为个人端提供法律服务的独立品牌。</p>
+                    <p>平台筛选法律服务行业富有竞争力的律师群体为个人用户提供全方位的法律服务。</p>
+                    <p>通过严格的质量控制、细腻的服务设计以及大数据下的价格管控，保障个人用户在享受优质法律服务的同时，坐拥自己的私人律师团，高性价比地处理自身法律事务。</p>
+                </div>
+                <div class="m-about-contact">
+                    <div class="m-about-contact-item clearfix">
+                        <div class="item-label item-left item-icon1">客服热线</div>
+                        <div class="item-label item-right">400-1068-188</div>
+                    </div>
+                    <div class="m-about-contact-item clearfix">
+                        <div class="item-label item-left item-icon2">内容合作</div>
+                        <div class="item-label item-right">zhangwei@falv58.com</div>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+
+                },
+
+
+            },
+            created: function() {
+    
+                this.page.show = 'home';
+                APP.getInfo(this, function(res) {
+                  
+                });
+
+            },
+            mounted: function() {
+            
+            },
+            methods: {
+ 
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

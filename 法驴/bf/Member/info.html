@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=32">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <div v-show="page.show == 'info'" class="wrap-main">
+            <div class="s-title_2">
+                <h2>设置</h2>
+            </div>
+            <!--<label for="headpic" class="s-info-item">
+                <input id="headpic" type="file" class="input-hidden">
+                <div class="item-headpic"><img :src="info.wechat_headimgurl"></div>
+                <div class="item-right"></div> 
+            </label>-->
+            <div class="s-info-item">
+                <div class="item-headpic"><img :src="info.wechat_headimgurl"></div>
+            </div>
+            <!--<a href="/Member/info.html?tab=set_name" class="s-info-item">
+                <div class="item-left">姓名</div>
+                <div class="item-right">23</div> 
+            </a>-->
+            <div class="s-info-item">
+                <div class="item-left">姓名</div>
+                <div class="item-right">{{ info.name }}</div> 
+            </div>
+            <div class="s-info-item">
+                <div class="item-left">性别</div>
+                <div class="item-right">{{ APP.getSex(info.sex) }}</div> 
+            </div>
+            <div class="s-info-item">
+                <div class="item-left">出生年月日</div>
+                <div class="item-right">{{ info.birthday }}</div> 
+            </div>
+            <div class="s-info-item">
+                <div class="item-left">职业</div>
+                <div class="item-right"></div> 
+            </div>
+            <div class="s-info-item">
+                <div class="item-left">地域</div>
+                <div class="item-right"></div> 
+            </div>
+            <!--<a href="/Member/set_pass.html" class="s-info-item">
+                <div class="item-left">修改密码</div>
+            </a>-->
+        </div>
+
+        <div v-show="page.show == 'set_name'" class="wrap-main">
+            <div class="s-info-edit">
+                <div class="s-info-item">
+                    <input type="item-input">
+                </div>
+                <div class="s-info-action">
+                    <a class="s-btn s-btn_1" href="javascript:;">确定</a>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="/Public/Home/member/js/exif.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/member/js/main.js?v=080"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+
+            },
+            created: function() {
+                this.page.show = APP.getParam("tab") ? APP.getParam("tab") : 'info';
+                APP.getInfo(this, function() {
+                    
+                });
+            },
+            mounted: function() {
+
+            },
+            methods: {
+                
+                setSex: function() {
+                    $.actions({
+                        actions: [{
+                            text: "<span>男</span>",
+                            onClick: function() {
+                                APP.sendKf();
+                            }
+                        },{
+                            text: "<span>女</span>",
+                            onClick: function() {
+                            //do something
+                            }
+                        }]
+                    });
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

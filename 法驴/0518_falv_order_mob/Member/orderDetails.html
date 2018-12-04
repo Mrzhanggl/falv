@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>订单详情</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=38">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
+    
+</head>
+
+<body>
+    <div :class="{'main-tabbar' : checkMainTabbar() }" v-cloak id="app" class="main">
+
+        <div v-show="page.show == 'home'">
+
+            <div class="m-main j-orderDetails-product">
+                <div class="j-orderDetails-state">
+                    <strong>{{ APP.getText.order_state[order.state] }}</strong>
+                    <a @click="APP.showActionKf()" href="javascript:;" class="j-orderDetails-kf">联系客服</a>
+                </div>
+                <div class="j-orderDetails-productInfo clearfix">
+                    <div class="productInfo-cover">
+                        <img :src="product.type != '9' && product.type != '10' ? src_url+product.icon : src_url+product.cover_image">
+                    </div>
+                    <div class="productInfo-content">
+                        <div class="productInfo-content-d1 overText_2">{{ product.name }}</div>
+                        <div class="productInfo-content-d2">
+                            <span v-if="order.channel=='12'||order.channel=='13'" class="t2">￥{{ product.flprice }}</span>
+                            <span v-else class="t2">￥{{ order.money }}</span>
+                            <span v-if="product.type == '11' && order.call_record && order.call_record.duration" class="t1">{{ APP.formatSeconds(order.call_record.duration) }}</span>
+                            <span v-if="product.type == '11' && order.call_record && !order.call_record.duration" class="t1">未接通</span>
+                        </div>
+                        <div v-if="product.type == '11'&& order.channel!='14'" class="productInfo-content-d3">
+                            {{ product.flprice }}元/分钟
+                        </div>
+                        <div v-else class="productInfo-content-d3">
+                            ￥{{ order.channel_info.price }}{{order.channel_info.unit}}
+                        </div>
+                    </div>
+                </div>
+
+                <!--壹钱包-->
+                <div v-if="order.channel == '12'||order.channel=='13'" class="j-orderDetails-coupon clearfix">
+                    <div class="item-l">
+                        <span class="i1">减</span><span class="item-l-text">兑换码</span>
+                    </div>
+                    <div class="item-r">
+                        <strong>-￥{{ product.flprice }}</strong>
+                    </div>
+                </div>
+
+                <div class="j-orderDetails-price">
+                    <span v-if="order.channel == '12'||order.channel=='13'">已优惠<strong style="color: #F9334B">￥{{ product.flprice }}</strong></span>&emsp;合计
+                    <span class="c1">
+                        <strong v-if="order.channel == '12'||order.channel=='13'">￥0.00</strong>
+                        <strong v-else>￥{{ order.money }}</strong>
+                    </span>
+                </div>
+            </div>
+
+            <div v-if="product.type != '9' && product.type != '10' && order.lawyer_id !='0' && order.call_record&& order.call_record.duration" class="m-main j-orderDetails-lawyer">
+                <div class="j-orderDetails-title">
+                    <strong>服务信息</strong>
+                </div>
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">服务律师</div>
+                    <div class="item-r">{{ order.lawyer_info ? order.lawyer_info.name.slice(0,1) + '律师' : '' }}</div>
+                </div>
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">开始服务时间</div>
+                    <div class="item-r">{{ APP.resetTime(order.grab_order_time) }}</div>
+                </div>
+            </div>
+
+
+            <div class="m-main j-orderDetails-lawyer j-orderDetails-order">
+                <div class="j-orderDetails-title">
+                    <strong>订单信息</strong>
+                </div>
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">订单号码</div>
+                    <div class="item-r">{{ order.order_id }}</div>
+                </div>
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">下单时间</div>
+                    <div class="item-r">{{ order.create_time }}</div>
+                </div>
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">姓名</div>
+                    <div class="item-r">{{ order.customer_name }}</div>
+                </div>
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">联系方式</div>
+                    <div class="item-r">{{ order.phone }}</div>
+                </div>
+                <div v-if="order.select_service_time" class="j-orderDetails-item clearfix">
+                    <div class="item-l">预约时间</div>
+                    <div class="item-r">{{ order.select_service_time }}</div>
+                </div>
+                <div v-if="order.state != '0' && order.state != '4' && order.state != '8'" class="j-orderDetails-item clearfix">
+                    <div class="item-l">支付方式</div>
+                    <div class="item-r">{{ pay_mode[order.latest_payment_channel] }}</div>
+                </div>
+                <div v-if="product.type != '9' && product.type != '10'" class="j-orderDetails-item clearfix">
+                    <div class="clearfix">
+                        <div class="item-l">买家留言</div>
+                    </div>
+                    <div class="item-remark">
+                          {{ order.buyer_message ? order.buyer_message : '暂无留言' }} 
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!--产品-->
+            <div v-if="product.type == '0' && checkMainTabbar()" class="weui-tabbar s-tabbar j-orderDetails-tabbar">
+                <a @click="cancal()" v-if="order.state == '0'" href="javascript:;" class="weui-tabbar__item j-orderDetails-tabbar-btn1">
+                    取消订单
+                </a>
+                <a v-if="order.state == '0' || order.state == '2'" :href="'/Member/orderGoPay.html?oid='+order.order_id" class="weui-tabbar__item j-orderDetails-tabbar-btn2">
+                    <strong>支付</strong>
+                </a>
+                <a @click="complete()" v-if="order.state == '1'" href="javascript:;" class="weui-tabbar__item j-orderDetails-tabbar-btn1">
+                    <strong>确认完成</strong>
+                </a>
+            </div>
+
+            <!--视频-->
+            <div v-if="product.type =='9' && checkMainTabbar() || product.type == '10' && checkMainTabbar()" class="weui-tabbar s-tabbar j-orderDetails-tabbar">
+                <a @click="cancal()" v-if="order.state == '0'" href="javascript:;" class="weui-tabbar__item j-orderDetails-tabbar-btn1">
+                    取消订单
+                </a>
+                <a v-if="order.state == '0' || order.state == '2'" :href="'/Member/orderGoPay.html?oid='+order.order_id" class="weui-tabbar__item j-orderDetails-tabbar-btn2">
+                    <strong>支付</strong>
+                </a>
+            </div>
+
+            <!--电话-->
+            <div v-if="product.type =='11' && checkMainTabbar()" class="weui-tabbar s-tabbar j-orderDetails-tabbar">
+                <a @click="cancal()" v-if="order.state == '8' && order.select_service_time" href="javascript:;" class="weui-tabbar__item j-orderDetails-tabbar-btn1">
+                    取消订单
+                </a>
+                 <a v-if="order.state == '3' && !order.lawyer_evaluate" :href="'/Member/jComment.html?oid='+order.order_id" class="weui-tabbar__item j-orderDetails-tabbar-btn1">
+                    <strong>评价</strong>
+                </a>
+                <a @click="checkOrder()" v-if="order.state == '3'" href="javascript:;" class="weui-tabbar__item j-orderDetails-tabbar-btn2">
+                    <strong>继续问</strong>
+                </a>
+                <a v-if="order.state == '0' || order.state == '2'" :href="'/Member/jTimeGoPay.html?oid='+order.order_id" class="weui-tabbar__item j-orderDetails-tabbar-btn2">
+                    <strong>支付</strong>
+                </a>
+            </div>
+
+
+
+        </div>
+        
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=090"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: 'home',
+                },
+
+                order: {},
+                product: '',
+
+
+                pay_mode: {
+                    '0': '支付宝转账',
+                    '1': '银行卡转账',
+                    '2': '余额',
+                    '3': '微信支付',
+                },
+
+                isOrderPay: {
+                    state: false,
+                    data: ''
+                },
+
+            },
+            created: function() {
+                APP.getInfo(this, function() {
+                    
+                });
+
+                this.getVerificationOrder();
+
+                this.details();
+                
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "订单详情页",
+                    parameter:  APP.getParam("oid")
+                })
+                
+            },
+            mounted: function() {
+
+            },
+            watch:{
+
+　　　　　　},
+            methods: {
+                getVerificationOrder: function() {
+                    //获取用户存在【待支付】状态的电话咨询订单
+                    var _this = this;
+                    APP.send('/PC/WxUser/verificationOrder.json', function(res) {
+                        if (res.errno == '0') {
+                            _this.isOrderPay.data = res.data;   
+                        } else {
+                            _this.isOrderPay.state = true;
+                        }
+                    });
+                    
+                },
+                checkMainTabbar: function() {
+                    //
+                    var _state = this.order.state;
+                    var _type = this.product.type;
+                    if (_type == '0') {
+                        if (_state == '0' || _state == '1' || _state =='2') {
+                            return true;
+                        }
+                    } else if (_type == '9' || _type == '10') {
+                        if (_state == '0' || _state == '2') {
+                            return true;
+                        }
+                    } else if (_type == '11') {
+                        if (_state == '0' || _state == '2' || _state == '3' || _state == '8' && this.order.select_service_time) {
+                            return true;
+                        }
+                    }
+                    return false;
+                },
+                details: function() {
+                    var _this = this;
+                    var _oid = APP.getParam("oid");
+                    var _json = {
+                        order_id: _oid
+                    }
+                    APP.send("/PC/NEWOrder/info.json", _json, function(res) {
+                        if (res.errno == '0') {
+                            //console.log(res);
+                            _this.order = res.data;
+                            _this.product =  res.data.products[0];
+                            //console.log(res.data.service_state)
+                        }
+                    })
+
+
+                },
+                cancal: function() {
+                    //取消订单
+                    var _this = this;
+                    var _oid = _this.order.order_id;
+                    APP.modal.showLayer({
+                        btn: ['是', '否'],
+                        text: '订单还未支付，是否确认取消?',
+                        onOK: function() {
+                            //console.log('ok');
+
+                            $.showLoading("正在取消");
+                            APP.send("/PC/NEWOrder/cancel.json?order_id=" + _oid, function(res) {
+                                $.hideLoading();
+                                if (res.errno == '0') {
+                                    APP.modal.hideLayer();
+                                    _this.details();
+                                    $.toast("取消成功", "text");
+                                    
+                                } else {
+                                    $.toast(res.msg, "text")
+                                }
+                            });
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+                },
+                complete: function() {
+                    //完成订单
+                    var _this = this;
+                    var _oid = _this.order.order_id;
+                    APP.modal.showLayer({
+                        title: '完成服务',
+                        btn: ['完成', '取消'],
+                        text: '是否确认完成服务',
+                        onOK: function() {
+                            //console.log('ok');
+                            $.showLoading("正在完成服务");
+                            APP.send("/PC/NEWOrder/complete.json?order_id=" + _oid, function(res) {
+                                $.hideLoading();
+                                _this.details();
+                                if (res.errno == '0') {
+                                    APP.modal.hideLayer();
+                                    $.toast("操作成功", "text");
+                                } else {
+                                    $.toast(res.msg, "text")
+                                }
+                            });
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+                },
+                checkOrder: function() {
+                    if (this.isOrderPay.state) {
+                        this.add();
+                    } else {
+                        window.location.href = '/Member/orderDetails.html?oid='+this.isOrderPay.data.order_id;
+                    }
+                },
+                add: function() {
+                    var _this = this;
+                    var _id = _this.product.id;
+                    var _lawyer_id = _this.order.lawyer_id;
+                    var _json = {
+                        product_data: [{id: _id, count: 1}],
+                        note: "",
+                        invoice_state: 0,
+                        invoice: {
+                            header_content_type: '',
+                            header_content: '',
+                            identification_number: '',
+                            name: '',
+                            telephone: '',
+                            address: '',
+                        },
+                        company_name: '',
+                        customer_name: _this.info.name,
+                        phone: _this.info.username,
+                        channel: '', //渠道 0 邮政 1 东家会 2 环球黑卡 3腾讯
+                        source: 14,
+                        order_type: 1,
+                        discount_code: '', //优惠码
+                        customer_selected_supplier_id: '', //供应商id
+                        lawyer_id: _lawyer_id,
+                    }
+                     if (APP.getOrderChannel() == '14') {
+                        _json.channel = 14;
+                        _json.source = 19
+                    }
+
+
+                    // console.log(_json)
+                    // return
+
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/create.json", _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //统计
+                            //return;
+                            window.location.href = "/Member/jMatching.html?oid=" + res.data;
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

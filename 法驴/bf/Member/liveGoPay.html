@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/Live/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/Live/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/main.css?v=12">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <div v-show="page.show == 'pay_succ'">
+            
+            <div class="s-payEnd-bd">
+                <div class="s-payEnd-tips">
+                    您已成功购买视频，<a @click="nextPage('payover_check', '查看购买的视频', '/Member/liveDetails.html?id='+products.collection_id)" href="javascript:;">点击查看</a>
+                </div>
+                <div class="s-payEnd-pic">
+                    <img src="/Public/Home/Live/img/25.jpg">
+                </div>
+                <div class="s-payEnd-d3">
+                    扫码关注服务号，了解更多优惠详情
+                </div>
+            </div>
+
+            <div class="s-payEnd-hot">
+                <div class="s-title">
+                    热门文章
+                </div>
+                <div class="s-content s-payEnd-hotBd clearfix">
+                    <a @click="nextPage('payover_article', '热门文章1', 'https://mp.weixin.qq.com/s/-Neglr6xPWyNnSLNj9EQQg')" class="s-payEnd-hotItem" href="javascript:;">
+                        <div class="hotItem-pic">
+                            <img src="/Public/Home/Live/img/a1.png">
+                        </div>
+                        <div class="hotItem-text">
+                            万一被公安人员带走，你要记住这些法律常识！
+                        </div>
+                    </a>
+                    <a @click="nextPage('payover_article', '热门文章2', 'https://mp.weixin.qq.com/s/a-8gylxXzVUc0POACJdd3A')" class="s-payEnd-hotItem" href="javascript:;">
+                        <div class="hotItem-pic">
+                            <img src="/Public/Home/Live/img/a2.png">
+                        </div>
+                        <div class="hotItem-text">
+                            离婚时房屋归属判定因素的汇总分析
+                        </div>
+                    </a>
+                    <a @click="nextPage('payover_article', '热门文章3', 'https://mp.weixin.qq.com/s/Lg76RPGoR-D-lMI7j51qwg')" class="s-payEnd-hotItem" href="javascript:;">
+                        <div class="hotItem-pic">
+                            <img src="/Public/Home/Live/img/a3.png">
+                        </div>
+                        <div class="hotItem-text">
+                            无固定期限劳动合同怎么解除？应得多少赔偿金？
+                        </div>
+                    </a>
+                    <a @click="nextPage('payover_article', '热门文章4', 'https://mp.weixin.qq.com/s/Lg76RPGoR-D-lMI7j51qwg')" class="s-payEnd-hotItem" href="javascript:;">
+                        <div class="hotItem-pic">
+                            <img src="/Public/Home/Live/img/a4.png">
+                        </div>
+                        <div class="hotItem-text">
+                            公安派出所不再办理的证明，我们找谁开？这次全给你说清楚！
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+    <script src="/Public/Home/Live/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/Live/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/Live/js/vue.min.js"></script>
+    <script src="/Public/Home/Live/js/fastclick.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/Live/js/main.js?v=214"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: 'pay_succ',
+                    loading: 0,
+                },
+
+                order: '',
+                products: ''
+
+            },
+            created: function() {
+                var _this = this;
+                _this.getDetails();
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0') {
+                        //_this.page.show = 'pay_succ';
+                    }
+                });
+                
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "支付成功"
+                })
+
+            },
+            mounted: function() {
+                
+            },
+            methods: {
+                nextPage: function(type, type_text, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "支付成功",
+                    }, function() {
+                        window.location.href = url;
+                    })
+
+                },
+                getDetails: function() {
+                    var _this = this;
+                    var _json = {
+                        order_id: APP.getParam("oid")
+                    }
+                    APP.send("/PC/NEWOrder/info.json", _json, function(res) {
+                        if (res.errno == '0') {
+                            //console.log(res);
+                            _this.order = res.data;
+                            if (res.data.state == '0') {
+                                _this.page.show = 'home'
+                                // _this.page.show = 'pay_succ'
+                            } else {
+                                _this.page.show = 'pay_succ'
+                            }
+                            _this.products = res.data.products[0];
+                        }
+                    })
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

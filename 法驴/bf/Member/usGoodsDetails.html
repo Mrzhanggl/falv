@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title> Legal Services...</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/us/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/us/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/us/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/us/css/main.css?v=32">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <!--首页-->
+        <div v-show="page.show == 'home'" class="main-page">
+            <div @click="APP.showActionKf('goodsDetails_top')" class="s-goodsDetails-kf">
+                <div class="clearfix">
+                    <div class="s-goodsDetails-kf-img">
+                        <img src="/Public/Home/us/img/m49.png">
+                    </div> 
+                    <div class="s-goodsDetails-kf-box clearfix">
+                        <div class="s-goodsDetails-kf-text">
+                            <p class="p1"><strong>Customer Service</strong></p> 
+                            <p class="p2">Professional customized solutions for your problems</p>
+                        </div> 
+                        <div class="s-goodsDetails-kf-btn">Consult now</div>
+                    </div>
+                </div>
+            </div>
+            <div class="s-goodsDetails-info">
+                <div class="s-goodsDetails-box">
+                    <div class="box-bd">
+                        <div class="s-goodsDetails-name clearfix">
+                            <img src="/Public/Home/us/img/m50.png">
+                            <div class="name-d1">
+                                <p class="name-p1"><strong v-text="goods_info.name"></strong></p>
+                                <p class="name-p2" v-text="goods.introduce"></p>
+                            </div>
+                        </div>
+                        <div class="s-goodsDetails-price">
+                            <div class="s-goodsDetails-price-item clearfix">
+                                <span class="price-w1 price-w3">Product Specification</span>
+                                <div class="price-t1 clearfix">
+                                    <a @click="nextGoods(list.id)" v-for="list in goods.re_product" :class="{active: goods_info.id == list.id}" class="price-t1-link" href="javascript:;">{{ list.specifications_name }}</a>
+                                </div>
+                            </div>
+                            <div class="s-goodsDetails-price-item s-goodsDetails-price-item_t clearfix">
+                                <span class="price-w1 price-w2">Traditional Institutions Price</span>
+                                <div class="price-t1 price-t2 clearfix">
+                                    <del>￥{{ goods_info.lsprice }}{{ goods_info.ls_unit }}</del>
+                                </div>
+                            </div>
+                            <div v-if="!user_marketing_id" class="s-goodsDetails-price-item clearfix">
+                                <span class="price-w1 price-w2">Falv Price </span>
+                                <div v-if="APP.getParam('id') != '100479'" class="price-t1 price-t2 clearfix">
+                                    <del>￥{{ goods_info.flprice }}{{ goods_info.fl_unit }}</del>
+                                </div>
+                                <div v-else class="price-t1 price-c1 clearfix">
+                                    <span>￥{{ goods_info.flprice }}{{ goods_info.fl_unit }}</span>
+                                </div>
+
+                            </div>
+                            <div v-if="APP.getParam('id') != '100479'" class="s-goodsDetails-price-item clearfix">
+                                <span class="price-w1 price-w2">Special Partner Price</span>
+                                <div class="price-t1 price-c1 price-t2 clearfix">
+                                    ￥{{ goods_info.channel_specification ? goods_info.channel_specification.price : '' }}{{ goods_info.channel_specification ? goods_info.channel_specification.unit : '' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="s-goodsDetails-title">
+                <h2>Product</h2>
+            </div>
+            <div v-html="goods_info.mobile_details ? goods_info.mobile_details : goods_info.details" class="s-goodsDetails-html">
+
+            </div>
+
+            <div class="weui-tabbar s-goodsDetails-tabbar">
+                <a @click="APP.showActionKf()" href="javascript:;" class="weui-tabbar__item s-goodsDetails-btn1">
+                    Customer Service
+                </a>
+                <a @click="add()" href="javascript:;" class="weui-tabbar__item s-goodsDetails-btn2">Buy now</a>
+            </div>
+
+        </div>
+
+
+    </div>
+    <script src="/Public/Home/us/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/us/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/us/js/vue.min.js"></script>
+    <script src="/Public/Home/us/js/main.js?v=064"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+                user_marketing_id: '',
+                goods: {},
+                goods_info: {}
+            },
+            created: function() {
+                var _this = this;
+                //短信营销特链
+                var _user_marketing_id = APP.getParam("user_marketing_id") ? APP.getParam("user_marketing_id") : '';
+                _this.user_marketing_id = _user_marketing_id;
+
+                APP.getInfo(this, function(res) {
+                    if (sessionStorage.getItem("goods_from")) {
+                        var _id = sessionStorage.getItem("goods_from")
+                        sessionStorage.removeItem("goods_from");
+                        APP.WXLogin(_this, '/Member/usOrderAdd.html?id=' + _id + '&user_marketing_id=' + _user_marketing_id)
+                        //window.location.href = APP.getParam("from");
+                    } else {
+                        _this.page.show = 'home';
+                    }
+                });
+                
+
+                this.details();
+                APP.sendMessageHm();
+            },
+            mounted: function() {
+
+            },
+            methods: {
+                details: function() {
+                    var _this = this;
+                    var _id = APP.getParam("id");
+                    var _tab_channel = APP.getOrderChannel();
+                    APP.send('/PC/Product/info.json?id=' + _id+'&channel='+_tab_channel, function(res) {
+                        //console.log(res);
+                        if (res.errno == '0') {
+                            _this.goods = res.data;
+                            _this.goods.re_product.push(_this.goods);
+                            _this.setSelectGoods();
+                        }
+                    });
+                },
+                nextGoods: function(id) {
+                    var _user_marketing_id = APP.getParam("user_marketing_id") ? APP.getParam("user_marketing_id") : '';
+                    if (id != this.goods_info.id) {
+                        window.location.href = '/Member/usGoodsDetails.html?id='+this.goods.id+'&cid='+id+'&user_marketing_id='+_user_marketing_id;
+                    }
+                },
+                setSelectGoods: function() {
+                    var _cid = "";
+                    var _this = this;
+                    var _re_product = _this.goods.re_product;
+                    if (_re_product.length>0) {
+                        _cid = APP.getParam("cid") ? APP.getParam("cid") : APP.getParam("id");
+                    } else {
+                        _cid =  _this.goods.id;
+                    }
+
+                    for (var i=0, len=_re_product.length; i<len; i++) {
+                        if (_cid == _re_product[i].id) {
+                            _this.goods_info = _re_product[i];
+                            _this.goods_info.flprice =  parseFloat(_this.goods_info.flprice).toFixed(2);
+                            return;
+                        }
+                    }
+                    _this.goods_info = _this.goods;
+                    _this.goods_info.flprice =  _this.goods_info.flprice.toFixed(2);
+                    
+                },
+                add: function() {
+                    APP.sendHm("click", "product-buy");
+
+                    var _this = this;
+                    var _loca_url = window.location.href + '&from=true';
+                    var _user_marketing_id = APP.getParam("user_marketing_id") ? APP.getParam("user_marketing_id") : '';
+                    if (_this.info_login) {
+                        window.location.href = '/Member/usOrderAdd.html?id=' + _this.goods_info.id + '&user_marketing_id='+_user_marketing_id;
+                    } else {
+                        sessionStorage.setItem("goods_from", _this.goods_info.id);
+                        APP.init(function() {
+                            //alert(233)
+                           window.location.href = window.location.pathname + window.location.search+ '&from=true';
+                        }, _loca_url);
+                    }
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

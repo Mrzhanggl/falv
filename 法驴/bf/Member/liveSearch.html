@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>法驴Live</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/Live/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/Live/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/main.css?v=14">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <div v-show="page.show == 'home'">
+
+            <div class="s-search-box active">
+                <div class="s-search-bd">
+                    <i class="i"></i>
+                    <input id="JS_search" v-model="search.text" class="s-search-input" type="text" autofocus="autofocus" placeholder="搜索视频名称、热门讲师">
+                </div>
+                <a @click="searchAjax()" class="s-search-btn" href="javascript:;">搜索</a>
+            </div>
+
+
+            <div class="s-content">
+
+                <a :href="'/Member/liveDetails.html?id='+list.id" v-for="list in search.data" class="s-live-item clearfix">
+                    <div class="s-live-item-cover">
+                        <!--<i class="s-live-item-newIcon">免费</i>-->
+                        <img :src="src_url+list.image">
+                    </div>
+                    <div class="s-live-item-info">
+                        <div class="s-live-item-title">
+                            {{ list.name }}
+                        </div>
+                        <div class="s-live-item-name">
+                            <span v-for="(list2, index2) in list.author">{{ index2==0 || index2==list.author.length-1 ? list2.author_name : list2.author_name +'、' }}</span><span v-show="list.author && list.author.length>0"> | </span><span>{{ APP.calcSum(list.view_counts) }}次播放</span>
+                        </div>
+                        <div class="s-live-item-price clearfix">
+                            <div class="s-live-item-class"><img :class="'bg'+list.category" :src="APP.getLiveClassIcon[list.category]"></div>
+                            <span v-if="list.pstate != '2'" class="col999">已停播</span>
+                            <span v-if="list.pstate == '2' && !list.order_state || list.pstate == '2' && list.order_state && list.order_state == '0'" class="colff7">￥{{ list.flprice }}</span>
+                            <span v-if="list.pstate == '2' && list.order_state && list.order_state!='0'" class="colff7">已购</span></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        
+
+            <div v-if="search.data && search.data.length>0" class="s-index-blank">
+                <span>我是有底线的</span>
+            </div>
+
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/Live/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/Live/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/Live/js/vue.min.js"></script>
+    <script src="/Public/Home/Live/js/fastclick.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/Live/js/main.js?v=216"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                },
+
+                search: {
+                    text: '',
+                    end_text:'',
+                    data: []
+                }
+
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0') {
+                        _this.page.show = 'home';
+                    }
+                });
+                
+                
+            },
+            mounted: function() {
+                //document.getElementById('JS_search').focus();
+            },
+            methods: {
+                searchAjax: function() {
+                    var _this = this;
+                    if (!_this.search.text || _this.search.text == _this.search.end_text) {
+                        return;
+                    }
+                    var _json = {search: _this.search.text}
+                    APP.send("/PC/Video/lookupFunction.json", _json, function(res) {
+                        if (res.errno == '0') {
+                           //console.log(res);
+                           vm.search.data = res.data.list;
+                           _this.search.end_text = _this.search.text;
+                        }
+                    });
+                },
+                hightTitle: function(text) {
+                    if (text) {
+                        var _t = this.search.end_text;
+                        var reg = new RegExp(_t, "g");
+                        return text.replace(reg, "<span>"+_t+"</span>");
+                    }
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

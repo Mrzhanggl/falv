@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=32">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main s-infinite-main">
+        
+        <div id="infinite" v-show="page.show=='home'" class="main-page s-infinite-page">
+            <div class="s-lawyer-bd">
+                <div class="s-lawyer-info">
+                    <div class="info-headpic">
+                        <img :src="lawyer.lawyer_id ? lawyer.app_lawyer_info.headimgurl : src_url+lawyer.headimgurl">
+                    </div>
+                    <div class="info-box">
+                        <p class="info-box-d1">{{ lawyer.name }}</p>
+                        <p class="info-box-d2">{{ lawyer.law_firm_name ? lawyer.law_firm_name : '&nbsp;' }}</p>
+                        <p class="info-box-d2" v-if="getLicenseNumber(lawyer.license_number) && getLicenseNumber(lawyer.license_number)!=0">{{ getLicenseNumber(lawyer.license_number) }}年以上执业经验</p>
+                        <div class="info-box-d3 clearfix">
+                            <span :class="{active: lawyer.total_score_text>=1}" class="s-comment-star"></span>
+                            <span :class="{active: lawyer.total_score_text>=2}" class="s-comment-star"></span>
+                            <span :class="{active: lawyer.total_score_text>=3}" class="s-comment-star"></span>
+                            <span :class="{active: lawyer.total_score_text>=4}" class="s-comment-star"></span>
+                            <span :class="{active: lawyer.total_score_text>=5}" class="s-comment-star"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="s-lawyer-field">
+                    <div class="field-title">擅长领域</div>
+                    <div class="clearfix">
+                        <div v-for="list in lawyer.case_type_text" class="s-lawyer-field-item">
+                            <img :src="lawyer_case_type[list]">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="s-lawyer-tab clearfix">
+                <a @click="tab=0" href="javascript:;" :class="{ active : tab == 0}" class="tab-item"><span>简介</span></a>
+                <a @click="tab=1" href="javascript:;" :class="{ active : tab == 1}" class="tab-item"><span>经典案例</span></a>
+                <a @click="tab=2" href="javascript:;" :class="{ active : tab == 2}" class="tab-item"><span>用户评价</span></a>
+            </div>
+
+            <div v-show="tab == 0" class="s-lawyer-bd">
+                <div class="s-lawyer-intr-title">
+                    个人简介
+                </div>
+                <div class="s-lawyer-intr">
+                    {{ lawyer.introduction }}
+                </div>
+            </div>
+
+            <div v-show="tab == 1" class="s-lawyer-bd">
+                <div class="s-lawyer-case">
+                    <div v-for="list in lawyer.classic_case" class="s-lawyer-case-item">{{ list }}</div>
+                </div>
+            </div>
+
+            <div v-show="tab == 2" class="s-lawyer-bd">
+                <div v-for="list in comment.data" class="s-lawyer-score-item">
+                    <div class="score-item-time">{{ list.time }}</div>
+                    <div class="score-item-box clearfix">
+                        <div class="score-item-headpic">
+                            <img :src="list.headimgurl" alt="">
+                        </div>
+                        <div class="s-lawyer-score-item-content">
+                            <p class="d1">{{ list.corporate }}</p>
+                            <div class="d2">
+                                服务事项：<span class="d2-text">{{ list.product_name }}</span>
+                                <div class="d2-score clearfix">
+                                    <span :class="{active: Number(list.score)>=5}" class="s-comment-star"></span>
+                                    <span :class="{active: Number(list.score)>=4}" class="s-comment-star"></span>
+                                    <span :class="{active: Number(list.score)>=3}" class="s-comment-star"></span>
+                                    <span :class="{active: Number(list.score)>=2}" class="s-comment-star"></span>
+                                    <span :class="{active: Number(list.score)>=1}" class="s-comment-star"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="s-orderList-loading">
+                    <span v-show="comment.loadingEnd==1">上拉可加载更多</span>
+                    <span v-show="comment.loadingEnd==2">正在加载更多数据</span>
+                    <span v-show="comment.loadingEnd==3">已经全部加载完毕</span>
+                    <span v-show="comment.loadingEnd==4">加载失败</span>
+                </div>
+                
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/member/js/main.js?v=080"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: 'home',
+                },
+
+                lawyer: {},
+                tab: 0,
+                lawyer_case_type: {
+                    '6': '/Public/Home/member/img/m37.png', //合同
+                    '7': '/Public/Home/member/img/m31.png', //婚姻
+                    '8': '/Public/Home/member/img/m33.png', //房产
+                    '9': '/Public/Home/member/img/m32.png', //劳动
+                    '10': '/Public/Home/member/img/m30.png', //交通
+                    '11': '/Public/Home/member/img/m35.png', //侵权
+                    '43': '/Public/Home/member/img/m34.png', //投资理财
+                    '44': '/Public/Home/member/img/m36.png', //刑事
+                },
+
+                comment: {
+                    loading: true,
+                    loadingEnd: 0, //1准备 2 加载中 3 加载完 4error
+                    page: 1,
+                    total_page: 1,
+                    data: [],
+                }
+
+            },
+            created: function() {
+                APP.getInfo(this, function() {
+                    
+                });
+                this.details(APP.getParam("lawyer_id"));
+                this.getList(this.comment.page, APP.getParam("lawyer_id"));
+            },
+            mounted: function() {
+
+            },
+            methods: {
+                details: function(sid) {
+                    var _this = this;
+                    var _json = {
+                        supplier_id: sid,
+                    }
+                    APP.send("/PC/Supplier/info.json", _json, function(res) {
+                        if (res.errno == '0') {
+                            _this.lawyer = res.data;
+                            var _case_type = [];
+                            //是否已认证律师
+                            //lawyer_id 是
+                            if (res.data.lawyer_id) {
+                                //获取律师领域
+                                _case_type = res.data.app_lawyer_info.cash_pledge_lawyer_rights.split(",")
+                            }
+                            //
+                            _this.lawyer['total_score_text'] = _this.lawyer.total_score / _this.lawyer.total_comments_number;
+                            _this.lawyer['case_type_text'] = [];
+                            for (var i=0, len=_case_type.length; i<len; i++) {
+                                if (_case_type[i]) {
+                                    _this.lawyer['case_type_text'].push(_case_type[i])
+                                }
+                            }
+                        }
+                    })
+                },
+                getLicenseNumber: function(num) {
+                    //获取律师年份
+                    var _text = 0;
+                    var _year = new Date().getFullYear();
+                    //13213200710979773
+                    if (num) {
+                        var lawyer_year = num.slice(5, 9);
+                        if (lawyer_year.length == 4) {
+                            _text = _year - lawyer_year;
+                        }
+                    } else {
+                        _text = this.lawyer.experience;
+                    }
+                    return _text;
+                },
+                getList: function(page, sid) {
+                    var _this = this;
+                    var _json = {
+                        supplier_id: sid,  
+                        page: page,//页
+                        number: 10,
+                    }
+                    _this.comment.loadingEnd = 2;
+                    APP.send("/PC/NEWOrder/supplierEvaluationList.json", _json, function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.comment.total_page = _data.list_count;
+
+                            //第一页且总页数大于1 初始化滚动加载
+                            if (_this['comment']['total_page'] > 1 && _this['comment']['page']==1) {
+                                _this.initPage(page, sid);
+                            }
+
+                            //保存数据
+                            _this.comment.data = _this.comment.data.concat(_data.list);
+                            
+                            //判断是否加载完所有页数
+                            if (_this['comment']['page'] < _this['comment']['total_page']) {
+                                _this.comment.loading = false;
+                                _this.comment.loadingEnd = 1;
+                            } else {
+                                _this.comment.loading = true;
+                                _this.comment.loadingEnd = 3;
+                            }
+                            
+                        } else {
+                            _this['comment'].page--;
+                            _this.comment = false;
+                            _this.comment.loadingEnd = 4;
+                        }
+                    });
+                },
+                initPage: function(page, sid) {
+                    var _this = this;
+                    setTimeout(function() {
+                        // var _loading = false;
+                        $("#infinite").infinite(50).on("infinite", function() {
+                            //console.log(233)
+                            if (_this.tab !=2) {
+                                return
+                            }
+
+                            if (_this.comment.loading) return;
+                            _this.comment.loading = true;
+                           
+                            //console.log(_this.loading);
+                            //console.log(_this[_mode][_type].page, _this[_mode][_type].total_page);
+                            if (_this.comment.page >= _this.comment.total_page) {
+                                //console.log("end");
+                                _this.comment.loading = true;
+                                _this.comment.loadingEnd = 3;
+                                return;
+                            }
+                            _this.comment.page++;
+                            _this.comment.loadingEnd = 2;
+                            _this.getList(_this.comment.page, sid);
+                           
+                            
+                        });
+                    }, 100)
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

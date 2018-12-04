@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>订单支付</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/Live/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/Live/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/main.css?v=12">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'home'">
+            
+            <div class="s-add-head clearfix">
+                <span>购买方式</span>
+                <div class="s-add-select clearfix">
+                    <a @click="selectLiveType('1', false)" :class="{'active' : video.nav=='1' }" class="add-select-btn btn2" href="javascript:;">单集</a>
+                    <a @click="selectLiveType('0', true)" :class="{'active' : video.nav=='0' }" class="add-select-btn btn1" href="javascript:;">
+                        <div class="add-select-discount"><span>{{ video.discount }}%</span></div>
+                        全集
+                    </a>
+                </div>
+            </div>
+
+            <div v-show="video.nav == '1'" class="s-content s-add-bd">
+                <div v-for="(list, index) in video.info.buttons" class="s-add-item clearfix">
+                    <div class="s-add-item-cover"><img :src="src_url+list.cover_image"></div>
+                    <div class="s-add-item-content">
+                        <div class="item-name">
+                            视频名称：{{ list.name }}
+                        </div>
+                        <div class="item-price">
+                            ￥{{ list.flprice }}
+                        </div>
+                    </div>
+                    <a v-show="!list.order_state || list.order_state && list.order_state == '0'" :class="{'active' : list.checked == 'true' }" @click="selectVideo(index)" class="JS_add_radio s-add-item-radio" href="javascript:;"></a>
+                </div>
+            </div>
+            <div v-show="video.nav == '0'" class="s-content s-add-bd">
+                
+                <div class="s-add-item clearfix">
+                    <div class="s-add-item-cover"><img :src="src_url+video.info.image"></div>
+                    <div class="s-add-item-content active">
+                        <div class="item-name">
+                            视频名称：{{ video.info.name }}
+                        </div>
+                        <div class="item-price clearfix">
+                            ￥{{ video.info.flprice }}
+                            <span class="item-totalSum">{{ video.buttons_length }}个视频</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="s-content">
+                <a href="javascript:;" class="s-add-code">
+                    抵用券/优惠码
+                    <div class="s-add-code-price">-￥5.00</div>
+                </a>
+            </div>-->
+
+            <div class="s-add-payBd">
+                <h2>支付方式</h2>
+                <a class="s-add-pay" href="javascript:;">
+                    <div class="s-add-pay-icon"></div>
+                    微信支付
+                    <div class="s-add-pay-radio active"></div>
+                </a>
+            </div>
+
+
+
+            <div class="weui-tabbar s-tabbar s-add-tabbar">
+                <a href="javascript:;" class="weui-tabbar__item tabbar__item1">
+                    <span>￥{{ video.price }}元</span>
+                </a>
+                <a @click="add()" href="javascript:;" class="weui-tabbar__item tabbar__item2 s-btn">
+                    确认支付
+                </a>
+            </div>
+
+
+            <div @click="video.all_show=false" v-show="video.all_show" class="s-pop-bg">
+            </div>
+
+            <div v-show="video.all_show" class="s-add-pop">
+                <div class="s-add-pop-top"></div>
+                <div class="s-add-pop-d1">购买全集视频仅需{{ video.info.flprice }}元哦</div>
+                <div class="s-add-pop-d2">
+                    <a @click.stop="selectLiveType('0', true);video.all_show=false" class="s-add-pop-btn1" href="javascript:;">购买全集</a>
+                    <a @click.stop="addAjax()" class="s-add-pop-btn2" href="javascript:;">放弃优惠</a>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div v-show="page.show == 'pay_fail'">
+            <div class="s-payEnd-fails-d1">
+                <img class="s-payEnd-fails-i" src="/Public/Home/Live/img/25.png">
+                <p class="s-payEnd-fails-t">购买失败</p>
+                <div class="s-payEnd-fails-b">
+                    <a @click="page.show = 'home'" class="s-btn" href="javascript:;">继续支付</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/Live/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/Live/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/Live/js/vue.min.js"></script>
+    <script src="/Public/Home/Live/js/fastclick.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/Live/js/main.js?v=214"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                },
+
+                video: {
+                    selectInfo: '',
+                    selectInfoItem: 0,
+                    info: '',
+                    nav: '',    //0合集 1单集
+                    price: 0,
+                    discount: 0,
+                    buttons_length: 0,
+                    all_show: false,    //全集购买提示
+                    is_buy_all: false
+                },
+
+            },
+            created: function() {
+                var _this = this;
+                var _vid = APP.getParam("vid");
+                if (APP.getParam("vid")) {
+                    _this.video.nav = '1';
+                } else {
+                    _this.video.nav = '0';
+                }
+                _this.getVideoList(function (res) {
+                    if (res.errno == '0') {
+                        var _data = res.data.buttons;
+                        var _s_total = 0;
+                        var _live = 0;
+                        var _buy_live = 0;
+
+                        for (var i=0, len=_data.length; i<len; i++) {
+                            if (_data[i]['pstate'] == '2' && !_data[i]['order_state'] || _data[i]['pstate'] == '2' && _data[i]['order_state'] == '0') {
+                                if (_data[i]['id'] == _vid) {
+                                    _this.video.info.buttons[i]['checked'] = 'true';
+                                    $(".JS_add_radio").eq(i).addClass("active")
+                                }
+                            }
+                            if (_data[i]['pstate'] == '2') {
+                                _live ++;
+                            }
+                            if (_data[i]['pstate'] == '2' && _data[i]['order_state'] && _data[i]['order_state'] != '0') {
+                                _buy_live ++;
+                            }
+
+                            
+                            _s_total += parseFloat(_data[i]['flprice']);
+                        }
+                        if (_live == _buy_live) {
+                            _this.video.is_buy_all = true;
+                        }
+
+
+                        //单集
+                        if (APP.getParam("vid")) {
+                            _this.calcPrice(false);
+
+                        } else {
+                            //合集
+                            _this.calcPrice(true);
+                        }
+                        // console.log(_s_total)
+                        // console.log(res.data['flprice'])
+                        //_s_total = 40;
+                        //折扣
+                        var _discount = (parseFloat(res.data['flprice']) * 100 ) / (_s_total * 100);
+                        //console.log(_discount)
+                        if  ((_s_total * 100) === 0) {
+                            _discount = 1;
+                        }
+                        _this.video.discount = (_discount * 100).toString().split(".")[0];
+                    }
+
+
+                });
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0') {
+                        _this.page.show = 'home';
+                    }
+                });
+                
+                
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "确认订单",
+                })
+
+            },
+            mounted: function() {
+                
+            },
+            methods: {
+                calcPrice: function(type) {
+                    //已优惠价格
+                    var _data = this.video.info.buttons;
+                    var _p = 0;
+                    if (type) {
+                        //合集价格
+                        _p = this.video.info.flprice;
+                    } else {
+                        for (var i=0, len=_data.length; i<len; i++) {
+                            if (_data[i]['checked'] == 'true') {
+                                _p = (_p * 100 + parseFloat(_data[i]['flprice']) * 100) / 100
+                            }
+                        }
+                    }
+                    //console.log(_p)
+                    this.video.price = parseFloat(_p).toFixed(2);
+                },
+                selectLiveType: function(s, type) {
+                    //全集切换
+                    if (s == this.video.nav) {
+                        return;
+                    }
+                    if (s == '0') {
+                        this.video.nav = '0';
+                    } else {
+                        this.video.nav = '1';
+                    }
+                    this.calcPrice(type);
+                },
+                checkVideoList: function(data) {
+                    //返回已上架的视频数据
+                    var _data = data ? data : [];
+                    var _newData = [];
+                    for (var i=0, len=_data.length; i<len; i++) {
+                        if (_data[i]['pstate'] == '2' && !_data[i]['order_state'] || _data[i]['pstate'] == '2' && _data[i]['order_state'] == '0') {
+                            _newData.push(_data[i])
+                        }
+                    }   
+                    return _newData;
+                },
+                getVideoList: function(callback) {
+                    var _this = this;
+                    var _id = APP.getParam("id");
+                    var _callback = callback ? callback : function() {};
+                    APP.send("/PC/Video/videoList.json?collection_id="+_id, function(res) {
+                        if (res.errno == '0') {
+                           //console.log(res);
+                           //vm.hot = res.data;
+                           var _data = res.data;
+                           
+                           //_this.video.buttons_length = res.data.buttons.length;
+                           _this.video.buttons_length = _data.collection_count;
+                           _this.video.selectInfo = _data.buttons[_this.video.selectInfoItem];
+
+                           //返回已上架的视频数据
+                           var _buttons = _this.checkVideoList(_data.buttons);
+
+                           if (_buttons) {
+                               for (var i=0, len=_buttons.length; i<len; i++) {
+                                   _buttons[i]['checked'] = "false";
+                               }
+                           }
+                           _data.buttons = _buttons;
+                           _this.video.info = _data;
+                        }
+                        _callback(res);
+                    });
+                },
+                selectVideo: function(item) {
+                    //单集选中切换
+                    var _this = this;
+                    //  _this.video.price = 21;
+                    // console.log(parseFloat(_this.video.price))
+                    // console.log(parseFloat(_this.video.info.flprice))
+
+                    if (this.video.info.buttons[item]['checked'] == "true") {
+                        this.video.info.buttons[item]['checked'] = "false";
+                        $(".JS_add_radio").eq(item).removeClass("active")
+                    } else {
+                        this.video.info.buttons[item]['checked'] = "true";
+                        $(".JS_add_radio").eq(item).addClass("active")
+ 
+                    }
+                    _this.calcPrice(false);
+                    
+                },
+                add: function() {
+                    var _this = this;
+                    var _data = this.video.info.buttons;
+                    var _sum = 0;
+                    for (var i=0, len=_data.length; i<len; i++) {
+                       if (_data[i]['checked'] == "true") {
+                           _sum ++;
+                       }
+                    }
+                    if (_this.video.is_buy_all) {
+                        $.toast("您已购买全部视频", "text");
+                        return;
+                    }
+                    if (_this.video.nav=='1' && _sum <= 0) {
+                        $.toast("请选择视频", "text");
+                        return;
+                    }
+
+                    //子集购买 判断全集价格是否大于所有选中子集价格
+                    //是 提示是否购买全集
+                    if (_this.video.nav=='1' && parseFloat(_this.video.price) > parseFloat(_this.video.info.flprice)) {
+                        _this.video.all_show = true;
+                    } else {
+                        //否
+                        _this.addAjax();
+                    }
+                    //_this.addAjax();
+
+                },
+                addAjax: function() {
+                    var _this = this; 
+                    var _product_data = [];
+
+                    var _data = _this.video.info.buttons;
+                    var _hm_id = '?id='+_this.video.info.product_id;
+                    if (_this.video.nav == '0') {
+                        //合集
+                        _product_data.push({
+                            id: _this.video.info.product_id,
+                            count: 1,
+                            is_video: 1
+                        })  
+                        
+                    } else {
+                        //单集
+                        for (var i=0, len=_data.length; i<len; i++) {
+                            if (_data[i]['checked'] == "true") {
+                                _product_data.push({
+                                    id: _data[i]['product_id'],
+                                    count: 1,
+                                    is_video: 2
+                                })
+
+                                _hm_id += '&vid='+_data[i]['product_id']
+                            }
+                        }
+                    }
+                    var _json = {
+                        product_data: _product_data,
+                        note: '',
+                        invoice_state: 0,
+                        invoice: {
+                            header_content_type: '',
+                            header_content: '',
+                            identification_number: '',
+                            name: '',
+                            telephone: '',
+                            address: '',
+                        },
+                        company_name: '',
+                        customer_name: _this.info.wechat_nickname,
+                        phone: _this.info.username,
+                        channel: '',
+                        source: APP.getOrderChannel() ? APP.getOrderChannel() : '14',
+                        order_type: 0,
+                        discount_code: '', //优惠码
+                        customer_selected_supplier_id: '' //供应商id
+                    }
+                    if (_json.product_data.length <= 0) {
+                        return;
+                    }
+                    //  console.log(_json)
+                    //  return
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/create.json", _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //统计
+                            _this.getDetails(res.data);
+                            //_this.goPay(res.data);
+                            //window.location.href = "/Member/orderGoPay.html?oid=" + res.data;
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+
+                    //_hm_id
+                    APP.sendHm({
+                        action: "click",
+                        object: "live_pay",
+                        chinese_object: "确认支付",
+                        chinese_url: "确认订单",
+                        parameter: _hm_id
+                    })
+                },
+                getDetails: function(oid) {
+                    var _this = this;
+                    var _json = {
+                        order_id: oid
+                    }
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/info.json", _json, function(res) {
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //alert(JSON.stringify(res.data.order_id));
+                            if (res.data.state == '0' || res.data.state == '2') {
+                                _this.goPay(oid)
+                            } else {
+                               window.location.href = "/Member/liveGoPay.html?oid="+oid;
+                            }
+                        }
+                    })
+                },
+                goPay: function(order_id) {
+                    //微信支付
+                    var _this = this;
+                    var _json = {
+                        order_id: order_id,
+                    }
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/channelOrderWechatPayment.json", _json, function(res) {
+                        $.hideLoading();
+                        // alert(JSON.stringify(res))
+                        //    return;
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                           
+                            wx.chooseWXPay({
+                                appId: _data.appId,
+                                timestamp: _data.timeStamp,
+                                nonceStr: _data.nonceStr,
+                                package: _data.package,
+                                signType: _data.signType,
+                                paySign: _data.paySign,
+                                success: function(res) {
+                                    // 支付成功后的回调函数
+                                    if (res.errMsg == "chooseWXPay:ok") {
+                                        //支付成功
+                                        //_this.page.show = 'pay_succ';
+                                        window.location.href = "/Member/liveGoPay.html?oid="+order_id;
+                                    } else {
+                                        _this.page.show = 'pay_fail';
+                                        _this.video.all_show = false;
+                                        $.toast(res.errMsg, 'text');
+                                    }
+                                },
+                                cancel: function(res) {
+                                    //支付取消
+                                    //$.toast('支付取消', 'text');
+                                    //_this.page.show = 'pay_fail';;
+                                }
+                            });
+                            
+                        } else {
+                            _this.page.show = 'pay_fail';
+                            _this.video.all_show = false;
+                            $.toast(res.msg, "text");
+                        }
+                    });
+
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

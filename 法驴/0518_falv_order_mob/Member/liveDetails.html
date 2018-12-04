@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Live详情</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/Live/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/Live/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/main.css?v=16">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" :class="{'main-tabbar' : !video.is_buy_all }" class="main">
+        <div v-show="page.show == 'home'">
+            <div class="s-details-video">
+                <div v-if="video.show == 'start'" class="s-video-pop s-video-pop-start">
+                    <img class="s-video-pop-cover" :src="src_url+video.selectInfo.preview_image">
+                    <a @click="vm_video.checkNet()" href="javascript:;" class="d3-btn"><strong>开始{{ video.selectInfo.order_state && video.selectInfo.order_state !='0' ? '播放' : '试看' }}</strong></a>
+                </div>
+                <div v-if="video.show == 'network_tips'" class="s-video-pop s-video-pop-start">
+                    <a @click="vm_video.start()" href="javascript:;" class="d5-btn"><strong class="s1"><span class="colff7">{{ APP.bytesToSize(videoSize) }}M</span>流量</strong></a>
+                </div>
+                 <div v-if="video.show == 'reStart'" class="s-video-pop s-video-pop-start">
+                    <a @click="vm_video.start()" href="javascript:;" class="d4-btn"></a>
+                </div>
+                <div v-if="video.show == 'end'" class="s-video-pop">
+                    <img class="s-video-pop-cover" :src="src_url+video.selectInfo.preview_image">
+                    <div class="s-video-pop-coverBg">
+                        <p class="d1">{{ video.selectInfo.is_see == '0' && video.selectInfo.free_url ?  '购买完整视频，享受限时优惠' : '该视频需付费观看'}}</p>
+                        <div class="d2">
+                            <a @click="nextAdd(video.selectInfo.id, video.selectInfo.pstate, video.selectInfo.name)" class="d2-btn d2-btn1" href="javascript:;">立即购买</a><a v-if="video.selectInfo.is_see == '0' && video.selectInfo.free_url" @click="vm_video.reStart()" class="d2-btn d2-btn2" href="javascript:;">重新试看</a>
+                        </div>
+                    </div>
+                </div>
+                <div id="JS_video_bd">
+
+                </div>
+            </div>
+
+            <div class="s-list-nav clearfix">
+                <a @click="tabDetails('0')" :class="{'active' : video.nav=='0' }" class="s-list-nav-item" href="javascript:;"><span>章节（{{ video.sum }}）</span></a>
+                <a @click="tabDetails('1')" :class="{'active' : video.nav=='1' }" class="s-list-nav-item" href="javascript:;"><span>详情</span></a>
+            </div>
+
+
+            <div v-show="video.nav == '0'">
+
+                <div class="s-content s-details-catalogNav clearfix">
+                    <a @click="selectVideo(index)" :class="{'active' : video.selectInfoItem == index }" v-for="(list, index) in video.info.buttons" class="s-details-catalogNav-item" href="javascript:;">
+                        {{ (index+1) }}
+                        <div v-if="list.order_state && list.order_state!='0'" class="item-buyIcon"></div>
+                    </a>
+                </div>
+
+                <div class="s-details-catalogBd">
+                    <div class="s-title">
+                        章节目录
+                    </div>
+                    <!--:class="{'state2' : !list.order_state && list.pstate == '2' || list.order_state && list.order_state == '0' && list.pstate == '2' }"-->
+                    <div :class="{'active' : video.bottons_more, 'more' : video.sum>3}" class="s-content s-details-catalog">
+                        <div v-show="video.sum>3" :class="{active : video.bottons_more}" class="s-details-catalog-more">
+                            <a :class="{active : !video.bottons_more}" @click="intrMore()" class="s-details-catalog-moreBtn" href="javascript:;"><span>{{ video.bottons_more ? '点击收起' : '展开更多' }}</span></a>
+                        </div>
+
+                        <a :class="{'select_active': video.selectInfoItem == index}" v-for="(list, index) in video.info.buttons" class="s-details-catalog-item state2" href="javascript:;">
+                            <div class="item-number">{{ (index+1) }}</div>
+                            <div @click="nextAdd(list.id, list.pstate, list.name, list.order_state, index, 'tab')" class="item-info">
+                                <div class="item-info-title">
+                                    {{ list.name }}<span v-if="parseFloat(list.flprice) == 0 && list.pstate == '2'" class="i1">免费</span><span v-if="list.pstate != '2'" class="i2">停播</span>
+                                </div>
+  
+                                <div class="item-info-intr">主讲人：{{ list.author_name }} | {{ list.time_length }}分钟 | {{ APP.calcSum(list.view_counts) }}次播放</div>
+                            </div>
+                            <div @click="nextAdd(list.id, list.pstate, list.name, list.order_state, index, 'add')" v-if="!list.order_state && list.pstate == '2' || list.order_state && list.order_state == '0' && list.pstate == '2'" class="item-price">
+                                ￥{{ list.flprice }}
+                            </div>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                <div class="s-details-intrBd">
+                    <div class="s-title">
+                        章节介绍
+                    </div>
+                    <div v-html="video.selectInfo.introduce" class="s-content s-details-intr">
+                        
+                    </div>
+                            
+                </div>
+
+            </div>
+
+            <div v-show="video.nav == '1'">
+                <div class="s-details-lecturerBd">
+                    <div class="s-title">
+                        讲师介绍
+                    </div>
+                    <div class="s-content s-lecturer-info">
+                        <div @click="window.location.href= '/Member/liveLecturerDetails.html?id='+video.speakerInformation.id" class="s-lecturer-info-head clearfix">
+                            <div class="s-lecturer-info-pic"><img :src="src_url+video.speakerInformation.image"></div>
+                            <div class="s-lecturer-info-name">
+                                {{ video.speakerInformation.name }}
+                            </div>
+                        </div>
+                        <div :class="{active : video.navMore}" class="s-lecturer-info-text">
+                            <div v-html="video.speakerInformation.description"></div>
+                            <a :class="{active : !video.navMore}" @click="video.navMore = video.navMore ? false : true" class="s-lecturer-more" href="javascript:;"><span>{{ video.navMore ? '点击收起' : '展开更多' }}</span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="s-details-lecturerBd">
+                    <div class="s-title">
+                        详情介绍
+                    </div>
+                    <div v-html="video.info.introduce" class="s-content s-details-intr">
+
+                    </div>
+                </div>
+            </div>
+        
+
+
+
+            <div v-show="!video.is_buy_all" class="weui-tabbar s-tabbar s-details-tabbar s-btn">
+                <a @click="nextAdd()" href="javascript:;" class="weui-tabbar__item">
+                    <p class="s-details-tabbar__label">全集特惠：<span>￥{{ video.info.flprice }}</span> <span class="s2"><del>￥{{ video.total_price }}</del></span></p>
+                </a>
+            </div>
+
+
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/Live/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/Live/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/Live/js/vue.min.js"></script>
+    <script src="/Public/Home/Live/js/fastclick.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/Live/js/main.js?v=220"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                },
+
+                video: {
+                    selectInfo: '',
+                    selectInfoItem: 0,
+                    speakerInformation: '',
+                    sum: 0,
+                    info: '',
+                    total_price: 0,
+                    show: '',
+                    bottons_more: false,
+                    nav: '0',
+                    navMore: false,
+                    is_buy_all: false
+                },
+                
+                videoSize: '',
+                networkType: '',
+
+               
+            },
+            created: function() {
+                
+                var _this = this;
+                
+
+                //获取来源
+                APP.initChannel();
+
+                _this.getVideoList();
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0') {
+                        _this.page.show = 'home';
+                    }
+                });
+                
+
+
+                
+            },
+            mounted: function() {
+                
+            },
+            methods: {
+                tabDetails: function(tab) {
+                    this.video.nav = tab;
+
+                    if (tab == "1") {
+                        APP.sendHm({
+                            action: "click",
+                            object: "details_details",
+                            chinese_object: "详情",
+                            chinese_url: "live详情"
+                        })
+                        
+                    }
+                },
+                intrMore: function() {
+                    
+                    if (!this.video.bottons_more) {
+                        APP.sendHm({
+                            action: "click",
+                            object: "details_more",
+                            chinese_object: "展开更多",
+                            chinese_url: "live详情"
+                        })
+                    }
+
+                    this.video.bottons_more = this.video.bottons_more ? false : true;
+                },
+                nextAdd: function(vid, state, param, type, index, mode) {
+                    if (this.video.info.pstate != '2') {
+                        $.toast("该合集已停播", "text");
+                        return;
+                    }
+                    if (state && state != '2') {
+                        $.toast("该视频已停播", "text");
+                        return;
+                    }
+                    if (vid) {
+                        //vid 子集
+                        if (!mode) {
+                            if (!type || type && type == '0') {
+                                APP.sendHm({
+                                    action: "click",
+                                    object: "details_buyOne",
+                                    chinese_object: "购买子集",
+                                    chinese_url: "live详情",
+                                    parameter: param
+                                }, function() {
+                                    window.location.href = "/Member/liveAdd.html?id=" + APP.getParam("id") + "&vid=" + vid;
+                                })
+                            
+                            } else {
+                                //已购买
+                                //console.log("mf")
+                                this.selectVideo(index, 'bot')
+                            }
+                            
+                        } else if (mode == 'tab') {
+                            //目录切换
+                            this.selectVideo(index, 'bot')
+
+                        } else if (mode == 'add') {
+                            //点击购买
+                            APP.sendHm({
+                                action: "click",
+                                object: "details_buyOne",
+                                chinese_object: "购买子集",
+                                chinese_url: "live详情",
+                                parameter: param
+                            }, function() {
+                                window.location.href = "/Member/liveAdd.html?id=" + APP.getParam("id") + "&vid=" + vid;
+                            })
+                            
+                        }
+                        
+                    } else {
+                        //全集
+                        APP.sendHm({
+                            action: "click",
+                            object: "details_buyAll",
+                            chinese_object: "全集特惠",
+                            chinese_url: "live详情"
+                        }, function() {
+                            window.location.href = "/Member/liveAdd.html?id=" + APP.getParam("id");
+                        })
+    
+                        
+                    }
+                    
+                },
+                calcTimeLength: function(time) {
+                    if (time == '0') {
+                        return time;
+                    }
+                    var time = time ? time : '00:00:00';
+                    var _tiems = time.split(":");
+                    return Number(_tiems[0]*60) + Number(_tiems[1]) > 0 ? Number(_tiems[0]*60) + Number(_tiems[1]) : 1;
+                },
+                calcPrice: function() {
+                    //已优惠价格
+                    var _data = this.video.info.buttons;
+                    var _p = 0;
+                    for (var i=0, len=_data.length; i<len; i++) { 
+                        _p = (_p * 100 + parseFloat(_data[i]['flprice']) * 100) / 100                    
+                    }
+                    
+                    //console.log(_p)
+                    this.video.total_price = parseFloat(_p).toFixed(2);
+                },
+                selectVideo: function(item, type) {
+                    //选中子集
+                    if (this.video.selectInfoItem == item) {
+                        return;
+                    }
+                   
+                    if (this.video.info.buttons[item]['pstate'] != '2') {
+                        $.toast("该视频已停播", "text");
+                        return;
+                    }
+
+
+                    //window.location.href = '/Member/liveDetails.html?id='+APP.getParam("id")+'&vid='+this.video.info.buttons[item]['id'];
+                    //保存选中子集数据
+                    this.video.selectInfoItem = item;
+                    this.video.selectInfo = this.video.info.buttons[item];
+                    $("#JS_video_bd").html('');
+                    //this.video.show = "start";
+                    //获取子集主讲人数据
+                    this.getSpeakerInformation(this.video.info.buttons[item]['author']);
+                    //获取最新视频数据
+                    this.getVideoListInfo(this.video.info.buttons[item]['id'], this.video.info.buttons[item]['order_state']);
+
+
+                    var _free_url = this.video.info.buttons[item].free_url;
+                    var _is_see = this.video.info.buttons[item].is_see;
+                    var _order_state = this.video.info.buttons[item].order_state;
+
+
+                    if (_is_see == '1' && !_order_state || _is_see == '1' && _order_state == '0' || !_free_url && _order_state == '0' || !_free_url && !_order_state) {
+                        this.video.show = 'end';
+                    } else {
+                        this.video.show = 'start';
+                    }
+                    $(document).scrollTop(0)
+                    //console.log(_is_see)
+
+
+                    if (type == 'bot') {
+                        APP.sendHm({
+                            action: "click",
+                            object: "details_List_son",
+                            chinese_object: "目录子集",
+                            chinese_url: "live详情",
+                            parameter: this.video.selectInfo['name']
+                        })
+
+                    } else {
+                        APP.sendHm({
+                            action: "click",
+                            object: "details_son",
+                            chinese_object: "点击子集",
+                            chinese_url: "live详情",
+                            parameter: this.video.selectInfo['name']
+                        })
+                    }
+                },
+                getVideoList: function() {
+                    //合集详情
+                    var _this = this;
+                    var _id = APP.getParam("id");
+                    var _vid = APP.getParam("vid");
+                    var _channel = APP.getOrderChannel() ? APP.getOrderChannel() : '14';
+                    APP.send("/PC/Video/videoList.json?collection_id="+_id+'&channel='+_channel, function(res) {
+                        if (res.errno == '0') {
+                           //console.log(res);
+                           //vm.hot = res.data;
+                           var _data = res.data;
+                           var _live = 0;
+                           var _buy_live = 0;
+                           _this.video.info = _data;
+                           _this.video.sum = _data.buttons.length;
+
+                           //子集大于3章 显示展示更多按钮
+                           if (_data.buttons.length<= 3) {
+                               _this.video.bottons_more = true;
+                           }
+                           //vid: 子集id 默认第一个子集
+                           _vid = _vid ? _vid : _data.buttons[0]['id'];
+                           //判断是否有未购买子集
+                            for (var i=0, len=_data.buttons.length; i<len; i++) {
+                                if (_data.buttons[i]['id'] == _vid) {
+                                    _this.video.selectInfoItem = i;
+                                }
+                                //免费视频
+                                if (_data.buttons[i]['pstate'] == '2') {
+                                    _live ++;
+                                }
+                                //已购买
+                                if (_data.buttons[i]['pstate'] == '2' && _data.buttons[i]['order_state'] && _data.buttons[i]['order_state'] != '0') {
+                                    _buy_live ++;
+                                    //console.log(_data.buttons[i]['order_state'])
+                                }
+                                
+                                _data.buttons[i].time_length = _this.calcTimeLength(_data.buttons[i].time_length);
+                            }
+                            //是否显示底部全集购买按钮
+                            if (_live == _buy_live) {
+                                _this.video.is_buy_all = true;
+                            }
+                            //console.log(_live, _buy_live)
+
+                           //_this.video.selectInfo = _data.buttons[_this.video.selectInfoItem];
+                           //获取最新视频数据
+                           _this.getVideoListInfo(_vid, _data.buttons[_this.video.selectInfoItem]['order_state']);
+                           //获取子集主讲人数据
+                           _this.getSpeakerInformation(_data.buttons[_this.video.selectInfoItem].author);
+                           //已优惠价格
+                           _this.calcPrice();
+
+
+                           //试看视频链接
+                           var _free_url = _data.buttons[_this.video.selectInfoItem].free_url;
+                           //is_see: 0有试看视频 1无试看视频
+                           var _is_see = _data.buttons[_this.video.selectInfoItem].is_see;
+                           //order_state： 0未购买 1已购买
+                           var _order_state = _data.buttons[_this.video.selectInfoItem].order_state;
+
+                           //判断是否有试看视频 is_see: 0有试看视频 1无试看视频
+                           if (_is_see == '1' && !_order_state || _is_see == '1' && _order_state == '0' || !_free_url && _order_state == '0' || !_free_url && !_order_state) {
+                               _this.video.show = 'end';
+                           } else {
+                               _this.video.show = 'start';
+                           }
+
+
+                           //微信分享
+                           //console.log(_data.introduce)
+                           var _desc = APP.clearHtmlText(_data.introduce)
+                           var _share_link = window.location.href;
+                           if (sessionStorage.getItem("order_from_channel")) {
+                               _share_link = _share_link + '&reg_from_channel='+APP.getFromChannel()
+                           }
+                           //console.log(_share_link)
+                           APP.setShare({
+                                title: _data.name,
+                                desc: _desc.slice(0, 15),
+                                link: _share_link,
+                                imgUrl: src_url+_data.image,
+                                success: function() {},
+                                cancel: function() {}
+                           })
+
+
+
+                           APP.sendHm({
+                                action: "visits",
+                                chinese_url: "live详情",
+                                parameter: _data.buttons[_this.video.selectInfoItem]['name']
+                            })
+
+                        }
+
+
+
+
+                    });
+                },
+                getVideoListInfo: function(vid, state) {
+                    //获取最新视频数据
+                    var _vid = vid;
+                    var _this = this;
+                    
+                    APP.send("/PC/Video/playVideo.json?id="+_vid, function(res) {
+                        if (res.errno == '0') {
+                            _this.video.selectInfo = res.data;
+                            _this.video.selectInfo['order_state'] = state;
+                        }
+                    })
+                },
+                getSpeakerInformation: function(_id) {
+                    //获取视频主讲人信息
+                    var _this = this;
+                    $.showLoading("数据加载中");
+                    APP.send("/PC/Video/speakerInformation.json?author_id="+_id, function(res) {
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                           //console.log(res);
+                           var _data = res.data;
+                           _this.video.speakerInformation = _data;
+                        }
+                    });
+                },
+            }
+        });      
+
+        
+        var vm_video = {
+            checkNet: function() {
+                //console.log(APP.getNetworkType())
+                //获取当前网络状态
+                wx.getNetworkType({
+                    success: function (res) {
+                        //console.log(res)
+                        vm.networkType = res.networkType; // 返回网络类型2g，3g，4g，wifi
+
+                        vm.videoSize = vm.video.selectInfo.size;
+
+                        if (!vm.video.selectInfo.order_state || vm.video.selectInfo.order_state && vm.video.selectInfo.order_state == '0') {
+                            vm.videoSize = vm.video.selectInfo.free_size;
+                        }
+                        //不是wifi 提醒需耗费流量
+                        if (res.networkType == "wifi") {
+                            vm_video.start()
+                        } else {
+                            vm.video.show = 'network_tips';
+                        }
+                    }
+                });
+            },
+            start: function() {
+                //播放视频
+                //vm.video.selectInfo.order_state = '1';
+                var _url;
+                //console.log(vm.video.selectInfo.order_state)
+                //判断是否有试看视频
+                if (!vm.video.selectInfo.order_state || vm.video.selectInfo.order_state && vm.video.selectInfo.order_state == '0') {
+                    _url = vm.video.selectInfo.free_url;
+                } else {
+                    //console.log(vm.video.selectInfo.order_state)
+                    _url = vm.video.selectInfo.video_url;
+                }
+                //是否停播
+                if (vm.video.selectInfo.pstate != '2') {
+                    $.toast("该视频已停播", "text");
+                    return;
+                }
+                //无试看视频且未购买过提醒购买
+                if (!vm.video.selectInfo.order_state && vm.video.selectInfo.is_see != '0' || vm.video.selectInfo.order_state == '0' && vm.video.selectInfo.is_see != '0') {
+                    vm.video.show = 'end';
+                    return;
+                }
+                //x5-video-player-type="h5" x5-video-player-fullscreen="true"
+                //preload="meta" x-webkit-airplay="true" x5-video-player-type="h5" x5-video-player-fullscreen="true"
+                //创建video 
+                //播放购买视频或试看视频
+                var html = '<video id="JS_video" controls="controls" playsinline="true" webkit-playsinline="true" x5-playsinline="true" src="'+_url+'"></video>';
+                $("#JS_video_bd").html(html);
+                vm.video.show = 'ing';
+                
+                setTimeout(function() {
+                    var _d = document.getElementById("JS_video");
+                    _d.play();
+                    //绑定事件 视频播放完毕清除video 显示结束页面
+                    _d.addEventListener('ended',function(){
+                        
+
+                        //console.log(233)
+                        //判断是否购买过当前视频
+                        //否
+                        if (!vm.video.selectInfo.order_state || vm.video.selectInfo.order_state && vm.video.selectInfo.order_state == '0') {
+                            //console.log(233)
+                            $("#JS_video_bd").html('');
+                            vm.video.show = 'end';
+                        } else {
+                            //是
+                            if (vm.video.selectInfo.pstate == '2') {
+                                $("#JS_video_bd").html('');
+                                vm.video.show = 'reStart';
+                            }
+                            //console.log(233)
+                            // if (APP.versions()['android']){
+                            //     $("#JS_video_bd").html('');
+                            //     vm.video.show = 'start';
+                            // }
+                        }
+
+                        
+
+                    },false); 
+                }, 50)
+
+                
+                APP.sendHm({
+                    action: "visits",
+                    object: "details_play",
+                    chinese_object: "开始播放",
+                    chinese_url: "live详情",
+                    parameter: vm.video.selectInfo.name
+                })
+            },
+            reStart: function() {
+                this.start();
+            }
+        }
+
+
+
+
+
+    </script>
+</body>
+
+</html>

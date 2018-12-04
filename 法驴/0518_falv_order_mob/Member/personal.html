@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=32">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
+    
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        
+        <div v-show="page.show=='home'" class="main-page">
+            <header class="s-header s-header_b">
+                <!--<div class="s-header-main">
+                    <a href="javascript:window.history.back();" class="s-header-colse"></a>
+                </div>-->
+            </header>
+            <div class="wrap-main">
+                <div v-if="APP.getOrderChannel() == '11'" class="s-personal-info">
+                    <div class="info-headpic"><img :src="info.wechat_headimgurl" alt=""></div>
+                    <div class="info-name overflows">{{ info.wechat_nickname }}</div>
+                    <span class="info-phone">{{ info.phone }}</span>
+                </div>
+                <div v-else class="s-personal-info">
+                    <div class="info-headpic"><img :src="info.wechat_headimgurl" alt=""></div>
+                    <div class="info-name overflows">{{ info.wechat_nickname }}</div>
+                    <span class="info-phone">{{ info.name }}</span>
+                </div>
+                
+                <div class="s-personal-order">
+                    <a @click="next(' ')" href="javascript:;" class="order-item">
+                        <p class="order-item-p1">{{ order.total_count }}单</p>
+                        <p class="order-item-p2">全部服务</p>
+                    </a>
+                    <a @click="next('0')" href="javascript:;" class="order-item">
+                        <p class="order-item-p1">{{ order.not_paid_count }}单</p>
+                        <p class="order-item-p2">待支付</p>
+                    </a>
+                    <a @click="next('1')" href="javascript:;" class="order-item">
+                        <p class="order-item-p1">{{ order.service_count }}单</p>
+                        <p class="order-item-p2">服务中</p>
+                    </a>
+                </div>
+
+                <div class="s-personal-kf clearfix">
+                    <a @click="APP.showActionKf()" href="javascript:;" class="fk-item floatLeft">
+                        <img class="img1" src="/Public/Home/member/img/m14.png">
+                        <p>客服</p>
+                    </a>
+                    <a @click="share=true;APP.sendHm({'action': 'click', 'object': 'useCenter-share'});" href="javascript:;" class="fk-item floatRight">
+                        <img class="img1" src="/Public/Home/member/img/m15.png">
+                        <p>分享</p>
+                    </a>
+                </div>
+
+                <div v-if="info.customer_source == '24'">
+
+                    <div class="s-title_3 clearfix">
+                        “邮”法可依服务<a href="/Member/goodsList.html">查看全部></a>
+                    </div>
+
+                    <div class="s-personal-goods clearfix">
+                        <a href="/Member/goodsDetails.html?id=100448" class="s-personal-goods-item">
+                            <div class="goods-item-top bg1"></div>
+                            <div class="goods-item-text">
+                                消费侵权类法律服务丨弱势群体维权专属管家
+                            </div>
+                        </a>
+                        <a href="/Member/goodsDetails.html?id=100454" class="s-personal-goods-item">
+                            <div class="goods-item-top bg2"></div>
+                            <div class="goods-item-text">
+                                房屋产权法律服务丨“硬"资产专属管家
+                            </div>
+                        </a>
+                        <a href="/Member/goodsDetails.html?id=100451" class="s-personal-goods-item">
+                            <div class="goods-item-top bg3"></div>
+                            <div class="goods-item-text">
+                                婚姻家事法律服务丨 家庭事务处理专属管家
+                            </div>
+                        </a>
+                        <a href="/Member/goodsDetails.html?id=100455" class="s-personal-goods-item">
+                            <div class="goods-item-top bg4"></div>
+                            <div class="goods-item-text">
+                                非标咨询法律服务(SN-00006)丨全栈法律咨询
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div @click="share=false" v-show="share" class="s-pop-bg2">
+                <div class="s-pop-share-icon"></div>
+                <p class="s-pop-share-text">从微信中分享</p>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="/Public/Home/member/js/exif.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/member/js/main.js?v=082"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: 'home',
+                },
+
+                share: false,
+                order: {
+                    total_count: 0,
+                    in_service_count: 0,
+                    not_serviced_count: 0
+                }
+
+            },
+            created: function() {
+                APP.getInfo(this, function() {
+                    
+                });
+                this.getOrderSum();
+
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "个人中心"
+                })
+            },
+            mounted: function() {
+
+            },
+            methods: {
+                next: function(type) {
+                    var _object = "userCenter-all";
+                    var _url = "/Member/orderList.html";
+                    if (type == "0") {
+                        _object = "userCenter-wait";
+                        _url = _url + "?tab=0";
+
+                    } else if (type == "1") {
+                        _object = "userCenter-service";
+                        _url = _url + "?tab=1";
+                    }
+
+                    APP.sendHm({
+                        action: "click", 
+                        object: _object
+                    }, function() {
+                        window.location.href = _url;
+                    });
+                    
+                },
+                getOrderSum: function() {
+                    var _this = this;
+                    APP.send("/PC/NEWOrder/channelOrderQuantity.json", function(res) {
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.order.total_count = _data.total_count;
+                            _this.order.in_service_count = _data.in_service_count;
+                            _this.order.not_serviced_count = _data.not_serviced_count;
+                            _this.order.not_paid_count = _data.not_paid_count;
+                            _this.order.service_count = _data.service_count;
+                        }
+                        
+                    })
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

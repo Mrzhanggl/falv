@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>登录</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/Mob/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/Mob/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/quick-supplier.css?v=16">
+    <script src="/Public/Home/Mob/js/jquery-3.1.1.min.js"></script>
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+    <style>
+        /*init weui*/
+        .weui-mask.weui-actions_mask {
+            cursor: pointer;
+        }
+        .weui-popup__container,
+        .weui-popup__overlay {
+            z-index: 1000;
+        }
+        .weui-dialog, .weui-toast {
+            -webkit-transform: scale(1) translate(-50%,-50%);
+            transform: scale(1) translate(-50%,-50%);
+        }
+        .weui-toast {
+            background: hsla(0, 0%, 7%, .8) !important;
+        }
+        .weui-toast--text {
+            padding: 8px 12px;
+        }
+        .weui-tabbar {
+            left: 0;
+        }
+        /*toast text*/
+        .weui-toast {
+            background: RGBA(0, 0, 0, 0.7);
+        }
+        .weui-toast--text {
+            min-width: 2.4rem;
+            text-align: center;
+            font-size: .26rem;
+            padding: .12rem .2rem;
+            border-radius: .62rem;
+            line-height: 1.4;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <!--登录或注册-->
+        <div v-show="page.show=='login'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="nextHome()" href="javascript:;" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>手机验证</h2>
+                </div>
+                <div class="s-login-intr">
+                    <p>请输入您的手机号码，</p>
+                    <p>登录或注册您的法驴账号</p>
+                </div>
+                <div class="s-login-form">
+                    <div class="s-input-item clearfix">
+                        <span class="item-d1">+86</span>
+                        <div class="item-d2">
+                            <input v-model="form_login.phone" oninput="if(value.length>11)value=value.slice(0,11)" type="tel" placeholder="请输入手机号" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="s-input-item s-input-itemCode clearfix">
+                        <span class="item-d1">验证码</span>
+                        <div class="item-d2">
+                            <input v-model="form_login.code" type="tel" placeholder="请输入验证码" autocomplete="off">
+                        </div>
+                        <a @click="loginCountDown()" :class="{'unactive': !form_login.code_state}" href="javascript:;" class="item-d3 unactive">
+                            {{ form_login.time }}
+                        </a>
+                    </div>
+                </div>
+                <div class="s-login-action">
+                    <a @click="login()" class="s-btn s-btn_1" href="javascript:;">下一步</a>
+                </div>
+                <div class="s1-login-tips">
+                    点击下一步，即表示已阅读并同意<a @click="nexAgreement()" href="javascript:;">《法律合作协议》</a>
+                </div>
+            </div>
+        </div>
+        <!--设置密码-->
+        <div v-show="page.show=='set_pass'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="nextHome()" href="javascript:;" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-title">
+                    <h2>设置密码</h2>
+                </div>
+                <div class="s-login-intr">
+                    <p>设置密码可登陆法驴APP</p>
+                </div>
+                <div class="s-setPass-form">
+                    <div class="s-input-item s-input-item2 clearfix">
+                        <span class="item-d1">设置密码</span>
+                        <div class="item-d2">
+                            <input v-model="form_set_pass.password" maxlength="" type="text" placeholder="输入密码（6-10为数字、字母）" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="s-input-item s-input-item2 clearfix">
+                        <span class="item-d1">密码</span>
+                        <div class="item-d2">
+                            <input v-model="form_set_pass.repassword" maxlength="" type="text" placeholder="重复密码" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="s-login-action">
+                    <a @click="setPassword()" class="s-btn s-btn_1" href="javascript:;">下一步</a>
+                </div>
+
+            </div>
+        </div>
+       
+        <!--法律服务合作协议-->
+        <div v-show="page.show=='agreement'" class="main-page">
+            <header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show=page.agreement_last_page" href="javascript:;" class="s-header-colse"></a>
+                </div>
+            </header>
+            <div class="wrap-main">
+                <div class="s-agreement-box">
+                    <iframe src="20180419.html"></iframe>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/Mob/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/Mob/js/vue.min.js"></script>
+    <script src="/Public/Home/Mob/js/exif.js"></script>
+    <script src="/Public/Home/Mob/js/city.js"></script>
+    <script src="/Public/Home/Mob/js/city-picker.min.js"></script>
+    <script src="/Public/Home/Mob/js/lawyerCommon.js?v=04"></script>
+    <script src="/Public/Home/Mob/js/lawyerMain.js?v=06"></script>
+
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                info_level: '1',
+                info_type: '1', //2审核中 1审核完成
+
+                weixin: {
+                    state: false,
+                    show: false,
+                },
+
+                page: {
+                    show: '',
+                    agreement_last_page: ''
+                },
+                form_login: {
+                    phone: '',
+                    code: '',
+                    time: '获取验证码',
+                    code_state: true
+                },
+                form_set_pass: {
+                    password: '',
+                    repassword: ''
+                },
+            },
+            created: function() {
+                var _this = this;
+                this.weixin.state =  APP.isWeiXin();
+
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0') {
+                       _this.nextPage();
+                    } else {
+                        _this.page.show = "login";
+                    }
+                    
+                });
+            },
+            watch: {
+                
+            },
+            mounted: function() {
+                
+            },
+            methods: {
+                logout: function(callback) {
+                    var callback = callback ? callback : function() {};
+                    APP.send("/PC/User/logout.json", function(res) {
+                        callback();
+                        //  window.location.href = "/h5/lawyerreg/quick_supplier.html?timestamp="+Date.parse(new Date());
+                    });
+                },
+                nextPage: function() {
+                    var _url = APP.getParam("from") ? decodeURIComponent(APP.getParam("from")) : '/h5/lawyerreg/jLawyerMatching.html';
+                     window.location.href = _url;
+                },
+                nexAgreement: function() {
+                    this.page.agreement_last_page = this.page.show;
+                    this.page.show='agreement';
+                },
+                login: function() {
+                    var _this = this;
+                    var _json = {
+                        phone: _this.form_login.phone,
+                        code: _this.form_login.code,
+                        type: 1,
+                        customer_source: localStorage.getItem('customer_source'),
+                        customer_source_parameter: localStorage.getItem('customer_source_parameter'),
+                        pre_registration_page: document.referrer,
+                        is_lawyer: 1,
+                    };
+                    $.showLoading('数据提交中');
+                    APP.send('/PC/UserLogin/login.json', _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            //获取账号律师信息
+                            _this.info_login = true;
+                            _this.info = _data;
+
+                            _this.nextPage();
+                            // if (_data.password_is_null) {
+                            //     _this.page.show = 'set_pass';
+                            // } else {
+                            //     if (parseFloat(_data.cash_pledge) > 0 && _data.rights_protection.length > 0 && _data.is_approval== '1') {
+                            //         _this.nextSuper();
+                            //     } else {
+                            //         window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=info';
+                            //         //_this.nextInfo(_data.is_approval);
+                            //     }
+                            // }
+                            
+                        } else {
+                            $.toast(res.msg, "text");
+                        }
+                    });
+
+                },
+                loginCountDown: function() {
+                    var _this = this;
+                    var _phone = _this.form_login.phone;
+
+                    if (!_this.form_login.code_state) return;
+                    if (!APP.isPhoneNo(_phone)) {
+                        $.toptip('请输入正确的手机号', 'error');
+                        return;
+                    }
+                         
+                    _this.form_login.code_state = false;
+                    _this.loginSendCode(_phone);
+                    _this.form_login.time = 60;
+                    var timest = setInterval(function() {
+                        if (typeof(_this.form_login.time) == 'string') {
+                            clearInterval(timest)
+                            return;
+                        }
+                        _this.form_login.time--;
+                        if (_this.form_login.time == 0) {
+                            _this.form_login.code_state = true;
+                            _this.form_login.time = '重新发送';
+                            clearInterval(timest)
+                        }
+                    }, 1000)
+                },
+                loginSendCode: function(phone) {
+                    //获取短信验证码
+                    var _this = this;
+                    var _json = {
+                        phone: phone
+                    }
+                    APP.send('/PC/UserLogin/sendShortMessageForFaLv.json', _json, function(res) {
+                        //console.log(res);
+                        if (res.errno == '0') {
+                            $.toptip('发送成功！', 'success');
+                        } else {
+                            _this.form_login.code_state = true;
+                            _this.form_login.time = '重新发送';
+                            //$.toast(res.msg, "text");
+                        }
+                    });
+                },
+            }
+        });      
+
+    </script>
+
+
+</body>
+</html>

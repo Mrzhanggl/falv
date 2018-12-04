@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1 viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=52">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main bg-dd">
+        <!--首页-->
+        <div v-show="page.show == 'home'">
+
+            <div class="s6-goodsList-head">
+                <a @click="next('fall-center', '', '/Member/personal.html')" v-if="info_login" href="javascript:;" class="s6-goodsList-per"><strong>个人中心</strong></a>
+                <div class="s6-goodsList-head-line"></div>
+            </div>
+
+            <div @click="APP.sendHm({action: 'click', object:'getCoupon', chinese_object:'领取优惠券',chinese_url:'钉钉落地页'});$('#JS_coupon').popup();" class="s6-goodsList-coupon">
+
+            </div>
+
+            <div class="s6-goodsList-title">
+                <img src="/Public/Home/member/img/m123.png">
+            </div>
+
+            <div class="wrap-main s6-goodsList-content">
+                <div @click="next('buy_call', '购买电话咨询', '/Member/goodsDetails.html?id='+product['DDJC'])" class="s6-goodsList-item clearfix">
+                    <div class="item-cover">
+                        <img src="/Public/Home/member/img/m124@2x.png">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-content-d1">
+                            <strong>不限时法律电话咨询</strong>
+                        </div>
+                        <div class="item-content-d2 clearfix">
+                            <span class="item-d2-text">不限时</span>
+                            <span class="item-d2-text">远程</span>
+                            <span class="item-d2-text">全领域</span>
+                        </div>
+                        <div class="item-content-d3">
+                            <div class="item-d3-text">
+                                <strong>68</strong><span class="c1">/次</span>
+                            </div>
+                            <div class="item-d3-btn">
+                                <strong>立即购买</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div old-id="100542" @click="next('buy_VIPC', '购买个人年卡', '/Member/goodsDetails.html?id='+product['DDYC'])" class="s6-goodsList-item clearfix">
+                    <div class="item-cover">
+                        <img src="/Public/Home/member/img/m125@2x.png">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-content-d1">
+                            <strong>个人法律咨询年卡</strong>
+                        </div>
+                        <div class="item-content-d2 clearfix">
+                            <span class="item-d2-text">个人权益</span>
+                            <span class="item-d2-text">24小时</span>
+                            <span class="item-d2-text">全领域</span>
+                        </div>
+                        <div class="item-content-d3">
+                            <div class="item-d3-text">
+                                <strong>666</strong><span class="c1">/年</span>
+                            </div>
+                            <div class="item-d3-btn">
+                                <strong>立即购买</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div old-id="100543" @click="next('buy_VIPB', '购买企业年卡', '/Member/goodsDetails.html?id='+product['DDYB'])" class="s6-goodsList-item clearfix">
+                    <div class="item-cover">
+                        <img src="/Public/Home/member/img/m126@2x.png">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-content-d1">
+                            <strong>企业法律咨询年卡</strong>
+                        </div>
+                        <div class="item-content-d2 clearfix">
+                            <span class="item-d2-text">企业权益</span>
+                            <span class="item-d2-text">远程</span>
+                            <span class="item-d2-text">全领域</span>
+                        </div>
+                        <div class="item-content-d3">
+                            <div class="item-d3-text">
+                                <strong>1188</strong><span class="c1">/年</span>
+                            </div>
+                            <div class="item-d3-btn">
+                                <strong>立即购买</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="s6-goodsList-footer">
+                <div class="s6-goodsList-footer-logo">
+                    <span><img src="/Public/Home/member/img/m128.png"></span>
+                    <span><img src="/Public/Home/member/img/m129.png"></span>
+                </div>
+                <div class="s6-goodsList-footer-text">
+                    本页面由阿方提法律咨询（上海）有限公司提供技术支持
+                </div>
+            </div>
+
+
+
+
+
+            <div id="JS_coupon" class="weui-popup__container popup-bottom s6-goodsDdPop__container">
+                <div class="weui-popup__overlay s6-popup__overlay"></div>
+                <div class="weui-popup__modal">
+                    <div class="s6-goodsDetailsPop-head">
+                        优惠券
+                        <a @click.stop="APP.sendHm({action:'click',object:'coupon_close',chinese_object:'关闭优惠券弹窗',chinese_url:'领取优惠券弹窗'});$.closePopup()" class="s6-goodsDetailsPop-close" href="javascript:;"></a>
+                    </div>
+                    <div class="s6-goodsDdPop-content">
+                        <div @click="getCoupon(0, 'DDJC')" class="s6-goodsDd-couponItem">
+                            <div class="couponItem-bd">
+                                <div class="couponItem-price">
+                                    <div class="couponItem-price-tab">
+                                        <span class="c1">￥</span><strong>15</strong>
+                                    </div>
+                                </div>
+                                <div class="couponItem-content">
+                                    <div class="couponItem-content-tab">
+                                        <p class="couponItem-content-name"><strong>仅限不限时法律电话咨询使用</strong></p>
+                                        <p v-if="!info_login || info_login && coupon.DDJC.result" class="couponItem-content-time">有效期30天</p>
+                                        <p v-else class="couponItem-content-time">有效期至{{ coupon['DDJC']['date'] }}</p>
+                                    </div>
+                                </div>
+                                <div v-if="!info_login || coupon.DDJC.result" class="couponItem-addBtn">
+                                    <strong>立即领取</strong>
+                                </div>
+                                <div v-else class="couponItem-actBtn">
+                                    <strong>去使用</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if="!info_login || coupon.DDYC.result || !coupon.DDYC.result && coupon.DDYC.data && coupon.DDYC.data.state != '2'" @click="getCoupon(2, 'DDYC')" class="s6-goodsDd-couponItem">
+                            <div class="couponItem-bd">
+                                <div class="couponItem-price">
+                                    <div class="couponItem-price-tab">
+                                        <span class="c1">￥</span><strong>100</strong>
+                                    </div>
+                                </div>
+                                <div class="couponItem-content">
+                                    <div class="couponItem-content-tab">
+                                        <p class="couponItem-content-name"><strong>仅限个人法律咨询年卡使用</strong></p>
+                                        <p v-if="!info_login || info_login && coupon.DDYC.result" class="couponItem-content-time">有效期30天</p>
+                                        <p v-else class="couponItem-content-time">有效期至{{ coupon['DDYC']['date'] }}</p>
+                                    </div>
+                                </div>
+                                <div v-if="!info_login || coupon.DDYC.result" class="couponItem-addBtn">
+                                    <strong>立即领取</strong>
+                                </div>
+                                <div v-else class="couponItem-actBtn">
+                                    <strong>去使用</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if="!info_login || coupon.DDYB.result || !coupon.DDYB.result && coupon.DDYB.data && coupon.DDYB.data.state != '2'" @click="getCoupon(1, 'DDYB')" class="s6-goodsDd-couponItem">
+                            <div class="couponItem-bd">
+                                <div class="couponItem-price">
+                                    <div class="couponItem-price-tab">
+                                        <span class="c1">￥</span><strong>100</strong>
+                                    </div>
+                                </div>
+                                <div class="couponItem-content">
+                                    <div class="couponItem-content-tab">
+                                        <p class="couponItem-content-name"><strong>仅限企业法律咨询年卡使用</strong></p>
+                                        <p v-if="!info_login || info_login && coupon.DDYB.result" class="couponItem-content-time">有效期30天</p>
+                                        <p v-else class="couponItem-content-time">有效期至{{ coupon['DDYB']['date'] }}</p>
+                                    </div>
+                                </div>
+                                <div v-if="!info_login || coupon.DDYB.result" class="couponItem-addBtn">
+                                    <strong>立即领取</strong>
+                                </div>
+                                <div v-else class="couponItem-actBtn">
+                                    <strong>去使用</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="s6-goodsDd-note">
+                            <div class="s6-goodsDd-noteTitle">优惠说明</div>
+                            <p class="s6-goodsDd-noteText">优惠券数量有限，领完即止；</p>
+                            <p class="s6-goodsDd-noteText">优惠券的有效期为30天，过期自动作废；</p>
+                            <p class="s6-goodsDd-noteText">每个订单只能使用一张优惠券，仅限在线支付时使用；</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/member/js/main.js?v=080"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },  
+
+                // `state`    '优惠码状态 0未激活 1未使用 2已使用 3已过期',
+                coupon: {
+                   DDJC: "",    //"电话咨询"
+                   DDYC: "",     //个人年卡
+                   DDYB: "",    //"企业年卡"
+                },
+
+                product: {
+                    "DDJC": "ddzx",
+                    "DDYC": "100542",
+                    "DDYB": "100543"
+                }
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                    _this.page.show = 'home';
+                    //console.log(res.errno)
+                });
+                
+
+                //设置来源
+                APP.setOrderChannel("11");
+                APP.setFromChannel("33");
+
+                _this.getCouponState();
+
+
+                APP.sendHm({action: "visits", chinese_url: "钉钉落地页"});
+            },
+            mounted: function() {
+                $.smartScroll($("#JS_coupon"), '.s6-goodsDdPop-content');
+            },
+            methods: {
+                next: function(type, type_chinese, url) {
+                    
+                    APP.sendHm({
+                        action: "click", 
+                        object: type,
+                        chinese_object: type_chinese,
+                        chinese_url: "钉钉落地页"
+                    }, function() {
+                        // $.closePopup()
+                        window.location.href = url;
+                    });
+                    
+                },
+                getCouponState: function() {
+                    //获取用户是否领取过优惠码
+                    var _this = this;          
+                    APP.send('/PC/NEWOrder/checkVerificationCodeStatus.json', function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.coupon.DDJC = _data.data.DDJC;
+                            _this.coupon.DDYB = _data.data.DDYB;
+                            _this.coupon.DDYC = _data.data.DDYC;
+                        }
+                    });
+                },
+                addCoupon: function(type) {
+                    //用户领取渠道优惠码
+                    var _this = this;
+                    $.showLoading("正在领取")
+                    APP.send('//PC/NEWOrder/userGeneratedCouponAndActivated.json?type=' + type, function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        $.hideLoading()
+                        if (res.errno == '0') {
+                            //$.toast("已领取成功，支付时会自动抵扣哦", "text")
+                            $.toast("领取成功", "text")
+                            _this.getCouponState();
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                },
+                getCoupon: function(type, para) {
+                    var _this = this;
+                    if (this.info_login) {
+                        //是否有优惠卷
+
+
+                        //行为记录
+                        var hm_para = {
+                            "DDJC": {
+                                text: "getCoupon_call",
+                                textChinese: "领取电话咨询优惠券",
+                                useText: "useCoupon_call",
+                                useTextChinese: "使用电话咨询优惠券"
+                            },
+                            "DDYC": {
+                                text: "getCoupon_VIPC",
+                                textChinese: "领取个人年卡优惠券",
+                                useText: "useCoupon_VIPC",
+                                useTextChinese: "使用个人年卡优惠券"
+                            },
+                            "DDYB": {
+                                text: "getCoupon_VIPB",
+                                textChinese: "领取企业年卡优惠券",
+                                useText: "useCoupon_VIPB",
+                                useTextChinese: "使用企业年卡优惠券"
+                            }
+                        }
+                        if (this.coupon[para]["result"]) {
+                            this.addCoupon(type);
+
+                            APP.sendHm({action: 'click', object: hm_para[para]["text"], chinese_object: hm_para[para]["textChinese"], chinese_url: '领取优惠券弹窗'});
+
+                        } else {
+                            
+                            APP.sendHm({action: 'click', object: hm_para[para]["useText"], chinese_object: hm_para[para]["useTextChinese"], chinese_url: '领取优惠券弹窗'}, function(){
+                                $("#JS_coupon").removeClass("weui-popup__container--visible").hide();
+                                window.location.href = "/Member/goodsDetails.html?id=" + _this.product[para];
+                            })   
+                        }
+
+                    } else {
+                        var _return_url = encodeURIComponent(window.location.pathname + window.location.search);
+                        window.location.href = '/Member/login.html?from=' + window.location.pathname + window.location.search;
+                        
+                    }
+
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

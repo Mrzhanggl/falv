@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=32">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
+    
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <!--启动页 :class="{ 'runPage' : page.loading == '2' }"  -->
+        <div v-show="page.show == 'loading' || page.loading >=5 " class="wrap-main">
+            <div :class="{ 'active' : page.loading >=6 }" class="s-index-loading">
+                <!--<img class="loading-box" src="/Public/Home/member/img/m9.png" alt="">-->
+                <div :class="{ 'active' : page.loading >= 2 }" class="s-index-loadingBox">
+                    <div :class="{ 'active' : page.loading >=3 }" class="loadingBox-rightTop"></div>
+                    <div :class="{ 'active' : page.loading >=3 }" class="loadingBox-leftBot"></div>
+                    <img :class="{ 'active' : page.loading >=4 }" class="loadingBox-t1" src="/Public/Home/member/img/m71.png">
+                    <!--<img :class="{ 'active' : page.loading >=5 }" class="loadingBox-t2" src="/Public/Home/member/img/m72.png">-->
+                    <div :class="{ 'active' : page.loading >=5 }" class="loadingBox-t2">
+                        <p :class="{ 'active' : page.loading_p >=0 }">尊敬的法驴会员用户</p>
+                        <p :class="{ 'active' : page.loading_p >=1 }">！</p>
+                        <p :class="{ 'active' : page.loading_p >=2 }"><strong>...</strong></p>
+                        <p :class="{ 'active' : page.loading_p >=3 }">欢迎来到
+                        <p :class="{ 'active' : page.loading_p >=4 }">法驴会员中心</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--首页-->
+        <div v-show="page.show == 'home'" class="wrap-main">
+            <div class="s-index-header">
+                <h2>{{ APP.getTimeText() }}</h2>
+                <p>即刻拥有法律服务私人管家</p>
+                <a href="/Member/personal.html" class="header-headpic">
+                    <img :src="info.wechat_headimgurl">
+                </a>
+            </div>
+            <div class="s-index-ban">
+                <img src="/Public/Home/member/img/m3.jpg">
+            </div>
+            <div class="s-index-action clearfix">
+                <a href="/Member/orderList.html" class="action-btn">
+                    <div class="action-btn-cell">
+                        <p class="p1"><img src="/Public/Home/member/img/m5.png"></p>
+                        <span class="s1">全部订单</span>
+                        <span class="s2">{{ order.total_count }}</span>
+                    </div>
+                </a>
+                <a href="/Member/orderList.html?tab=1" class="action-btn action-btn_right">
+                    <div class="action-btn-cell">
+                        <p class="p1"><img src="/Public/Home/member/img/m6.png"></p>
+                        <span class="s1">服务中</span>
+                        <span class="s2">{{ order.in_service_count }}</span>
+                    </div>
+                </a>
+            </div>
+            <div class="s-index-kf">
+                <a @click="APP.showActionKf()" class="s-btn s-btn_1" href="javascript:;"><span class="kf-span">咨询客服</span></a>
+            </div>
+        </div>
+
+
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/member/js/main.js?v=080"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                    loading_p: 0
+                },
+
+                order: {
+                    total_count: 0,
+                    in_service_count: 0,
+                    not_serviced_count: 0
+                }
+            },
+            created: function() {
+                this.getOrderSum();
+                APP.getInfo(this, function() {
+                    
+                });
+                
+            },
+            mounted: function() {
+
+            },
+            methods: {
+                getOrderSum: function() {
+                    var _this = this;
+                    APP.send("/PC/NEWOrder/channelOrderQuantity.json", function(res) {
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.order.total_count = _data.total_count;
+                            _this.order.in_service_count = _data.in_service_count;
+                            _this.order.not_serviced_count = _data.not_serviced_count;
+                        }
+                        
+                    })
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>开始咨询</title>
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=40">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'home'">
+            <div class="j-timeDetails-bd">
+                <h3 class="m-commentDetails-title"><strong>适用场景</strong></h3>
+                <div class="m-main" style="padding-right: 0;">
+                    <div class="j-timeDetails-object m-bd clearfix">
+                        <div v-for="list in product_object[product.product_case]" class="j-timeDetails-object-item">
+                            <strong>{{ list }}</strong>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="m-commentDetails-title j-commentDetails-title">
+                    <strong>服务流程</strong>
+                    <div class="j-timeDetails-question">
+                        <a @click="showTips();" href="javascript:;" class="j-timeDetails-question-btn"></a>
+                    </div>
+                </h3>
+
+                <div class="j-timeDetails-progress clearfix">
+                    <div class="j-timeDetails-progress-item item-next">
+                        <img class="item-d1" src="/Public/Home/topic/img/list_iconJ_zixun_default@2x.png">
+                        <div class="item-d2"><strong>开始咨询</strong></div>
+                    </div>
+                    <div class="j-timeDetails-progress-item item-next r2">
+                        <img class="item-d1" src="/Public/Home/topic/img/list_iconJ_phone_default@2x.png">
+                        <div class="item-d2"><strong>接听律师来电</strong></div>
+                    </div>
+                    <div class="j-timeDetails-progress-item">
+                        <img class="item-d1" src="/Public/Home/topic/img/list_iconJ_manyi_default@2x.png">
+                        <div class="item-d2"><strong>满意付费</strong></div>
+                    </div>
+                </div>
+                <div class="m-main">
+                    <div class="m-bd" style="height: 1px;"></div>
+                </div>
+
+                <h3 class="m-commentDetails-title"><strong>用户评价 {{ comment.total_sum }}</strong></h3>
+                <div :class="{'padB30' : !comment.data || comment.data.length==0}" class="m-commentDetails-all">
+
+                    <div :class="{'active' : !page.commentShow}" class="JS_commentDetails j-comment-itemBd">
+
+                    
+                        <div v-show="page.commentShow || !page.commentShow && index < 2" v-for="(list, index) in comment.data" class="m-comment-item j-comment-item clearfix">
+                            <div class="item-headpic">
+                                <img :src="list.user_info.wechat_headimgurl">
+                            </div>
+                            <div class="item-box">
+                                <div class="item-box-content">
+                                    <div class="item-box-d1">
+                                        {{ list.user_info.wechat_nickname ? list.user_info.wechat_nickname : '&nbsp;' }}
+                                        <div class="item-box-d1-text"><strong>{{ APP.getText.score_star_text[list.professional_experience] }}</strong></div>
+                                    </div>
+                                    <div class="item-box-d2">{{ list.time }}</div>
+                                    <div class="item-box-d3 overText_3">
+                                        {{ list.note ? list.note : '&nbsp;' }}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>         
+
+                    </div>
+
+                    <a v-show="comment.data.length>2 && comment.loadingEnd!=2" :class="{active : !page.commentShow}" @click="page.commentShow = page.commentShow ? false : true;" href="javascript:;" class="m-details-more j-details-more">
+                        <span>{{ !page.commentShow ? '查看全部评价' : '点击收起' }}</span>
+                    </a>
+
+                    <div v-show="comment.loadingEnd==2" class="s-index-blank j-index-blank">
+                        <span>正在加载更多数据</span>
+                    </div>
+
+
+                </div>
+              
+            </div>
+
+            <div class="weui-tabbar s-tabbar j-timeDetails-tabbar">
+                <div class="j-timeDetails-bar__item">
+                    <strong>限时特惠{{ product.flprice }}元/分钟</strong>
+                </div>
+                <a @click="checkLogin()" href="javascript:;" class="j-timeDetails-bar__btn">
+                    <strong>开始咨询</strong>
+                </a>
+
+            </div>
+
+            
+        </div>
+
+        
+  
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        ;(function(){
+            var isPageHide = false;
+            window.addEventListener('pageshow', function () {
+                if (isPageHide) {
+                    window.location.reload();
+                }
+            });
+            window.addEventListener('pagehide', function () {
+                isPageHide = true;
+            });
+        })();
+
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    commentShow: false,
+                },
+                
+
+                isOrderPay: {
+                    state: false,
+                    data: ''
+                },
+                product: '',
+
+                product_object: {
+                    "8": ["租房", "拆迁", "装修", "公共区域", "停车位", "中介纠纷", "房屋买卖", "物业费"],  //房屋产权
+                    "9": ["工伤赔偿", "退休返聘", "女性权益", "社保", "试用期", "带薪年假", "劳动合同", "补偿金"],  //劳动纠纷
+                    "11": ["虚假宣传", "诱骗消费", "不良竞争", "退款办理", "预付消费", "无照经营"],   //消费者权益
+                    "7": ["第三者", "协议离婚", "房产分割", "抚养费", "诉讼离婚", "家庭暴力", "子女抚养权"],    //婚姻家事
+                    "10": ["事故调解", "车辆被扣", "赔偿标准", "保险理赔", "工伤", "伤残鉴定"],    //交通
+                    "0": ["刑事犯罪", "邻里纠纷", "网络言论", "肖像权", "诽谤", "宠物伤人"]  //其他
+                },
+
+                comment: {
+                    loading: true,
+                    loadingEnd: 0, //1准备 2 加载中 3 加载完 4error
+                    loadingMoreState: false,
+                    page: 1,
+                    data: [],
+                    total_sum: 0,
+                },
+            },
+            created: function() {
+                var _this = this;
+                this.init()
+                this.getVerificationOrder();
+                this.getDetails();
+                this.getCommentList(_this.comment.page)
+
+
+
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "开始咨询"
+                })
+
+            },
+            mounted: function() {
+
+                
+            },
+            methods: {
+                init: function() {
+                    var _this = this;
+                    APP.init(function() {
+                        APP.initInfo(_this, function(res) {
+                            if (res.errno == '0') {
+                                _this.page.show = "home";
+                            } else {
+                                APP.WXLogin(_this);
+                            }
+                        });
+                    });
+                },
+                showTips: function() {
+                    var _t = "<p class='p1'>费用结算：采用先用后付的形式，用户需要在使用完毕后按照订单显示的金额支付咨询费</p>\
+                            <p class='p1'>隐私保护：未获取用户授权时，保证不对外公开或向第三方提供会员的注册资料以及会员在使用法律咨询服务过程中储存在问律师的非公开内容</p>\
+                            <p class='p1 p1-b'>提示：律师的回复取决于您的问题描述，仅供参考。</p>";
+                    APP.modal.showTimeTips({
+                        btn: ['知道了'],
+                        text: _t,
+                        onOK: function() {
+                            //console.log('ok');
+                            APP.modal.hideLayer();
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+                    
+                },
+                checkLogin: function() {
+                    var _this = this;
+                    if (this.info_login) {
+                        //window.location.href = "/Member/jMatching.html?oid=";
+
+                        if (this.isOrderPay.state) {
+                            //判断工作时间
+                            if (this.checkTime("9:00", "17:30")) {
+                                this.add();
+                            } else {
+                                window.location.href = '/Member/jAppointTime.html?id='+this.product.id;
+                                //this.add();
+                            }
+                        } else {
+                            //有未付款订单
+                            window.location.href = '/Member/orderDetails.html?oid='+this.isOrderPay.data.order_id;
+                        }
+                        
+                    } else {
+                        window.location.href = '/Member/login.html?from=' + encodeURIComponent(window.location.pathname+window.location.search);
+                    }
+
+
+                    APP.sendHm({
+                        action: "click",
+                        object: "Begin-consulting",
+                        chinese_object: "开始咨询",
+                        chinese_url: "开始咨询"
+                    })
+
+
+                },
+                checkTime: function(beginTime, endTime) {
+                    var strb = beginTime.split(":");
+                    if (strb.length != 2) {
+                        return false;
+                    }
+
+                    var stre = endTime.split(":");
+                    if (stre.length != 2) {
+                        return false;
+                    }
+
+                    var b = new Date ();
+                    var e = new Date ();
+                    var n = new Date ();
+
+                    b.setHours (strb[0]);
+                    b.setMinutes (strb[1]);
+                    e.setHours (stre[0]);
+                    e.setMinutes (stre[1]);
+
+                    if (n.getTime () - b.getTime () > 0 && n.getTime () - e.getTime () < 0) {
+                        return true;
+                    } else {
+                        console.log("当前时间是：" + n.getHours () + ":" + n.getMinutes () + "，不在该时间范围内！");
+                        return false;
+                    }
+                },
+                getDetails: function() {
+                    var _this = this;
+                    var _id = APP.getParam("id");
+                    APP.send('/PC/Product/info.json?id='+_id, function(res) {
+                        if (res.errno == '0') {
+                            _this.product = res.data;
+                    
+                        }
+                        //微信分享
+                        //console.log(_data.introduce)
+                        // var _title = res.data.title;
+                        // var _desc = res.data.share_title;
+                        // var _share_link = window.location.href;
+                        // var _imgUrl = res.data.share_icon;
+                        // //console.log(_share_link)
+                        // APP.setShare({
+                        //     title: _title,
+                        //     desc: _desc,
+                        //     link: _share_link,
+                        //     imgUrl: src_url+_imgUrl,
+                        //     success: function() {},
+                        //     cancel: function() {}
+                        // })
+
+
+                    });
+                },
+                getVerificationOrder: function() {
+                    //获取用户存在【待支付】状态的电话咨询订单
+                    var _this = this;
+                    var _id = APP.getParam("id");
+                    APP.send('/PC/WxUser/verificationOrder.json', function(res) {
+                        if (res.errno == '0') {
+                            _this.isOrderPay.data = res.data;   
+                        } else {
+                            _this.isOrderPay.state = true;
+                        }
+                    });
+                    
+                },
+                getCommentList: function(page, callback) {
+                    var _this = this;
+
+                    var _callback = callback ? callback : function(){};
+                    var _id = APP.getParam("id");
+                    var _json = {
+                        product_id: _id,
+                        page: page, //页
+                    }
+                    _this.comment.loadingEnd = 2;
+
+                    APP.send("/PC/WxUser/evaluationList.json", _json, function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            var _data = res.data.list;
+                            if (_this.comment.page == 1) {
+                                _this.comment.total_sum = res.data.total;
+
+                                if (_data.length <= 2) {
+                                    _this.page.commentShow = true;
+                                }
+
+                                // _data[1] = _data[0];
+                                // _data[2] = _data[1];
+                            }
+                            // if (_data && _data.length == 0 && _this.comment.page >1) {
+                            //     _this.comment.page --;
+                            // }
+
+                            //第一页且总页数大于1 初始化滚动加载
+                            if (_data && _data.length>0 && _this.comment.page == 1) {
+                                _this.initPage(page);
+                            }
+
+                            //保存数据
+                            _this.comment.data = _this.comment.data.concat(_data);
+                            
+                            //判断是否加载完所有页数
+                            if (_data && _data.length > 0) {
+                                _this.comment.loading = false;
+                                _this.comment.loadingEnd = 1;
+                            } else {
+                                _this.comment.loading = true;
+                                _this.comment.loadingEnd = 3;
+                            }
+                            
+                        } else {
+                            
+                            _this.comment.loading = false;
+                            _this.comment.loadingEnd = 4;
+                        }
+
+                        _callback();
+                    });
+
+                },
+                initPage: function(page) {
+                    var _this = this;
+                    var _n_h = 0;
+                    setTimeout(function() {
+                        // var _loading = false;
+                        var _h = $(document).height() - $(window).height();
+                        $(document).scroll(function() {
+                            if (!_this.page.commentShow) return;
+
+                            //console.log($(this).scrollTop(), $(".JS_nav_active").offset().top)
+                            _h = $(document).height() - $(window).height();
+
+                            //console.log(_h - $(this).scrollTop())
+                            //console.log(_this.comment.page)
+                            if (_h - $(this).scrollTop() <= 100) {
+                                if (_this.comment.loading) return;
+                                _this.comment.loading = true;
+                                if (_this.comment.loadingEnd  == 3) {
+                                    //console.log("end");
+                                    _this.comment.loading = true;
+                                    return;
+                                }
+                                _this.comment.page++;
+                                _this.comment.loadingEnd = 2;
+                                //console.log(_this.comment.page)
+                                _this.getCommentList(_this.comment.page);
+                            }
+                        })
+                       
+                    }, 100)
+                },
+                add: function() {
+                    var _this = this;
+                    var _json = {
+                        product_data: [{id: _this.product.id, count: 1}],
+                        note: "",
+                        invoice_state: 0,
+                        invoice: {
+                            header_content_type: '',
+                            header_content: '',
+                            identification_number: '',
+                            name: '',
+                            telephone: '',
+                            address: '',
+                        },
+                        company_name: '',
+                        customer_name: _this.info.name,
+                        phone: _this.info.username,
+                        channel: '', //渠道 0 邮政 1 东家会 2 环球黑卡 3腾讯
+                        source: 14,
+                        order_type: 1,
+                        discount_code: '', //优惠码
+                        customer_selected_supplier_id: '', //供应商id
+                        customer_source: localStorage.getItem('customer_source'),
+                        customer_source_parameter: localStorage.getItem('customer_source_parameter'),
+                        pre_registration_page: document.referrer
+                    }
+
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/create.json", _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //统计
+                            //return;
+                            window.location.href = "/Member/jMatching.html?oid=" + res.data;
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

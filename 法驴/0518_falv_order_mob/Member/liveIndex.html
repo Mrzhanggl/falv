@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>法驴Live</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/Live/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/Live/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Live/css/main.css?v=18">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'home'">
+
+            <div class="s-search-box">
+                <div @click="nextPage('search', '搜索', '/Member/liveSearch.html')" class="s-search-bd unactive">
+                    <i class="i"></i>
+                    <input class="s-search-input" type="text" placeholder="搜索视频名称、热门讲师">
+                </div>
+            </div>
+
+            <div class="s-index-swiper">
+                <div class="JS_swiper swiper-container s-swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/Public/Home/Live/img/ban_1.jpg">
+                        </div>
+                    </div>
+                </div>
+                <div class="JS_swiper_pagination swiper-pagination s-swiper-pagination"></div>
+            </div>
+
+            <div class="s-index-nav clearfix">
+                <a @click="nextPage('index_main', '我的live', '/Member/livePersonal.html')" href="javascript:;" class="s-index-nav-item nav-item__line">
+                    <img src="/Public/Home/Live/img/5.png">
+                    <p>我的Live</p>
+                </a>
+                <a @click="nextPage('index_new', '最近更新', '/Member/liveList.html')" href="javascript:;" class="s-index-nav-item">
+                    <img src="/Public/Home/Live/img/6.png">
+                    <p>最近更新</p>
+                </a>
+            </div>
+
+
+            <div class="s-index-bd">
+                <div class="s-title">
+                    热门推荐
+                    <a @click="nextPage('live_hot', '热门_更多', '/Member/liveList.html?tab=1')" href="javascript:;" class="s-title-more">查看更多</a>
+                </div>
+                <div class="s-content">
+                    <a @click="nextDetails(list.name, list.videos[0]['name'], list.id)" href="javascript:;" v-for="list in hot" class="s-live-item clearfix">
+                        <div class="s-live-item-cover">
+                            <!--<i class="s-live-item-newIcon">免费</i>-->
+                            <img :src="src_url+list.image">
+                        </div>
+                        <div class="s-live-item-info">
+                            <div class="s-live-item-title">
+                                {{ list.name }}
+                            </div>
+                            <div class="s-live-item-name">
+                               <span v-for="(list2, index2) in list.author">{{ index2==0 || index2==list.author.length-1 ? list2.author_name : list2.author_name +'、' }}</span><span v-show="list.author && list.author.length>0"> | </span><span>{{ APP.calcSum(list.view_counts) }}次播放</span>
+                            </div>
+                            <div class="s-live-item-price clearfix">
+                                <div class="s-live-item-class"><img :class="'bg'+list.category" :src="APP.getLiveClassIcon[list.category]"></div>
+                                <span v-if="list.pstate != '2'" class="col999">已停播</span>
+                                <span v-if="list.pstate == '2' && !list.order_state || list.pstate == '2' && list.order_state && list.order_state == '0'" class="colff7">￥{{ list.flprice }}</span>
+                                <span v-if="list.pstate == '2' && list.order_state && list.order_state!='0'" class="colff7">已购</span></span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div v-if="hot && hot.length>0" class="s-index-blank">
+                <span>我是有底线的</span>
+            </div>
+
+
+            <div class="weui-tabbar s-tabbar">
+                <a href="/Member/mIndex.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
+                    <p class="weui-tabbar__label">首页</p>
+                </a>
+                <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+                    <div class="weui-tabbar__icon weui-tabbar__icon2"></div>
+                    <p class="weui-tabbar__label">视频</p>
+                </a>
+                <a @click="$('#JS_more').popup();" href="javascript:;" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon">
+                        <div class="j-tabbar_iconMore"></div>
+                    </div>
+                    <p class="weui-tabbar__label">问律师</p>
+                </a>
+                <a href="/Member/mGoodsList.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon3"></div>
+                    <p class="weui-tabbar__label">产品</p>
+                </a>
+                <a href="/Member/mPersonal.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon4"></div>
+                    <p class="weui-tabbar__label">我的</p>
+                </a>
+
+            </div>
+
+            <div id="JS_more" class="weui-popup__container">
+                <div class="weui-popup__modal m-popup j-navPopup-modal">
+                    
+                    <div class="j-navPopup-ban">
+                        <img src="/Public/Home/topic/img/31.png">
+                    </div>
+
+                    <div class="j-navPopup-nav clearfix">
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100536">
+                                <img class="item-d1" src="/Public/Home/topic/img/18.png">
+                                <div class="item-d2">婚姻家事</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100537">
+                                <img class="item-d1" src="/Public/Home/topic/img/19.png">
+                                <div class="item-d2">房屋产权</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100538">
+                                <img class="item-d1" src="/Public/Home/topic/img/20.png">
+                                <div class="item-d2">劳动纠纷</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100539">
+                                <img class="item-d1" src="/Public/Home/topic/img/40.png">
+                                <div class="item-d2">交通</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100540">
+                                <img class="item-d1" src="/Public/Home/topic/img/21.png">
+                                <div class="item-d2">消费者权益</div>
+                            </a>
+                        </div>
+                        <div class="j-navPopup-item">
+                            <a href="/Member/jTimeDetails.html?id=100541">
+                                <img class="item-d1" src="/Public/Home/topic/img/22.png">
+                                <div class="item-d2">其他</div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <a onclick="$.closePopup();" href="javascript:;" class="j-navPopup-close"></a>
+                </div>
+            </div>
+
+
+            <!--<div class="weui-tabbar s-tabbar">
+                <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+                    <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
+                    <p class="weui-tabbar__label">首页</p>
+                </a>
+                <a href="/Member/liveList.html?tab=1" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon2"></div>
+                    <p class="weui-tabbar__label">列表</p>
+                </a>
+                <a href="/Member/livePersonal.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon3"></div>
+                    <p class="weui-tabbar__label">我的</p>
+                </a>
+
+            </div>-->
+        </div>
+
+    </div>
+    <script src="/Public/Home/Live/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/Live/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/Live/js/swiper-3.4.2.jquery.min.js"></script>
+    <script src="/Public/Home/Live/js/vue.min.js"></script>
+    <script src="/Public/Home/Live/js/fastclick.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/Live/js/main.js?v=216"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                },
+
+                hot: []
+            },
+            created: function() {
+                var _this = this;
+                _this.getList();
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0') {
+                        _this.page.show = 'home';
+                        setTimeout(function() {
+                            _this.initBan();
+                        },10)
+                    }
+                    
+                });
+                
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "live首页"
+                })
+
+            },
+            mounted: function() {
+                $.smartScroll($("#JS_more"), '.weui-popup__modal');
+            },
+            methods: {
+                nextPage: function(type, type_text, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "live首页"
+                    }, function() {
+                        window.location.href = url;
+                    })
+                },
+                nextDetails: function(pname, pname2, id) {
+                    APP.sendHm({
+                        action: "click",
+                        object: "index_details",
+                        chinese_object: "合集详情",
+                        chinese_url: "live首页",
+                        parameter: pname
+                    }, function() {
+                         APP.sendHm({
+                            action: "click",
+                            object: "index_details",
+                            chinese_object: "浏览合集详情",
+                            chinese_url: "live首页",
+                            parameter: pname2
+                        }, function() {
+                            window.location.href = '/Member/liveDetails.html?id='+id
+                        })
+                    })
+                },
+                getList: function() {
+                    var _this = this;
+                    APP.send("/PC/Video/popularVideo.json?page=1", function(res) {
+                        if (res.errno == '0') {
+                           //console.log(res);
+                           vm.hot = res.data;
+                        }
+                    });
+                },
+                initBan: function() {
+                    var s = new Swiper('.JS_swiper', {
+                        pagination: '.JS_swiper_pagination',
+                        resistanceRatio: 0,
+                    }); 
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

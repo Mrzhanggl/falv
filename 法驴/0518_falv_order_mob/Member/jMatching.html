@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html class="ffffff">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=44">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+</head>
+
+<body class="ffffff">
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'matching'" class="j-matching-page matching-bg">
+
+            <div class="j-matching-d1">
+                <strong>已通知 <span class="c1">{{ lawyer_sum }}</span> 位律师，精选中...</strong>
+            </div>
+            <div class="j-matching-d2">
+                精选过程不产生费用，请放心等待
+            </div>
+
+
+
+            <div class="j-matching-box">
+                <div class="j-matching-box-q2">
+                    <div class="j-matching-box-q3">
+                        <div class="j-matching-box-q4">
+                            <div id="circle"></div>
+                        </div>
+                        <div class="j-matching-box-icon"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="j-matching-action">
+                <a @click="cancal()" href="javascript:;" class="j-matching-cancal">取消订单</a>
+            </div>
+
+        </div>
+
+        <div v-show="page.show== 'start_matching'" class="m-main" data-title="等待呼入">
+
+            <div class="j-matchingStart-bd">
+                <div class="j-matchingStart-head">
+                    <strong>预计来电时间{{ order_lawyer.receipt_time }}</strong>
+                </div>
+                <div class="j-matchingStart-content">
+                    <div class="j-matchingStart-info">
+                        <div class="info-headimg">
+                            <img :src="order_lawyer.headimgurl">
+                        </div>
+                        <div class="info-name">
+                            <strong>{{ order_lawyer.name ? order_lawyer.name.slice(0,1) + '律师' : '' }}</strong>
+                        </div>
+                        <div class="info-field">
+                            擅长领域：{{ order_lawyer.cash_pledge_lawyer_rights_text }}
+                        </div>
+                    </div>
+                    <div class="m-main">
+                        <div class="j-matchingStart-item clearfix">
+                            <span class="item-l">用户评价</span>
+                            <span class="item-r c1"><strong>{{ order_lawyer.avg_score_text }}</strong></span>
+                        </div>
+                        <div class="j-matchingStart-item clearfix">
+                            <span class="item-l">接单数量</span>
+                            <span class="item-r c1"><strong>{{ order_lawyer.order_count }}单</strong></span>
+                        </div>
+                        <div class="j-matchingStart-item">
+                            <div class="clearfix">
+                                <span class="item-l">
+                                    请留意律师来电
+                                    <div class="j-timeDetails-question">
+                                        <a @click="showTips();" href="javascript:;" class="j-timeDetails-question-btn"></a>
+                                    </div>
+                                </span>
+                                <span class="item-r">010-53153478</span>
+                            </div>
+                            <p class="item-tips">*对律师隐藏您的真实手机号，保护您的隐私</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+        <div v-show="page.show== 'busy_matching'" class="m-main" data-title="律师正忙">
+            <div class="j-matching-d1">
+                <strong>为您推荐的律师正忙</strong>
+            </div>
+            <div class="j-matching-d2">
+                点击下面按钮，系统将为您推荐其他律师
+            </div>
+            <div class="j-matchingBusy-d3">
+                <img class="j-matchingBusy-ban" src="/Public/Home/topic/img/24.png">
+            </div>
+            <div class="j-matchingBusy-action">
+                <a @click="addOrder('0');" href="javascript:;" class="m-btn m-btn_1">推荐其他律师</a>
+                <a v-if="APP.getOrderChannel()=='14'" @click="nextPage('another_time', '稍后再咨询', '律师正忙', '/newVip/newmIndex.html')" href="javascript:;"
+                    class="m-btn m-btn_2" style="font-weight: normal">稍后再咨询</a>
+                <a v-else @click="nextPage('another_time', '稍后再咨询', '律师正忙', '/Member/mIndex.html')" href="javascript:;" class="m-btn m-btn_2"
+                    style="font-weight: normal">稍后再咨询</a>
+            </div>
+            <div class="j-matchingBusy-tips">推荐咨询时间：9:00-17:30</div>
+        </div>
+
+
+        <!--指定订单 未接单-->
+        <div v-show="page.show== 'end_matching'" class="m-main" data-title="通知律师">
+
+            <div class="j-matchingStart-bd">
+                <div class="j-matchingStart-head">
+                    <strong>{{ order_lawyer.name ? order_lawyer.name.slice(0,1) : '' }}律师未回应</strong>
+                </div>
+                <div class="j-matchingStart-content">
+                    <div class="j-matchingStart-info">
+                        <div class="info-headimg">
+                            <img :src="order_lawyer.headimgurl">
+                        </div>
+                        <div class="info-name">
+                            <strong>{{ order_lawyer.name ? order_lawyer.name.slice(0,1) + '律师' : '' }}</strong>
+                        </div>
+                        <div class="info-field">
+                            擅长领域：{{ order_lawyer.cash_pledge_lawyer_rights_text }}
+                        </div>
+                    </div>
+                    <div class="m-main">
+                        <div class="j-matchingStart-item clearfix">
+                            <span class="item-l">用户评价</span>
+                            <span class="item-r c1"><strong>{{ order_lawyer.avg_score_text }}</strong></span>
+                        </div>
+                        <div class="j-matchingStart-item clearfix">
+                            <span class="item-l">接单数量</span>
+                            <span class="item-r c1"><strong>{{ order_lawyer.order_count }}单</strong></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="j-matchingEnd-action m-main">
+                <a @click="addOrder('1', order_lawyer.id);" href="javascript:;" class="m-btn m-btn_1">再通知一次</a>
+                <a @click="addOrder('2');" href="javascript:;" class="m-btn m-btn_2">咨询其他律师</a>
+            </div>
+
+        </div>
+
+        <!--指定订单 等待接单-->
+        <div v-show="page.show== 'appoint_matching'" class="m-main" data-title="通知律师">
+
+            <div class="j-matchingStart-bd">
+                <div class="j-matchingStart-head">
+                    <strong>等待{{ order_lawyer.name ? order_lawyer.name.slice(0,1) : '' }}律师接单</strong>
+                </div>
+                <div class="j-matchingStart-content">
+                    <div class="j-matchingStart-info">
+                        <div class="info-headimg">
+                            <img :src="order_lawyer.headimgurl">
+                        </div>
+                        <div class="info-name">
+                            <strong>{{ order_lawyer.name ? order_lawyer.name.slice(0,1) + '律师' : '' }}</strong>
+                        </div>
+                        <div class="info-field">
+                            擅长领域：{{ order_lawyer.cash_pledge_lawyer_rights_text }}
+                        </div>
+                    </div>
+                    <div class="m-main">
+                        <div class="j-matchingStart-item clearfix">
+                            <span class="item-l">用户评价</span>
+                            <span class="item-r c1"><strong>{{ order_lawyer.avg_score_text }}</strong></span>
+                        </div>
+                        <div class="j-matchingStart-item clearfix">
+                            <span class="item-l">接单数量</span>
+                            <span class="item-r c1"><strong>{{ order_lawyer.order_count }}单</strong></span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="j-matchingEnd-action j-matchingAppoint-action m-main">
+                <a @click="cancal()" href="javascript:;" class="m-btn m-btn_2" style="font-weight: normal">取消订单</a>
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/circle-progress.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+
+        window.addEventListener('pageshow', function(e) {
+            // 通过persisted属性判断是否存在 BF Cache
+            if (e.persisted) {
+                location.reload();
+            }
+        });
+
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+
+                },
+
+                order: '',
+                order_intr: null,
+                order_call_intr: null,
+                order_lawyer: '',
+
+
+                lawyer_sum_star: null,
+                lawyer_sum_intr: null,
+                lawyer_sum: null,
+                count_down: 1,
+
+            },
+            created: function () {
+                var _this = this;
+                this.lawyer_sum_star = APP.randomNum(1, 10);
+                this.lawyer_sum = this.lawyer_sum_star;
+                this.getDetails();
+                APP.getInfo(this, function (res) {
+                    if (res.errno == '0') {
+                        //_this.page.show = 'appoint_matching';
+                    }
+                });
+            },
+            mounted: function () {
+
+                // $('#circle').find("canvas").css({
+                //     "width": $(".j-matching-box-q4").width()*2,
+                //     "height": $(".j-matching-box-q4").height()*2,
+                // })
+            },
+            methods: {
+                nextPage: function (type, type_text, url_text, url) {
+                    this.page.show = '';
+
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: url_text,
+                    }, function () {
+                        window.location.href = url;
+                    })
+
+                },
+                showTips: function () {
+                    var _t =
+                        "<p class='p1'>号码保护服务不会向您额外收费，费用由平台承担。</p>\
+                            <p class='p1 p1-b'>当号码保护服务的通讯商根据政策需要有特殊调整时，呼入号码将临时变更为<span class='p1-c1'>022-60624788</span>，请放心使用。</p>";
+                    APP.modal.showTimeTips({
+                        title: '注意事项',
+                        btn: ['知道了'],
+                        text: _t,
+                        onOK: function () {
+                            //console.log('ok');
+                            APP.modal.hideLayer();
+                        },
+                        onCancal: function () {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+
+                },
+                cancal: function () {
+                    //订单取消
+                    var _this = this;
+                    APP.modal.showLayer({
+                        btn: ['继续等待', '取消'],
+                        text: '正在为努力您匹配律师，<br>确认取消订单?',
+                        onOK: function () {
+                            //console.log('ok');
+                            APP.modal.hideLayer();
+                        },
+                        onCancal: function () {
+                            //console.log('cancal')
+                            $.showLoading("正在取消");
+                            var _oid = APP.getParam("oid");
+                            APP.send("/PC/NEWOrder/cancel.json?order_id=" + _oid, function (res) {
+                                $.hideLoading();
+                                if (res.errno == '0') {
+                                    APP.modal.hideLayer();
+                                    clearInterval(_this.order_intr);
+                                    clearInterval(_this.lawyer_sum_intr);
+                                    $.toast("取消成功", "text");
+                                    setTimeout(function () {
+                                        _this.page.show = '';
+                                        document.title = '';
+                                        if (_this.order.is_design == '0') {
+                                            window.history.go(-1);
+                                            //window.location.href = "/Member/jTimeDetails.html?id="+_this.order.products[0]['id'];
+                                        } else {
+                                            if (document.referrer) {
+                                                window.history.go(-1);
+                                            } else {
+                                                window.location.href =
+                                                    "/Member/orderList.html";
+                                            }
+
+                                            //window.location.href = "/Member/jTimeDetails.html?id="+_this.order.products[0]['id'];
+                                        }
+                                    }, 200)
+                                } else {
+                                    $.toast(res.msg, "text")
+                                }
+                            });
+                        }
+                    });
+
+
+                    if (_this.order.is_design == '0') {
+                        APP.sendHm({
+                            action: "click",
+                            object: "Cancel_order",
+                            chinese_object: "取消订单",
+                            chinese_url: "律师匹配中"
+                        })
+
+                    } else {
+                        APP.sendHm({
+                            action: "click",
+                            object: "Cancel_order",
+                            chinese_object: "取消订单",
+                            chinese_url: "通知律师"
+                        })
+
+                    }
+
+                },
+                setCircle: function () {
+                    //进度条
+                    var _this = this;
+                    $('#circle').unbind().circleProgress({
+                        value: 1,
+                        size: $(".j-matching-box-q4").width() * 2, //126
+                        startAngle: 1.6,
+                        lineCap: 'round',
+                        thickness: 6 * 2,
+                        emptyFill: "rgba(255, 255, 255, 1)",
+                        animation: {
+                            duration: 10000,
+                            easing: 'linear'
+                        },
+                        fill: {
+                            gradient: ["#FF6E1F", "#FF931F"]
+                        }
+                    }).on('circle-animation-end', function (event, progress, stepValue) {
+                        //当图像正在绘制时的监听事件
+                        _this.count_down++;
+                        //小于60s 并且未接单
+                        if (_this.count_down <= 6 && _this.order.clock_state !== '2') {
+                            _this.setCircle();
+                        }
+                        console.log(_this.count_down)
+
+                        if (_this.count_down > 6) {
+                            APP.modal.hideLayer();
+                            _this.page.show = 'busy_matching';
+                            console.log("2")
+                            document.title = '律师正忙';
+                        }
+                    });
+
+
+                    if (_this.count_down == 1) {
+                        $('#circle').find("canvas").css({
+                            "width": $(".j-matching-box-q4").width(),
+                            "height": $(".j-matching-box-q4").height(),
+                        })
+                    }
+
+                },
+                getDetails: function () {
+                    var _this = this;
+                    var _id = APP.getParam("oid");
+                    APP.send('/PC/NEWOrder/info.json?order_id=' + _id, function (res) {
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.order = _data;
+
+                            //console.log(APP.calcCount(_data.create_time))
+                            //普通订单 未抢单
+                            if (_data.state == '8' && _data.clock_state == '1' && res.data.is_design ==
+                                '0' && APP.calcCount(_data.create_time) < 60) {
+                                _this.page.show = 'matching';
+                                document.title = '匹配律师中';
+                                //轮循订单信息
+                                _this.getOrderState();
+                                _this.getLawyerSum();
+                                setTimeout(function () {
+                                    _this.setCircle();
+                                }, 10)
+
+
+
+                                APP.sendHm({
+                                    action: "visits",
+                                    chinese_url: "律师匹配中"
+                                })
+
+                            }
+                            //指定订单 未抢单is_design1 
+                            if (res.data.state == '8' && res.data.clock_state == '1' && res.data.is_design ==
+                                '1' && APP.calcCount(_data.create_time) < 60) {
+                                _this.page.show = "appoint_matching";
+                                document.title = '通知律师';
+                                //轮循订单信息
+                                _this.getOrderState();
+                                //获取律师信息
+                                _this.getLawyerInfo(res.data.lawyer_id);
+
+
+
+
+                            }
+
+                            //已接单未接通
+                            if (_data.state == '8' && _data.clock_state == '2' && _data.call_record &&
+                                parseInt(_data.call_record.byetype) < 0) {
+                                //用户未接
+                                if (_data.call_record.byetype == '-3' || _data.call_record.byetype ==
+                                    '-4' || _data.call_record.byetype == '-9') {
+                                    _this.page.show = '';
+                                    document.title = '';
+                                    window.history.go(-1);
+                                    //window.location.href = "/Member/jTimeDetails.html?id="+_this.order.products[0]['id'];
+                                } else {
+                                    //律师未接
+                                    setIntCallState = false;
+                                    clearInterval(_this.order_call_intr);
+                                    _this.page.show = 'busy_matching';
+                                    console.log("3")
+                                    document.title = '律师正忙';
+                                }
+
+                            }
+                            //已接单正在呼叫
+                            if (_data.state == '8' && _data.clock_state == '2' && _data.call_record &&
+                                _data.call_record.length == 0) {
+                                _this.page.show = "start_matching";
+                                document.title = '等待呼入';
+                                _this.getOrderCallState();
+                            }
+                            //已接单已接通
+                            if (_data.state == '0' && _data.clock_state == '2' && _data.call_record &&
+                                parseInt(_data.call_record.byetype) > 0) {
+                                _this.page.show = '';
+                                document.title = '';
+                                if (APP.getParam('fromtype') == "ajk") {
+                                    window.location.href = "/Member/jTimeGoPay.html?oid=" + _id +
+                                        "&fromtype=ajk";
+                                } else {
+                                    window.location.href = "/Member/jTimeGoPay.html?oid=" + _id;
+                                }
+
+                            }
+                            //已超时
+                            if (_data.state == '4' && _data.is_design == '0') {
+                                _this.page.show = 'busy_matching';
+                                console.log("4")
+                                document.title = '律师正忙';
+                            }
+                            //已超时      
+                            if (_data.state == '8' && _data.is_design == '0' && APP.calcCount(_data
+                                    .create_time) >= 60) {
+                                _this.page.show = 'busy_matching';
+                                console.log("5")
+                                document.title = '律师正忙';
+                            }
+                            //已超时 指定订单
+                            if (_data.state == '4' && _data.is_design == '1') {
+                                _this.page.show = 'end_matching';
+                                document.title = '律师正忙';
+                                //获取律师信息
+                                _this.getLawyerInfo(res.data.lawyer_id);
+                            }
+                            //已超时 指定订单
+                            if (_data.state == '8' && _data.is_design == '1' && APP.calcCount(_data
+                                    .create_time) >= 60) {
+                                _this.page.show = 'end_matching';
+                                document.title = '律师正忙';
+                                //获取律师信息
+                                _this.getLawyerInfo(res.data.lawyer_id);
+                            }
+
+                        }
+
+                    });
+                },
+                getLawyerSum: function () {
+                    //律师数量
+                    var _this = this;
+
+                    function getSum() {
+                        if (_this.lawyer_sum_star % 2 == 0) {
+                            _this.lawyer_sum = _this.lawyer_sum + 4;
+                        } else {
+                            _this.lawyer_sum = _this.lawyer_sum + 3;
+                        }
+                    }
+                    _this.lawyer_sum_intr = setInterval(function () {
+                        getSum();
+                    }, 6000)
+                },
+                getOrderState: function () {
+                    //获取订单状态
+                    var _this = this;
+                    var setIntState = true;
+
+                    //轮循
+                    _this.order_intr = setInterval(function () {
+                        if (_this.count_down > 6) {
+                            //页面超时60s
+                            APP.modal.hideLayer();
+                            clearInterval(_this.order_intr);
+                            clearInterval(_this.lawyer_sum_intr)
+                            return;
+                        }
+                        if (!setIntState) {
+                            return
+                        }
+                        getState();
+                    }, 3000)
+
+                    function getState() {
+                        var _oid = APP.getParam("oid");
+                        var _json = {
+                            order_id: _oid
+                        }
+                        setIntState = false;
+
+                        APP.sendTimeOut("/PC/NEWOrder/info.json", _json, function (res) {
+                            if (res.errno == '0') {
+                                //console.log(res);
+                                _this.order = res.data;
+
+                                if (res.data.state == '8' && res.data.clock_state == '1') {
+                                    //继续请求
+                                    setIntState = true;
+                                    console.log("ing")
+                                } else if (res.data.state == '8' && res.data.clock_state == '2') {
+                                    //成功
+                                    APP.modal.hideLayer();
+                                    clearInterval(_this.order_intr);
+                                    clearInterval(_this.lawyer_sum_intr);
+                                    _this.page.show = "start_matching";
+                                    document.title = '等待呼入';
+                                    //轮循订单状态 获取通话
+                                    _this.getOrderCallState();
+                                    //获取律师信息
+                                    _this.getLawyerInfo(res.data.lawyer_id);
+                                    console.log("succ")
+
+
+                                } else if (res.data.state == '4') {
+                                    //过期超时
+                                    APP.modal.hideLayer();
+                                    clearInterval(_this.order_intr);
+                                    clearInterval(_this.lawyer_sum_intr);
+                                    console.log("timeout")
+
+                                    //指定订单
+                                    if (res.data.is_design == '1') {
+                                        _this.page.show = 'end_matching';
+                                        document.title = '律师正忙';
+                                    } else {
+                                        _this.page.show = 'busy_matching';
+                                        console.log("6")
+                                        document.title = '律师正忙';
+                                    }
+
+
+                                }
+                            } else {
+                                setIntState = true;
+                            }
+                        }, function () {
+                            //超时处理
+                            console.log("net timeout");
+                            setIntState = true;
+                        })
+                    }
+                },
+                getOrderCallState: function () {
+                    //获取订单通话状态
+                    var _this = this;
+                    var setIntCallState = true;
+
+                    _this.order_call_intr = setInterval(function () {
+                        if (!setIntCallState) {
+                            return
+                        }
+                        getState();
+                    }, 3000)
+
+                    function getState() {
+                        var _oid = APP.getParam("oid");
+                        var _json = {
+                            order_id: _oid
+                        }
+                        setIntCallState = false;
+                        APP.sendTimeOut("/PC/NEWOrder/info.json", _json, function (res) {
+                            setIntCallState = true;
+                            if (res.errno == '0') {
+                                //console.log(res)
+                                var _data = res.data;
+                                _this.order = _data;
+                                //已接单未接通
+                                if (_data.state == '8' && _data.clock_state == '2' && _data.call_record &&
+                                    parseInt(_data.call_record.byetype) < 0) {
+                                    //用户未接
+                                    if (_data.call_record.byetype == '-3' || _data.call_record.byetype ==
+                                        '-4' || _data.call_record.byetype == '-9') {
+                                        _this.page.show = '';
+                                        document.title = '';
+                                        //指定订单
+                                        if (_data.is_design == '1') {
+                                            //window.location.href = "/Member/orderList.html";
+                                            if (document.referrer) {
+                                                window.history.go(-1);
+                                            } else {
+                                                window.location.href = "/Member/orderList.html";
+                                            }
+                                        } else {
+                                            window.history.go(-1);
+                                            //window.location.href = "/Member/jTimeDetails.html?id="+_this.order.products[0]['id'];
+                                        }
+
+                                    } else {
+                                        //律师未接
+                                        setIntCallState = false;
+                                        clearInterval(_this.order_call_intr);
+                                        _this.page.show = 'busy_matching';
+                                        console.log("7")
+                                        document.title = '律师正忙';
+                                    }
+
+                                }
+                                //已接单已接通
+                                if (_data.state == '0' && _data.clock_state == '2' && _data.call_record &&
+                                    parseInt(_data.call_record.byetype) > 0) {
+                                    _this.page.show = '';
+                                    document.title = '';
+
+                                    if (APP.getParam('fromtype') == "ajk") {
+                                        window.location.href = "/Member/jTimeGoPay.html?oid=" +
+                                            _oid + "&fromtype=ajk";
+                                    } else {
+                                        window.location.href = "/Member/jTimeGoPay.html?oid=" +
+                                            _oid;
+                                    }
+
+                                }
+                            } else {
+
+                            }
+                        }, function () {
+                            //超时处理
+                            console.log("net timeout");
+                            setIntCallState = true;
+                        })
+                    }
+                },
+                getLawyerInfo: function (id) {
+                    //获取律师详情
+                    var _this = this;
+                    APP.send('/PC/WxUser/lawyerDetails.json?lawyer_id=' + id, function (res) {
+                        if (res.errno == '0') {
+                            _this.order_lawyer = res.data.info;
+                            _this.order_lawyer.order_count = res.data.order_count;
+                            //res.data.info.cash_pledge_lawyer_rights = "6,9"
+                            //领域
+                            _this.order_lawyer['cash_pledge_lawyer_rights_text'] = getCase(res.data
+                                .info.cash_pledge_lawyer_rights);
+
+                            //平分
+                            var _avg_score = res.data.average;
+                            _this.order_lawyer['avg_score_text'] = getScore(_avg_score);
+
+                            //预计时间
+                            var _t = _this.order.grab_order_time ? _this.order.grab_order_time.replace(
+                                /-/g, "/") : '';
+                            _t = new Date(_t).getTime() + 120000;
+                            _t = new Date(_t);
+                            var _hour = _t.getHours();
+                            var _min = _t.getMinutes() < 10 ? '0' + _t.getMinutes() : _t.getMinutes();
+                            _this.order_lawyer['receipt_time'] = _hour + ':' + _min;
+                        }
+                    })
+
+
+                    function getScore(s) {
+                        var _s = parseFloat(s);
+                        if (!_s) {
+                            return "暂无评价"
+                        }
+                        if (_s >= 4) {
+                            return "非常满意"
+                        } else if (_s >= 3) {
+                            return "比较满意"
+                        } else if (_s >= 2) {
+                            return "一般"
+                        } else if (_s < 2) {
+                            return "不满意"
+                        }
+                    }
+
+                    function getCase(d) {
+                        if (!d) {
+                            return;
+                        }
+                        var _d = d;
+                        var _e = "";
+                        for (var i = 0, len = _d.length; i < len; i++) {
+                            if (i == len - 1) {
+                                _e += APP.getText.product_case[_d[i]];
+                            } else {
+                                _e += APP.getText.product_case[_d[i]] + ','
+                            }
+                        }
+
+                        return _e;
+                    }
+                },
+                addOrder: function (type, lawyer_id) {
+
+                    if (type == "0") {
+                        APP.sendHm({
+                            action: "click",
+                            object: "other_lawyer",
+                            chinese_object: "推荐其他律师",
+                            chinese_url: "律师正忙"
+                        })
+
+                    } else if (type == "1") {
+                        APP.sendHm({
+                            action: "click",
+                            object: "one_more_time",
+                            chinese_object: "再通知一次",
+                            chinese_url: "通知律师"
+                        })
+
+                    } else if (type == "2") {
+                        APP.sendHm({
+                            action: "click",
+                            object: "other_lawyer",
+                            chinese_object: "咨询其他律师",
+                            chinese_url: "通知律师"
+                        })
+
+                    }
+
+                    this.add(lawyer_id);
+                },
+                add: function (lawyer_id) {
+                    var _this = this;
+                    var _json = {
+                        product_data: [{
+                            id: _this.order.products[0]['id'],
+                            count: 1
+                        }],
+                        note: "",
+                        invoice_state: 0,
+                        invoice: {
+                            header_content_type: '',
+                            header_content: '',
+                            identification_number: '',
+                            name: '',
+                            telephone: '',
+                            address: '',
+                        },
+                        company_name: '',
+                        customer_name: _this.info.name,
+                        phone: _this.info.username,
+                        channel: APP.getOrderChannel(), //渠道 0 邮政 1 东家会 2 环球黑卡 3腾讯
+                        source: 14,
+                        order_type: 1,
+                        discount_code: '', //优惠码
+                        customer_selected_supplier_id: '', //供应商id
+                    }
+
+                    if (lawyer_id) {
+                        _json['lawyer_id'] = lawyer_id;
+                    }
+                    if (APP.getOrderChannel() == '14') {
+                        _json.channel = 14;
+                        _json.source = 19
+                    }
+
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/create.json", _json, function (res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //统计
+                            //return;
+                            _this.page.show = '';
+                            document.title = '';
+
+                            // if(APP.getParam('fromtype')=="ajk"){
+                            //         window.location.href = "/Member/jMatching.html?oid=" + res.data+"&fromtype=ajk";
+                            //     }else{
+                            //        window.location.href = "/Member/jMatching.html?oid=" + res.data;
+                            //     }
+
+                            window.location.href = "/Member/jMatching.html?oid=" + res.data ;
+
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+
+                },
+            }
+        });
+    </script>
+</body>
+
+</html>

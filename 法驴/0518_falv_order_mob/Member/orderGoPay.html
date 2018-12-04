@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=21">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
+    
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        
+        <div v-show="page.show=='home'" class="main-page s-infinite-page f5f5f5">
+
+
+            <div class="s5-orderPay-info-d1">
+                <img v-if="APP.getOrderChannel() == '13'" class="hxi1" src="/Public/Home/member/img/content_icon_right_default@2x.png" alt="">
+                <img v-else class="i1" src="/Public/Home/member/img/content_icon_right_default@2x.png" alt="">
+                <p v-if="APP.getOrderChannel() == '12'" class="p1"><strong>兑换成功！</strong></p>
+                <p v-if="APP.getOrderChannel() == '13'" class="hxp1"><strong>兑换成功！</strong></p>
+                <p v-if="APP.getOrderChannel() == '13'" class="hxp2">我们将在两小时内与您取得联系，请保持电话畅通</p>
+                <p v-else class="p1"><strong>订单提交成功，请尽快支付！</strong></p>
+            </div>
+
+            
+
+            <div v-if="APP.getOrderChannel() != '13'"   class="s5-orderPay-info-d2">
+                <div class="info-d2-item clearfix">
+                    <span class="item-l">订单号：</span>
+                    <span class="item-r">{{ order.order_id }}</span>
+                </div>
+                <div class="info-d2-item clearfix">
+                    <span class="item-l">应付总金额：</span>
+                    <span v-if="APP.getOrderChannel() == '12'||APP.getOrderChannel() == '13'" class="item-r">￥{{ order.products[0]['flprice'] }}</span>
+                    <span v-else class="item-r">￥{{ order.money }}</span>
+                </div>
+                <div class="info-d2-item clearfix">
+                    <span class="item-l">实付金额：</span>
+                    <span class="item-r"><strong>￥{{ order.to_pay }}</strong></span>
+                </div>
+            </div>
+
+            <!--壹钱包和华夏-->
+            <template v-if="APP.getOrderChannel() == '12' || APP.getOrderChannel() == '13' ">
+
+
+            <div  v-if="APP.getOrderChannel() == '12'" class="s7-orderPay-action">
+                <a @click="nextYQB()" class="m-btn m-btn_1" href="javascript:;">确定</a>
+                <p class="p1">
+                    请保持电话畅通，法驴将根据您预约时间为您服务。<br>
+                    关注“法驴会员”公众号，可获得实时服务进度！
+                </p>
+            </div>
+            <div v-if="APP.getOrderChannel() == '13'" class="hx_new">
+                <div class="hx_yhzx">
+                    <div class="hx_yhzx_tt">
+                        <div>
+                            <img src="/Public/Home/member/img/hxdh_left.png" alt="">
+                        </div>
+                        <span>华夏用户专享</span>
+                        <div>
+                             <img src="/Public/Home/member/img/hxdh_right.png" alt="">
+                        </div>
+                    </div>
+                    <div class="hx_ftt">
+                        <img src="/Public/Home//member/img/hxdh_ftt.png" alt="">
+                    </div>
+                    <ul class="hx_four">
+                        <li>
+                            <img src="/Public/Home/member/img/list_icon_zixun_default.png" alt="">
+                            <p>咨询不限时长</p>
+                        </li>
+                        <li>
+                            <img src="/Public/Home/member/img/list_icon_safety_default.png" alt="">
+                            <p>严格隐私保护</p>
+                        </li>
+                        <li>
+                            <img src="/Public/Home/member/img/list_icon_cover_default.png" alt="">
+                            <p>专业领域覆盖</p>
+                        </li>
+                        <li>
+                            <img src="/Public/Home/member/img/list_icon_customization_default.png" alt="">
+                            <p>定制化服务</p>
+                        </li>
+                    </u>
+                </div>
+                <div class="hx_flys">
+                    <div class="hx_yhzx_tt">
+                        <div>
+                            <img src="/Public/Home/member/img/hxdh_left.png" alt="">
+                        </div>
+                        <span>法驴优势</span>
+                        <div>
+                             <img src="/Public/Home/member/img/hxdh_right.png" alt="">
+                        </div>
+                    </div>
+                    <ul class="hx_flys_f">
+                        <li>
+                            <img src="/Public/Home/member/img/hxdh_banner1.png" alt="">
+                        </li>
+                        <li>
+                            <img src="/Public/Home/member/img/hxdh_banner2.png" alt="">
+                        </li>
+                        <li>
+                            <img src="/Public/Home/member/img/hxdh_banner3.png" alt="">
+                        </li>
+                        <li>
+                            <img src="/Public/Home/member/img/hxdh_banner4.png" alt="">
+                        </li>
+                    </ul>
+                    <p>感谢您选择华夏在线的服务</p>
+                    
+                </div>
+
+                <a @click="nextYQB()" class="m-btn hx_m-btn_1" href="javascript:;">返回首页</a>
+            </div>
+            </template>
+            <!--非壹钱包和华夏-->
+            <template v-else>
+             <div class="s5-orderPay-info-d3">
+                <div class="info-d3-title">支付方式</div>
+                <a v-if="APP.getOrderChannel() != '11'" @click="form_goPay.mode='0'" :class="{'active': form_goPay.mode=='0'}" href="javascript:;"  class="s-orderPay-item s5-orderPay-item">
+                    <div class="item-label clearfix">
+                        <div class="item-label-radio"></div>
+                        <div class="item-label-icon item-label-icon_1"></div>
+                        <div class="item-label-text">微信支付</div>
+                    </div>
+                </a>
+                <a v-if="APP.getOrderChannel() == '11'||APP.getOrderChannel() == '14'" @click="form_goPay.mode='1'" :class="{'active': form_goPay.mode=='1'}" href="javascript:;"  class="s-orderPay-item s5-orderPay-item">
+                    <div class="item-label clearfix">
+                        <div class="item-label-radio"></div>
+                        <div class="item-label-icon item-label-icon_2"></div>
+                        <div class="item-label-text">支付宝</div>
+                    </div>
+                </a>
+            </div>
+
+
+                <div   class="s-orderPay-action">
+                    <a @click="goPay()" class="m-btn m-btn_1" href="javascript:;">确定</a>
+                </div>
+
+                
+            </template>
+<!--
+            <div v-if="APP.getOrderChannel() != '12' && APP.getOrderChannel() != '13'" class="s5-orderPay-info-d3">
+                <div class="info-d3-title">支付方式</div>
+                <a v-if="APP.getOrderChannel() != '11'" @click="form_goPay.mode='0'" :class="{'active': form_goPay.mode=='0'}" href="javascript:;"  class="s-orderPay-item s5-orderPay-item">
+                    <div class="item-label clearfix">
+                        <div class="item-label-radio"></div>
+                        <div class="item-label-icon item-label-icon_1"></div>
+                        <div class="item-label-text">微信支付</div>
+                    </div>
+                </a>
+                <a v-else-if="APP.getOrderChannel() == '11'||APP.getOrderChannel() == '14" @click="form_goPay.mode='1'" :class="{'active': form_goPay.mode=='1'}" href="javascript:;"  class="s-orderPay-item s5-orderPay-item">
+                    <div class="item-label clearfix">
+                        <div class="item-label-radio"></div>
+                        <div class="item-label-icon item-label-icon_2"></div>
+                        <div class="item-label-text">支付宝</div>
+                    </div>
+                </a>
+            </div>
+
+            <div v-else-if="APP.getOrderChannel() != '12' && APP.getOrderChannel() != '13'" class="s-orderPay-action">
+                <a @click="goPay()" class="m-btn m-btn_1" href="javascript:;">确定</a>
+            </div>
+
+             
+            <div v-else-if="APP.getOrderChannel() == '12'||APP.getOrderChannel() == '13'" class="s7-orderPay-action">
+                <a @click="nextYQB()" class="m-btn m-btn_1" href="javascript:;">确定</a>
+                <p class="p1">
+                    请保持电话畅通，法驴将根据您预约时间为您服务。<br>
+                    关注“法驴会员”公众号，可获得实时服务进度！
+                </p>
+            </div>-->
+
+
+        </div>
+
+
+        <div v-show="page.show=='pay_succ'" class="main-page s3-payEnd-page">
+            <div class="wrap-main">
+                <!--<div class="s-orderPayEnd-title">
+                    <h2>支付成功 </h2>
+                </div>
+                <img class="s-orderPayEnd-icon" src="/Public/Home/member/img/m47.png">
+                <div class="s-orderPayEnd-action">
+                    <a :href="'/Member/orderDetails.html?oid='+order.order_id" class="s-btn s-btn_1">查看服务进度</a>
+                </div>-->
+            </div>
+            <div class="s3-payEnd-bd">
+                <div class="s3-payEnd-tips">
+                    您已成功购买法律服务，<a :href="'/Member/orderDetails.html?oid='+order.order_id">点击查看</a>
+                </div>
+                <div class="s3-payEnd-pic">
+                    <img src="/Public/Home/member/img/25.jpg">
+                </div>
+                <div class="s3-payEnd-d3">
+                    扫码关注服务号，获取订单最新动态通知
+                </div>
+            </div>
+
+            <div class="s3-payEnd-hot">
+                <div class="s3-title">
+                    热门文章
+                </div>
+                <div class="s3-content s3-payEnd-hotBd clearfix">
+                    <a class="s3-payEnd-hotItem" href="https://mp.weixin.qq.com/s/-Neglr6xPWyNnSLNj9EQQg">
+                        <div class="hotItem-pic">
+                            <img src="/Public/Home/member/img/a1.png">
+                        </div>
+                        <div class="hotItem-text">
+                            万一被公安人员带走，你要记住这些法律常识！
+                        </div>
+                    </a>
+                    <a class="s3-payEnd-hotItem" href="https://mp.weixin.qq.com/s/a-8gylxXzVUc0POACJdd3A">
+                        <div class="hotItem-pic">
+                            <img src="/Public/Home/member/img/a2.png">
+                        </div>
+                        <div class="hotItem-text">
+                            离婚时房屋归属判定因素的汇总分析
+                        </div>
+                    </a>
+                    <a class="s3-payEnd-hotItem" href="https://mp.weixin.qq.com/s/Lg76RPGoR-D-lMI7j51qwg">
+                        <div class="hotItem-pic">
+                            <img src="/Public/Home/member/img/a3.png">
+                        </div>
+                        <div class="hotItem-text">
+                            无固定期限劳动合同怎么解除？应得多少赔偿金？
+                        </div>
+                    </a>
+                    <a class="s3-payEnd-hotItem" href="https://mp.weixin.qq.com/s/Lg76RPGoR-D-lMI7j51qwg">
+                        <div class="hotItem-pic">
+                            <img src="/Public/Home/member/img/a4.png">
+                        </div>
+                        <div class="hotItem-text">
+                            公安派出所不再办理的证明，我们找谁开？这次全给你说清楚！
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <div v-show="page.show=='pay_fail'" class="main-page">
+            <div class="wrap-main">
+                <div class="s-orderPayEnd-title">
+                    <h2>支付失败</h2>
+                </div>
+                <img class="s-orderPayEnd-icon" src="/Public/Home/member/img/m48.png">
+                <div class="s-orderPayEnd-action">
+                    <a @click="page.show='home'" class="s-btn s-btn_1" href="javascript:;">继续支付</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/member/js/main.js?v=082"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+
+                order: {},
+                form_goPay: {
+                    mode: '0', //0微信 1z支付宝
+                }
+
+            },
+            created: function() {
+                
+                //钉钉渠道显示支付宝支付
+                if (APP.getOrderChannel() == "11") {
+                    this.form_goPay.mode = "1";
+                } else {
+                    this.form_goPay.mode = "0";
+                }
+                APP.getInfo(this, function() {
+                    
+                });
+                this.details();
+
+            
+                APP.sendHm({
+                    action: "visits", 
+                    chinese_url: "订单提交成功",
+                    parameter: APP.getParam("oid")
+                });
+            },
+            mounted: function() {
+
+            },
+            methods: {
+                details: function() {
+                    var _this = this;
+                    var _json = {
+                        order_id: APP.getParam("oid"),
+                    }
+                    APP.send("/PC/NEWOrder/info.json", _json, function(res) {
+                        if (res.errno == '0') {
+                            //console.log(res);
+                            _this.order = res.data;
+                            //壹钱包
+                            if (res.data.channel == "12"||res.data.channel == "13") {
+                                _this.page.show = 'home';
+                                document.title = "兑换成功"
+                            } else {
+                                document.title = "支付";
+                                if (res.data.state == '0' || res.data.state == '2') {
+                                    _this.page.show = 'home'
+                                } else {
+                                    _this.page.show = 'pay_succ'
+                                }
+                            }
+
+                        }
+                    })
+                },
+                goPay: function() {
+                    if (this.form_goPay.mode == '0') {
+                        this.goPayWxJssdk();
+                    } else if (this.form_goPay.mode == '1') {
+                        this.goPayZFB();
+                    }
+                },
+                goPayZFB: function () {
+                    //支付宝支付
+                    var _oid = APP.getParam("oid");
+                    window.location.href = ajax_url + '/PC/NEWOrder/payment.json?order_id=' + _oid + '&payment=0&type=1';
+                    // APP.send('/PC/NEWOrder/returnAliPayUrl.json',{order_id:_oid},function(res){
+                    //     console.log(res)
+                    // })
+                },
+                goPayWxJssdk: function() {
+                    //微信支付
+                    var _this = this;
+                    var _json = {
+                        order_id: _this.order.order_id,
+                    }
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/channelOrderWechatPayment.json", _json, function(res) {
+                        $.hideLoading();
+                        // alert(JSON.stringify(res))
+                        //    return;
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                           
+                            wx.chooseWXPay({
+                                appId: _data.appId,
+                                timestamp: _data.timeStamp,
+                                nonceStr: _data.nonceStr,
+                                package: _data.package,
+                                signType: _data.signType,
+                                paySign: _data.paySign,
+                                success: function(res) {
+                                    // 支付成功后的回调函数
+                                    if (res.errMsg == "chooseWXPay:ok") {
+                                        //支付成功
+                                        _this.page.show = 'pay_succ';
+                                        //window.location.href = "my-order.html?sta=0";
+                                    } else {
+                                        _this.page.show = 'pay_fail';
+                                        $.toast(res.errMsg, 'text');
+                                    }
+                                },
+                                cancel: function(res) {
+                                    //支付取消
+                                    //$.toast('支付取消', 'text');
+                                    //_this.page.show = 'pay_fail';;
+                                }
+                            });
+                            
+                        } else {
+                            _this.page.show = 'pay_fail';
+                            $.toast(res.msg, "text");
+                        }
+                    });
+
+                },
+                nextYQB: function() {
+                    if(APP.getOrderChannel()=="12"){
+                        window.location.href = "/Member/goodsYqb.html";
+                    }else if(APP.getOrderChannel()=="13")
+                    window.location.href = "/Member/goodsHx.html";
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

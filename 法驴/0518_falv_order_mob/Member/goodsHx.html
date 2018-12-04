@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1 viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=15">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
+
+</head>
+
+<body>  
+    <div v-cloak id="app" class="main bg-dd">
+        <!--首页-->
+        <div v-show="page.show == 'home'" style="overflow: hidden">
+
+            <div class="s7-goodsList-head newhx">
+                <a @click="next('fall-center', '', '/Member/personal.html')" v-if="info_login" href="javascript:;" style="top: .3rem" class="s6-goodsList-per s7-goodsList-per"><strong>个人中心</strong></a>
+            </div>
+
+            <div class="s7-goodsList-bd">
+
+                <div class="s6-goodsList-title">
+                    <img src="/Public/Home/member/img/m123.png">
+                </div>
+
+                <div class="wrap-main s6-goodsList-content">
+                    <!--<div @click="next('exchange_call', '兑换电话咨询', '/Member/goodsDetails.html?id=yqbzx')" class="s6-goodsList-item clearfix">
+                        <div class="item-cover">
+                            <img src="/Public/Home/member/img/m124@2x.png">
+                        </div>
+                        <div class="item-content">
+                            <div class="item-content-d1">
+                                <strong>不限时法律电话咨询</strong>
+                            </div>
+                            <div class="item-content-d2 clearfix">
+                                <span class="item-d2-text">不限时</span>
+                                <span class="item-d2-text">远程</span>
+                                <span class="item-d2-text">全领域</span>
+                            </div>
+                            <div class="item-content-d3">
+                                <div class="item-d3-text">
+                                    <strong>108</strong><span class="c1">/次</span>
+                                </div>
+                                <div class="item-d3-btn">
+                                    <strong>立即兑换</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>-->
+
+                    <div old-id="100573" @click="next('exchange_VIPC', '兑换个人年卡', '/Member/goodsDetails.html?id=100573')" class="s6-goodsList-item clearfix">
+                        <div class="item-cover">
+                            <img src="/Public/Home/member/img/m125@2x.png">
+                        </div>
+                        <div class="item-content">
+                            <div class="item-content-d1">
+                                <strong>个人法律咨询年卡</strong>
+                            </div>
+                            <div class="item-content-d2 clearfix">
+                                <span class="item-d2-text">个人权益</span>
+                                <span class="item-d2-text">24小时</span>
+                                <span class="item-d2-text">全领域</span>
+                            </div>
+                            <div class="item-content-d3">
+                                <div class="item-d3-text">
+                                    <strong>666</strong><span class="c1">/年</span>
+                                </div>
+                                <div class="item-d3-btn">
+                                    <strong>立即兑换</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="s7-goodsList-footer">
+                <div class="s7-goodsList-footer-text">
+                    本页面由阿方提法律咨询（上海）有限公司提供技术支持
+                </div>
+                <a @click="tiao()" class="s7-goodsList-footer-tk">
+                    《免责条款》
+                </a>
+            </div>
+            <div class="s7-goodsList-footer-bg">   
+                
+             </div>
+
+
+
+
+
+
+
+        </div>
+
+
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/member/js/main.js?v=080"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },  
+
+                // `state`    '优惠码状态 0未激活 1未使用 2已使用 3已过期',
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                    _this.page.show = 'home';
+                    //console.log(res.errno)
+                    // console.log(_this.page.show)
+                });
+                
+
+                //设置来源
+                APP.setOrderChannel("13");
+                APP.setFromChannel("36");
+
+
+                APP.sendHm({action: "visits", chinese_url: "华夏落地页"});
+            },
+            mounted: function() {
+                
+            },
+            methods: {
+                tiao: function(){
+                    var url=window.location.host
+                    window.location.href = "http://"+url+"/Member/goodsHxtk.html"
+                },
+                next: function(type, type_chinese, url) {
+                    
+                    APP.sendHm({
+                        action: "click", 
+                        object: type,
+                        chinese_object: type_chinese,
+                        chinese_url: "华夏落地页"
+                    }, function() {
+                        // $.closePopup()
+                        window.location.href = url;
+                    });
+                    
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

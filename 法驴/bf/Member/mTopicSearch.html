@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>搜索</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=24">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <div v-show="page.show == 'home'">
+            <div class="m-search-box">
+                <div class="m-search-bd">
+                    <i class="i"></i> 
+                    <input v-model="topic.search" type="text" placeholder="搜索专题标题、文章、视频、产品" class="m-search-input">
+                </div>
+                <a @click="getSearch()" class="m-search-btn" href="javascript:;">搜索</a>
+            </div>
+            
+            <div class="m-topicSearch-bd">
+
+                <div>
+                    <a :href="'/Member/mTopicDetails.html?id='+list.id" v-for="list in topic.data" class="m-TopicList-item">
+                        <div class="item-cover"><img :src="src_url+list.banner"></div>
+                        <h3 class="item-title overText_2">{{ list.title }}</h3>
+                        <div v-if="list.tags && list.tags.length>0" class="item-label clearfix">
+                            <span v-for="list2 in list.tags">{{ list2.tag_name.substring(0, 4) }}</span>
+                        </div>
+                        <div data-o="15 分钟前" class="item-time">
+                            {{ list.created_at }}<span>&emsp;•&emsp;</span>{{ list.view_count }} 阅读
+                        </div>
+                    </a>
+                </div>
+
+                 <div v-show="topic.loadingEnd==2" class="s-index-blank">
+                    <span>正在加载更多数据</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                   
+                },
+
+
+
+
+                topic: {
+                    search_old: '',
+                    search: '',
+                    loading: true,
+                    loadingEnd: 0, //1准备 2 加载中 3 加载完 4error
+                    loadingMoreState: false,
+                    page: 1,
+                    data: [],
+                }
+            },
+            created: function() {
+                var _this = this;
+                
+                APP.getInfo(this, function(res) {
+                   _this.page.show = 'home';
+                });
+                
+            },
+            mounted: function() {
+               
+            },
+            methods: {
+                getSearch: function() {
+                    if (this.topic.search_old && this.topic.search_old == this.topic.search) return;
+
+                    $.showLoading();
+                    this.topic.page = 1;
+                    this.topic.data = [];
+                    this.topic.loading = true;
+                    this.topic.loadingEnd = 0;
+                    this.topic.loadingMoreState = false;
+
+                    
+                    this.getList(this.topic.page)
+
+                    APP.sendHm({
+                        action: "click",
+                        object: "subList_search",
+                        chinese_object: "搜索",
+                        chinese_url: "专题列表页",
+                        parameter: this.topic.search
+                    })
+                },
+                getList: function(page, callback) {
+                    var _this = this;
+                    var _callback = callback ? callback : function(){};
+
+                    var _json = {
+                        order: '',
+                        search: _this.topic.search,
+                        page: page, //页
+                    }
+
+                    _this.topic.loadingEnd = 2;
+                    
+                    APP.send("/PC/WxUser/showAll.json", _json, function(res) {
+                        //console.log(res)
+                        if (_this.topic.page == 1) {
+                            $.hideLoading();
+                        }
+
+                        if (res.errno == '0') {
+                            var _data = res.data.list;
+                            _this.topic.search_old = _this.topic.search;
+
+                            _this.topic.total_sum = res.data.listCount;
+                            
+                            //第一页且总页数大于1 初始化滚动加载
+                            if (_data && _data.length>0 && _this.topic.page == 1) {
+                                _this.initPage(page);
+                            }
+
+                            //保存数据
+                            _this.topic.data = _this.topic.data.concat(_data);
+                            
+                            //判断是否加载完所有页数
+                            if (_data && _data.length > 0) {
+                                _this.topic.loading = false;
+                                _this.topic.loadingEnd = 1;
+                            } else {
+                                _this.topic.loading = true;
+                                _this.topic.loadingEnd = 3;
+                            }
+                            
+                        } else {
+                            _this.topic.page--;
+                            _this.topic.loading = false;
+                            _this.topic.loadingEnd = 4;
+                        }
+
+                        _callback();
+                    });
+
+                },
+                initPage: function(page) {
+                    var _this = this;
+                    setTimeout(function() {
+                        // var _loading = false;
+                        var _h = $(document).height() - $(window).height();
+                        $(document).scroll(function() {
+                            if (_h <= 0) {_h = $(document).height() - $(window).height()};
+                            //console.log(_h - $(this).scrollTop())
+                            if (_h - $(this).scrollTop() <= 100) {
+                                if (_this.topic.loading) return;
+                                _this.topic.loading = true;
+                                if (_this.topic.loadingEnd  == 3) {
+                                    //console.log("end");
+                                    _this.topic.loading = true;
+                                    return;
+                                }
+                                _this.topic.page++;
+                                _this.topic.loadingEnd = 2;
+                                //console.log(_this.comment.page)
+                                _this.getList(_this.topic.page);
+                            }
+                        })
+                       
+                    }, 100)
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

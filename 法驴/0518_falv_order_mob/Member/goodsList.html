@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=40">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+</head>
+
+<body>
+    <div v-cloak id="app" :class="{ 's-infinite-scrolling' : page.show=='home'}" class="main s-infinite-main bg-yz">
+        <!--首页-->
+        <div v-show="page.show == 'home'" class="wrap-main s-infinite-page">
+            <div class="s-goodsList-head">
+                <a @click="next('fall-center', '/Member/personal.html')" v-if="info_login" href="javascript:;" class="s-goodsList-per">个人中心</a>
+                <div class="s-goodsList-logo">
+                    <img class="logo-d1" src="/Public/Home/member/img/m56.png">
+                    <span class="logo-item">
+                        <img class="logo-d2" src="/Public/Home/member/img/m57.png">
+                    </span>
+                </div>
+                <div class="s-goodsList-title">
+                    <img src="/Public/Home/member/img/m58.png?v=2" alt="">
+                </div>
+            </div>
+
+            <div class="s-goodsList-bd">
+                <div class="s-goodList-boxHead"></div>
+                <div class="s-goodsList-box s3-goodList-box4">
+                    <div class="s3-goodList-head">
+                        <div class="s-goodsList-box-title">
+                            <span>《小驴说法》</span>
+                        </div>
+                        
+                        <div class="s-goodsList-box-pic">
+                            <a data-id="7" @click="next('index_details', '/Member/liveDetails.html?id=7')" href="javascript:;"><img src="/Public/Home/member/img/m110.png"></a>
+                            <p class="s3-goodList-box-tips">《小驴说法》第一季，特邀亚洲私人财富律师帮你揭秘婚姻家事中常遇到的各类难题。</p>
+                        </div>
+ 
+                    </div>
+                    
+                </div>
+
+                <div class="s-goodsList-box s-goodsList-box5">
+                    <div class="s-goodsList-box-line s3-goodsList-box-line2 line1"></div>
+                    <div class="s-goodsList-box-line s3-goodsList-box-line2 line2"></div>
+                    <div class="s-goodsList-box-title">
+                        <span>邮储银行用户专属</span>
+                    </div>
+                    <div @click="nextGetCoupon()" class="s-goodsList-coupon-item">
+                        <div :class="{'unactive' : coupon.coupon_get_state}" class="item-icon"></div>
+                        <p>*适用所有类型的电话咨询服务</p>
+                        <p>&ensp;剩余：{{ coupon.unbounded_count }}个/总数：{{ coupon.not_expired_count }}个</p>
+                    </div>
+                    
+                </div>
+                <div class="s-goodsList-box" style="position: relative">
+                    <div class="s-goodsList-box-line s3-goodsList-box-line2 line1"></div>
+                    <div class="s-goodsList-box-line s3-goodsList-box-line2 line2"></div>
+                    <div class="s-goodsList-box-title">
+                        <span>热门推荐</span>
+                    </div>
+                    <!--100337 100455 -->
+                    <a @click="next('fall-prodoct1', '/Member/goodsDetails.html?id=100455')" href="javascript:;" class="s-goodsList-box-item">
+                        <div class="s-goodsList-box-pic">
+                            <div class="pic-icon bg1"></div>
+                            <img src="/Public/Home/member/img/m61.png" alt="">
+                        </div>
+                        <div class="s-goodsList-box-text">
+                            <p class="p1">专业法律管家为您预诊</p>
+                            <p class="p2">电话沟通，不限时长</p>
+                            <div class="p3-btn">立刻了解</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="s-goodsList-box s-goodsList-box2">
+                    <div class="s-goodsList-box-line s3-goodsList-box-line2 line1"></div>
+                    <div class="s-goodsList-box-line s3-goodsList-box-line2 line2"></div>
+                    <div class="s-goodsList-box-title">
+                        <span>更多服务</span>
+                    </div>
+                    <a @click="next('fall-prodoct2', '/Member/goodsDetails.html?id=100448')" href="javascript:;" class="s-goodsList-box-item">
+                        <div class="s-goodsList-box-pic">
+                            <div class="pic-icon bg2"></div>
+                            <img src="/Public/Home/member/img/m62.png" alt="">
+                        </div>
+                        <div class="s-goodsList-box-text">
+                            <p class="p1">天上掉馅饼，遭遇诈骗心不定？</p>
+                            <p class="p2">赶紧电话律师，问问清楚！</p>
+                            <div class="p3-btn">立刻了解</div>
+                        </div>
+                    </a>
+                    <a @click="next('fall-prodoct3', '/Member/goodsDetails.html?id=100454')" href="javascript:;" class="s-goodsList-box-item">
+                        <div class="s-goodsList-box-pic">
+                            <div class="pic-icon bg3"></div>
+                            <img src="/Public/Home/member/img/m63.png" alt="">
+                        </div>
+                        <div class="s-goodsList-box-text">
+                            <p class="p1">家里要买房，买卖政策不明晰？</p>
+                            <p class="p2">赶紧电话律师，问问清楚！</p>
+                            <div class="p3-btn">立刻了解</div>
+                        </div>
+                    </a>
+                    <a @click="next('fall-prodoct4', '/Member/goodsDetails.html?id=100451')" href="javascript:;" class="s-goodsList-box-item">
+                        <div class="s-goodsList-box-pic">
+                            <div class="pic-icon bg4"></div>
+                            <img src="/Public/Home/member/img/m64.png" alt="">
+                        </div>
+                        <div class="s-goodsList-box-text">
+                            <p class="p1">最近有变故，财产分割变难题？</p>
+                            <p class="p2">赶紧电话律师，问问清楚！</p>
+                            <div class="p3-btn">立刻了解</div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="s-goodsList-box s-goodsList-box3">
+                    <div class="s-goodsList-box-line s3-goodsList-box-line2 line1"></div>
+                    <div class="s-goodsList-box-line s3-goodsList-box-line2 line2"></div>
+                    <div class="s-goodsList-box-title">
+                        <span>特供优惠</span>
+                    </div>
+                    <p class="box3-p1">&emsp;&emsp;除了享受邮储银行用户的特享价格以外，法驴网特别为用户提供了每月<span><strong>100份</strong></span>“电话咨询服务”免单优惠。凡在活动期间通过邮储银行获取福利优惠码，即可免费不限时电话咨询各类法律问题。详情请洽邮储银行微信公众号或各线下网点。</p>
+                </div>
+            </div>
+
+            <!--免责声明-->
+            <div class="weui-mask"></div>
+            <div class="b1-dialog b1-dialog_center JS_dialog">
+                <div class="b1-dialog__td clearfix"><a onclick="APP.modal.hideLayer();" class="b1-dialog__close" href="javascript:;"></a></div>
+                <div class="b1-dialog__hd"><span class="b1-dialog__title">提示</span></div>
+                <div class="b1-dialog__bd"></div>
+                <div class="b1-dialog__ft clearfix">
+                    <div class="b1-dialog__btn JS_dialog_cancel default">取消</div>
+                    <div class="b1-dialog__btn JS_dialog_commit primary">确定</div>
+                </div>
+                <a onclick="APP.modal.hideLayer();" href="javascript:;" class="b1-dialog-close"><i class="iconfont icon-round_close_light"></i></a>
+            </div>
+
+        </div>
+
+
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/member/js/main.js?v=080"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },  
+
+                coupon: {
+                    unbounded_count: 0,
+                    not_expired_count: 0,
+                    coupon_use_state: false,
+                    coupon_get_state: false,
+                }
+
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0' && sessionStorage.getItem("coupon_from_login")) {
+                        sessionStorage.removeItem("coupon_from_login");
+                        _this.addCoupon();
+                    }
+
+                    _this.page.show = 'home';
+                    //console.log(res.errno)
+                });
+                this.getCouponSum();
+                this.getCouponState();
+                this.getCouponToday();
+                
+
+                //设置来源
+                APP.setOrderChannel("0");
+                APP.setFromChannel('24');
+
+                
+
+            },
+            mounted: function() {
+                var _tab_channel = '0';
+                if (_tab_channel == '0' && !localStorage.getItem("first_mail_state")) {
+                    this.showStatement();
+                }
+            },
+            methods: {
+                next: function(type, url, parameter) {
+                    if (type == 'index_details') {
+                        var _json = {
+                            action: "click",
+                            object: type,
+                            chinese_object: "合集详情",
+                            parameter: "亚洲最佳私人财富律师——贾明军 全面揭秘婚姻财富难题",
+                            fromchannel: "youzheng"
+                        }
+                        var _json2 = {
+                            action: "click",
+                            object: type,
+                            chinese_object: "浏览合集详情",
+                            parameter: "男性也会遭遇家暴？",
+                            fromchannel: "youzheng"
+                        }
+                        APP.send("/PC/User/visit.json", _json, function() {
+                            APP.send("/PC/User/visit.json", _json2, function() {
+                                window.location.href = url;
+                            })
+                        })
+                    } else {
+
+                        APP.sendHm({
+                            action: "click", 
+                            object: type
+                        }, function() {
+                            window.location.href = url;
+                        });
+                    }
+                },
+                showStatement: function() {
+                    localStorage.setItem("first_mail_state", "true");
+                    APP.modal.showLayer({
+                        title: '免责声明',
+                        btnHide: true,
+                        text: '尊敬的用户,您正在前往第三方合作平台,如因您接受第三方服务而产生任何纠纷,邮储银行具有免责权利。',
+                        onOK: function() {
+                            //console.log('ok');
+                            APP.modal.hideLayer();
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+
+                    setTimeout(function() {
+                        APP.modal.hideLayer();
+                    }, 600)
+                },
+                getCouponSum: function() {
+                    // 获取该渠道可领取数量
+                    var _this = this;
+                    APP.send('/PC/NEWOrder/getChannelUnboundedDiscountCodeNumber.json?channel=0', function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        // _this.page.show = 'home';
+                        if (res.errno == '0') {
+                            _this.coupon.unbounded_count = res.data.unbounded_count;
+                            _this.coupon.not_expired_count = res.data.not_expired_count;
+                        }
+                    });
+                },
+                getCouponState: function() {
+                    //获取用户是否使用过优惠码
+                    var _this = this;          
+                    APP.send('/PC/NEWOrder/userAvailableChannelDiscountCode.json?channel=0', function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            _this.coupon.coupon_use_state = true;
+                        }
+                    });
+                },
+                getCouponToday: function() {
+                    //获取今日渠道领取的优惠卷 
+                    var _this = this;
+                    APP.send('/PC/NEWOrder/getTodayReceiveDiscountCode.json?channel=0', function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            if (res.data && res.data.length == 0) {
+
+                            } else {
+                                _this.coupon.coupon_get_state = true;
+                            }
+                        }
+
+                    });
+                },
+                addCoupon: function() {
+                    //用户领取渠道优惠码
+                    var _this = this;
+                    $.showLoading("正在领取")
+                    APP.send('/PC/NEWOrder/userActivationDiscountCode.json?channel=0', function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        $.hideLoading()
+                        if (res.errno == '0') {
+                            $.toast("已领取成功，支付时会自动抵扣哦", "text")
+                            _this.getCouponSum();
+                            _this.getCouponState();
+                            _this.getCouponToday();
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                },
+                nextGetCoupon: function() {
+                    if (parseFloat(this.coupon.unbounded_count) == 0) {
+                        $.toast("已经被领取完了，请关注后续活动", "text");
+                        return;
+                    }
+                    if (this.info_login && !this.coupon.coupon_use_state) {
+                        $.toast("您已经使用过，请关注后续活动", "text");
+                        return;
+                    }
+                    if (this.info_login && this.coupon.coupon_get_state) {
+                        $.toast("已领取成功，支付时会自动抵扣哦", "text");
+                        return;
+                    }
+                    if (this.info_login) {
+                        this.addCoupon();
+                    } else {
+                        var _return_url = encodeURIComponent("/Member/goodsList.html");
+                        //sessionStorage.setItem("coupon_from", "true");
+                        //授权后跳转页面
+                        var _loca_url = '/Member/login.html?from='+_return_url;
+                        sessionStorage.setItem("coupon_from_login", "0");
+                        //APP.WXLogin(_this, '/Member/goodsList.html');
+
+                        APP.init(function() {
+                            //alert(233)
+                           window.location.href = _loca_url;
+                        }, _loca_url);
+                    }
+
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

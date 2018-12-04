@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html class="ffffff">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我的</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/Mob/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/Mob/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/LawyerTime.css?v=24">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body class="ffffff">
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'home'">
+
+            <div class="j-lawyerPersonal-top"></div>
+            <div class="j-lawyerPersonal-info">
+                <div class="info-box">
+                    <div class="info-box-left">
+                        <p class="info-name"><strong>{{ info.name ? info.name : '&emsp;'  }}</strong></p>
+                        <p class="info-tel">{{ APP.getNum(info.phone) }}</p>
+                    </div>
+                    <div class="info-box-right">
+                        <div class="info-headpic">
+                            <img :src="info.headimgurl">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="m-main j-lawyerPersonal-Nav">
+                <a @click="nextPage('lawyer_myOrder', '查看我的订单', '', '/h5/lawyerreg/jLawyerOrderList.html')" href="javascript:;" class="j-lawyerPersonal-item">
+                    <i class="i1"></i><strong>我的订单</strong>
+                </a>
+            </div>
+            <!--<div class="m-main j-lawyerPersonal-Nav">
+                <a @click="testlougout()" href="javascript:;" class="j-lawyerPersonal-item">
+                    <i class="i1"></i><strong>登出</strong>
+                </a>
+            </div>-->
+
+
+            <div class="weui-tabbar s-tabbar s-tabbar-more">
+                <a href="/h5/lawyerreg/jLawyerMatching.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon5"></div>
+                    <p class="weui-tabbar__label weui-tabbar__label2">抢单</p>
+                </a>
+                <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+                    <div class="weui-tabbar__icon weui-tabbar__icon6"></div>
+                    <p class="weui-tabbar__label weui-tabbar__label2">我的</p>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/Mob/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/Mob/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/Mob/js/vue.min.js"></script>
+    <script src="/Public/Home/Mob/js/lawyerCommon.js?v=04"></script>
+    <script src="/Public/Home/Mob/js/lawyerMain.js?v=06"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+
+                },
+
+                order: {
+                    total_count: 0,
+                    in_service_count: 0,
+                    not_serviced_count: 0
+                }
+
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                   if (res.errno == '0') {
+                        _this.page.show = 'home';
+                    }
+                });
+                this.getOrderSum();
+
+
+
+                APP.sendHm('visits', '', '', '律师端我的')
+            },
+            mounted: function() {
+                
+            },
+            methods: {
+                nextPage: function(type, type_text, param, url) {
+                    APP.sendHm("click", type, type_text, "律师端我的", param, function() {
+                        window.location.href = url;
+                    });
+                },
+                testlougout: function() {
+                    $.showLoading('数据提交中');
+                    APP.send('/PC/User/logout.json?type=1', function(res) {
+                        $.hideLoading();
+                        if (res.errno == '0') { 
+                            window.location.href = '/h5/lawyerreg/jLawyerLogin.html';
+                        }
+                    });
+                },
+                getOrderSum: function() {
+                    var _this = this;
+                    APP.send("/PC/NEWOrder/channelOrderQuantity.json", function(res) {
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.order.total_count = _data.total_count;
+                            _this.order.in_service_count = _data.in_service_count;
+                            _this.order.not_serviced_count = _data.not_serviced_count;
+                        }
+                        
+                    })
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

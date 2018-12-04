@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html class="bgf0f0f0">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1 viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=54">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
+
+</head>
+
+<body class="bgf0f0f0">
+    <div v-cloak id="app" class="main">
+
+        <div v-show="page.show == 'home'" class="main-page">
+
+
+            <!--钉钉 壹钱包-->
+            <div v-if="APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12'" class="s6-goodsDetails-dd">
+
+                <div class="s-goodsDetails-info">
+                    <div class="s-goodsDetails-box">
+                        <div class="box-bd">
+                            <div class="s-goodsDetails-name s6-goodsDetails-name clearfix">
+                                <img src="/Public/Home/member/img/m131.png">
+                                <div class="name-d1">
+                                    <p class="name-p1"><strong v-text="goods_info.name"></strong></p>
+                                    <p class="name-p2" v-text="goods_info.introduce"></p>
+                                </div>
+                            </div>
+                            <div class="s-goodsDetails-price">
+
+                                <div class="s-goodsDetails-price-item s-goodsDetails-price-item_t clearfix">
+                                    <span class="price-w1">传统机构价格</span>
+                                    <div class="price-t1 clearfix">
+                                        <del>￥{{ goods_info.lsprice }}{{ goods_info.ls_unit }}</del>
+                                    </div>
+                                </div>
+                                <div v-if="!user_marketing_id" class="s-goodsDetails-price-item clearfix">
+                                    <span class="price-w1">法驴价格</span>
+                                    <div v-if="sessionStorage.getItem('order_from_channel')" class="price-t1 clearfix">
+                                        <del>￥{{ goods_info.flprice }}{{ goods_info.fl_unit }}</del>
+                                    </div>
+                                    <div v-else class="price-t1 price-c1 clearfix">
+                                        <span>￥{{ goods_info.flprice }}{{ goods_info.fl_unit }}</span>
+                                    </div>
+
+                                </div>
+                                <div v-if="sessionStorage.getItem('order_from_channel')" class="s-goodsDetails-price-item clearfix">
+                                    <span v-if="APP.getOrderChannel() == '11'" class="price-w1">钉钉特惠价</span>
+                                    <span v-if="APP.getOrderChannel() == '12'" class="price-w1">优惠价</span>
+                                    <div class="price-t1 price-c1 clearfix">
+                                        ￥{{ goods_info.channel_specification ? goods_info.channel_specification.price : '' }}{{ goods_info.channel_specification ? goods_info.channel_specification.unit : '' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-html="goods_info.mobile_details ? goods_info.mobile_details : goods_info.details" class="s6-goodsDetails-box">
+                    
+                </div>
+
+
+
+                <div class="weui-tabbar s6-goodsDetails-tabbar">
+                    <a @click="APP.showActionKf()" href="javascript:;" class="weui-tabbar__item s6-goodsDetailsTabbar-btn1">
+                        <div class="d1"><img src="/Public/Home/member/img/m132.png" alt=""></div>
+                        <div class="d2">联系客服</div>
+                    </a>
+                    <a @click="checkAddDd()" old-click="checkAdd(),$.closePopup()" href="javascript:;" class="weui-tabbar__item s6-goodsDetailsTabbar-btn2"><strong>{{ APP.getOrderChannel() == '12' ? '立即兑换' :  '立即购买'}}</strong></a>
+                </div>
+
+                <!--钉钉-->
+                <div id="JS_product" class="weui-popup__container popup-bottom">
+                    <div class="weui-popup__overlay s6-popup__overlay"></div>
+                    <div class="weui-popup__modal">
+                        <div class="s6-goodsDetailsPop-head">
+                            请选择咨询场景
+                            <a @click.stop="APP.sendHm({action: 'click', object: 'DD_chooseSKU_close', chinese_object: '关闭按钮', chinese_url: '产品详情页'});$.closePopup()" class="s6-goodsDetailsPop-close" href="javascript:;"></a>
+                        </div>
+                        <div class="s6-goodsDetailsPop-content">
+                            <div class="s6-goodsDetailsPop-product clearfix">
+                                <div class="item-cover">
+                                    <img :src="src_url+ dd_product.icon">
+                                </div>
+                                <div class="item-content">
+                                    <div class="item-content-d1">{{ goods_info.name }}</div>
+                                    <div class="item-content-d2">钉钉优惠价：<span>￥{{ goods_info.channel_specification_price }}{{ goods_info.channel_specification_unit }}</span></div>
+                                </div>
+                            </div>
+                            <div class="s6-goodsDetailsPop-title">
+                                个人用户
+                            </div>
+                            <div class="s6-goodsDetailsPop-list clearfix">
+                                <div @click="selectProduct('100546', '婚姻家事')" :class="{'active': dd_product.selectText == '婚姻家事'}" class="s6-goodsDetailsPop-object-item"><strong>婚姻家事</strong></div>
+                                <div @click="selectProduct('100544', '劳动纠纷')" :class="{'active': dd_product.selectText == '劳动纠纷'}" class="s6-goodsDetailsPop-object-item"><strong>劳动纠纷</strong></div>
+                                <div @click="selectProduct('100547', '消费者权益')" :class="{'active': dd_product.selectText == '消费者权益'}" class="s6-goodsDetailsPop-object-item"><strong>消费者权益</strong></div>
+                                <div @click="selectProduct('100545', '房屋产权')" :class="{'active': dd_product.selectText == '房屋产权'}" class="s6-goodsDetailsPop-object-item"><strong>房屋产权</strong></div>
+                                <div @click="selectProduct('100548', '交通')" :class="{'active': dd_product.selectText == '交通'}" class="s6-goodsDetailsPop-object-item"><strong>交通</strong></div>
+                                <div @click="selectProduct('100550', '其他')" :class="{'active': dd_product.selectText == '其他'}" class="s6-goodsDetailsPop-object-item"><strong>其他</strong></div>                                
+                            </div>
+                            <div class="s6-goodsDetailsPop-title">
+                                企业用户
+                            </div>
+                            <div class="s6-goodsDetailsPop-list clearfix">
+                                <div @click="selectProduct('100549', '公司经营')" :class="{'active': dd_product.selectText == '公司经营'}" class="s6-goodsDetailsPop-object-item"><strong>公司经营</strong></div>
+                             
+                            </div>
+
+                            <div class="s6-goodsDetailsPop-action">
+                                <a @click="confirmAddDd()" href="javascript:;" class="s-btn s-btn_4"><strong>确定</strong></a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--壹钱包-->
+                <div id="JS_product_yqb" class="weui-popup__container popup-bottom">
+                    <div class="weui-popup__overlay s6-popup__overlay"></div>
+                    <div class="weui-popup__modal">
+                        <div class="s6-goodsDetailsPop-head">
+                            请选择咨询场景
+                            <a @click.stop="APP.sendHm({action: 'click', object: 'DD_chooseSKU_close', chinese_object: '关闭按钮', chinese_url: '产品详情页'});$.closePopup()" class="s6-goodsDetailsPop-close" href="javascript:;"></a>
+                        </div>
+                        <div class="s6-goodsDetailsPop-content s7-goodsDetailsPop-content">
+                            <div class="s6-goodsDetailsPop-product clearfix">
+                                <div class="item-cover">
+                                    <img :src="src_url+ dd_product.icon">
+                                </div>
+                                <div class="item-content">
+                                    <div class="item-content-d1">{{ goods_info.name }}</div>
+                                    <div class="item-content-d2">优惠价：<span>￥{{ goods_info.channel_specification_price ? goods_info.channel_specification_price : '' }}{{ goods_info.channel_specification_unit ? goods_info.channel_specification_unit : '' }}</span></div>
+                                </div>
+                            </div>
+
+                            <div class="s6-goodsDetailsPop-list s7-goodsDetailsPop-list clearfix">
+                                <div @click="selectProduct('100557', '财富')" :class="{'active': dd_product.selectText == '财富'}" class="s6-goodsDetailsPop-object-item"><strong>财富</strong></div>
+                                <div @click="selectProduct('100558', '婚姻')" :class="{'active': dd_product.selectText == '婚姻'}" class="s6-goodsDetailsPop-object-item"><strong>婚姻</strong></div>
+                                <div @click="selectProduct('100559', '房产')" :class="{'active': dd_product.selectText == '房产'}" class="s6-goodsDetailsPop-object-item"><strong>房产</strong></div>
+                                <div @click="selectProduct('100560', '劳务')" :class="{'active': dd_product.selectText == '劳务'}" class="s6-goodsDetailsPop-object-item"><strong>劳务</strong></div>
+                                <div @click="selectProduct('100561', '合同')" :class="{'active': dd_product.selectText == '合同'}" class="s6-goodsDetailsPop-object-item"><strong>合同</strong></div>
+                                <div @click="selectProduct('100562', '刑事')" :class="{'active': dd_product.selectText == '刑事'}" class="s6-goodsDetailsPop-object-item"><strong>刑事</strong></div> 
+                                <div @click="selectProduct('100563', '侵权')" :class="{'active': dd_product.selectText == '侵权'}" class="s6-goodsDetailsPop-object-item"><strong>侵权</strong></div>
+                                <div @click="selectProduct('100564', '行政')" :class="{'active': dd_product.selectText == '行政'}" class="s6-goodsDetailsPop-object-item"><strong>行政</strong></div>
+                                <div @click="selectProduct('100565', '其他')" :class="{'active': dd_product.selectText == '其他'}" class="s6-goodsDetailsPop-object-item"><strong>其他</strong></div>                               
+                            </div>
+
+
+                            <div class="s7-goodsDetailsPop-action">
+                                <a @click="confirmAddDd()" href="javascript:;" class="s-btn s-btn_4"><strong>确定</strong></a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                
+            </div>
+            <!--其它-->
+            <div v-else>
+
+                <div @click="APP.showActionKf('goodsDetails_top')" class="s-goodsDetails-kf">
+                    <div class="clearfix">
+                        <div class="s-goodsDetails-kf-img">
+                            <img src="/Public/Home/member/img/m49.png">
+                        </div> 
+                        <div class="s-goodsDetails-kf-box clearfix">
+                            <div class="s-goodsDetails-kf-text">
+                                <p class="p1"><strong>客服</strong></p> 
+                                <p class="p2">专业定制解决方案，及时解决问题</p>
+                            </div> 
+                            <div class="s-goodsDetails-kf-btn">立即咨询</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="s-goodsDetails-info">
+                    <div class="s-goodsDetails-box">
+                        <div class="box-bd">
+                            <div class="s-goodsDetails-name clearfix">
+                                <img src="/Public/Home/member/img/m50.png">
+                                <div class="name-d1">
+                                    <p class="name-p1"><strong v-text="goods_info.name"></strong></p>
+                                    <p class="name-p2" v-text="goods.introduce"></p>
+                                </div>
+                            </div>
+                            <div class="s-goodsDetails-price">
+                                <div class="s-goodsDetails-price-item clearfix">
+                                    <span class="price-w1">产品规格</span>
+                                    <div class="price-t1 clearfix">
+                                        <a @click="nextGoods(list.id)" v-for="list in goods.re_product" :class="{active: goods_info.id == list.id}" class="price-t1-link" href="javascript:;">{{ list.specifications_name }}</a>
+                                    </div>
+                                </div>
+                                <div class="s-goodsDetails-price-item s-goodsDetails-price-item_t clearfix">
+                                    <span class="price-w1">传统机构价格</span>
+                                    <div class="price-t1 clearfix">
+                                        <del>￥{{ goods_info.lsprice }}{{ goods_info.ls_unit }}</del>
+                                    </div>
+                                </div>
+                                <div v-if="!user_marketing_id" class="s-goodsDetails-price-item clearfix">
+                                    <span class="price-w1">法驴价格</span>
+                                    <div v-if="sessionStorage.getItem('order_from_channel')" class="price-t1 clearfix">
+                                        <del>￥{{ goods_info.flprice }}{{ goods_info.fl_unit }}</del>
+                                    </div>
+                                    <div v-else class="price-t1 price-c1 clearfix">
+                                        <span>￥{{ goods_info.flprice }}{{ goods_info.fl_unit }}</span>
+                                    </div>
+
+                                </div>
+                                <div v-if="sessionStorage.getItem('order_from_channel')" class="s-goodsDetails-price-item clearfix">
+                                    <span class="price-w1">渠道特惠价</span>
+                                    <div class="price-t1 price-c1 clearfix">
+                                        ￥{{ goods_info.channel_specification ? goods_info.channel_specification.price : '' }}{{ goods_info.channel_specification ? goods_info.channel_specification.unit : '' }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="s-goodsDetails-title">
+                    <h2>产品详情</h2>
+                </div>
+                <div v-html="goods_info.mobile_details ? goods_info.mobile_details : goods_info.details" class="s-goodsDetails-html">
+
+                </div>
+
+                <div class="weui-tabbar s-goodsDetails-tabbar">
+                    <a @click="APP.showActionKf()" href="javascript:;" class="weui-tabbar__item s-goodsDetails-btn1">
+                        联系客服
+                    </a>
+                    <a @click="checkAdd()" href="javascript:;" class="weui-tabbar__item s-goodsDetails-btn2">立即购买</a>
+                </div>
+
+            </div>
+
+
+
+            <div @click="channelShow=false;" v-show="channelShow" class="s-pop-bg3"></div>
+            <div v-show="channelShow">
+                <a @click.stop="channelShow=false;addChannel()" href="javascript:;" class="s4-followPop-close">跳过</a>
+                <div class="s4-followPop-bd">
+                    <h2><strong>欢迎关注“法驴会员”公众号</strong></h2>
+                    <div class="s4-followPop-box">
+                        <div @click.stop="" id="JS_qrcode" class="s4-followPop-codeBd">
+                            <!--<img src="/Public/Home/member/img/25.jpg" alt="">-->
+                        </div>
+                        <p class="d1"><strong>长按图片【识别二维码】关注公众号</strong></p>
+                    </div>
+                    <p class="s4-followPop-p1"><strong>关注公众号</strong></p>
+                    <p class="s4-followPop-p2"><strong>1.为您实时推送服务进度提醒</strong></p>
+                    <p class="s4-followPop-p2"><strong>2.为您推送相关法律知识&emsp;&emsp;</strong></p>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="/Public/Home/member/js/jquery.qrcode.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/member/js/main.js?v=084"></script>
+    <script>
+        // //二维码渠道 判断授权100337
+        (function() {
+            // var _id = {
+            //     '100448': true,
+            //     '100449': true,
+            //     '100450': true,
+            //     '100451': true,
+            //     '100452': true,
+            //     '100453': true,
+            //     '100454': true,
+            //     '100455': true,
+            //     '100456': true,
+            //     '100457': true,
+            //     '100474': true,
+            //     '100475': true,
+            //     '100476': true,
+            //     '100481': true
+            // }
+            var _url = window.location.href;
+            //&& _id[APP.getParam("id")]
+            //非渠道
+            if (!APP.getOrderChannel()) {
+                APP.send("/PC/Wx/getOpenid.json?source=1", function(res) {
+                    if (res.errno != '0') {
+                        window.location.href = ajax_url+'/PC/Wx/authorizedForFaLv.json?type=snsapi_userinfo&url='+encodeURIComponent(_url);
+                    } else {
+                        APP.authorization = true;
+                    }
+                });
+            }
+        })()
+        
+    </script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+                user_marketing_id: '',
+                goods: {},
+                goods_info: {},
+
+                channelShow: false,
+                channelBind: false,
+
+                wxQrcode: {
+                    bind: false,
+                    url: '',
+                    ticket: '',
+                    state: true
+                    
+                },
+
+                dd_product: {
+                    details: '',
+                    icon: "/Public/Home/member/img/m117.png",
+                    select: '',
+                    selectText: ''
+                }
+            },
+            created: function() {
+                var _this = this;
+                //短信营销特链
+                var _user_marketing_id = APP.getParam("user_marketing_id") ? APP.getParam("user_marketing_id") : '';
+                _this.user_marketing_id = _user_marketing_id;
+
+                APP.getInfo(this, function(res) {
+                    // if (sessionStorage.getItem("goods_from")) {
+                    //     var _id = sessionStorage.getItem("goods_from")
+                    //     sessionStorage.removeItem("goods_from");
+                    //     APP.WXLogin(_this, '/Member/orderAdd.html?id=' + _id + '&user_marketing_id=' + _user_marketing_id)
+                    // } else {
+                    //     _this.page.show = 'home';
+                    // }
+
+                    _this.page.show = 'home';
+                });
+                
+                
+
+                this.getChannelWx();
+                this.details();
+                
+   
+                APP.sendMessageHm();
+            },
+            mounted: function() {
+                if (APP.getOrderChannel() == "11") {
+                     $.smartScroll($("#JS_product"), '.s6-goodsDetailsPop-content');
+                } else if (APP.getOrderChannel() == "12") {
+                     $.smartScroll($("#JS_product_yqb"), '.s6-goodsDetailsPop-content');
+                }
+
+                
+            },
+            methods: {
+                selectProduct: function(para, paraText) {
+                    // if (this.dd_product.select == para) {
+                    //     return;
+                    // }
+                    this.dd_product.select = para;
+                    this.dd_product.selectText = paraText;
+
+                    var _text = paraText;
+                    var hm_para = {
+                        "婚姻家事": {
+                            text: "choose_marrige",
+                            textChinese: "选择婚姻家事"
+                        },
+                        "劳动纠纷": {
+                            text: "choose_labor",
+                            textChinese: "选择劳务纠纷"
+                        },
+                        "消费者权益": {
+                            text: "choose_infringement",
+                            textChinese: "选择消费者权益"
+                        },
+                        "房屋产权": {
+                            text: "choose_house",
+                            textChinese: "选择房屋产权"
+                        },
+                        "交通": {
+                            text: "choose_traffic",
+                            textChinese: "选择交通"
+                        },
+                        "其他": {
+                            text: "choose_other",
+                            textChinese: "选择其他"
+                        },
+                        "公司经营": {
+                            text: "choose_company",
+                            textChinese: "选择公司经营"
+                        },
+                    };
+
+                    var hm_para_yqb = {
+                        "婚姻": {
+                            text: "choose_marrige",
+                            textChinese: "选择婚姻"
+                        },
+                        "劳务": {
+                            text: "choose_labor",
+                            textChinese: "选择劳务"
+                        },
+                        "财富": {
+                            text: "choose_money",
+                            textChinese: "选择财富"
+                        },
+                        "房产": {
+                            text: "choose_house",
+                            textChinese: "选择房产"
+                        },
+                        "刑事": {
+                            text: "choose_criminal",
+                            textChinese: "选择刑事"
+                        },
+                        "其他": {
+                            text: "choose_other",
+                            textChinese: "选择其他"
+                        },
+                        "侵权": {
+                            text: "choose_infringement",
+                            textChinese: "选择侵权"
+                        },
+                        "行政": {
+                            text: "choose_administrative",
+                            textChinese: "选择行政"
+                        },
+                        "合同": {
+                            text: "choose_contract",
+                            textChinese: "选择合同"
+                        }
+                    }
+
+
+
+                    var _this = this;
+                    var _json = {
+                        id: para
+                    }
+                    
+                    if (APP.getOrderChannel()) {
+                        _json['channel'] = APP.getOrderChannel()
+                    }
+
+                    APP.send('/PC/Product/info.json', _json, function(res) {
+                        //console.log(res.data.channel_specification.price);
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            if (_data.channel_specification) {
+
+                                // _this.goods_info.flprice = _data.flprice;
+                                // _this.goods_info.fl_unit = _data.fl_unit;
+                                // _this.goods_info.lsprice = _data.lsprice;
+                                // _this.goods_info.ls_unit = _data.ls_unit;
+                                
+                                // _this.goods_info.channel_specification.price = _data.channel_specification.price;
+                                // _this.goods_info.channel_specification.unit = _data.channel_specification.unit;
+                                _this.goods_info.channel_specification_price = _data.channel_specification.price;
+                                _this.goods_info.channel_specification_unit = _data.channel_specification.unit;
+
+
+                            }
+                            _this.goods_info.mobile_details = _data.mobile_details;
+                            _this.dd_product.icon = _data.icon;
+                        }
+                    });
+
+                    if (APP.getOrderChannel() == "11") {
+                        APP.sendHm({action: 'click', object: hm_para[_text]["text"], chinese_object: hm_para[_text]["textChinese"], chinese_url: '产品详情页'})
+                    } else if (APP.getOrderChannel() == "12") {
+                        APP.sendHm({action: 'click', object: hm_para_yqb[_text]["text"], chinese_object: hm_para_yqb[_text]["textChinese"], chinese_url: '产品详情页'})
+                    }
+                    
+                },
+                confirmAddDd: function() {
+                    var _id = this.dd_product.select;
+                    if (!_id) {
+                        $.toast("请选择咨询场景", "text");
+                        return;
+                    }
+
+                    APP.sendHm({action: 'click', object: "DD_chooseSKU_sure", chinese_object: "确定按钮", chinese_url: '产品详情页'}, function(){
+                        $("#JS_product").removeClass("weui-popup__container--visible").hide();
+                        window.location.href = "/Member/orderAddChannel.html?id="+_id;
+                    })
+           
+                },
+                checkAddDd: function() {
+                    //
+                    var _id = APP.getParam("id");
+                    if (_id == "ddzx") {
+                        $('#JS_product').popup();
+                    } else if (_id == "yqbzx") {
+                       $('#JS_product_yqb').popup();
+                    } else {
+                        window.location.href = "/Member/orderAddChannel.html?id="+_id;
+                    }
+                },
+                getWxQrcode: function(name, money, callback) {
+                    //获取动态关注二维码
+                    var _this = this;
+                    var _callback = callback ? callback : function(){};
+                    var _v = ajax_url+"/Member/orderAddChannel.html?id="+APP.getParam("id");
+                    //Date.parse(new Date())
+                    var _json = {
+                        v: _v,
+                        product: name,
+                        money: money
+                    }
+                    //vc='+Date.parse(new Date())
+                    APP.send('/PC/Wx/checkQrecode.json', _json, function(res) {
+                        //console.log(res);
+                        //alert(res.errno)
+                        if (res.errno == '0') {
+                            _this.wxQrcode.url = res.data.url;
+                            _this.wxQrcode.ticket = res.data.ticket;
+                        
+                            $('#JS_qrcode').html("").qrcode({
+                                render: "canvas",
+                                width: 140,
+                                height: 140,
+                                text: res.data.url
+                            });
+                            var image = new Image();  
+                            // canvas.toDataURL 返回的是一串Base64编码的URL
+                            // 指定格式 PNG  
+                            image.src = $('#JS_qrcode').find("canvas")[0].toDataURL("image/png");  
+                            $('#JS_qrcode').html(image);
+
+                            _callback(res);
+                        }
+                       
+                    });
+                },
+                details: function() {
+                    var _this = this;
+                    var _id = APP.getParam("id");
+
+                    var _json = {
+                        id: _id
+                    }
+                    if (_id == "ddzx") {
+                        _json["id"] = "100550"
+                    }
+                    if (_id == "yqbzx") {
+                        _json["id"] = "100565"
+                    }
+
+
+                   if (APP.getOrderChannel()) {
+                        _json['channel'] = APP.getOrderChannel()
+                    }
+                    APP.send('/PC/Product/info.json', _json, function(res) {
+                        //console.log(res);
+                        if (res.errno == '0') {
+                            _this.goods = res.data;
+
+                            if (_id == "ddzx") {
+                                
+                                res.data.name = "不限时电话咨询丨远程法律维权管家";
+                                res.data.introduce = "精准匹配相关律师，跨地域获取畅聊服务。";
+                                _this.goods_info = res.data;
+                            } else if (_id == "yqbzx") {
+                                 res.data.name = "不限时法律电话咨询";
+                                 res.data.introduce = "";
+                                _this.goods_info = res.data;
+                                
+                            } else {
+                                _this.goods.re_product.push(_this.goods);
+                                _this.setSelectGoods();
+                                _this.getWxQrcode(res.data.name.replace(/\-/g, "—"), res.data.flprice);
+                            }
+                            console.log(res.data.channel_specification)
+                            _this.goods_info['channel_specification_price'] = res.data.channel_specification ? res.data.channel_specification.price : '';
+                            _this.goods_info['channel_specification_unit'] = res.data.channel_specification ? res.data.channel_specification.unit : '';
+                            
+                            APP.sendHm({action: "visits", chinese_url: "产品详情页", parameter: res.data.name});                          
+                        }
+                    });
+                },
+                nextGoods: function(id) {
+                    var _user_marketing_id = APP.getParam("user_marketing_id") ? APP.getParam("user_marketing_id") : '';
+                    if (id != this.goods_info.id) {
+                        if (_user_marketing_id) {
+                            window.location.href = '/Member/goodsDetails.html?id=' + this.goods.id + '&cid=' + id + '&user_marketing_id='+_user_marketing_id;
+                        } else {
+                            window.location.href = '/Member/goodsDetails.html?id=' + this.goods.id + '&cid=' + id;
+                        }
+                    }
+                },
+                setSelectGoods: function() {
+                    var _cid = "";
+                    var _this = this;
+                    var _re_product = _this.goods.re_product;
+                    if (_re_product.length>0) {
+                        _cid = APP.getParam("cid") ? APP.getParam("cid") : APP.getParam("id");
+                    } else {
+                        _cid =  _this.goods.id;
+                    }
+
+                    for (var i=0, len=_re_product.length; i<len; i++) {
+                        if (_cid == _re_product[i].id) {
+                            _this.goods_info = _re_product[i];
+                            _this.goods_info.flprice =  parseFloat(_this.goods_info.flprice).toFixed(2);
+                            return;
+                        }
+                    }
+                    _this.goods_info = _this.goods;
+                    _this.goods_info.flprice =  _this.goods_info.flprice.toFixed(2);
+                    
+                },
+                getChannelWx: function() {
+                    //获取是否关注公众号
+                    var _this = this;
+                    APP.send('/PC/Wx/getOpenid.json?source=1', function(res) {
+                        //alert(JSON.stringify(res2.data))
+                        if (res.errno == '0') {
+                            if (res.data) {
+                                APP.send('/PC/Wx/checkWXOpenId.json?openid='+res.data.openid, function(res2) {
+                                    //console.log(res);
+                                    //alert(JSON.stringify(res2))
+                                    // if (res.data.user_id == '27351') {
+                                    //     _this.goods_info.mobile_details = JSON.stringify(res) +' '+JSON.stringify(res2);
+                                    // }
+
+                                    if (res2.errno == '0') {
+                                        _this.channelBind = true;
+                                    }
+                                });
+                            }
+                        }
+                    })
+
+                },
+                checkAdd: function() {
+                    var _this = this;
+                    APP.sendHm({
+                        action: "click", 
+                        object: "product-buy",
+                        chinese_object: "立即购买"
+                    });
+                    
+                    //alert(sessionStorage.getItem("order_from_channel"))
+                    if (this.checkChannelMode()) {
+                        
+                        if (!this.channelBind) {
+                            this.channelShow = true;
+                            //return;
+                            // setTimeout(function() {
+                            //     if (_this.channelShow) {
+                            //         _this.addChannel();
+                            //     }
+                            // }, 5000)
+                        } else {
+                            
+                            this.addChannel();
+                        }
+                    } else {
+                        this.add();
+                    }
+  
+                    
+                },
+                checkChannelMode: function() {
+                    //100337
+                    var _id = {
+                        '100448': true,
+                        '100449': true,
+                        '100450': true,
+                        '100451': true,
+                        '100452': true,
+                        '100453': true,
+                        '100454': true,
+                        '100455': true,
+                        '100456': true,
+                        '100457': true,
+                        '100474': true,
+                        '100475': true,
+                        '100476': true,
+                        '100481': true
+                    }
+                    //&& _id[this.goods_info.id]
+                    if (!APP.getOrderChannel()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                },
+                addChannel: function() {
+                    var _user_marketing_id = APP.getParam("user_marketing_id") ? APP.getParam("user_marketing_id") : '';
+                    if (_user_marketing_id) {
+                        window.location.href = '/Member/orderAddChannel.html?id=' + this.goods_info.id + '&user_marketing_id='+_user_marketing_id;
+                    } else {
+                        window.location.href = '/Member/orderAddChannel.html?id=' + this.goods_info.id;
+                    }
+  
+                },
+                add: function() {
+                    var _this = this;
+                    //var _loca_url = window.location.href + '&from=true';
+                    var _user_marketing_id = APP.getParam("user_marketing_id") ? APP.getParam("user_marketing_id") : '';
+                    if (_user_marketing_id) {
+                        window.location.href = '/Member/orderAdd.html?id=' + _this.goods_info.id + '&user_marketing_id='+_user_marketing_id;
+                    } else {
+                        window.location.href = '/Member/orderAdd.html?id=' + _this.goods_info.id;
+                    }
+                    
+
+                    // if (_this.info_login) {
+                    //     window.location.href = '/Member/orderAdd.html?id=' + _this.goods_info.id + '&user_marketing_id='+_user_marketing_id;
+                    // } else {
+
+                    //     sessionStorage.setItem("goods_from", _this.goods_info.id);
+                    //     APP.init(function() {
+                    //        window.location.href = window.location.pathname + window.location.search+ '&from=true';
+                    //     }, _loca_url);
+                    // }
+
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>消息列表</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=28">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <div v-show="page.show == 'home'">
+            <div class="m-message-head clearfix">
+                <span>共{{ message.total_sum }}条消息</span>
+                <a @click="setRead()" class="link1" href="javascript:;">全部已读</a>
+            </div>
+            <div class="m-message-content">
+                <div>
+
+                
+                <a @click="next(index, list.type)" v-for="(list, index) in message.data" href="javascript:;" class="m-message-item clearfix">
+                    <div class="item-icon">
+                        <img :src="message.icon[list.type]">
+                        <div v-if="list.status=='0'" class="item-icon-new"></div>
+                    </div>
+                    <div class="item-box">
+                        <div class="item-box-bd">
+                            <div class="item-box-d1">{{ list.title }}<span class="item-box-time">{{ APP.resetTime(list.updated_at, 'zh') }}</span></div>
+                            <div class="item-box-d2">{{ list.content }}<span v-if="list.type=='1'"> 查看更多>></span></div>
+                        </div>
+                    </div>
+                </a>
+                </div>
+                <div v-show="message.loadingEnd==2" class="s-index-blank">
+                    <span>正在加载更多数据</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+
+                },
+
+
+                message: {
+                    icon: {
+                        '0': '/Public/Home/topic/img/list_icon_tongzhi_default@2x.png',
+                        '1': '/Public/Home/topic/img/list_icon_dingdan_default@2x.png'
+                    },
+                    loading: true,
+                    loadingEnd: 0, //1准备 2 加载中 3 加载完 4error
+                    loadingMoreState: false,
+                    page: 1,
+                    data: [],
+                    total_sum: 0,
+                    read_stauts: true
+                }
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                   if (res.errno == '0') {
+                        _this.page.show = 'home';
+                    }
+                });
+                _this.getList(_this.message.page);
+            },
+            mounted: function() {
+            
+            },
+            methods: {
+                setRead: function() {
+                    var _this = this;
+                    if (!_this.message.read_stauts) {
+                        return;
+                    }
+                    var _json = {
+                        id: ''
+                    }
+                    
+                    _this.message.read_stauts = false;
+                    var _mdata = _this.message.data;
+                    APP.send('/PC/WxUser/editMessageStatus.json', _json, function(res) {
+                        _this.message.read_stauts = true;
+                        if (res.errno == '0') {
+                            $.toast("操作成功", "text");
+                            for(var i=0, len=_mdata.length; i<len; i++) {
+                                _this.message.data[i]['status'] = '1';
+                            }
+                        } else {
+                            $.toast(res.msg, "text");
+                        }
+                    });
+                },
+                getList: function(page, callback) {
+                    var _this = this;
+                    var _api;
+                    var _callback = callback ? callback : function(){};
+                    var _json = {
+                        page: page, //页
+                    }
+                    _this.message.loadingEnd = 2;
+
+                    APP.send("/PC/WxUser/message.json", _json, function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            var _data = res.data.list;
+                            _this.message.total_sum = res.data.total;
+                            //第一页且总页数大于1 初始化滚动加载
+                            if (_data && _data.length>0 && _this.message.page == 1) {
+                                _this.initPage(page);
+                            }
+
+                            //保存数据
+                            _this.message.data = _this.message.data.concat(_data);
+                            
+                            //判断是否加载完所有页数
+                            if (_data && _data.length > 0) {
+                                _this.message.loading = false;
+                                _this.message.loadingEnd = 1;
+                            } else {
+                                _this.message.loading = true;
+                                _this.message.loadingEnd = 3;
+                            }
+                            
+                        } else {
+                            _this.message.page--;
+                            _this.message.loading = false;
+                            _this.message.loadingEnd = 4;
+                        }
+
+                        _callback();
+                    });
+
+                },
+                initPage: function(page) {
+                    var _this = this;
+                    setTimeout(function() {
+                        // var _loading = false;
+                        var _h = $(document).height() - $(window).height();
+                        $(document).scroll(function() {
+                            if (_h <= 0) {_h = $(document).height() - $(window).height()};
+                            if (_h - $(this).scrollTop() <= 50) {
+                                if (_this.message.loading) return;
+                                _this.message.loading = true;
+                                if (_this.message.loadingEnd  == 3) {
+                                    //console.log("end");
+                                    _this.message.loading = true;
+                                    return;
+                                }
+                                _this.message.page++;
+                                _this.message.loadingEnd = 2;
+                                //console.log(_this.message.page)
+                                _this.getList(_this.message.page);
+                            }
+                        })
+                       
+                    }, 100)
+                },
+                next: function(index, type) {
+                    var _this = this;
+                    var _id = _this.message.data[index]['id'];
+                    var _state = _this.message.data[index]['status'];
+                    if (type == '0') {
+                        if (_state == '0') {
+                            APP.send('/PC/WxUser/messageInfo.json?id='+_id, function(res) {
+                                if (res.errno == '0') {
+                                    _this.message.data[index]['status'] = '1'
+                                }
+                            });
+                        }
+                    } else {
+                        var _oid = _this.message.data[index]['extra_data'];
+                        if (_state == '0') {
+                            APP.send('/PC/WxUser/messageInfo.json?id='+_id, function(res) {
+                                if (res.errno == '0') {
+                                    window.location.href = "/Member/orderDetails.html?oid="+_oid;
+                                }
+                            });
+                        } else {
+                            window.location.href = "/Member/orderDetails.html?oid="+_oid;
+                        }
+                    }
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

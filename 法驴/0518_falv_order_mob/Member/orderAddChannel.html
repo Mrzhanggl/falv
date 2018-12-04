@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=58">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+
+        <div v-show="page.show=='home'" class="main-page main-page_b">
+            <div class="s4-orderAddChannel-bd">
+                <div class="s4-orderAddChannel-info s4-orderAddChannel-bt clearfix">
+                    <div class="s4-orderAddChannel-info-cover">
+                        <img :src="service.cover_img" alt="">
+                    </div>
+                    <div class="s4-orderAddChannel-info-content">
+                        <div class="d1">{{ goods.name }}</div>
+                        <!--<div class="d2">
+                            优惠价：<span>￥</span>{{ goods.flprice }}{{ goods.fl_unit }}
+                        </div>-->
+                    </div>
+                </div>
+                <div class="s4-orderAddChannel-item s4-orderAddChannel-item2">
+                    <div class="s4-orderAddChannel-bt clearfix">   
+
+                        
+                        <div class="item-w1"><span class="colf12">* </span>姓名</div>
+                        <div class="item-w2">
+                            <input v-model="no_login_form.customer_name_input" type="text" oninput="if(value.length>10)value=value.slice(0,10)" autocomplete="off" placeholder="请输入您的姓名">
+                            <!--v-model="no_login_form.customer_name" <span v-else class="item-login-text">{{ no_login_form.customer_name }}</span>-->
+
+                        </div>
+
+                        <div class="item-sex">
+                            <span @click="no_login_form.sex =  '0'" :class="{'active': no_login_form.sex == '0'}" class="item-sex-radio">先生</span>
+                            <span @click="no_login_form.sex = '1'" :class="{'active': no_login_form.sex == '1'}" class="item-sex-radio">女士</span>
+                        </div>
+
+                    </div>
+                    
+                </div>
+                <div class="s4-orderAddChannel-item s4-orderAddChannel-bt clearfix">
+                    <div class="item-w1"><span class="colf12">* </span>手机</div>
+                    <div :class="{'unactive': info_login}" class="item-w2">
+                        <input v-show="!info_login" v-model="no_login_form.phone" type="tel" oninput="if(value.length>11)value=value.slice(0,11)" autocomplete="off" placeholder="请输入11位完整手机号">
+                        <span v-show="info_login" class="item-login-text">{{ no_login_form.phone }}</span>
+                    </div>
+                </div>
+                <div v-show="!info_login" class="s4-orderAddChannel-item s4-orderAddChannel-bt clearfix">
+                    <div class="item-w1"><span class="colf12">* </span>验证码</div>
+                    <div class="item-w2 item-code">
+                        <input v-model="no_login_form.code" type="text" autocomplete="off" placeholder="请输入短信验证码">
+                        <a @click="loginCountDown()" class="item-codeBtn" href="javascript:;">{{ no_login_form.time }}</a>
+                    </div>
+                </div>
+                <a @click="$('#time').popup();" href="javascript:;" class="s4-orderAddChannel-item s4-orderAddChannel-bt clearfix">
+                    <div class="item-w3">
+                        <p class="item-w3-d1"><span class="item-w1-hidden colf12">* </span>{{ APP.getParam('id') == '100566'|| APP.getParam('id') == '100573' ? '回访时间' : '服务时间' }}</p>
+
+                        <p class="item-w3-d2"><span class="item-w1-hidden colf12">* </span>{{ APP.getParam('id') == '100566' || APP.getParam('id') == '100573' ? '请留意接听回访电话' : '请留意接听客服来电' }}</p>
+                    </div>
+                    <div class="item-w4">
+                        <div class="item-w4-table">
+                            <span class="item-w4-text">{{ service.select_time }}</span>
+                        </div>
+                        
+                    </div>
+                </a>
+                <div class="s4-orderAddChannel-item s4-orderAddChannel-bt clearfix">
+                    <div class="item-w1"><span class="item-w1-hidden colf12">* </span>买家留言</div>
+                    <div class="item-w2">
+                        <input v-model="no_login_form.remarks" type="text" placeholder="请输入买家留言">
+                    </div>
+                </div>
+            </div>
+
+            <!--钉钉-->
+            <div v-if="APP.getOrderChannel() == '11'" class="weui-tabbar s-orderAdd-tabbar s6-orderAdd-tabbar">
+                <a href="javascript:;" class="weui-tabbar__item s-orderAdd-btn1">
+                    <span v-show="dd_coupon.loading"><strong>¥{{ dd_coupon.state ? dd_coupon.price : goods.flprice }}</strong></span><span v-if="dd_coupon.state" class="discount-price"> | 已优惠{{ dd_coupon.coupon_price }}元 </span>
+                </a>
+                <a @click="add()" href="javascript:;" class="weui-tabbar__item s-orderAdd-btn2">去付款</a>
+            </div>
+            <!--安居客-->
+            <div v-else-if="APP.getOrderChannel() == '14'" class="weui-tabbar s-orderAdd-tabbar s6-orderAdd-tabbar">
+                <a href="javascript:;" class="weui-tabbar__item s-orderAdd-btn1">
+                    <span><strong>¥{{ goods.channel_specification.price }}</strong></span>
+                </a>
+                <a @click="add()" href="javascript:;" class="weui-tabbar__item s-orderAdd-btn2">去付款</a>
+            </div>
+
+            <!--壹钱包-->
+            <div v-else-if="APP.getOrderChannel() == '12'||APP.getOrderChannel() == '13'" class="weui-tabbar s-orderAdd-tabbar s6-orderAdd-tabbar">
+                <!--<a href="javascript:;" class="weui-tabbar__item s-orderAdd-btn1">
+                    <strong>¥{{ goods.flprice }}</strong>
+                </a>-->
+                <a @click="nextYQB()" href="javascript:;" class="weui-tabbar__item s-orderAdd-btn2">去兑换</a>
+            </div>
+
+            <div v-else class="weui-tabbar s-orderAdd-tabbar s4-orderAdd-tabbar">
+                <a href="javascript:;" class="weui-tabbar__item s-orderAdd-btn1">
+                    应付总额：<span>¥{{ goods.flprice }}</span>
+                </a>
+                <a @click="add()" href="javascript:;" class="weui-tabbar__item s-orderAdd-btn2">去付款</a>
+            </div>
+
+
+            <div id="time" class="weui-popup__container popup-bottom" >
+                <div @click.stop="$.closePopup()" class="weui-popup__overlay"></div>
+                <div class="weui-popup__modal s4-timePop__modal">
+                    <div class="s4-timePop-head">
+                        请选择服务时间
+                        <a @click.stop="$.closePopup()" class="s4-timePop-close" href="javascript:;"></a>
+                    </div>
+                    <div class="clearfix">
+                        <div class="s4-timePop-dayBd">
+                            <a  @click="selectServiceDay(index)" v-for="(list, index) in service.date" :class="{'active': list.state }" class="dayBd-item" href="javascript:;">{{ list.text }}</a>
+                        </div>
+                        <div class="s4-timePop-hourBox">
+                            <div id="JS_time_hour" class="s4-timePop-hourBd" style="-webkit-overflow-scrolling: touch;">
+                                <div v-show="service.index == index" v-for="(list, index) in service.date">
+
+                                    <a @click="selectServiceTime(list2.date, list2.result, list2.start)" :class="{'unactive': list2.result == 0, 'active': service.select_time == list2.select_time }" v-for="(list2, index2) in list.time" class="hourBd-item" href="javascript:;">
+                                        <span class="w3">{{ list2.date }}</span><span class="w2">{{ list2.result_text }}</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div v-show="page.show=='yqb'"  class="main-page">
+            <div class="s7-orderAddCoupon-bd">
+                <div class="s7-orderAddCoupon-input">
+                    <input @click="mhInputYQB()" v-model="yqb_coupon.code" type="text">
+                    <a @click="addYQB()" href="javascript:;" class="input-btn"><strong>确定</strong></a>
+                </div>
+                <div class="s7-orderAddCoupon-tips">
+                    <p class="p1">兑换须知</p>
+                    <p class="p2">1.单笔订单只能使用1张兑换券，不支持同时使用多张；</p>
+                    <p class="p2">2.兑换券有效期至2019年3月31日，未使用的兑换券过期后，将自动作废；</p>
+                    <p class="p2">3.兑换券严禁出售或转让，如经发现并证实的，该券将予以失效处理；</p>
+                    <p class="p2">4. 如需了解更多，请联系热线电话400-0183-693。</p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/member/js/main.js?v=080"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+
+                user_marketing_id: '',
+                goods: {},
+
+                service: {
+                    // '1': '/Public/Home/member/img/m114.png',
+                    // '1': '/Public/Home/member/img/m115.png',
+                    // '1': '/Public/Home/member/img/m116.png',
+                    // '1': '/Public/Home/member/img/m117.png',
+                    cover_img: '/Public/Home/member/img/m117.png',
+                    max: 0,
+                    maxLength: 4,
+                    index: 0,
+                    select_day: '',     //日期
+                    select_time: '',    //日期+时间段
+                    date: []
+                },
+
+                no_login_form: {
+                    customer_name_input: '',
+                    customer_name: '',
+                    phone: '',
+                    code: '',
+                    sex: '',   //0是男，1是女
+                    remarks: '',
+                    time: '获取验证码',
+                    code_state: true
+                },
+
+                dd_coupon: {
+                    loading: false,
+                    state: false,
+                    info: '',
+                    price: '',          //优惠后价格
+                    coupon_price: '',   //优惠面额
+                },
+
+                yqb_coupon: {
+                    code: "",
+                }
+
+            },
+            created: function() {
+                var _this = this;
+                this.user_marketing_id = APP.getParam("user_marketing_id") ? APP.getParam("user_marketing_id") : '';
+
+                // APP.send('/PC/NEWOrder/getNewOrderByName.json', function(res) {
+                //     if (res.errno == '0') {
+                //         _this.no_login_form.customer_name = res.data.by_user.customer_name ? res.data.by_user.customer_name : '';
+                //     }
+                // });
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0') {
+                        // _this.no_login_form.customer_name = res.data.wechat_nickname;
+                        _this.no_login_form.phone = res.data.username;
+                        // _this.no_login_form.customer_name = res.data.corporate;
+                        _this.no_login_form.customer_name = res.data.name;
+
+
+                        _this.no_login_form.sex = res.data.crm_sex;
+                    } else {
+                        _this.no_login_form.sex = "0";
+                    }
+                });
+
+                if (APP.getParam("type") == "yqb") {
+                    $("body").addClass("bgf0f0f0")
+                    this.page.show = "yqb";
+                    document.title = "输入兑换码";
+
+                    APP.sendHm({action: "visits", chinese_url: "输入兑换码页面"});
+                } else {
+                    document.title = "请核对订单";
+                    this.initDay();
+                    this.details();
+
+                    APP.sendHm({
+                        action: "visits", 
+                        chinese_url: "核对订单页",
+                        parameter: APP.getParam("oid")
+                    });
+                }
+
+                //钉钉渠道
+                if (APP.getOrderChannel() == "11") {
+                    this.checkCoupon();
+                }
+
+                
+            },
+            mounted: function() {
+                $.smartScroll($("#time"), '.s4-timePop-hourBd');
+            },
+            watch: {
+                
+            },
+            methods: {
+                checkCoupon: function() {
+                    //钉钉11 获取是否有该产品优惠卷
+                    var _this = this;
+                    var _id = APP.getParam("id");
+                    APP.send('/PC/NEWOrder/getTheCouponsAvailableForTheProduct.json?product_id=' + _id, function(res) {
+                        //console.log(res);
+                        if (res.errno == '0') {
+                            _this.dd_coupon.info = res.data;
+                            _this.getCouponPrice(res.data.code, res.data.code_id);
+                            
+                        } else {
+                            _this.dd_coupon.state = false;
+                            _this.dd_coupon.loading = true;
+                        }
+                    });
+                },
+                getCouponPrice: function(code, code_id) {
+                    //钉钉11 获取优惠后价格
+                    var _this = this;
+                    var _json = {
+                        product_id: APP.getParam("id"),
+                        discount_code: code,
+                        channel: '11'
+                    }
+                    APP.send('/PC/NEWOrder/checkDiscountCode.json', _json, function(res) {
+                        //console.log(res);
+                        if (res.errno == '0') {
+                            _this.dd_coupon.price = res.data;
+                            _this.dd_coupon.state = true;
+
+                            if (code_id && code_id.split("DDJC").length > 1) {
+                                _this.dd_coupon.coupon_price = 15;
+                            } else if (code_id && code_id.split("DDJC").length <= 1) {
+                                _this.dd_coupon.coupon_price = 100;
+                            }
+                        } else {
+                            _this.dd_coupon.state = false;
+                        }
+                        _this.dd_coupon.loading = true;
+                    });
+                },
+                initDay: function() {
+                    //预约时间段
+
+                    var week_text = {
+                        '0': '周日',
+                        '1': '周一',
+                        '2': '周二',
+                        '3': '周三',
+                        '4': '周四',
+                        '5': '周五',
+                        '6': '周六'
+                    }
+                    //返回年月日 判断是否工作日工作时间
+                    function addDate(days) {
+                        var date = new Date();
+                        var _hour = date.getHours();
+                        var _week = date.getDay();
+
+                        //  _hour = 20;
+                        //  days = days + 4;
+
+                        //非工作时间
+                        if (_week == 0 || _week == 6) {
+                            if (_hour >= 20) {
+                                days = days + 1;
+                            }
+                        } else if (_hour >= 21) {
+                            days = days + 1;
+                        }
+                        
+                        
+
+                        date.setDate(date.getDate() + days);
+                        var month = date.getMonth() + 1;
+                        var day = date.getDate();
+                        return date.getFullYear() + '-' + getFormatDate(month) + '-' + getFormatDate(day);
+                    }
+                    //小于10添加0前缀
+                    function getFormatDate(arg) {
+                        if (arg == undefined || arg == '') {
+                            return '';
+                        }
+                        var re = arg + '';
+                        if (re.length < 2) {
+                            re = '0' + re;
+                        }
+                        return re;
+                    }
+                    //返回日期月日
+                    function getMonthDay(arg) {
+                        //ios -
+                        var date = new Date(arg.replace(/\-/g, "/"));
+                        var month = date.getMonth() + 1;
+                        var day = date.getDate();
+                        return getFormatDate(month) + '-' + getFormatDate(day);
+                    }
+                    //返回星期
+                    function getWeek(arg) {
+                        //ios -
+                        var date = new Date(arg.replace(/\-/g, "/"));
+                        return week_text[date.getDay()]
+                    }
+
+                    var _t;     //日期年月日
+                    var _d = [];    //所有日期
+                    var _t_text = "";   //今天或月日
+                    var _td_text = new Date().getDate() + "";   //当天日期
+                    
+                    for (var i=0; i<5; i++) {
+                        //获取日期年月日
+                        _t = addDate(i);
+                        //为当天
+                        if (_t && _t.split("-")[2] == _td_text) {
+                            _t_text = "今天"
+                        } else {
+                            _t_text = getMonthDay(_t)
+                        }
+
+                        //默认选中第一个日期
+                        if (i == 0) {
+                            _d.push({
+                                date: _t,
+                                text: _t_text + '【'+getWeek(_t)+'】',
+                                state: true,
+                                time: []
+                            })
+                        } else {
+                            _d.push({
+                                date: _t,
+                                text: _t_text + '【'+getWeek(_t)+'】',
+                                state: false,
+                                time: []
+                            })
+                        }
+                    }
+
+
+
+                    //
+                    this.service.date = _d;
+                
+                    this.service.index = 0;
+                    this.service.select_day = this.service.date[this.service.index]['date'];
+                    //获取第一个日期预约时间段
+                    this.getDayTimes(_d[0]['date'])
+                    //console.log(_d);
+
+                },
+                getDayTimes: function(day) {
+                    //获取预约时间段
+                    var _this = this;
+                    APP.send('/PC/Public/contactServiceTime.json?date='+day, function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            //console.log( _this.service.date[_this.service.max].date);
+                            var _data = res.data.list;
+                            for (var i=0, len=_data.length; i< len; i++) {
+                                if (_data[i]['result'] == 1) {
+                                    _data[i]['result_text'] = '可预约';
+                                }
+                                if (_data[i]['result'] == 0) {
+                                    _data[i]['result_text'] = '已约满';
+                                }
+
+                                //组合日期 + 时间段 用于提交数据
+                                //_data[i]["start"] true 为尽快服务时间段 无需添加日期
+                                _data[i]['select_time'] = _data[i]["start"] ? _data[i]['date'] : day + ' ' + _data[i]['date'];
+
+
+
+
+                                //服务时间默认为用户最近一个可选日期的可选时段，如该时段已约满，自动往后推一个。
+                                // console.log(_this.service.select_time)
+                                if (!_this.service.select_time && _data[i]['result'] == 1) {
+                                    _this.service.select_time = _data[i]["start"] ? _data[i]["date"] : day + ' ' + _data[i]["date"];
+                                }
+
+                            }
+
+                            _this.service.date[_this.service.max]['time'] = _data;
+
+                            
+                            //循环获取maxLength天
+                            if (_this.service.max < _this.service.maxLength) {
+                                 _this.service.max ++ ;
+                                _this.getDayTimes(_this.service.date[_this.service.max]['date'])
+                            }
+
+                            
+                        }
+                    });
+                    
+                }, 
+                selectServiceTime: function(time, result, type) {
+                    if (result == 0) {
+                        return;
+                    }
+                    // if (this.service.select_time == time) {
+                    //     this.service.select_time = '';
+                    // } else { 
+                    //     this.service.select_time = time;
+                    // }
+                    this.service.select_time = type ? time : this.service.select_day + ' ' + time;
+                },
+                selectServiceDay: function(index) {
+                    //选中时间段
+                    if (this.service.index == index) {
+                        return;
+                    }
+                    
+                    this.service.date[this.service.index]['state'] = false;
+                    this.service.date[index]['state'] = true;
+                    this.service.index = index;
+                    this.service.select_day = this.service.date[index]['date'];
+                    $("#JS_time_hour").scrollTop(0);
+                },
+                details: function() {
+                    var _this = this;
+                    var _tab_channel = APP.getOrderChannel();
+                    var _json = {
+                        id: APP.getParam("id")
+                    }
+                    if (_tab_channel) {
+                        _json['channel'] = _tab_channel
+                    }
+                    // _json['channel'] = 11;
+                    APP.send('/PC/Product/info.json', _json, function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            _this.goods = res.data;
+
+                            _this.page.show = 'home';
+                            _this.goods.flprice =  parseFloat(_this.goods.flprice).toFixed(2);
+
+                            if (_tab_channel == "11") {
+                                _this.service.cover_img = ajax_url + res.data.icon;
+
+                                _this.goods.flprice = res.data.channel_specification.price;
+                                _this.goods.fl_unit = res.data.channel_specification.unit;
+                            }
+                            
+
+                        }
+                    });
+                },
+                add: function() {
+                    var _this = this;
+                    var _channel = APP.getOrderChannel();
+                    
+                    var _json = {
+                        product_data: [{id: _this.goods.id, count: 1}],
+                        buyer_message: _this.no_login_form.remarks,
+                        note: '',
+                        invoice_state: 0,
+                        invoice: {
+                            header_content_type: '',
+                            header_content: '',
+                            identification_number: '',
+                            name: '',
+                            telephone: '',
+                            address: '',
+                        },
+                        sex: _this.no_login_form.sex,
+                        company_name: '',
+                        customer_name: _this.no_login_form.customer_name_input,
+                        phone: _this.no_login_form.phone,
+                        select_service_time: _this.service.select_time, //预约服务时间
+                        channel: _channel, //渠道 0 邮政 1 东家会 2 环球黑卡 3腾讯
+                        order_type: 1,
+                        discount_code: '', //优惠码
+                        customer_selected_supplier_id: '', //供应商id
+
+                    }
+
+                    //性别 
+
+                    //法驴来源
+                    if (!_channel) {
+                        _json["source"] = 14;
+                    }
+                    
+                    //订单优惠卷
+                    if (_this.dd_coupon.state) {
+                        _json["discount_code"] = _this.dd_coupon.info.code;
+                    }
+
+                    
+                    //未登录提交订单
+                    if (!_this.info_login) {
+                        _this.addNologin(_json)
+                        return;
+                    }
+
+
+                    if (!_this.no_login_form.customer_name_input) {
+                        $.toast("请输入您的姓名", "text")
+                        return;
+                    }
+
+                    // console.log(_json)
+                    // return
+                    //已登录提交订单
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/create.json", _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //统计
+                            // return;
+                            window.location.href = "/Member/orderGoPay.html?oid=" + res.data;
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                
+                },
+                addNologin: function(data) {
+                    //未登录提交订单
+                    var _this = this;
+                    var data = data;
+                    //console.log(_this.no_login_form.customer_name)
+                    data.customer_name = _this.no_login_form.customer_name_input;
+                    data.phone = _this.no_login_form.phone;
+                    data.phone_code = _this.no_login_form.code;
+                    data['tiao'] = true;
+
+                    if (!data.customer_name) {
+                        $.toast("请输入您的姓名", "text")
+                        return;
+                    }
+                    if (!APP.isPhoneNo(data.phone)) {
+                        $.toast("请输入正确的手机号", "text")
+                        return;
+                    }
+                    if (!data.phone_code) {
+                        $.toast("请填写验证码", "text")
+                        return;
+                    }
+
+                    // console.log(data);
+                    // return;
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/unregisteredCreate.json", data, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //统计
+                             //return;
+                            window.location.href = "/Member/orderGoPay.html?oid=" + res.data;
+                        } else {
+                            // _this.service.max = 0;
+                            // _this.getDayTimes(_this.service.date[0]['date'])
+                            $.toast(res.msg, "text");
+                        }
+                    });
+                },
+                loginCountDown: function() {
+                    var _this = this;
+                    var _phone = _this.no_login_form.phone;
+
+                    if (!_this.no_login_form.code_state) return;
+                    if (!APP.isPhoneNo(_phone)) {
+                        $.toast('请输入正确的手机号', 'text');
+                        return;
+                    }
+                         
+                    _this.no_login_form.code_state = false;
+                    _this.loginSendCode(_phone);
+                    _this.no_login_form.time = 60;
+                    var timest = setInterval(function() {
+                        if (typeof(_this.no_login_form.time) == 'string') {
+                            clearInterval(timest)
+                            return;
+                        }
+                        _this.no_login_form.time--;
+                        if (_this.no_login_form.time == 0) {
+                            _this.no_login_form.code_state = true;
+                            _this.no_login_form.time = '重新发送';
+                            clearInterval(timest)
+                        }
+                    }, 1000)
+                },
+                loginSendCode: function(phone) {
+                    //获取短信验证码
+                    var _this = this;
+                    var _json = {
+                        phone: phone,
+                        type: 2
+                    }
+                    APP.send('/PC/UserLogin/sendShortMessage.json', _json, function(res) {
+                        //console.log(res);
+                        if (res.errno == '0') {
+                            $.toptip('发送成功！', 'success');
+                        } else {
+                            _this.no_login_form.code_state = true;
+                            _this.no_login_form.time = '重新发送';
+                            //$.toast(res.msg, "text");
+                        }
+                    });
+                },
+                nextYQB: function() {
+                    var _this = this;
+                    var _json = {
+                        buyer_message: this.no_login_form.remarks,
+                        sex: this.no_login_form.sex,
+                        customer_name: $.trim(_this.no_login_form.customer_name_input),
+                        phone: this.no_login_form.phone,
+                        select_service_time: this.service.select_time,
+                        phone_code: $.trim(_this.no_login_form.code),
+                        channel: APP.getOrderChannel(),
+                    }
+
+                    if (!_json.customer_name) {
+                        $.toast("请输入您的姓名", "text")
+                        return;
+                    }
+
+                    if (!this.info_login) {
+                        if (!APP.isPhoneNo(_json.phone)) {
+                            $.toast("请输入正确的手机号", "text")
+                            return;
+                        }
+                        if (!_json.phone_code) {
+                            $.toast("请填写验证码", "text")
+                            return;
+                        }
+
+                        $.showLoading("数据提交中");
+                        APP.send("/PC/NEWOrder/validateCode.json", {phone: _json.phone, phone_code: _json.phone_code}, function(res) {
+                            //console.log(res)
+                            $.hideLoading();
+                            if (res.errno == '0') {
+                                //统计
+                                sessionStorage.setItem("yqb_orderAdd", JSON.stringify(_json));
+                                window.location.href = "/Member/orderAddChannel.html?id=" + APP.getParam("id") + "&type=yqb";
+                            } else {
+                                $.toast(res.msg, "text")
+                            }
+                        });
+
+                    } else {
+                        sessionStorage.setItem("yqb_orderAdd", JSON.stringify(_json));
+                        window.location.href = "/Member/orderAddChannel.html?id=" + APP.getParam("id") + "&type=yqb";
+                    }
+
+                    
+                },
+                addYQB: function() {
+                    var _this = this;
+
+                    var _yqb_json = sessionStorage.getItem("yqb_orderAdd") ?  JSON.parse(sessionStorage.getItem("yqb_orderAdd")) : {};
+                    
+                    var _json = {
+                        product_data: [
+                            {
+                                id: APP.getParam("id"), 
+                                count: 1
+                            }
+                        ],
+                        buyer_message: _yqb_json.buyer_message,
+                        note: '',
+                        invoice_state: 0,
+                        invoice: {
+                            header_content_type: '',
+                            header_content: '',
+                            identification_number: '',
+                            name: '',
+                            telephone: '',
+                            address: '',
+                        },
+                        sex: _yqb_json.sex,
+                        company_name: '',
+                        customer_name: _yqb_json.customer_name,
+                        phone: _yqb_json.phone,
+                        select_service_time: _yqb_json.select_service_time, //预约服务时间
+                        channel: _yqb_json.channel, //渠道 0 邮政 1 东家会 2 环球黑卡 3腾讯
+                        order_type: 1,
+                        discount_code: _this.yqb_coupon.code, //优惠码
+                        customer_selected_supplier_id: '', //供应商id
+                    }
+
+                    if (!_json.discount_code) {
+                        $.toast("请输入兑换码", "text")
+                        return;
+                    }
+
+
+                    APP.sendHm({action: 'click', object: "DD_choose_sure", chinese_object: "确定按钮", chinese_url: '输入兑换码'})
+
+                    if (_this.info_login) {
+                        // console.log(_json)
+                        // return;
+                        $.showLoading("数据提交中");
+                        APP.send("/PC/NEWOrder/create.json", _json, function(res) {
+                            //console.log(res)
+                            $.hideLoading();
+                            if (res.errno == '0') {
+                                //统计
+                                // return;
+                                window.location.href = "/Member/orderGoPay.html?oid=" + res.data;
+                            } else {
+                                $.toast(res.msg, "text")
+                            }
+                        });
+                    } else {
+                        _json['phone_code'] = _yqb_json.phone_code;
+                        _json['tiao'] = true;
+
+                        // console.log(_json)
+                        // return;
+                        $.showLoading("数据提交中");
+                        APP.send("/PC/NEWOrder/unregisteredCreate.json", _json, function(res) {
+                            //console.log(res)
+                            $.hideLoading();
+                            if (res.errno == '0') {
+                                //统计
+                                //return;
+                                window.location.href = "/Member/orderGoPay.html?oid=" + res.data;
+                            } else {
+                                $.toast(res.msg, "text");
+                            }
+                        });
+                    }
+                },
+                mhInputYQB: function() {
+                    APP.sendHm({action: 'click', object: "Input box", chinese_object: "输入框", chinese_url: '输入兑换码'})
+                }
+                
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

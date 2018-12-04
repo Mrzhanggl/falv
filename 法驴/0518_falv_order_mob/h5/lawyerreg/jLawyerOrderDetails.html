@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>订单详情</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/Mob/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/Mob/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/LawyerTime.css?v=38">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+
+        <div v-show="page.show == 'home'">
+
+            <div class="m-main j-lawyerOrderDetails-box">
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">订单编号</div>
+                    <div class="item-r">{{ order.order_id }}</div>
+                </div>
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">订单时间</div>
+                    <div class="item-r">{{ order.create_time }}</div>
+                </div>
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">所属领域</div>
+                    <div class="item-r">{{ APP.getText.product_case[product.product_case] }}</div>
+                </div>
+            </div>
+
+            <div class="m-main j-lawyerOrderDetails-box">
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">通话时长</div>
+                    <div v-if="order.call_record && parseInt(order.call_record.byetype) > 0 " class="item-r">{{ APP.formatSeconds(order.call_record.duration) }}</div>
+                    <div v-if="order.call_record && parseInt(order.call_record.byetype) < 0 " class="item-r">未接听</div>
+                </div>
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">订单金额</div>
+                    <div class="item-r">{{ order.money }}</div>
+                </div>
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">支付状态</div>
+                    <div class="item-r">{{ order.state == '1' || order.state == '3' ? '用户已支付' : '用户未支付' }}</div>
+                </div>
+            </div>
+
+            <div v-if="order.lawyer_willingness && order.state == '0' || order.lawyer_willingness && order.state == '3'" class="m-main j-lawyerOrderDetails-box3">
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">用户意愿</div>
+                    <div class="item-r">{{ order.lawyer_willingness }}</div>
+                </div>
+            </div>
+            <div v-if="!order.lawyer_willingness && order.state == '0' || !order.lawyer_willingness && order.state == '3'" @click="$('#user_will').popup();" class="m-main j-lawyerOrderDetails-box3">
+                <div class="j-orderDetails-item clearfix">
+                    <div class="item-l">用户意愿</div>
+                    <div class="item-r"><span class="item-icon-down">暂无需求</span></div>
+                </div>
+            </div>
+
+            <div v-if="order.lawyer_evaluate" class="m-main j-lawyerOrderDetails-box2">
+                <div class="j-orderDetails-title"><strong>客户评价</strong></div>
+                <div class="j-orderDetails-item j-lawyerOrderDetails-starItem clearfix">
+                    <div class="item-l">专业体验</div>
+                    <div class="item-r">
+                        <div class="clearfix">
+                            <span :class="{'active': parseInt(order.lawyer_evaluate.professional_experience) >=1 }" class="j-item-content-star"></span>
+                            <span :class="{'active': parseInt(order.lawyer_evaluate.professional_experience) >=2 }" class="j-item-content-star" data-c="active2"></span>
+                            <span :class="{'active': parseInt(order.lawyer_evaluate.professional_experience) >=3 }" class="j-item-content-star"></span>
+                            <span :class="{'active': parseInt(order.lawyer_evaluate.professional_experience) >=4 }" class="j-item-content-star"></span>
+                            <span :class="{'active': parseInt(order.lawyer_evaluate.professional_experience) >=5 }" class="j-item-content-star"></span>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="order.lawyer_evaluate.ext_data && order.lawyer_evaluate.ext_data.length>0" class="j-lawyerOrderDetails-textItem clearfix">
+                    <div v-for="list in order.lawyer_evaluate.ext_data" class="j-comment-textItem active">{{ list }}</div>
+                </div>
+                <div class="j-lawyerOrderDetails-commentItem clearfix">
+                    <div class="item-l">文字评论</div>
+                </div>
+                <div class="j-lawyerOrderDetails-commentText">
+                    {{ order.lawyer_evaluate.note ? order.lawyer_evaluate.note : "用户暂无评价..." }}
+                </div>
+            </div>
+
+
+            <div id="user_will" class="weui-popup__container popup-bottom" >
+                <div @click.stop="$.closePopup()" class="weui-popup__overlay s4-weui-popup__overlay"></div>
+                <div class="weui-popup__modal s4-timePop__modal">
+                    <div class="s4-timePop-head">
+                        客户意愿
+                        <a @click.stop="$.closePopup()" class="s4-timePop-close" href="javascript:;"></a>
+                    </div>
+                    <div class="m-main j-lawyerComment-addService clearfix">
+                       <div class="j-comment-addService clearfix">
+                            <div @click="form.lawyer_willingness='打官司'" :class="{'active': form.lawyer_willingness=='打官司'}" class="j-timeDetails-object-item"><strong>打官司</strong></div>
+                            <div @click="form.lawyer_willingness='律师见面'" :class="{'active': form.lawyer_willingness=='律师见面'}" class="j-timeDetails-object-item"><strong>律师见面</strong></div>
+                            <div @click="form.lawyer_willingness='文书起草'" :class="{'active': form.lawyer_willingness=='文书起草'}" class="j-timeDetails-object-item"><strong>文书起草</strong></div>
+                            <div @click="form.lawyer_willingness='律师函'" :class="{'active': form.lawyer_willingness=='律师函'}" class="j-timeDetails-object-item"><strong>律师函</strong></div>
+                        </div>
+                        <div class="clearfix">
+                            <div @click="form.willingness_of_user = form.willingness_of_user ? false : true" :class="{'active': form.willingness_of_user }" class="j-comment-addService-label">
+                                我愿意承接客户的这项业务
+                            </div>
+                        </div>
+                    </div>
+                    <div @click="editWill()" :class="{'unactive': !form.lawyer_willingness}" class="s4-timePop-action"><strong>确定</strong></div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/Mob/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/Mob/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/Mob/js/vue.min.js"></script>
+    <script src="/Public/Home/Mob/js/lawyerCommon.js?v=02"></script>
+    <script src="/Public/Home/Mob/js/lawyerMain.js?v=068"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: 'home',
+                },
+
+ 
+                
+
+                order: {},
+                product: '',
+
+                form: {
+                    lawyer_willingness: '',
+                    willingness_of_user: false
+                }
+
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0') {
+                        _this.page.show = 'home';
+                    }
+                });
+                this.details();
+                
+
+
+                APP.sendHm('visits', '', '', '律师端订单详情')
+            },
+            mounted: function() {
+
+            },
+            watch:{
+                
+　　　　　　 },
+            methods: {
+                details: function() {
+                    var _this = this;
+                    var _oid = APP.getParam("oid");
+                    var _json = {
+                        order_id: _oid
+                    }
+                    APP.send("/PC/NEWOrder/info.json", _json, function(res) {
+                        if (res.errno == '0') {
+                            //console.log(res);
+                            _this.order = res.data;
+                            _this.product =  res.data.products[0];
+                            //console.log(res.data.service_state)
+
+                            if (res.data.state=='0' || res.data.state == '3') {
+
+                                if (!res.data.lawyer_willingness) {
+                                    $("#user_will").popup();
+                                }
+                            }
+                        }
+                    })
+                },
+                editWill: function() {
+                    var _this = this;
+                    var _oid = APP.getParam("oid");
+                    var _json = {
+                        order_id: _oid,
+                        willingness_of_user: '0',
+                        lawyer_willingness: _this.form.lawyer_willingness
+                    }
+
+                    if (_this.form.willingness_of_user) {
+                        _json['willingness_of_user'] = "1";
+                    }
+                    if (!_json.lawyer_willingness) {
+                        $.toast("请选择意愿", "text");
+                        return;
+                    }
+                    // console.log(_json)
+                    // return;
+
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/editOrder.json", _json, function(res) {
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //console.log(res);
+                            $.toast("操作成功", "text");
+                            $.closePopup();
+                            _this.details();
+                        }
+                    })
+
+
+
+     
+                    APP.sendHm('click', 'lawyer_otherNeeds', '客户有后续需求', '律师端订单详情')
+                    if (_json.lawyer_willingness == '打官司') {
+                        APP.sendHm('click', 'lawyer_lawSuit', '客户意愿-打官司', '律师端订单详情')
+                    } else if (_json.lawyer_willingness == '律师见面') {
+                        APP.sendHm('click', 'lawyer_lawMeet', '客户意愿-律师见面', '律师端订单详情')
+                    } else if (_json.lawyer_willingness == '文书起草') {
+                        APP.sendHm('click', 'lawyer_lawDoc', '客户意愿-文书起草', '律师端订单详情')
+                    } else if (_json.lawyer_willingness == '律师函') {
+                        APP.sendHm('click', 'lawyer_lawLetter', '客户意愿-律师函', '律师端订单详情')
+                    }
+
+                    if (_this.form.willingness_of_user) {
+                        APP.sendHm('click', 'lawyer_accept', '愿意承接', '律师端订单详情')
+                    } else {
+                        APP.sendHm('click', 'lawyer_refuse', '不愿意承接', '律师端订单详情')
+                    }
+                    
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

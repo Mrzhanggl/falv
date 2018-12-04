@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我的订单</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/Mob/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/Mob/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/LawyerTime.css?v=38">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+
+        <div v-show="page.show == 'home'">
+
+            <div class="j-lawyerOrderList-all">
+                本月订单：{{ order.month_count }}&emsp;&emsp;全部订单：{{ order.total_count }}
+            </div>
+            <div class="j-lawyerOrderList-nav">
+                <a @click="selectList('all')" :class="{'active': select.order_state == 'all'}" href="javascript:;" class="j-lawyerOrderList-navItem">全部订单</a>
+                <a @click="selectList('8')" :class="{'active': select.order_state == '8'}" href="javascript:;" class="j-lawyerOrderList-navItem">无需支付</a>
+                <a @click="selectList('3')" :class="{'active': select.order_state == '3'}" href="javascript:;" class="j-lawyerOrderList-navItem">已支付</a>
+                <a @click="selectList('0')" :class="{'active': select.order_state == '0'}" href="javascript:;" class="j-lawyerOrderList-navItem">待支付</a>
+            </div>
+
+            <div class="j-lawyerOrderList-content">
+                <div @click="nextPage('lawyerOrder_look', '查看订单', list.order_id, '/h5/lawyerreg/jLawyerOrderDetails.html?oid='+list.order_id)" v-for="(list, index) in order.data" class="j-orderList-item j-lawyerOrderList-item">
+                    <div class="item-head">
+                        <strong>订单编号:{{ list.order_id }}</strong>
+                        <a v-if="list.call_record && list.call_record.byetype && parseInt(list.call_record.byetype) > 0 " href="javascript:;" class="item-more item-link">{{ APP.formatSeconds(list.call_record.duration) }}</a>
+                        <a v-if="list.call_record && list.call_record.byetype && parseInt(list.call_record.byetype) < 0 " href="javascript:;" class="item-more item-link">未接听</a>
+
+                    </div>
+                    <div class="item-content">
+                        <div class="item-content-time">{{ APP.resetTime(list.create_time, 'zh_all') }}</div>
+                        <div class="item-content-name"><strong class="c1">￥<span class="c1-s1">{{ list.money }}</span></strong></div>
+                        <div v-if="list.state == '3' && list.lawyer_evaluate" class="item-content-score clearfix">
+                            <span :class="{'active': parseInt(list.lawyer_evaluate.professional_experience) >=1 }" class="j-item-content-star"></span>
+                            <span :class="{'active': parseInt(list.lawyer_evaluate.professional_experience) >=2 }" class="j-item-content-star"></span>
+                            <span :class="{'active': parseInt(list.lawyer_evaluate.professional_experience) >=3 }" class="j-item-content-star"></span>
+                            <span :class="{'active': parseInt(list.lawyer_evaluate.professional_experience) >=4 }" class="j-item-content-star"></span>
+                            <span :class="{'active': parseInt(list.lawyer_evaluate.professional_experience) >=5 }" class="j-item-content-star"></span>
+                        </div>
+                        <div :class="{'state2': list.state == '3', 'state3': list.state == '0' || list.state == '2'}" class="item-content-state">{{ APP.getText.lawyer_order_state[list.state] }}</div>
+                    </div>
+                </div>
+
+
+                <div v-show="order.loadingEnd==2" class="j-list-blank">
+                    <span>正在加载更多数据</span>
+                </div>
+
+
+                <div v-show="order.loadingEnd !=2 && !order.data || order.loadingEnd !=2 && order.data && order.data.length == 0" class="j-list-blank">
+                    <span>暂无数据</span>
+                </div>
+
+
+            </div>
+
+            <!--<div class="j-orderList-content">
+                <div @click="window.location.href='/Member/orderDetails.html?oid='" class="j-orderList-item">
+                    <div class="item-head">
+                        <strong>婚姻家事-律师陪同</strong>
+                        <a href="javascript:;" class="item-more item-link">
+                            待缴清
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-content-time">2018年7月29日 16:26</div>
+                        <div class="item-content-name"><span class="c1">￥<span class="c1-s1">50.5</span></span>电话咨询</div>
+                        <div class="item-content-action clearfix">
+                            <a href="javascript:;" class="action-btn btn_2">支付</a>
+                            <a href="javascript:;" class="action-btn btn_1">取消订单</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="j-orderList-item">
+                    <div class="item-head">
+                        <strong>婚姻家事-律师陪同</strong>
+                        <a href="javascript:;" class="item-more item-link">
+                            待缴清
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-content-time">2018年7月29日 16:26</div>
+                        <div class="item-content-name"><span class="c1">￥<span class="c1-s1">50.5</span></span>电话咨询</div>
+                        <div class="item-content-action clearfix">
+                            <a href="javascript:;" class="action-btn btn_2">支付</a>
+                            <a href="javascript:;" class="action-btn btn_1">取消订单</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="j-orderList-item">
+                    <div class="item-head">
+                        <strong>婚姻家事-律师陪同</strong>
+                        <a href="javascript:;" class="item-more item-link">
+                            待缴清
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-content-time">2018年7月29日 16:26</div>
+                        <div class="item-content-name"><span class="c1">￥<span class="c1-s1">50.5</span></span>电话咨询</div>
+                        <div class="item-content-action clearfix">
+                            <a href="javascript:;" class="action-btn btn_2">支付</a>
+                            <a href="javascript:;" class="action-btn btn_1">取消订单</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="j-orderList-item">
+                    <div class="item-head">
+                        <strong>婚姻家事-律师陪同</strong>
+                        <a href="javascript:;" class="item-more item-link">
+                            待缴清
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-content-time">2018年7月29日 16:26</div>
+                        <div class="item-content-name"><span class="c1">￥<span class="c1-s1">50.5</span></span>电话咨询</div>
+                        <div class="item-content-action clearfix">
+                            <a href="javascript:;" class="action-btn btn_2">支付</a>
+                            <a href="javascript:;" class="action-btn btn_1">取消订单</a>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+            
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/Mob/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/Mob/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/Mob/js/vue.min.js"></script>
+    <script src="/Public/Home/Mob/js/lawyerCommon.js?v=02"></script>
+    <script src="/Public/Home/Mob/js/lawyerMain.js?v=068"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: 'home',
+                },
+
+ 
+                select_show: false,
+                select: {
+                    show: false,
+                    text: '',
+                    order_state: '',
+                },
+
+                order: {
+                    month_count: 0,
+                    total_count: 0,
+                    loading: true,
+                    loadingEnd: 0, //1准备 2 加载中 3 加载完 4error
+                    page: 1,
+                    total_page: 1,
+                    data: [],
+                }
+
+            },
+            created: function() {
+                var _this = this;
+                var _tab = APP.getParam('tab') ? APP.getParam('tab') : 'all';
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0') {
+                        _this.page.show = 'home';
+                    } 
+                });
+                this.getAllOrderSum();
+
+                this.select.order_state = _tab
+                this.select.text = APP.getText.lawyer_order_state[_tab];
+                this.getList(this.order.page, this.select.order_state);
+
+
+
+
+                APP.sendHm('visits', '', '', '律师端订单列表')
+            },
+            mounted: function() {
+
+            },
+            watch:{
+                
+　　　　　　},
+            methods: {
+                nextPage: function(type, type_text, param, url) {
+                    APP.sendHm("click", type, type_text, "律师端订单列表", param, function() {
+                        window.location.href = url;
+                    });
+                },
+                getAllOrderSum: function() {
+                    var _this = this;
+                    APP.send("/PC/Lawyer/orderStatisticsThisMonth.json", function(res) {
+                        if (res.errno == '0') {
+                            _this.order.month_count = res.data.month_count;
+                            _this.order.total_count = res.data.total_count;
+                        }
+                    })
+                },
+                selectList: function(type) {
+
+                    this.select.text = APP.getText.lawyer_order_state[type];
+                    this.select.order_state = type;
+                    this.select_show = false;
+                    this.order.page = 1;
+                    this.order.loadingEnd = 0;
+                    this.order.total_page = 1;
+                    this.order.data = [];
+                    this.getList(this.order.page, this.select.order_state);
+
+                    if (type == 'all') {
+                        APP.sendHm('click', 'lawyerOrder_all', '筛选-全部订单', '律师端订单列表')
+                    } else if (type == '8') {
+                        APP.sendHm('click', 'lawyerOrder_noNeedPay', '筛选-无需支付', '律师端订单列表')
+                    } else if (type == '3') {
+                        APP.sendHm('click', 'lawyerOrder_payed', '筛选-已支付', '律师端订单列表')
+                    } else if (type == '0') {
+                        APP.sendHm('click', 'lawyerOrder_noPay', '筛选-未支付', '律师端订单列表')
+                    } 
+
+                },
+                getList: function(page, state) {
+                    var _this = this;
+                    var _json = {
+                        page: page, //页
+                        state: state 
+                    }
+
+                    _this.order.loadingEnd = 2;
+                    APP.send("/PC/Lawyer/orderList.json", _json, function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            var _data = res.data.list;
+                            _this.order.total_sum = res.data.listCount;
+                            //第一页且总页数大于1 初始化滚动加载
+                            if (_data && _data.length>0 && _this.order.page == 1) {
+                                _this.initPage(page, state);
+                            }
+
+                            //保存数据
+                            _this.order.data = _this.order.data.concat(_data);
+                            
+                            //判断是否加载完所有页数
+                            if (_data && _data.length > 0) {
+                                _this.order.loading = false;
+                                _this.order.loadingEnd = 1;
+                            } else {
+                                _this.order.loading = true;
+                                _this.order.loadingEnd = 3;
+                            }
+                            
+                        } else {
+                            _this.order.page--;
+                            _this.order.loading = false;
+                            _this.order.loadingEnd = 4;
+                        }
+
+                    });
+
+                },
+                initPage: function(page, state) {
+                    var _this = this;
+                    setTimeout(function() {
+                        // var _loading = false;
+                        var _h = $(document).height() - $(window).height();
+                        $(document).scroll(function() {
+                            if (_h <= 0) {_h = $(document).height() - $(window).height()};
+                            _h = $(document).height() - $(window).height();
+                            //console.log(_h - $(this).scrollTop())
+                            if (_h - $(this).scrollTop() <= 100) {
+                                if (_this.order.loading) return;
+                                _this.order.loading = true;
+                                if (_this.order.loadingEnd  == 3) {
+                                    //console.log("end");
+                                    _this.order.loading = true;
+                                    return;
+                                }
+                                _this.order.page++;
+                                _this.order.loadingEnd = 2;
+                                //console.log(_this.order.page)
+                                _this.getList(_this.order.page, _this.select.order_state);
+                            }
+                        })
+                       
+                    }, 100)
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

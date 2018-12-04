@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我能移民去哪里？</title>
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/migrantMain.css?v=44">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+
+       
+        <div class="m-page JS_page JS_page1 active">
+            
+            <div class="head-top">
+                <img class="img1" src="/Public/Home/topic/img/migrant-bg@2x.png" alt="">
+            </div>
+
+            <div class="content-box">
+                <div class="content-box-bd">
+                    <div class="content-hd-title">
+                        您想去的国家地区？<span class="s1">（最多选3个）</span>
+                    </div>
+                    <div class="content-bd-list">
+                        <div class="content-select-ul clearfix">
+                            <div v-for="(list, index) in select.data_1" class="content-select-li">
+                                <a @click="selectMulti('data_1', index)" :class="{'active': list.checked}" href="javascript:;" class="content-select-item">{{ list.name }}</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-action">
+                    <a @click="nextPage('page2')" :class="{'unactive': !select.data_1_botton}" href="javascript:;" class="btn btn_1"><strong>下一步</strong></a>
+                </div>
+
+            </div>
+            
+        </div>
+       
+        <div class="m-page JS_page JS_page2">
+            
+            <div class="head-top">
+                <img class="img1" src="/Public/Home/topic/img/migrant-bg2@2x.png" alt="">
+                <img class="page2-head-text" src="/Public/Home/topic/img/migrant-wenzi@2x.png" alt="">
+            </div>
+
+            <div class="content-box">
+                <div class="content-box-bd">
+                    <div class="content-hd-title">
+                        您为什么想移民<span class="s1">（最多选3个）</span>
+                    </div>
+                    <div class="content-bd-list">
+                        <div class="content-select-ul clearfix">
+                            <div v-for="(list, index) in select.data_2" class="content-select-li2">
+                                <a @click="selectMulti('data_2', index)" :class="{'active': list.checked}" href="javascript:;" class="content-select-item content-select-item2">{{ list.name }}</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-action">
+                    <a @click="nextPage('page3')" href="javascript:;" :class="{'unactive': !select.data_2_botton}" class="btn btn_1"><strong>下一步</strong></a>
+                </div>
+
+            </div>
+            
+        </div>
+
+        <div class="m-page JS_page JS_page3">
+            
+            <div class="head-top">
+                <img class="img1" src="/Public/Home/topic/img/migrant-bg2@2x.png" alt="">
+                <img class="page2-head-text" src="/Public/Home/topic/img/migrant-wenzi@2x.png" alt="">
+            </div>
+
+            <div class="content-box content-boxBot">
+                <div class="content-box-bd">
+                    <div class="content-hd-title">
+                        您的家庭资产?
+                    </div>
+                    <div class="content-bd-list">
+                        <div class="content-select-ul clearfix">
+                            <div v-for="(list, index) in select.data_3" class="content-select-li2">
+                                <a @click="selectSingle('data_3', index, 'page4')" :class="{'active': list.name == select.data_3_botton}" href="javascript:;" class="content-select-item content-select-item2">{{ list.name }}</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="content-action">
+                    <a @click="nextPage('page4')" href="javascript:;" :class="{'unactive': !select.data_3_botton}" class="btn btn_1"><strong>下一步</strong></a>
+                </div>-->
+
+            </div>
+            
+        </div>
+
+        <div class="m-page JS_page JS_page4">
+            
+            <div class="head-top">
+                <img class="img1" src="/Public/Home/topic/img/migrant-bg2@2x.png" alt="">
+                <img class="page2-head-text" src="/Public/Home/topic/img/migrant-wenzi@2x.png" alt="">
+            </div>
+
+            <div class="content-box content-boxBot">
+                <div class="content-box-bd">
+                    <div class="content-hd-title">
+                        您的英语能力？
+                    </div>
+                    <div class="content-bd-list">
+                        <div class="content-select-ul clearfix">
+                            <div v-for="(list, index) in select.data_4" class="content-select-li2">
+                                <a @click="selectSingle('data_4', index, 'page5')" :class="{'active': list.name == select.data_4_botton}" href="javascript:;" class="content-select-item content-select-item2">{{ list.name }}</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="content-action">
+                    <a @click="nextPage('page5')" href="javascript:;" :class="{'unactive': !select.data_4_botton}" class="btn btn_1"><strong>下一步</strong></a>
+                </div>-->
+
+            </div>
+            
+        </div>
+
+        <div class="m-page JS_page JS_page5">
+            
+            <div class="head-top">
+                <img class="img1" src="/Public/Home/topic/img/migrant-bg2@2x.png" alt="">
+                <img class="page2-head-text" src="/Public/Home/topic/img/migrant-wenzi@2x.png" alt="">
+            </div>
+
+            <div class="content-box content-boxBot">
+                <div class="content-box-bd">
+                    <div class="content-hd-title">
+                        您的工作年限？
+                    </div>
+                    <div class="content-bd-list">
+                        <div class="content-select-ul clearfix">
+                            <div v-for="(list, index) in select.data_5" class="content-select-li2">
+                                <a @click="selectSingle('data_5', index, 'page6')" :class="{'active': list.name == select.data_5_botton}" href="javascript:;" class="content-select-item content-select-item2">{{ list.name }}</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div class="content-action">
+                    <a @click="nextPage('page6')" href="javascript:;" :class="{'unactive': !select.data_5_botton}" class="btn btn_1"><strong>下一步</strong></a>
+                </div>-->
+
+            </div>
+            
+        </div>
+
+        <div class="m-page JS_page JS_page6">
+            
+            <div class="head-top">
+                <img class="img1" src="/Public/Home/topic/img/migrant-bg2@2x.png" alt="">
+                <img class="page2-head-text2" src="/Public/Home/topic/img/migrant-wenzi2@2x.png" alt="">
+            </div>
+
+            <div class="content-box">
+                <div class="content-box-bd content-form-bd">
+                    <div class="content-form-item clearfix">
+                        <div class="item-left item-left-name">姓名</div>
+                        <div class="item-right item-right-name">
+                            <input v-model="form.name" maxlength="20" class="item-right-input" type="text" placeholder="请输入姓名" autocomplete="off">
+                        </div>
+                        <div class="item-right-sex">
+                            <div @click="form.sex = '1'" :class="{'active': form.sex=='1'}" class="item-sex-radio">女士</div>
+                            <div @click="form.sex = '0'" :class="{'active': form.sex=='0'}" class="item-sex-radio">先生</div>
+                        </div>
+                    </div>
+                    <div class="content-form-item clearfix">
+                        <div class="item-left">年龄</div>
+                        <div class="item-right">
+                            <input v-model="form.age" oninput="this.value = reAge(this.value)" class="item-right-input" type="tel" placeholder="请输入年龄" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="content-form-item clearfix">
+                        <div class="item-left">手机号</div>
+                        <div class="item-right">
+                            <input v-model="form.phone" class="item-right-input" oninput="this.value = rePhone(this.value)" type="tel" placeholder="请输入手机号" autocomplete="off">
+                        </div>
+                    </div>
+                    <div v-show="form.phone && form.phone.length == 11" class="content-form-item clearfix">
+                        <div class="item-left">验证码</div>
+                        <div class="item-right item-right-code">
+                            <input v-model="form.code" class="item-right-input" type="tel" placeholder="请输入验证码" autocomplete="off">
+                        </div>
+                        <div @click="loginCountDown()" :class="{'unactive': !form.code_state}" class="item-right-codeBtn">
+                            {{ form.time }}
+                        </div>
+                    </div>
+                    <div class="content-form-itemTips">
+                        您的联系方式我们绝对保密，仅用于保存您的评估结果，方便您下次查看
+                    </div>
+                </div>
+
+                <div class="content-action">
+                    <a @click="add()" href="javascript:;" class="btn btn_1"><strong>生成移民方案</strong></a>
+                </div>
+
+            </div>
+            
+        </div>
+
+        <div class="m-page JS_page JS_page7" data-title="评估结果">
+            <div class="content-end-head clearfix">
+                <div class="end-head-left">
+                    <div class="end-head-item">
+                        <div class="item-icon">推荐国家</div>
+                        <div class="item-text"><strong>{{ endCountry.best_place }}</strong></div>
+                        <div class="item-text2">投资移民</div>
+                    </div>
+                </div>
+                <div class="end-head-right">
+                    <div class="JS_swiper swiper-container">
+                        <div class="swiper-wrapper">
+                            <div v-for="(list, index) in endCountry.other_place" class="swiper-slide">
+                                <div class="end-head-item">
+                                    <div class="item-icon item-icon2">心仪国家</div>
+                                    <div class="item-text"><strong>{{ list }}</strong></div>
+                                    <div class="item-text2">投资移民</div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="swiper-pagination JS_swiper_pagination" style="opacity: 0"></div>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+
+            <div class="content-end-contrast">
+                <div class="end-contrast-title">
+                    <strong>项目对比</strong>
+                </div>
+                <div class="end-contrast-bd clearfix">
+                    <div class="end-contrast-left">
+                        <div class="end-contrast-pk">
+                            <img src="/Public/Home/topic/img/migrant-pk@2x.png" alt="">
+                        </div>
+                        <div class="end-contrast-item">
+                            <img class="img1" :src="endCountry.best_place ? country[endCountry.best_place]['pic'] : ''" alt="">
+                            <div class="text1">
+                                优势：{{ endCountry.best_place ? country[endCountry.best_place]['intr'] : '' }}
+                            </div>
+                            <div class="JS_circle_bd circle">
+                                <div class="circle-progress">
+                                    <strong>{{ canvas_circle.circle1 +'%' }}</strong>
+                                </div>
+                                <div id="JS_circle"></div>
+                            </div>
+                            <div class="circle-text">
+                                匹配率
+                            </div>
+                        </div>
+                    </div>
+                    <div class="end-contrast-right">
+                        <div class="end-contrast-item">
+                            <img class="img1" :src="endCountry.other_place.length>0 ? country[endCountry.other_place[endCountry.other_place_index]]['pic'] : ''" alt="">
+                            <div class="text1">
+                                优势：{{ endCountry.other_place.length>0 ? country[endCountry.other_place[endCountry.other_place_index]]['intr'] : '' }}
+                            </div>
+                            <div class="circle">
+                                <div class="circle-progress">
+                                    <strong>{{ canvas_circle.circle2 +'%' }}</strong>
+                                </div>
+                                <div id="JS_circle2"></div>
+                            </div>
+                            <div class="circle-text">
+                                匹配率
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="end-contrast-title">
+                    <strong>为您推荐更多移民产品</strong>
+                </div>
+                <a href="javascript:;" class="end-product-item clearfix">
+                    <div class="item-cover">
+                        <img src="/Public/Home/topic/img/migrant-product@2x.png" alt="">
+                    </div>
+                    <div class="item-content">
+                        <div class="item-content-p1 overText_2">大额外币定存</div>
+                        <div class="item-content-p2">3.2-3.4%</div>
+                        <div class="item-content-p3">开放2年期</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div v-show="mLoading" class="m-loading"></div>
+        
+  
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/swiper-3.4.2.jquery.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/circle-progress.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=04"></script>
+    <script>
+
+        function reAge(value) {
+            return value.replace(/[^\d]/g,'') ? parseInt(value.replace(/[^\d]/g,'')) > 100 ? 100 : parseInt(value.replace(/[^\d]/g,'')) == 0 ? '' :  parseInt(value.replace(/[^\d]/g,'')) :  '';
+        }
+        
+        function rePhone(value) {
+            return value.replace(/[^\d]/g,'') ? value.replace(/[^\d]/g,'').length > 11 ? value.replace(/[^\d]/g,'').slice(0,11) : value.replace(/[^\d]/g,'') :  '';
+        }
+
+        function newImage(a, b) {
+            var c = new Image;
+            c.onload = function() {
+                b(c)
+            }, c.src = a
+        }
+
+
+        //分享
+        ;(function() {
+            APP.send('/PC/Wx/jssdkConf.json?source=2', function(res) {
+                //alert(JSON.stringify(res));
+                if (res.errno == '0') {
+                    var data = res.data;
+                    wx.config({
+                        debug: false,
+                        appId: data.appId,
+                        timestamp: data.timestamp,
+                        nonceStr: data.nonceStr,
+                        signature: data.signature,
+                        jsApiList: [
+                            'onMenuShareAppMessage',
+                            'onMenuShareTimeline',
+                            'onMenuShareWeibo',
+                            'onMenuShareQQ',
+                            'onMenuShareQZone'
+                        ]
+                    });
+                }
+
+                var _link = window.location.href;
+                var _configAll = {
+                    title: '我能移民去哪里？',
+                    desc: '',
+                    link: _link,
+                    imgUrl: 'http://www.falv58.com/Public/Home/member/img/slogo.png',
+                    success: function() {
+                        sendHm("1")
+                    },
+                    cancel: function() {}
+                }
+
+
+
+                wx.ready(function() {
+                    //分享给朋友
+                    wx.onMenuShareAppMessage(_configAll);
+                    //QQ
+                    wx.onMenuShareQQ(_configAll);
+                    //QQ微博
+                    wx.onMenuShareWeibo(_configAll);
+                    //QQ空间
+                    wx.onMenuShareQZone(_configAll);
+                    //分享到朋友圈
+                    wx.onMenuShareTimeline(_configAll);
+                });
+
+
+            });
+        })();
+        /** * 添加次数(用于记录打开数和分享数) * 
+         * @link /PC/Activity/addTimes.json * 
+         * @param int $type 0 => '打开', 1 => '分享' * 
+         * @param int $admin_id 员工id * 
+         * @param int $source 来源,默认0为员工。用户登录信息中的source * @throws \Exception */
+        function sendHm(type) {
+            if (!APP.getParam("admin_id")) {
+                return;
+            }
+
+            var _json = {
+                type: type,
+                source: 0,
+                admin_id: APP.getParam("admin_id")
+            }
+
+            APP.send('/PC/Activity/addTimes.json', _json, function(res) {
+                //alert(JSON.stringify(res));
+                if (res.errno == '0') {
+                    
+                }
+            });
+        }
+
+        //打开
+        sendHm("0")
+
+
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+
+                mLoading: false,   
+                
+                select: {
+                    data_1_botton: false,
+                    data_1: [
+                        {"name":"美国","checked":false},
+                        {"name":"爱尔兰","checked":false},
+                        {"name":"加拿大","checked":false},
+                        {"name":"澳大利亚","checked":false},
+                        {"name":"英国","checked":false},
+                        {"name":"马耳他","checked":false},
+                        {"name":"葡萄牙","checked":false},
+                        {"name":"意大利","checked":false},
+                        {"name":"德国","checked":false},
+                        {"name":"新西兰","checked":false},
+                        {"name":"希腊","checked":false},
+                        {"name":"菲律宾","checked":false},
+                        {"name":"马来西亚","checked":false},
+                        {"name":"新加坡","checked":false},
+                        {"name":"赛浦路斯","checked":false}
+                    ],
+                    data_2_botton: false,
+                    data_2: [
+                        {"name":"子女教育","checked":false},
+                        {"name":"海外生育","checked":false},
+                        {"name":"养老储备","checked":false},
+                        {"name":"投资理财","checked":false},
+                        {"name":"海外置业","checked":false},
+                        {"name":"税务策划","checked":false}
+                    ],
+                    data_3_botton: '',
+                    data_3: [
+                        {"name":"100万以内","checked":false, "rate": '76'},
+                        {"name":"100万-300万","checked":false, "rate": '78'},
+                        {"name":"300万-500万","checked":false, "rate": '80'},
+                        {"name":"500万-1000万","checked":false, "rate": '82'},
+                        {"name":"1000万-3000万","checked":false, "rate": '84'},
+                        {"name":"3000万以上","checked":false, "rate": '86'}
+                    ],
+                    data_4_botton: '',
+                    data_4: [
+                        {"name":"完全不会","checked":false},
+                        {"name":"专业英语8级","checked":false},
+                        {"name":"大学英语6级","checked":false},
+                        {"name":"大学英语4级","checked":false},
+                        {"name":"初级英语水平","checked":false}
+                    ],
+                    data_5_botton: '',
+                    data_5: [
+                        {"name":"1年以内","checked":false},
+                        {"name":"1-3年","checked":false},
+                        {"name":"3-5年","checked":false},
+                        {"name":"5-8年","checked":false},
+                        {"name":"8年以上","checked":false}
+                    ]
+                },
+
+
+                country: {
+                    "美国":{"pic":"/Public/Home/topic/img/migrant-country-mg@2x.png","intr":"留学+移民，无排期无名额限制，快速拿身份"},
+                    "爱尔兰":{"pic":"/Public/Home/topic/img/migrant-country-ael@2x.png","intr":"一步到位拿永居，办理速度快，申请条件宽松"},
+                    "加拿大":{"pic":"/Public/Home/topic/img/migrant-country-jnd@2x.png","intr":"一步到位拿绿卡，投资安全可靠无风险"},
+                    "澳大利亚":{"pic":"/Public/Home/topic/img/migrant-country-adly@2x.png","intr":"无年龄、学历、语言的硬性要求，办理周期短，最快10个月"},
+                    "英国":{"pic":"/Public/Home/topic/img/migrant-country-yg@2x.png","intr":"投资移民不需要申请参与项目经营管理，全家获得绿卡"},
+                    "马耳他":{"pic":"/Public/Home/topic/img/migrant-country-mqt@2x.png","intr":"申请周期短，每年秩序住满1天即可满足居住要求"},
+                    "葡萄牙":{"pic":"/Public/Home/topic/img/migrant-country-pty@2x.png","intr":"资金要求少，一步到位拿永居，孩子上国际学校首选项目"},
+                    "意大利":{"pic":"/Public/Home/topic/img/migrant-country-ydl@2x.png","intr":"移民局直接授权办理，速度快，一步到位拿永居"},
+                    "德国":{"pic":"/Public/Home/topic/img/migrant-country-dg@2x.png","intr":"花更少的钱，获得欧洲绿卡身份"},
+                    "新西兰":{"pic":"/Public/Home/topic/img/migrant-country-xxl@2x.png","intr":"办理时间短、资金要求少、无移民监"},
+                    "希腊":{"pic":"/Public/Home/topic/img/migrant-country-xl@2x.png","intr":"一步到位获希腊永居，免费公立医疗及教育，常游26个申根国"},
+                    "菲律宾":{"pic":"/Public/Home/topic/img/migrant-country-flb@2x.png","intr":"银行存款即可移民，百分百安全无忧"},
+                    "马来西亚":{"pic":"/Public/Home/topic/img/migrant-country-mlxy@2x.png","intr":"无风险、审批快、无移民监"},
+                    "新加坡":{"pic":"/Public/Home/topic/img/migrant-country-xjp@2x.png","intr":"国债风险低，可一步到位获得永居"},
+                    "赛浦路斯":{"pic":"/Public/Home/topic/img/migrant-country-spls@2x.png","intr":"快速拿护照，尽享超过120个国家免签政策"}
+                },
+
+                canvas_circle: {
+                    circle1: 0,
+                    circle2: 0
+                },
+
+                form: {
+                    country: [],
+                    immigration: [],
+                    assets: '',
+                    english_ability: '',
+                    working_years: '',
+                    name:'',
+                    sex: '0',
+                    phone: '',
+                    age: '',
+                    code: '',
+                    time: '获取验证码',
+                    code_state: true
+                },
+                
+
+                //评估结果
+                endCountry: {
+                    best_place: '',
+                    match_rate: '',
+
+                    swiper: null,
+                    other_place_index: 0,
+                    other_place: [],
+                    other_rate: '',
+                },
+                
+            },
+            created: function() {
+                this.page.show = 'page1';
+                // var _this = this;
+                // _this.endCountry.best_place = "新西兰";
+                // _this.endCountry.match_rate = "90";
+                // _this.endCountry.other_place = ["加拿大", "马耳他", "德国"];
+                // _this.endCountry.other_rate = "82";
+
+
+                // _this.page.show = "page7";
+                // $.showLoading()
+                // setTimeout(function() {
+                //     _this.initEnd();
+                //     _this.setCircle(_this.endCountry.match_rate);
+                //     _this.setCircle2(_this.endCountry.other_rate);
+                //     $.hideLoading()
+                // }, 10)
+                
+
+                /**
+                *客情助手移民结果
+                * @method /PC/Activity/getDataResults.json
+                * @param string $name [姓名]
+                * @param string $code [验证码]
+                * @param string $phone [手机号码]
+                * @param string $age [年龄]
+                * @param string $sex [性别]
+                * @param string|array $country [心怡的国家]
+                * @param string|array $immigration [移民理由]
+                * @param string $assets [家庭资产]
+                * @param string $english_ability [英语能力]
+                * @param string $working_years [工作年限]
+                * @return void|array  best_place 最佳地点  match_rate 匹配率
+                */
+            },
+            mounted: function() {
+
+                // this.initEnd();
+                // this.setCircle();
+                // this.setCircle2();
+
+
+            },
+            methods: {
+                slideEnter: function(page) {
+                    var _this = this;
+                    _this.mLoading = true;
+                    $(".JS_"+page).addClass("enter-active");
+                    setTimeout(function(){
+                        $(".JS_page").removeClass("active").removeClass("enter-active");
+                        $(".JS_"+page).addClass("active");
+                        _this.mLoading = false;
+                    }, 1000)
+                },
+                nextPage: function(page) {
+                    if (page == 'page2') {
+                        var _state = false;
+                        var _data = this.select.data_1;
+                        for (var i=0; i < _data.length; i++) {
+                            if (_data[i]['checked']) {
+                                _state = true;
+                                this.form.country.push(_data[i]['name'])
+                            }
+                        }
+                        
+                        if (!_state) {
+                            $.toast("您想去的国家地区", "text")
+                            return;
+                        }
+                    } else if (page == 'page3') {
+                        var _state = false;
+                        var _data = this.select.data_2;
+                        for (var i=0; i < _data.length; i++) {
+                            if (_data[i]['checked']) {
+                                _state = true;
+                                this.form.immigration.push(_data[i]['name'])
+                            }
+                        }
+                        
+                        if (!_state) {
+                            $.toast("您为什么想移民", "text")
+                            return;
+                        }
+                    
+                    } else if (page == 'page4') {
+                        
+                        // if (!this.select.data_3_botton) {
+                        //     $.toast("您的家庭资产", "text")
+                        //     return;
+                        // }
+                        this.form.assets = this.select.data_3_botton;
+                    
+                    }  else if (page == 'page5') {
+                        
+                        // if (!this.select.data_4_botton) {
+                        //     $.toast("您的英语能力", "text")
+                        //     return;
+                        // }
+                        this.form.english_ability = this.select.data_4_botton;
+                    
+                    } else if (page == 'page6') {
+                        
+                        // if (!this.select.data_5_botton) {
+                        //     $.toast("您的工作年限", "text")
+                        //     return;
+                        // }
+                        this.form.working_years = this.select.data_5_botton;
+                    
+                    }
+                    
+
+
+
+                    //console.log(this.form)
+                    this.slideEnter(page);
+
+                    //this.page.show = page;
+                }, 
+                selectMulti: function(type, index) {
+                    var _data = this.select[type];
+                    var _max = 0;         
+                    for (var i=0; i < _data.length; i++) {
+                        if (_data[i]['checked']) {
+                            _max ++;
+                        }
+                    }
+
+                    if (this.select[type][index]['checked']) {
+                        _max--;
+                        this.select[type][index]['checked'] = false;
+                    } else {
+                        if (_max >= 3) {
+                            //$.toast("最多可选中3个", "text");
+                            return;
+                        }
+                        _max++;
+                        this.select[type][index]['checked'] = true;
+                    }
+
+                    //console.log(_max)
+                    if (_max <= 0) {
+                        this.select[type+'_botton'] = false;
+                    } else {
+                        this.select[type+'_botton'] = true;
+                    }
+
+                },
+                selectSingle: function(type, index, page) {
+                    this.select[type+'_botton'] = this.select[type][index]['name'];
+                    this.nextPage(page);
+                },
+                loginCountDown: function() {
+                    var _this = this;
+                    var _phone = _this.form.phone;
+
+                    if (!_this.form.code_state) return;
+                    if (!APP.isPhoneNo(_phone)) {
+                        $.toast('请输入正确的手机号', 'text');
+                        return;
+                    }
+                         
+                    _this.form.code_state = false;
+                    _this.loginSendCode(_phone);
+                    _this.form.time = 60;
+                    var timest = setInterval(function() {
+                        if (typeof(_this.form.time) == 'string') {
+                            clearInterval(timest)
+                            return;
+                        }
+                        _this.form.time--;
+                        if (_this.form.time == 0) {
+                            _this.form.code_state = true;
+                            _this.form.time = '重新发送';
+                            clearInterval(timest)
+                        }
+                    }, 1000)
+                },
+                loginSendCode: function(phone) {
+                    //获取短信验证码
+                    var _this = this;
+                    var _json = {
+                        phone: phone
+                    }
+                    //return
+                    APP.send('/PC/UserLogin/sendShortMessageForFaLv.json', _json, function(res) {
+                        //console.log(res);
+                        if (res.errno == '0') {
+                            //$.toptip('发送成功！', 'success');
+                        } else {
+                            _this.form.code_state = true;
+                            _this.form.time = '重新发送';
+                            //$.toast(res.msg, "text");
+                        }
+                    });
+                },
+                add: function() {
+                    var _this = this;
+                    var _json = _this.form;
+
+                    _json.name = $.trim(_json.name);
+                    _json.name = _json.name.replace(/\s/g,"");
+
+                    if (!_json.name) {
+                        $.toast("请填写姓名", "text");
+                        return
+                    }
+                    if (!_json.sex) {
+                        $.toast("请选择性别", "text");
+                        return
+                    }
+                    if (!_json.age) {
+                        $.toast("请填写年龄", "text");
+                        return
+                    }
+                    if (!APP.isPhoneNo(_json.phone)) {
+                        $.toast("请输入正确手机号", "text");
+                        return
+                    }
+                    if (!_json.code) {
+                        $.toast("请填写验证码", "text");
+                        return
+                    }
+
+
+                    // console.log(_json)
+                    // return;
+                    // delete _json["time"];
+                    // delete _json["code_state"];
+                    $.showLoading("数据提交中")
+                    APP.send('/PC/Activity/getDataResults.json', _json, function(res) {
+                        //console.log(res);
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //$.toptip('发送成功！', 'success');
+                            _this.endCountry.best_place = res.data.best_place;
+                            _this.endCountry.match_rate = 90;
+                            _this.endCountry.other_place = _this.form.country;
+                            _this.endCountry.other_rate = res.data.match_rate;
+
+                            _this.slideEnter("page7");
+                            document.title = "评估结果";
+                            setTimeout(function() {
+                                _this.initEnd();
+                                
+                            }, 10)
+                            setTimeout(function() {
+                                $.showLoading()
+                                _this.setCircle( _this.endCountry.match_rate);
+                                _this.setCircle2(_this.endCountry.other_rate);
+                                $.hideLoading()
+                            }, 1000)
+                        } else {
+                            
+                            $.toast(res.msg, "text");
+                        }
+                    });
+
+                },
+                setCircle: function(val) {
+                    var _this = this;
+                    $('#JS_circle').unbind().circleProgress({
+                        value: parseFloat(val) / 100,
+                        size: $(".JS_circle_bd").height()*2,  //126
+                        startAngle: -1.5,
+                        lineCap:'butt',
+                        thickness: 10*2,
+                        emptyFill: "rgba(255, 255, 255, 1)",
+                        animation: {
+                            duration: 1000,
+                            easing: 'linear'
+                        },
+                        emptyFill: '#f7d5d4',
+                        fill: {
+                            color: "#F7364E"
+                        }
+                    }).on('circle-animation-progress', function(event, progress, stepValue) {
+                        //当图像正在绘制时的监听事件
+                        //console.log(stepValue)
+                        _this.canvas_circle.circle1 = (stepValue * 100).toFixed(0);
+                    });
+
+                    $('#JS_circle').find("canvas").css({
+                        "width": $(".JS_circle_bd").height(),
+                        "height": $(".JS_circle_bd").height(),
+                    })
+                },
+                setCircle2: function (val) {
+                    var _this = this;
+                    $('#JS_circle2').unbind().circleProgress({
+                        value: parseFloat(val) / 100,
+                        size: $(".JS_circle_bd").height()*2,  //126
+                        startAngle: -1.5,
+                        lineCap:'butt',
+                        thickness: 10*2,
+                        emptyFill: "rgba(255, 255, 255, 1)",
+                        animation: {
+                            duration: 1000,
+                            easing: 'linear'
+                        },
+                        emptyFill: '#c8d7fe',
+                        fill: {
+                            color: "#3776E6"
+                        }
+                    }).on('circle-animation-progress', function(event, progress, stepValue) {
+                        //当图像正在绘制时的监听事件
+                        //console.log(stepValue)
+                        _this.canvas_circle.circle2 = (stepValue * 100).toFixed(0);
+                    });
+
+                    $('#JS_circle2').find("canvas").css({
+                        "width": $(".JS_circle_bd").height(),
+                        "height": $(".JS_circle_bd").height(),
+                    })
+4
+                },
+                initEnd: function() {
+                    var _this = this;
+                    var _w = $(".end-head-left .end-head-item").width() / 1.16;
+                    //console.log(_w)
+                    _this.endCountry.swiper = new Swiper('.JS_swiper', {
+                        resistanceRatio: 0,
+                        pagination: '.JS_swiper_pagination',
+                        centeredSlides:true,
+                        slidesPerView:'auto',
+                        effect:'coverflow',
+                        coverflow:{
+                            rotate:0,//滑动时旋转角度
+                            stretch: _w,//聚合宽度
+                            depth: 200,//景深
+                            modifier:1,//覆盖叠加层数
+                            slideShadows: false//是否阴影
+                        },
+                        onTransitionEnd: function(swiper) {
+                            _this.endCountry.other_place_index = swiper.activeIndex;
+                            //console.log(swiper.activeIndex)
+                            //_this.setCircle2(_this.endCountry.other_rate);
+                        }
+                    }); 
+                    if (_this.endCountry.other_place.length>1) {
+                        $(".JS_swiper_pagination").css({
+                            opacity: 1
+                        })
+                    }
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

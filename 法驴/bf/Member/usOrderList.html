@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/us/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/us/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/us/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/us/css/main.css?v=32">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" :class="{ 's-infinite-scrolling' : page.show=='home' }" class="main s-infinite-main">
+        
+        <div id="infinite" v-show="page.show=='home'" class="main-page s-infinite-page">
+           
+            <div class="wrap-main">
+                <div class="s-title_2">
+                    <h2>Orders center</h2>
+                    <a @click="select_show=select_show?false:true" :class="{ active:select_show }" href="javascript:;" class="s-orderList-select">{{ select.text }}</a>
+                    <div v-show="select_show" class="s-orderList-selectBd">
+                        <a @click="selectList(' ')" href="javascript:;" class="selectBd-item">All orders</a>
+                        <a @click="selectList('0')" href="javascript:;" class="selectBd-item">Wait for services</a>
+                        <a @click="selectList('1')" href="javascript:;" class="selectBd-item">In service</a>
+                        <a @click="selectList('2')" href="javascript:;" class="selectBd-item">Service completed</a>
+                        <a @click="selectList('3')" href="javascript:;" class="selectBd-item">Order canceled</a>
+                    </div>
+                </div>
+                <div class="s-orderList-bd">
+                    <div v-for="list in order.data" class="s-orderList-item">
+                        <div @click="window.location.href='/Member/usOrderDetails.html?oid='+list.order_id" class="s-orderList-box">
+                            <div class="s-orderList-head">
+                                {{ APP.getText.service_state[list.service_state] }}
+                            </div>
+                            <div class="s-orderList-goods">
+                                {{ list.products[0].name }}
+                            </div>
+                        </div>
+                        <div class="s-orderList-action clearfix">
+                            <a :href="'/Member/usOrderDetails.html?oid='+list.order_id" class="action-btn">Details of service</a>
+                            <a @click="APP.showActionKf()" href="javascript:;" class="action-btn">Customer sevice</a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="s-orderList-loading">
+                    <span v-show="order.loadingEnd==1">上拉可加载更多</span>
+                    <span v-show="order.loadingEnd==2">正在加载更多数据</span>
+                    <span v-show="order.loadingEnd==3">No more updates</span>
+                    <span v-show="order.loadingEnd==4">加载失败</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/us/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/us/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/us/js/vue.min.js"></script>
+    <script src="/Public/Home/us/js/main.js?v=064"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: 'home',
+                },
+
+ 
+                select_show: false,
+                select: {
+                    show: false,
+                    text: '',
+                    service_state: '',
+                },
+
+                order: {
+                    loading: true,
+                    loadingEnd: 0, //1准备 2 加载中 3 加载完 4error
+                    page: 1,
+                    total_page: 1,
+                    data: [],
+                }
+
+            },
+            created: function() {
+                var _tab = APP.getParam('tab') ? APP.getParam('tab') : ' ';
+                APP.getInfo(this, function() {
+                    
+                });
+
+                this.select.service_state = _tab
+                this.select.text = APP.getText.service_state[_tab];
+                this.getList(this.order.page, this.select.service_state);
+            },
+            mounted: function() {
+
+            },
+            watch:{
+                select_show (curVal,oldVal) {
+　　　　　　　　　   //console.log(curVal,oldVal);
+                    var _this = this;
+                    if (!oldVal) {
+                        setTimeout(function() {
+                            $("#app").one('click', function() {
+                                //console.log(233)
+                                setTimeout(function() {
+                                    _this.select_show = false;
+                                },50)
+                            })
+                        }, 100)
+            
+                    }
+
+　　　　　　　　 }　　
+　　　　　　},
+            methods: {
+                selectList: function(type) {
+                    this.select.text = APP.getText.service_state[type];
+                    this.select.service_state = type;
+                    this.select_show = false;
+                    this.order.page = 1;
+                    this.order.loadingEnd = 0;
+                    this.order.total_page = 1;
+                    this.order.data = [];
+                    this.getList(this.order.page, this.select.service_state);
+
+                    if (type == " ") {
+                        APP.sendHm("click", "orderCenter-all");
+                    } else if (type == '0') {
+                        APP.sendHm("click", "orderCenter-wait");
+                    } else if (type == '1') {
+                        APP.sendHm("click", "oderCenter-service");
+                    } else if (type == '2') {
+                        APP.sendHm("click", "orderCenter-complete");
+                    } else if (type == '3') {
+                        APP.sendHm("click", "orderCenter-cencel");
+                    }
+                },
+                getList: function(page, state) {
+                    var _this = this;
+                    var _json = {
+                        order_type: 1,  //0标准 1渠道
+                        page: page, //页
+                        service_state: state!=' ' ? state : '' //服务状态 空全部 0 待服务 1 服务中 2 服务完成 3 订单取消
+                    }
+                    _this.order.loadingEnd = 2;
+                    APP.send("/PC/NEWOrder/showAll.json", _json, function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.order.total_page = _data.listCount;
+
+                            //第一页且总页数大于1 初始化滚动加载
+                            if (_this['order']['total_page'] > 1 && _this['order']['page']==1) {
+                                _this.initPage(page, state);
+                            }
+
+                            //保存数据
+                            _this.order.data = _this.order.data.concat(_data.list);
+                            
+                            //判断是否加载完所有页数
+                            if (_this['order']['page'] < _this['order']['total_page']) {
+                                _this.order.loading = false;
+                                _this.order.loadingEnd = 1;
+                            } else {
+                                _this.order.loading = true;
+                                _this.order.loadingEnd = 3;
+                            }
+                            
+                        } else {
+                            _this['order'].page--;
+                            _this.order.loading = false;
+                            _this.order.loadingEnd = 4;
+                        }
+                    });
+                },
+                initPage: function(page, state) {
+                    var _this = this;
+                    document
+                    setTimeout(function() {
+                        // var _loading = false;
+                        $("#infinite").infinite(50).on("infinite", function() {
+                            //console.log(233)
+                            if (_this.order.loading) return;
+                            _this.order.loading = true;
+                           
+                            //console.log(_this.loading);
+                            //console.log(_this[_mode][_type].page, _this[_mode][_type].total_page);
+                            if (_this.order.page >= _this.order.total_page) {
+                                //console.log("end");
+                                _this.order.loading = true;
+                                _this.order.loadingEnd = 3;
+                                return;
+                            }
+                            _this.order.page++;
+                            _this.order.loadingEnd = 2;
+                            _this.getList(_this.order.page, _this.select.service_state);
+                           
+                            
+                        });
+                    }, 100)
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=34">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <!--登录或注册javascript:WeixinJSBridge.call('closeWindow');-->
+        <div v-show="page.show=='login'" class="main-page">
+            <div class="wrap-main">
+                <div class="s-title s3-title">
+                    <h2><strong>手机验证</strong></h2>
+                </div>
+                <div class="s-login-intr">
+                    <p>请输入您的手机号码</p>
+                </div>
+                <div class="s-login-form">
+                    <div class="s-input-item clearfix">
+                        <span class="item-d1">+86</span>
+                        <div class="item-d2">
+                            <input v-model="form_login.phone" oninput="if(value.length>11)value=value.slice(0,11)" type="tel" placeholder="请输入手机号" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="s-input-item s-input-itemCode clearfix">
+                        <span class="item-d1">验证码</span>
+                        <div class="item-d2">
+                            <input v-model="form_login.code" type="tel" placeholder="请输入验证码" autocomplete="off">
+                        </div>
+                        <a @click="loginCountDown()" :class="{'unactive': !form_login.code_state}" href="javascript:;" class="item-d3 unactive">
+                            {{ form_login.time }}
+                        </a>
+                    </div>
+                </div>
+                <div class="s-login-action">
+                    <a @click="login()" :class="{unactive : !form_login.code || !APP.isPhoneNo(form_login.phone)}" class="s-btn s-btn_1" href="javascript:;">登录</a>
+                </div>
+                <div class="s1-login-tips">
+                    点击绑定并登录，即表示已阅读并同意<a @click="nexAgreement()" href="javascript:;">《法驴会员用户协议》</a>
+                </div>
+            </div>
+        </div>
+        <!--设置密码-->
+        <div v-show="page.show=='set_pass'" class="main-page">
+            <!--<header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show='login'" href="javascript:;" class="s-header-colse"></a>
+                </div>
+            </header>-->
+            <div class="wrap-main">
+                <div class="s-title s3-title">
+                    <h2><strong>设置密码</strong></h2>
+                </div>
+                <div class="s-login-intr s-login-intr2">
+                    
+                </div>
+                <div class="s-setPass-form">
+                    <div class="s-input-item s-input-item2 clearfix">
+                        <span class="item-d1">设置密码</span>
+                        <div class="item-d2">
+                            <input v-model="form_set_pass.password" maxlength="" type="password" placeholder="输入密码（6-10为数字、字母）" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="s-input-item s-input-item2 clearfix">
+                        <span class="item-d1">密码</span>
+                        <div class="item-d2">
+                            <input v-model="form_set_pass.repassword" maxlength="" type="password" placeholder="重复密码" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="s-login-action">
+                    <a @click="setPassword()" class="s-btn s-btn_1" href="javascript:;">下一步</a>
+                </div>
+
+            </div>
+        </div>
+        <!--法律服务合作协议-->
+        <div v-show="page.show=='agreement'" class="main-page">
+            <!--<header class="s-header">
+                <div class="s-header-main">
+                    <a @click="page.show=page.agreement_last_page" href="javascript:;" class="s-header-colse"></a>
+                </div>
+            </header>-->
+            <div class="wrap-main">
+                <div class="s-agreement-box">
+                    <iframe src="agreement.html"></iframe>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="/Public/Home/member/js/exif.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/member/js/main.js?v=080"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    agreement_last_page: ''
+                },
+
+
+                form_login: {
+                    phone: '',
+                    code: '',
+                    time: '获取验证码',
+                    code_state: true
+                },
+                form_set_pass: {
+                    password: '',
+                    repassword: ''
+                },
+
+
+            },
+            created: function() {
+                var _this = this;
+                //  _this.page.show = 'login';
+                // return
+                _this.getInfo();
+                
+            },
+            mounted: function() {
+
+            },
+            methods: {
+                getInfo: function() {
+                    var _this = this;
+                    APP.send("/PC/User/userInfo.json?source=1", function(res) {
+                        if (res.errno == '0') {
+                            var _url = decodeURIComponent(APP.getParam("from"));
+                            if (APP.getParam("from")) {
+                                window.location.href = _url;
+                            }
+                        } else {
+                            _this.page.show = 'login';
+                        }
+                    })
+                },
+                nexAgreement: function() {
+                    // this.page.agreement_last_page = this.page.show;
+                    // this.page.show='agreement';
+                    window.location.href = "/Member/agreement.html"
+                },
+                login: function() {
+                    var _this = this;
+                    if (!APP.isPhoneNo(_this.form_login.phone)) {
+                        $.toast('请输入正确的手机号', 'text');
+                        return;
+                    }
+                    if (!_this.form_login.code) {
+                        return;
+                    }
+                    var _customer_source = APP.getFromChannel();
+                    var _json = {
+                        phone: _this.form_login.phone,
+                        code: _this.form_login.code,
+                        type: 1,
+                        customer_source: _customer_source
+                    };
+                    $.showLoading('数据提交中');
+                    APP.send('/PC/UserLogin/login.json', _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            //获取账号信息
+                            _this.info_login = true;
+                            _this.info = _data;
+                            if (_data.new_registration) {
+                                APP.sendHm({
+                                    action: "click",
+                                    object: "register"
+                                })
+                                
+                            }
+                            if (_data.password_is_null) {
+                                _this.page.show = 'set_pass';
+                            } else {
+                                _this.nextPage();                       
+                            }
+                            
+                        } else {
+                            $.toast(res.msg, "text");
+                        }
+                    });
+
+                },
+                loginCountDown: function() {
+                    var _this = this;
+                    var _phone = _this.form_login.phone;
+
+                    if (!_this.form_login.code_state) return;
+                    if (!APP.isPhoneNo(_phone)) {
+                        $.toast('请输入正确的手机号', 'text');
+                        return;
+                    }
+                         
+                    _this.form_login.code_state = false;
+                    _this.loginSendCode(_phone);
+                    _this.form_login.time = 60;
+                    var timest = setInterval(function() {
+                        if (typeof(_this.form_login.time) == 'string') {
+                            clearInterval(timest)
+                            return;
+                        }
+                        _this.form_login.time--;
+                        if (_this.form_login.time == 0) {
+                            _this.form_login.code_state = true;
+                            _this.form_login.time = '重新发送';
+                            clearInterval(timest)
+                        }
+                    }, 1000)
+                },
+                loginSendCode: function(phone) {
+                    //获取短信验证码
+                    var _this = this;
+                    var _json = {
+                        phone: phone
+                    }
+                    APP.send('/PC/UserLogin/sendShortMessageForFaLv.json', _json, function(res) {
+                        //console.log(res);
+                        if (res.errno == '0') {
+                            $.toptip('发送成功！', 'success');
+                        } else {
+                            _this.form_login.code_state = true;
+                            _this.form_login.time = '重新发送';
+                            //$.toast(res.msg, "text");
+                        }
+                    });
+                },
+                setPassword: function() {
+                    var _this = this;
+                    var password = _this.form_set_pass.password;
+                    var repassword = _this.form_set_pass.repassword;
+
+                    if (!password) {
+                        $.toast("请输入密码", 'text');
+                        return;
+                    }
+                    if (password.length<6 || password.length>10) {
+                        $.toast("密码格式不正确", 'text');
+                        return;
+                    }
+                    if (!repassword) {
+                        $.toast("请再次输入密码", 'text');
+                        return;
+                    }
+                    if　(password !== repassword) {
+                        $.toast("两次输入的密码不一致", 'text');
+                        return;
+                    }
+                
+                    var _json = {
+                        password: password
+                    };
+                    $.showLoading('数据提交中');
+                    APP.send('/PC/User/loginEditPassword.json', _json, function(res) {
+                        $.hideLoading();
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            $.toast("设置成功", "success", function() {
+                                _this.nextPage();
+                                //_this.nextInfo();
+                            });
+                        } else {
+                            $.toast(res.msg, 'text');
+                        }
+                    });
+                },
+                nextPage: function() {
+                    var _url = APP.getParam("from") ? decodeURIComponent(APP.getParam("from")) : '/Member/index.html';
+                     window.location.href = _url;
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

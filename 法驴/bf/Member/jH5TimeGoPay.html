@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>支付订单</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=12">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'home'">
+            
+            <div class="m-main j-timeGoPay-info clearfix">
+                <div class="j-timeGoPay-item item-line">
+                    <p class="item-d1"><strong>{{ order_time }}分钟</strong></p>
+                    <p class="item-d2">通话（{{ product['flprice']}}元/分钟）</p>
+                </div>
+                <div class="j-timeGoPay-item">
+                    <p class="item-d1"><strong>{{ order.money }}元</strong></p>
+                    <p class="item-d2">订单金额</p>
+                </div>
+            </div>
+
+            <div @click.stop="nextCoupon('coupon')" class="m-main">
+                <div class="j-timeGoPay-coupon">
+                    抵用券/优惠码
+                    <span class="coupon-price">-￥0.00</span>
+                </div>
+            </div>
+
+            <div class="weui-tabbar s-tabbar j-timeDetails-tabbar">
+                <div class="j-timeDetails-bar__item">
+                    <strong>需支付<span>￥{{ order.to_pay }}</span></strong>
+                </div>
+                <a v-if="order.state == '0' || order.state == '2'" @click="goPayWx()" href="javascript:;" class="j-timeDetails-bar__btn">
+                    <strong>确认支付</strong>
+                </a>
+                <a v-if="order.state == '0' && form_goPay.wx_pay_link || order.state == '2' && form_goPay.wx_pay_link" :href="form_goPay.wx_pay_link" class="j-timeDetails-bar__btn">
+                    打开微信
+                </a>
+
+                <a v-if="order.state != '0' && order.state != '2'" href="javascript:;" class="j-timeDetails-bar__btn">
+                    <strong>已完成</strong>
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div v-show="page.show == 'coupon'" class="j-timeGoPay-couponPage" data-title="使用优惠码">
+            <div @click.stop="nextCoupon('home')" class="couponPage-close"></div>
+            <div class="couponPage-modal">
+
+                <div class="j-timeGoPay-coupon-title">
+                    优惠码
+                </div>
+                <div class="m-main">
+                    <div class="j-timeGoPay-coupon-item">
+                        <input class="j-timeGoPay-coupon-input" placeholder="使用优惠码"/>
+                        <i class="item-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/fastclick.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                },
+
+                order: '',
+                product: '',
+                order_time: 0,
+
+
+                form_goPay: {
+                    wx_pay_link: '',
+                    timest_state: true,
+                    timeset: null
+                }
+
+            },
+            created: function() {
+                var _this = this;
+                _this.getDetails();
+                _this.getOrderState();
+                _this.getInfo();
+                
+            },
+            mounted: function() {
+                
+            },
+            methods: {
+                nextCoupon: function(page) {
+                    if (page == 'coupon') {
+                        document.title = "使用优惠码"
+                    } else {
+                        document.title = "支付订单"
+                    }
+                    this.page.show = page;
+                },
+                getInfo: function() {
+                    var _this = this;
+                    var _url = window.location.pathname + window.location.search;
+                    var _from_url = '/Member/jH5Login.html?from='+encodeURIComponent(_url);
+                    APP.send("/PC/User/userInfo.json?source=1", function(res) {
+                        if (res.errno == '0') {
+                            _this.page.show = 'home';
+                        } else {
+                            window.location.href = _from_url;
+                        }
+                    })
+                },
+                getDetails: function() {
+                    var _this = this;
+                    var _oid = APP.getParam("oid");
+                    var _json = {
+                        order_id: _oid
+                    }
+                    APP.send("/PC/NEWOrder/info.json", _json, function(res) {
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //alert(JSON.stringify(res.data.order_id));
+                            var _data = res.data;
+                            _this.order = _data;
+                            _this.product = _data.products[0];
+
+                            _this.order_time = APP.calcMinute(_data.call_record.duration)
+                        
+                        }
+                    })
+                },
+                goPayWx: function() {
+                    var _this = this;
+                    var _json = {
+                        uuid: APP.getParam("oid"),
+                        type: 4                   
+                    }
+                    $.showLoading("数据提交中");
+                    APP.send("/V2/Lawyer/wxPay.json", _json, function(res) {
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            //mweb_url 获取跳转链接 生成a标签按钮 用户再次点击跳转微信支付
+                            _this.form_goPay.wx_pay_link = _data.mweb_url;
+                            // window.location.href = _data.mweb_url;
+                        } else {
+                            $.toast(res.msg, "text");
+                        }
+                    });
+
+                    APP.sendHm({
+                        action: "click",
+                        object: "confirm_to_pay",
+                        chinese_object: "确认支付",
+                        chinese_url: "支付订单",
+                        parameter: _json.uuid
+                    })
+
+                },
+                getOrderState: function() {
+                    //微信H5支付 需要轮循查看订单详情
+                    var _this = this;
+                    var uuid = APP.getParam("oid");
+                    if (!_this.form_goPay.timest_state) return;
+                    _this.form_goPay.timeset = setTimeout(function() {
+                        _this.form_goPay.timest_state = false;
+                        APP.send("/V2/Lawyer/getOrder.json?uuid="+uuid, function(res) {
+                            
+                            if (res.errno == '0') {
+                                var _data = res.data;
+                                if (_data.state == 'STATE_SUCCESS') {
+                                    _this.getDetails();
+                                    clearTimeout( _this.form_goPay.timeset)
+                                } else {
+                                    _this.form_goPay.timest_state = true;
+                                    _this.getOrderState()
+                                }
+                            } else {
+                                _this.form_goPay.timest_state = true;
+                                _this.getOrderState()
+                            }
+                        });
+                    }, 3000)
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/us/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/us/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/us/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/us/css/main.css?v=44">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <!--首页-->
+
+
+        <div v-show="page.show == 'home'" class="wrap-main">
+            <div class="s2-usGoodsList-bg"></div>
+            <a @click="next('fall-center', '/Member/usPersonal.html')" v-if="info_login" href="javascript:;" class="s-goodsList-per">Personal Center</a>
+            <div class="s2-goodsList-head">
+                    <div class="s2-goodsList-title">
+                    <img src="/Public/Home/us/img/m91.png" alt="">
+                </div>
+            </div>
+
+            <div class="s-goodsList-bd s2-goodsList-bd">
+                <div class="s2-goodList-coupon"></div>
+                <div class="s-goodsList-box">
+
+                    <div class="s-goodsList-box-title s2-goodsList-box-title">
+                        <span>Recommendations<div class="s2-title-bg"></div></span>
+                    </div>
+                    <!--100328-->
+                    <a @click="next('fall-prodoct1', '/Member/usGoodsDetails.html?id=100491')" href="javascript:;" class="s-goodsList-box-item">
+                        <div class="s-goodsList-box-pic">
+                            <img src="/Public/Home/us/img/m107.png" alt="">
+                        </div>
+                        <div class="s-goodsList-box-text s2-goodsList-box-text">
+                            <p class="h2"><strong>Consumer Rights</strong></p>
+                            <p class="p1">
+                                Many business tricks around you,<br>
+                                Know the law in order to maintain<br>
+                                legal rights.<br>
+                                Call our lawyer anytime!
+                            </p>
+                            <div class="p3-btn">Click to enter</div>
+                        </div>
+                    </a>
+
+                    <a @click="next('fall-prodoct2', '/Member/usGoodsDetails.html?id=100492')" href="javascript:;" class="s-goodsList-box-item">
+                        <div class="s-goodsList-box-pic">
+                            <img src="/Public/Home/us/img/m108.png" alt="">
+                        </div>
+                        <div class="s-goodsList-box-text s2-goodsList-box-text">
+                            <p class="h2"><strong>Labor Disputes</strong></p>
+                            <p class="p1">
+                                Work schedule is tight, rights are violated.<br>
+                                Immediately call our lawyer for reasonable<br> 
+                                response!
+                            </p>
+                            <div class="p3-btn">Click to enter</div>
+                        </div>
+                    </a>
+
+                </div>
+                
+            </div>
+
+
+          
+        </div>
+       
+
+    </div>
+    <script src="/Public/Home/us/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/us/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/us/js/vue.min.js"></script>
+    <script src="/Public/Home/us/js/main.js?v=064"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+
+                channel: '0',
+
+                coupon: {
+                    unbounded_count: 0,
+                    not_expired_count: 0,
+                    coupon_use_state: false,
+                    coupon_get_state: false,
+                }
+
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0' && sessionStorage.getItem("coupon_from_login")) {
+                        sessionStorage.removeItem("coupon_from_login");
+                        _this.addCoupon();
+                    }
+
+                    _this.page.show = 'home';
+                    //console.log(res.errno)
+                });
+                this.getCouponSum();
+                this.getCouponState();
+                this.getCouponToday();
+                
+
+                //来源
+                var _tab_channel = '9';
+                this.channel = _tab_channel;
+                APP.setFromChannel('30');
+                APP.setOrderChannel(_tab_channel);
+
+                
+
+            },
+            mounted: function() {
+                // var _tab_channel = APP.getParam("tab") ? APP.getParam("tab") : '5';
+                // if (_tab_channel == '0' && !localStorage.getItem("first_mail_state")) {
+                //     this.showStatement();
+                // }
+            },
+            methods: {
+                next: function(type, url) {
+                    APP.sendHm("click", type, function() {
+                        window.location.href = url;
+                    });
+                },
+                showStatement: function() {
+                    localStorage.setItem("first_mail_state", "true");
+                    APP.modal.showLayer({
+                        title: '免责声明',
+                        btnHide: true,
+                        text: '尊敬的用户,您正在前往第三方合作平台,如因您接受第三方服务而产生任何纠纷,邮储银行具有免责权利。',
+                        onOK: function() {
+                            //console.log('ok');
+                            APP.modal.hideLayer();
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+
+                    // setTimeout(function() {
+                    //     APP.modal.hideLayer();
+                    // }, 2000)
+                },
+                getCouponSum: function() {
+                    // 获取该渠道可领取数量
+                    var _this = this;
+                    APP.send('/PC/NEWOrder/getChannelUnboundedDiscountCodeNumber.json?channel=0', function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        // _this.page.show = 'home';
+                        if (res.errno == '0') {
+                            _this.coupon.unbounded_count = res.data.unbounded_count;
+                            _this.coupon.not_expired_count = res.data.not_expired_count;
+                        }
+                    });
+                },
+                getCouponState: function() {
+                    //获取用户是否使用过优惠码
+                    var _this = this;          
+                    APP.send('/PC/NEWOrder/userAvailableChannelDiscountCode.json?channel=0', function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            _this.coupon.coupon_use_state = true;
+                        }
+                    });
+                },
+                getCouponToday: function() {
+                    //获取今日渠道领取的优惠卷 
+                    var _this = this;
+                    APP.send('/PC/NEWOrder/getTodayReceiveDiscountCode.json?channel=0', function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            if (res.data && res.data.length == 0) {
+
+                            } else {
+                                _this.coupon.coupon_get_state = true;
+                            }
+                        }
+
+                    });
+                },
+                addCoupon: function() {
+                    //用户领取渠道优惠码
+                    var _this = this;
+                    $.showLoading("正在领取")
+                    APP.send('/PC/NEWOrder/userActivationDiscountCode.json?channel=0', function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        $.hideLoading()
+                        if (res.errno == '0') {
+                            $.toast("已领取成功，支付时会自动抵扣哦", "text")
+                            _this.getCouponSum();
+                            _this.getCouponState();
+                            _this.getCouponToday();
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                },
+                nextGetCoupon: function() {
+                    if (parseFloat(this.coupon.unbounded_count) == 0) {
+                        $.toast("已经被领取完了，请关注后续活动", "text");
+                        return;
+                    }
+                    if (this.info_login && !this.coupon.coupon_use_state) {
+                        $.toast("您已经使用过，请关注后续活动", "text");
+                        return;
+                    }
+                    if (this.info_login && this.coupon.coupon_get_state) {
+                        $.toast("已领取成功，支付时会自动抵扣哦", "text");
+                        return;
+                    }
+                    if (this.info_login) {
+                        this.addCoupon();
+                    } else {
+                        var _return_url = encodeURIComponent("/Member/usGoodsList.html");
+                        //sessionStorage.setItem("coupon_from", "true");
+                        var _loca_url = '/Member/usLogin.html?from='+_return_url;
+                        sessionStorage.setItem("coupon_from_login", "0");
+                        //APP.WXLogin(_this, '/Member/usGoodsList.html');
+
+                        APP.init(function() {
+                            //alert(233)
+                           window.location.href = _loca_url;
+                        }, _loca_url);
+                    }
+
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

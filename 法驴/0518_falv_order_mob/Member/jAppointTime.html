@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html class="ffffff">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>律师已休息</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=40">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body class="ffffff">
+    <div v-cloak id="app" class="main">
+        <div v-show="page.show == 'home'">
+            <div class="m-main">
+                <div class="j-matching-d1">
+                    <strong>非工作时间，律师已休息</strong>
+                </div>
+                <div class="j-matching-d2">
+                    <p>*律师将在预约时间给您回拨</p>
+                    <p v-if="product.channel_specification" >资费标准：{{ product.channel_specification.price }}元/分钟</p>
+                    <p v-else>资费标准：{{product.flprice}}元/分钟</p>
+                </div>
+                <div class="j-matchingBusy-d3 j-matchingBusy-d4">
+                    <img class="j-matchingBusy-ban" src="/Public/Home/topic/img/24.png">
+                </div>
+                <div class="j-matchingBusy-action">
+                    <a @click="openTimePop()" href="javascript:;" class="m-btn m-btn_1">预约服务时间</a>
+                    <a v-if="APP.getOrderChannel()=='14'" @click="nextPage('Rest-cancel', '取消', '', '/newVip/newmIndex.html')" href="javascript:;" class="m-btn m-btn_2" style="font-weight: normal">取消</a>
+                    <a v-else @click="nextPage('Rest-cancel', '取消', '', '/Member/mIndex.html')" href="javascript:;" class="m-btn m-btn_2" style="font-weight: normal">取消</a>
+                </div>
+                <div class="j-matchingBusy-tips">推荐咨询时间：9:00-17:30</div>
+            </div>
+
+
+            <div id="time" class="weui-popup__container popup-bottom" >
+                <div @click.stop="$.closePopup()" class="weui-popup__overlay s4-weui-popup__overlay"></div>
+                <div class="weui-popup__modal s4-timePop__modal">
+                    <div class="s4-timePop-head">
+                        预约服务时间
+                        <a @click.stop="$.closePopup()" class="s4-timePop-close" href="javascript:;"></a>
+                    </div>
+                    <div class="clearfix">
+                        <div class="s4-timePop-dayBd">
+                            <a @click="selectServiceDay(index)" v-for="(list, index) in service.date" :class="{'active': list.state }" class="dayBd-item" href="javascript:;">{{ list.text }}</a>
+                        </div>
+                        <div class="s4-timePop-hourBox">
+                            <div id="JS_time_hour" class="s4-timePop-hourBd" style="-webkit-overflow-scrolling: touch;">
+                                <div v-show="service.index == index" v-for="(list, index) in service.date">
+                                    <a @click="selectServiceTime(list2.date, list2.result)" :class="{'unactive': list2.result == 0, 'active': service.select_time == service.select_day+ ' '+list2.date }" v-for="(list2, index2) in list.time" class="hourBd-item" href="javascript:;">{{ list2.date }}<span class="w2">{{ list2.result_text }}</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div @click="add()" class="s4-timePop-action"><strong>确定下单</strong></div>
+
+                </div>
+            </div>
+
+            
+        </div>
+
+        
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+                
+
+                product: '',
+
+                service: {
+                    cover_img: {
+                        '1': '/Public/Home/member/img/m114.png',
+                        '1': '/Public/Home/member/img/m115.png',
+                        '1': '/Public/Home/member/img/m116.png',
+                        '1': '/Public/Home/member/img/m117.png',
+                    },
+                    max: 0,
+                    index: 0,
+                    select_day: '',
+                    select_time: '',
+                    date: []
+                },
+
+            },
+            created: function() {
+                var _this = this;
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0') {
+                        _this.page.show = "home";
+                    } 
+                });
+                this.initDay();
+                this.getDetails();
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "律师已休息"
+                })
+            },
+            mounted: function() {
+                $.smartScroll($("#time"), '.s4-timePop-hourBd');
+                
+            },
+            methods: {
+                openTimePop: function() {
+                    $('#time').popup();
+
+                    APP.sendHm({
+                        action: "click",
+                        object: "Rest-time",
+                        chinese_object: "预约服务时间",
+                        chinese_url: "律师已休息"
+                    })
+                },
+                nextPage: function(type, type_text, param, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "律师已休息",
+                        parameter: param
+                    }, function() {
+                        window.location.href = url;
+                    })
+                },
+                initDay: function() {
+                    var week_text = {
+                        '0': '周日',
+                        '1': '周一',
+                        '2': '周二',
+                        '3': '周三',
+                        '4': '周四',
+                        '5': '周五',
+                        '6': '周六'
+                    }
+                    function addDate(days) {
+                        // if (days == undefined || days == '') {
+                        //     days = 1;
+                        // }
+                        var date = new Date();
+                        date.setDate(date.getDate() + days);
+                        var month = date.getMonth() + 1;
+                        var day = date.getDate();
+                        return date.getFullYear() + '-' + getFormatDate(month) + '-' + getFormatDate(day);
+                    }
+                    function getFormatDate(arg) {
+                        if (arg == undefined || arg == '') {
+                            return '';
+                        }
+                        var re = arg + '';
+                        if (re.length < 2) {
+                            re = '0' + re;
+                        }
+                        return re;
+                    }
+                    function getMonthDay(arg) {
+                        var date = new Date(arg.replace(/\-/g, "/"));
+                        var month = date.getMonth() + 1;
+                        var day = date.getDate();
+                        return getFormatDate(month) + '-' + getFormatDate(day);
+                    }
+                    function getWeek(arg) {
+                        var date = new Date(arg.replace(/\-/g, "/"));
+                        return week_text[date.getDay()]
+                    }
+
+                    var _t;
+                    var _d = [];
+                    for (var i=1; i<=5; i++) {
+                        _t = addDate(i);
+                        if (i == 0) {
+                            _d.push({
+                                date: _t,
+                                text: '今天'+'【'+getWeek(_t)+'】',
+                                state: true,
+                                time: []
+                            })
+                        } else {
+                            _d.push({
+                                date: _t,
+                                text: getMonthDay(_t)+'【'+getWeek(_t)+'】',
+                                state: false,
+                                time: []
+                            })
+                        }
+                    }
+                    this.service.index = 0;
+                    this.service.date = _d;
+                    this.service.date[0]["state"] = true;
+                    this.service.select_day = this.service.date[this.service.index]['date'];
+                    this.getDayTimes(_d[0]['date'])
+                    //console.log(_d);
+                    
+                },
+                getDayTimes: function(day) {
+                    //获取预约时间段
+                    var _this = this;
+                    APP.send('/PC/Public/contactTime.json?date='+day, function(res) {
+                        //console.log(res);
+                        //alert(JSON.stringify(res))
+                        if (res.errno == '0') {
+                            //console.log( _this.service.date[_this.service.max].date);
+                            var _data = res.data.list;
+                            for (var i=0, len=_data.length; i< len; i++) {
+                                if (_data[i]['result'] == 1) {
+                                    _data[i]['result_text'] = '可预约';
+                                }
+                                if (_data[i]['result'] == 0) {
+                                    _data[i]['result_text'] = '已约满';
+                                }
+                            }
+                            //console.log(_data);
+                            _this.service.date[_this.service.max]['time'] = _data;
+                            if (_this.service.max < 4) {
+                                 _this.service.max ++ ;
+                                _this.getDayTimes(_this.service.date[_this.service.max]['date'])
+                            }
+                        }
+                    });
+                    
+                },
+                selectServiceTime: function(time, result) {
+                    if (result == 0) {
+                        return;
+                    }
+                    this.service.select_time = this.service.select_day+ ' '+ time;
+                },
+                selectServiceDay: function(index) {
+                    if (this.service.index == index) {
+                        return;
+                    }
+                    
+                    this.service.date[this.service.index]['state'] = false;
+                    this.service.date[index]['state'] = true;
+                    this.service.index = index;
+                    this.service.select_day = this.service.date[index]['date'];
+                    $("#JS_time_hour").scrollTop(0);
+                },
+                getDetails: function() {
+                    var _this = this;
+                    var _id = APP.getParam("id");
+                    var channel= APP.getOrderChannel();
+                    APP.send('/PC/Product/info.json?id='+_id+"&channel="+channel, function(res) {
+                        if (res.errno == '0') {
+                            _this.product = res.data;
+                        }
+                    });
+                },
+                add: function() {
+                    var _this = this;
+                    var _json = {
+                        product_data: [{id: _this.product.id, count: 1}],
+                        note: "",
+                        invoice_state: 0,
+                        invoice: {
+                            header_content_type: '',
+                            header_content: '',
+                            identification_number: '',
+                            name: '',
+                            telephone: '',
+                            address: '',
+                        },
+                        company_name: '',
+                        customer_name: _this.info.name,
+                        phone: _this.info.username,
+                        channel: '', //渠道 0 邮政 1 东家会 2 环球黑卡 3腾讯
+                        source: 14,
+                        order_type: 1,
+                        discount_code: '', //优惠码
+                        customer_selected_supplier_id: '', //供应商id
+                        select_service_time: _this.service.select_time
+                    }
+                     if (APP.getOrderChannel() == '14') {
+                        _json.channel = 14;
+                        _json.source = 19
+                    }
+
+                    if (!_this.service.select_time) {
+                        $.toast("请选择服务时间", "text");
+                        return;
+                    }
+                    // console.log(_json)
+                    // return
+                    $.showLoading("数据提交中");
+                    APP.sendHm({
+                        action: "click",
+                        object: "Appointment-order",
+                        chinese_object: "确定下单",
+                        chinese_url: "预约时间弹窗"
+                    })
+
+                    APP.send("/PC/NEWOrder/create.json", _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //统计
+                            //return;
+                            window.location.href = "/Member/orderList.html";
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>订单中心</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1 viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=52">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
+    
+</head>
+
+<body>
+    <div v-cloak id="app" class="main main-tabbar">
+
+        <div v-show="page.show == 'home'">
+
+            <div class="j-orderList-nav" style="-webkit-overflow-scrolling: touch;">
+                <div class="clearfix" style="width: 9.6rem">
+                    <a @click="selectList('top', 'all')" :class="{'active' : select.order_state == 'all'}" href="javascript:;" class="j-orderList-navItem">全部</a>
+                    <a @click="selectList('top', '0')" :class="{'active' : select.order_state == '0'}" href="javascript:;" class="j-orderList-navItem">待支付</a>
+                    <a @click="selectList('top', '1')" :class="{'active' : select.order_state == '1'}" href="javascript:;" class="j-orderList-navItem">服务中</a>
+                    <a @click="selectList('top', '2')" :class="{'active' : select.order_state == '2'}" href="javascript:;" class="j-orderList-navItem">待缴清</a>
+                    <a @click="selectList('top', '4')" :class="{'active' : select.order_state == '4'}" href="javascript:;" class="j-orderList-navItem">已取消</a>
+                    <a @click="selectList('top', '3')" :class="{'active' : select.order_state == '3'}" href="javascript:;" class="j-orderList-navItem">已完成</a>
+                </div>
+            </div>
+
+            <div class="j-orderList-content">
+                <div v-if="list.products" v-for="(list, index) in order.data" class="j-orderList-item">
+                    <div @click="window.location.href='/Member/orderDetails.html?oid='+list.order_id" class="item-head">
+                        <strong class="item-head-icon"><span class="item-head-icon-s1">{{ select.iconJson[list.products[0]['type']] }}</span>{{ list.products[0].name }}</strong>
+                        <a href="javascript:;" class="item-more item-user-more item-link">
+                            {{ APP.getText.order_state[list.state] }}
+                        </a>
+                    </div>
+                    <div class="item-content">
+                        <div @click="window.location.href='/Member/orderDetails.html?oid='+list.order_id" class="item-content-time">{{ APP.resetTime(list.create_time, 'zh_all') }}</div>
+                        <div v-if="parseFloat(list.money) > 0" @click="window.location.href='/Member/orderDetails.html?oid='+list.order_id" class="item-content-name"><strong class="c1">￥<span class="c1-s1">{{ list.money }}</span></strong></div>
+                        <div v-if="list.products[0]['type'] == '0' || list.products[0]['type'] == '9' || list.products[0]['type'] == '10'" class="item-content-action clearfix">
+                            <a @click="nextPage('orderCenter-pay', '支付', '/Member/orderGoPay.html?oid='+list.order_id, list.order_id)" v-if="list.state == '0' || list.state == '2'" href="javascript:;" class="action-btn btn_2">支付</a>
+                            <a @click="cancal(index)" v-if="list.state == '0'" href="javascript:;" class="action-btn btn_1">取消订单</a>
+                        </div>
+                        <div v-if="list.products[0]['type'] == '11'" class="item-content-action clearfix">
+                            <a @click="nextPage('orderCenter-pay', '支付', '/Member/jTimeGoPay.html?oid='+list.order_id, list.order_id)" v-if="list.state == '0' || list.state == '2'" href="javascript:;" class="action-btn btn_2">支付</a>
+                            <a @click="checkOrder(index)" v-if="list.state == '3'" href="javascript:;" class="action-btn btn_1">继续问</a>
+                            <a @click="nextPage('orderCenter-evaluation', '评价', '/Member/jComment.html?oid='+list.order_id, list.order_id)" v-if="list.state == '3' && !list.lawyer_evaluate" href="javascript:;" class="action-btn btn_1">评价</a>
+                            <a @click="cancal(index)" v-if="list.state == '8' && list.select_service_time" href="javascript:;" class="action-btn btn_1">取消订单</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div v-show="order.loadingEnd==2" class="j-list-blank">
+                    <span>正在加载更多数据</span>
+                </div>
+
+                <div v-show="order.loadingEnd !=2 && !order.data || order.loadingEnd !=2 && order.data && order.data.length == 0" class="j-list-blank">
+                    <span>暂无数据</span>
+                </div>
+
+            </div>
+            
+
+            <div class="weui-tabbar s-tabbar j-orderList-tabbar">
+                <div>
+                    <a @click="$('#JS_nav').popup()" class="j-orderList-allNav" href="javascript:;">
+                        <img src="/Public/Home/topic/img/content_icon_shaixuan_default@2x.png">
+                        <p><strong>{{ select.text }}</strong></p>
+                    </a>
+                </div>
+            </div>
+
+
+            <div id="JS_nav" class="weui-popup__container popup-bottom">
+                <div class="weui-popup__overlay j-weui-popup__overlay"></div>
+                <div class="weui-popup__modal j-weui-popup__modal">
+                    <div class="m-main">
+                        <div class="j-orderList-allNav-title">
+                            <strong>筛选订单</strong>
+                        </div>
+                        <div class="j-orderList-allNav-content clearfix">
+                            <div @click="selectList('bot', '0')" :class="{'active' : select.type == '0'}" class="allNav-item">全部订单</div>
+                            <div @click="selectList('bot', '1')" :class="{'active' : select.type == '1'}" class="allNav-item">产品</div>
+                            <div @click="selectList('bot', '3')" :class="{'active' : select.type == '3'}" class="allNav-item">电话咨询</div>
+                            <div @click="selectList('bot', '2')" :class="{'active' : select.type == '2'}" class="allNav-item">视频</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=088"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                },
+
+ 
+                select_show: false,
+                select: {
+                    show: false,
+                    iconJson: {
+                        "0": "产品",
+                        "6": "产品",
+                        "7": "产品",
+                        "9": "视频",
+                        "10": "视频",
+                        "11": "咨询"
+                    },
+                    textJson: {
+                        '0': '全部订单',
+                        '1': '产品',
+                        '2': '视频',
+                        '3': '电话咨询'
+                    },
+                    text: '',
+                    order_state: 'all', //订单状态 all全部 0代付款 1服务中 2服务完成 3待缴清 4已取消
+                    type: '0'   //订单类型 0=>全部，1=>产品,2=>视频，3=>咨询
+                },
+
+                order: {
+                    loading: true,
+                    loadingEnd: 0, //1准备 2 加载中 3 加载完 4error
+                    page: 1,
+                    total_page: 1,
+                    data: [],
+                },
+
+
+                isOrderPay: {
+                    state: false,
+                    data: ''
+                },
+
+            },
+            created: function() {
+                var _this = this;
+                var _tab = APP.getParam('tab') ? APP.getParam('tab') : 'all';
+                var _type = APP.getParam('type') ? APP.getParam('type') : '0';
+                APP.getInfo(this, function(res) {
+                    if (res.errno == '0') {
+                        _this.page.show = "home";
+                    }
+                });
+                this.getVerificationOrder();
+
+                this.select.text = this.select.textJson[_type];
+                this.select.order_state = _tab;
+                this.select.type = _type;
+                this.getList(this.order.page, this.select.order_state, this.select.type);
+
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "订单中心"
+                })
+
+            },
+            mounted: function() {
+
+            },
+            watch:{
+                
+　　　　　　},
+            methods: {
+                nextPage: function(type, type_text, url, param) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "订单中心",
+                        parameter: param
+                    }, function() {
+                        window.location.href = url;
+                    })
+                },
+                getVerificationOrder: function() {
+                    //获取用户是否存在【待支付】状态的电话咨询订单
+                    var _this = this;
+                    APP.send('/PC/WxUser/verificationOrder.json', function(res) {
+                        if (res.errno == '0') {
+                            _this.isOrderPay.data = res.data;   
+                        } else {
+                            _this.isOrderPay.state = true;
+                        }
+                    });
+                    
+                },
+                cancal: function(index) {
+                    //取消订单
+                    var _this = this;
+                    var _oid = _this.order.data[index]['order_id'];
+                    APP.modal.showLayer({
+                        btn: ['是', '否'],
+                        text: '订单还未支付，是否确认取消?',
+                        onOK: function() {
+                            //console.log('ok');
+
+                            $.showLoading("正在取消");
+                            APP.send("/PC/NEWOrder/cancel.json?order_id=" + _oid, function(res) {
+                                $.hideLoading();
+                                if (res.errno == '0') {
+                                    APP.modal.hideLayer();
+                                    $.toast("取消成功", "text");
+                                    _this.order.data.splice(index, 1)
+                                } else {
+                                    $.toast(res.msg, "text")
+                                }
+                            });
+                        },
+                        onCancal: function() {
+                            //console.log('cancal')
+                            APP.modal.hideLayer();
+                        }
+                    });
+                },
+                selectList: function(type, para) {
+                    if (type == 'top') {
+                        this.select.order_state = para;
+                    } else {
+                        this.select.type = para;
+                        this.select.text = this.select.textJson[para];
+                        $.closePopup();
+                    }
+                    this.select_show = false;
+                    this.order.page = 1;
+                    this.order.loadingEnd = 0;
+                    this.order.total_page = 1;
+                    this.order.data = [];
+                    this.getList(this.order.page, this.select.order_state, this.select.type);
+
+                    //行为记录
+                    if (type == "bot") {
+
+                        if (para == "0") {
+                            APP.sendHm({
+                                action: "click",
+                                object: "orderCenter-all-style",
+                                chinese_object: "筛选-全部订单",
+                                chinese_url: "订单中心"
+                            })
+                        } else if (para == "1") {
+                            APP.sendHm({
+                                action: "click",
+                                object: "orderCenter-product",
+                                chinese_object: "筛选-产品",
+                                chinese_url: "订单中心"
+                            })
+                        } else if (para == "3") {
+                            APP.sendHm({
+                                action: "click",
+                                object: "orderCenter-ask-for-phone",
+                                chinese_object: "筛选-电话咨询",
+                                chinese_url: "订单中心"
+                            })
+                        } else if (para == "2") {
+                            APP.sendHm({
+                                action: "click",
+                                object: "orderCenter-video",
+                                chinese_object: "筛选-视频",
+                                chinese_url: "订单中心"
+                            })
+                        }
+
+                    } else if (type == 'top') {
+                        // console.log(para)
+                        if (para == "all") {
+                            APP.sendHm({
+                                action: "click",
+                                object: "orderCenter-all",
+                                chinese_object: "筛选-全部",
+                                chinese_url: "订单中心"
+                            })
+                        } else if (para == "0") {
+                            APP.sendHm({
+                                action: "click",
+                                object: "orderCenter-wait for pay",
+                                chinese_object: "筛选-待支付",
+                                chinese_url: "订单中心"
+                            })
+                        } else if (para == "1") {
+                            APP.sendHm({
+                                action: "click",
+                                object: "oderCenter-service",
+                                chinese_object: "筛选-服务中",
+                                chinese_url: "订单中心"
+                            })
+                        } else if (para == "3") {
+                            APP.sendHm({
+                                action: "click",
+                                object: "orderCenter-complete",
+                                chinese_object: "筛选-服务完成",
+                                chinese_url: "订单中心"
+                            })
+                        } else if (para == "4") {
+                            APP.sendHm({
+                                action: "click",
+                                object: "orderCenter-cencel",
+                                chinese_object: "筛选-订单已取消",
+                                chinese_url: "订单中心"
+                            })
+                        } else if (para == "2") {
+                            APP.sendHm({
+                                action: "click",
+                                object: "orderCenter-wait for pay more",
+                                chinese_object: "待缴清",
+                                chinese_url: "订单中心"
+                            })
+                        }
+                    } 
+                },
+                getList: function(page, state, type) {
+                    var _this = this;
+                    
+                    var _json = {
+                        order_type: 1,  //0标准 1渠道
+                        page: page, //页
+                        type: type,
+                        state: state 
+                    }
+
+                    //视频订单
+                    // if (type == '2') {
+                    //     if (state == '1') {
+                    //         _json['state'] = '3'
+                    //     } else if (state == '3') {
+                    //         _json['state'] = '1'
+                    //     }
+                    // }   
+
+
+                    _this.order.loadingEnd = 2;
+                    APP.send("/PC/WxUser/orderList.json", _json, function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            var _data = res.data.list;
+                            _this.order.total_sum = res.data.listCount;
+                            //第一页且总页数大于1 初始化滚动加载
+                            if (_data && _data.length>0 && _this.order.page == 1) {
+                                _this.initPage(page, state, type);
+                            }
+
+                            //保存数据
+                            _this.order.data = _this.order.data.concat(_data);
+                            
+                            //判断是否加载完所有页数
+                            if (_data && _data.length > 0) {
+                                _this.order.loading = false;
+                                _this.order.loadingEnd = 1;
+                            } else {
+                                _this.order.loading = true;
+                                _this.order.loadingEnd = 3;
+                            }
+                            
+                        } else {
+                            _this.order.page--;
+                            _this.order.loading = false;
+                            _this.order.loadingEnd = 4;
+                        }
+
+                    });
+
+                },
+                initPage: function(page, state, type) {
+                    var _this = this;
+                    setTimeout(function() {
+                        // var _loading = false;
+                        var _h = $(document).height() - $(window).height();
+                        $(document).scroll(function() {
+                            if (_h <= 0) {_h = $(document).height() - $(window).height()};
+                            _h = $(document).height() - $(window).height();
+                            //console.log(_h - $(this).scrollTop())
+                            if (_h - $(this).scrollTop() <= 100) {
+                                if (_this.order.loading) return;
+                                _this.order.loading = true;
+                                if (_this.order.loadingEnd  == 3) {
+                                    //console.log("end");
+                                    _this.order.loading = true;
+                                    return;
+                                }
+                                _this.order.page++;
+                                _this.order.loadingEnd = 2;
+                                //console.log(_this.order.page)
+                                _this.getList(_this.order.page, _this.select.order_state, _this.select.type);
+                            }
+                        })
+                       
+                    }, 100)
+                },
+                checkOrder: function(index) {
+                    var _this = this;
+                    if (this.isOrderPay.state) {
+                        APP.sendHm({
+                            action: "click",
+                            object: "orderCenter-contiune",
+                            chinese_object: "继续问",
+                            chinese_url: "订单中心",
+                            parameter: _this.isOrderPay.data.order_id
+                        }, function() {
+                            _this.add(index);
+                        })
+
+                    } else {
+                        this.nextPage('orderCenter-contiune', '继续问', '/Member/orderDetails.html?oid='+this.isOrderPay.data.order_id, this.isOrderPay.data.order_id)
+                    }
+                },
+                add: function(index) {
+                    var _this = this;
+                    var _id = _this.order.data[index]['products'][0]['id'];
+                    var _lawyer_id = _this.order.data[index]['lawyer_id'];
+                    var _json = {
+                        product_data: [{id: _id, count: 1}],
+                        note: "",
+                        invoice_state: 0,
+                        invoice: {
+                            header_content_type: '',
+                            header_content: '',
+                            identification_number: '',
+                            name: '',
+                            telephone: '',
+                            address: '',
+                        },
+                        company_name: '',
+                        customer_name: _this.info.name,
+                        phone: _this.info.username,
+                        channel: '', //渠道 0 邮政 1 东家会 2 环球黑卡 3腾讯
+                        source: 14,
+                        order_type: 1,
+                        discount_code: '', //优惠码
+                        customer_selected_supplier_id: '', //供应商id
+                        lawyer_id: _lawyer_id,
+                    }
+
+                    // console.log(_json)
+                    // return
+
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/create.json", _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //统计
+                            //return;
+                            window.location.href = "/Member/jMatching.html?oid=" + res.data;
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                
+                },
+            }
+        });      
+
+    </script>
+</body>
+
+</html>
