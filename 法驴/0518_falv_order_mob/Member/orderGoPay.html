@@ -12,7 +12,7 @@
     <script src="/Public/Home/member/js/flexible.js"></script>
     <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
     <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
-    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=21">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=12">
     <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
     
@@ -23,20 +23,35 @@
     <div v-cloak id="app" class="main">
         
         <div v-show="page.show=='home'" class="main-page s-infinite-page f5f5f5">
+            <div class="bgbgbg">
+                <div class="s5-orderPay-info-d1">
+                    <img v-if="APP.getOrderChannel() == '13'||APP.getOrderChannel() == '16'||APP.getOrderChannel() == '23'" class="hxi1" src="/Public/Home/member/img/content_icon_right_default@2x.png" alt="">
+                    <img v-else class="i1" src="/Public/Home/member/img/content_icon_right_default@2x.png" alt="">
+                    <p v-if="APP.getOrderChannel() == '12'" class="p1"><strong>兑换成功！</strong></p>
+                    <p v-if="APP.getOrderChannel() == '13'|| APP.getOrderChannel() == '16'" class="hxp1"><strong>兑换成功！</strong></p>
+                    <p v-if="APP.getOrderChannel() == '23'" class="hxp1"><strong>订单提交成功</strong></p>
+                    <p v-if="APP.getOrderChannel() == '13'||APP.getOrderChannel() == '23'" class="hxp2">我们将在两小时内与您取得联系，请保持电话畅通</p>
+                    
+                    <p v-if="APP.getOrderChannel() == '16'" class="hxp2">我们将在指定时间与您取得联系，请保持电话畅通</p>
+                    <p v-if="APP.getOrderChannel() != '12' && APP.getOrderChannel() != '13' && APP.getOrderChannel() != '16' && APP.getOrderChannel() != '23'" class="p1"><strong>订单提交成功，请尽快支付！</strong></p>
+                </div>
 
 
-            <div class="s5-orderPay-info-d1">
-                <img v-if="APP.getOrderChannel() == '13'" class="hxi1" src="/Public/Home/member/img/content_icon_right_default@2x.png" alt="">
+            </div>
+
+            <!--<div class="s5-orderPay-info-d1">
+                <img v-if="APP.getOrderChannel() == '13'||APP.getOrderChannel() == '16'" class="hxi1" src="/Public/Home/member/img/content_icon_right_default@2x.png" alt="">
                 <img v-else class="i1" src="/Public/Home/member/img/content_icon_right_default@2x.png" alt="">
                 <p v-if="APP.getOrderChannel() == '12'" class="p1"><strong>兑换成功！</strong></p>
-                <p v-if="APP.getOrderChannel() == '13'" class="hxp1"><strong>兑换成功！</strong></p>
+                <p v-if="APP.getOrderChannel() == '13'|| APP.getOrderChannel() == '16'" class="hxp1"><strong>兑换成功！</strong></p>
                 <p v-if="APP.getOrderChannel() == '13'" class="hxp2">我们将在两小时内与您取得联系，请保持电话畅通</p>
-                <p v-else class="p1"><strong>订单提交成功，请尽快支付！</strong></p>
-            </div>
+                <p v-if="APP.getOrderChannel() == '16'" class="hxp2">我们将在指定时间与您取得联系，请保持电话畅通</p>
+                <p v-if="APP.getOrderChannel() != '12' && APP.getOrderChannel() != '13' && APP.getOrderChannel() != '16'" class="p1"><strong>订单提交成功，请尽快支付！</strong></p>
+            </div>-->
 
             
 
-            <div v-if="APP.getOrderChannel() != '13'"   class="s5-orderPay-info-d2">
+            <div v-if="APP.getOrderChannel() != '13' && APP.getOrderChannel() != '16' && APP.getOrderChannel() != '23'"   class="s5-orderPay-info-d2">
                 <div class="info-d2-item clearfix">
                     <span class="item-l">订单号：</span>
                     <span class="item-r">{{ order.order_id }}</span>
@@ -53,7 +68,7 @@
             </div>
 
             <!--壹钱包和华夏-->
-            <template v-if="APP.getOrderChannel() == '12' || APP.getOrderChannel() == '13' ">
+            <template v-if="APP.getOrderChannel() == '12' || APP.getOrderChannel() == '13' ||APP.getOrderChannel() == '16' ||APP.getOrderChannel() == '23' ">
 
 
             <div  v-if="APP.getOrderChannel() == '12'" class="s7-orderPay-action">
@@ -63,13 +78,15 @@
                     关注“法驴会员”公众号，可获得实时服务进度！
                 </p>
             </div>
-            <div v-if="APP.getOrderChannel() == '13'" class="hx_new">
+            <div v-if="APP.getOrderChannel() == '13'|| APP.getOrderChannel() == '16' ||APP.getOrderChannel() == '23'" class="hx_new">
                 <div class="hx_yhzx">
                     <div class="hx_yhzx_tt">
                         <div>
                             <img src="/Public/Home/member/img/hxdh_left.png" alt="">
                         </div>
-                        <span>华夏用户专享</span>
+                        <span v-if="APP.getOrderChannel() == '13'">华夏用户专享</span>
+                        <span v-if="APP.getOrderChannel() == '16'">法驴用户专享</span>
+                        <span v-if="APP.getOrderChannel() == '23'">青黑用户专享</span>
                         <div>
                              <img src="/Public/Home/member/img/hxdh_right.png" alt="">
                         </div>
@@ -120,8 +137,8 @@
                             <img src="/Public/Home/member/img/hxdh_banner4.png" alt="">
                         </li>
                     </ul>
-                    <p>感谢您选择华夏在线的服务</p>
-                    
+                    <p v-if="APP.getOrderChannel() == '13' ">感谢您选择华夏在线的服务</p>
+                    <p v-if="APP.getOrderChannel() == '16' || APP.getOrderChannel() == '23'">感谢您选择法驴的服务</p>
                 </div>
 
                 <a @click="nextYQB()" class="m-btn hx_m-btn_1" href="javascript:;">返回首页</a>
@@ -321,7 +338,7 @@
                             //console.log(res);
                             _this.order = res.data;
                             //壹钱包
-                            if (res.data.channel == "12"||res.data.channel == "13") {
+                            if (res.data.channel == "12"||res.data.channel == "13"||APP.getOrderChannel() == "16"||APP.getOrderChannel() == "23") {
                                 _this.page.show = 'home';
                                 document.title = "兑换成功"
                             } else {
@@ -400,8 +417,13 @@
                 nextYQB: function() {
                     if(APP.getOrderChannel()=="12"){
                         window.location.href = "/Member/goodsYqb.html";
-                    }else if(APP.getOrderChannel()=="13")
+                    }else if(APP.getOrderChannel()=="13"){
                     window.location.href = "/Member/goodsHx.html";
+                    }else if(APP.getOrderChannel()=="16"){
+                    window.location.href = "/Member/goodsCommon.html?customersource="+APP.getCustomerSourceChannel();
+                    }else if(APP.getOrderChannel()=="23"){
+                    window.location.href = "/Member/goodsBRC.html";
+                    }
                 }
             }
         });      

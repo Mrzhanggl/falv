@@ -141,9 +141,10 @@ APP.initInfo = function(vm, callback) {
         _this.send("/PC/User/userInfo.json?source=1", function(res) {
         // alert(JSON.stringify(res))
         //alert(JSON.stringify(res))
+        console.log(res)
         if (res.errno == '0') {
             _vm.info_login = true;
-            _this.getLawyerInfo(_vm);
+            _this.getLawyerInfo(_vm,_callback);
             _this.send('/PC/Wx/getOpenid.json?source=1', function(res2) {
                 //alert(JSON.stringify(res2.data))
                 if (res2.errno == '0') {
@@ -151,7 +152,7 @@ APP.initInfo = function(vm, callback) {
                     res.data.wechat_nickname = res2.data.nickname;
                     res.data['wechat_city'] = res2.data.city;
                     res.data['wechat_sex'] = res2.data.sex;
-                    _vm.info = res.data;
+                    // _vm.info = res.data;
                 }
             })
 
@@ -165,8 +166,9 @@ APP.initInfo = function(vm, callback) {
             }
             
             //window.location.href = '/Member/login.html?from='+encodeURIComponent(window.location.href);
+            _callback(res);
         }
-        _callback(res);
+        
     });
 
 };
@@ -183,19 +185,19 @@ APP.getLawyerInfo= function(vm, callback) {
             //审核状态
             if (_data && _data.length == 0) {
                 //个人用户
-                nextApproval();
+                // nextApproval();
             } else if (_data.is_approval== '0'){
                 //审核中
-                nextApproval();
+                // nextApproval();
             } else if (_data.is_approval == '1' && parseFloat(_data.cash_pledge) > 0) {
                 //通过
                 
             } else if (_data.is_approval == '1' && parseFloat(_data.cash_pledge) <= 0) {
                 //通过 未交押金
-                nextApproval()
+                // nextApproval()
             } else if (_data.is_approval == '2') {
                 //不通过
-                nextApproval();
+                // nextApproval();
             }
         }
         _callback(res);

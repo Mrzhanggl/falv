@@ -12,29 +12,29 @@
     <script src="/Public/Home/member/js/flexible.js"></script>
     <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
     <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
-    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=15">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=48">
     <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
 
 </head>
 
-<body>  
+<body>
     <div v-cloak id="app" class="main bg-dd">
         <!--首页-->
-        <div v-show="page.show == 'home'" style="overflow: hidden">
+        <div v-show="page.show == 'home'">
 
-            <div class="s7-goodsList-head newhx">
+            <div class="newcommon">
                 <a @click="next('fall-center', '', '/Member/personal.html')" v-if="info_login" href="javascript:;" style="top: .3rem" class="s6-goodsList-per s7-goodsList-per"><strong>个人中心</strong></a>
             </div>
 
-            <div class="s7-goodsList-bd">
+            <div class="s7-goodsList-bd new-s7-goodsList-bd">
 
                 <div class="s6-goodsList-title">
                     <img src="/Public/Home/member/img/m123.png">
                 </div>
 
                 <div class="wrap-main s6-goodsList-content">
-                    <!--<div @click="next('exchange_call', '兑换电话咨询', '/Member/goodsDetails.html?id=yqbzx')" class="s6-goodsList-item clearfix">
+                    <div @click="next('exchange_call', '兑换电话咨询', '/Member/goodsDetails.html?id=common')" class="s6-goodsList-item clearfix">
                         <div class="item-cover">
                             <img src="/Public/Home/member/img/m124@2x.png">
                         </div>
@@ -56,9 +56,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>-->
+                    </div>
 
-                    <div old-id="100573" @click="next('exchange_VIPC', '兑换个人年卡', '/Member/goodsDetails.html?id=100567')" class="s6-goodsList-item clearfix">
+                    <div old-id="100566" @click="next('exchange_VIPC', '兑换个人年卡', '/Member/goodsDetails.html?id=100578')" class="s6-goodsList-item clearfix">
                         <div class="item-cover">
                             <img src="/Public/Home/member/img/m125@2x.png">
                         </div>
@@ -86,16 +86,10 @@
             </div>
 
             <div class="s7-goodsList-footer">
-                <div class="s7-goodsList-footer-texta">
+                <div class="s7-goodsList-footer-text new-s7-goodsList-footer-text">
                     本页面由阿方提法律咨询（上海）有限公司提供技术支持
                 </div>
-                <a @click="tiao()" class="s7-goodsList-footer-tk">
-                    《免责条款》
-                </a>
             </div>
-            <div class="s7-goodsList-footer-bg">   
-                
-             </div>
 
 
 
@@ -134,27 +128,23 @@
                 
 
                 //设置来源
-                APP.setOrderChannel("13");
-                APP.setFromChannel("36");
+                APP.setOrderChannel("16");
+                // APP.setFromChannel("35");
+                APP.setCustomerSourceChannel(APP.getParam("customersource"))
 
-
-                APP.sendHm({action: "visits", chinese_url: "华夏落地页"});
+                APP.sendHm({action: "visits", chinese_url: "壹钱包落地页"});
             },
             mounted: function() {
                 
             },
             methods: {
-                tiao: function(){
-                    var url=window.location.host
-                    window.location.href = "http://"+url+"/Member/goodsHxtk.html"
-                },
                 next: function(type, type_chinese, url) {
                     
                     APP.sendHm({
                         action: "click", 
                         object: type,
                         chinese_object: type_chinese,
-                        chinese_url: "华夏落地页"
+                        chinese_url: "壹钱包落地页"
                     }, function() {
                         // $.closePopup()
                         window.location.href = url;

@@ -12,7 +12,7 @@
     <script src="/Public/Home/topic/js/flexible.js"></script>
     <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
     <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
-    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=38">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=32">
     <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
     
@@ -43,7 +43,7 @@
                         <div v-if="product.type == '11'&& order.channel!='14'" class="productInfo-content-d3">
                             {{ product.flprice }}元/分钟
                         </div>
-                        <div v-else class="productInfo-content-d3">
+                        <div v-if="product.type == '11'&& order.channel=='14'"  class="productInfo-content-d3">
                             ￥{{ order.channel_info.price }}{{order.channel_info.unit}}
                         </div>
                     </div>
@@ -83,11 +83,12 @@
             </div>
 
 
+
             <div class="m-main j-orderDetails-lawyer j-orderDetails-order">
                 <div class="j-orderDetails-title">
                     <strong>订单信息</strong>
                 </div>
-                <div class="j-orderDetails-item clearfix">
+                <div class="j-orderDetails-item clearfix">    
                     <div class="item-l">订单号码</div>
                     <div class="item-r">{{ order.order_id }}</div>
                 </div>
@@ -130,7 +131,7 @@
                 <a v-if="order.state == '0' || order.state == '2'" :href="'/Member/orderGoPay.html?oid='+order.order_id" class="weui-tabbar__item j-orderDetails-tabbar-btn2">
                     <strong>支付</strong>
                 </a>
-                <a @click="complete()" v-if="order.state == '1'" href="javascript:;" class="weui-tabbar__item j-orderDetails-tabbar-btn1">
+                <a @click="complete()" v-if="order.state == '1'" href="javascript:;" class="weui-tabbar__item j-orderDetails-tabbar-btn1 newauto">
                     <strong>确认完成</strong>
                 </a>
             </div>

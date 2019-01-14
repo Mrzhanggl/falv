@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html class="ffffff">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=44">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+
+</head>
+
+<body class="ffffff">
+    <style>
+    .all{
+        text-align: center;
+    }
+    ul{
+        width: 100%;
+        padding-top: .3rem;
+        margin: auto;
+        font-size: 0;
+    }
+    li{
+        margin:0 .3rem .3rem .3rem;
+        list-style: none;
+        display: inline-block;
+        font-size: .3rem;
+        width: 3.1rem;
+        line-height: 1rem;
+        font-weight: bold;
+        height: 1rem;
+        color: #000000;
+        background:rgba(255,255,255,1);
+        box-shadow:-.02rem .04rem .12rem 0rem rgba(0, 0, 0, 0.04);
+        border-radius:.10rem;
+    }
+    .code{
+        width:6.5rem;
+        height:1rem;
+        background:rgba(255,255,255,1);
+        border:.01rem solid rgba(230,230,230,1);
+        box-shadow:-.02rem .04rem 0.12rem 0rem rgba(0, 0, 0, 0.04);
+        border-radius:.10rem;
+        margin: auto;
+        margin-bottom: .3rem;
+        text-align: center;
+        line-height: 1rem;
+    }
+    .bt{
+        width:6.5rem;
+        height:1rem;
+        background:orange;
+        border:.01rem solid rgba(230,230,230,1);
+        box-shadow:-.02rem .04rem 0.12rem 0rem rgba(0, 0, 0, 0.04);
+        border-radius:.10rem;
+        margin: auto;
+        margin-bottom: .3rem;
+        text-align: center;
+        line-height: 1rem;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .datamsg{
+        width:6.5rem;
+        height:4.51rem;
+        background:rgba(255,255,255,1);
+        border:0.01rem solid rgba(230,230,230,1);
+        box-shadow:-.02rem .04rem 0.12rem 0rem rgba(0, 0, 0, 0.04);
+        border-radius:.10rem;
+        margin: auto;
+    }
+    .active{
+        background:rgba(96,79,255,1);
+        color: #fff;
+    }
+    </style>
+    <div id="app" class="all">   
+        <ul>
+            <li v-for="item in list" :class="{active:product==item.id}" @click='change(item.id)'>{{item.title}}</li>
+        </ul>
+        <input type="text" class="code" v-model="mzh"  placeholder="请输入渠道Id">
+         <input type="text" class="code" v-model="mkey"  placeholder="请输入秘钥">
+        <div class="bt" @click="pro()">点击生成优惠码</div>
+        <input type="text" class="code" id="textcode" v-model="code" @click="cp()" placeholder="此处为生成的优惠码">
+        
+        <div class="datamsg">
+            <!--调用时间 {{call_time}}
+            请求的是哪种产品优惠码 {{product_code}}
+            生成优惠码的时间 {{create_time}}
+            优惠码到期时间 {{expire_time}}-->
+            {{callback_data}}
+        </div>
+    </div>
+
+
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/circle-progress.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=059"></script>
+    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script>
+        var vm = new Vue({
+             el: '#app',
+             data:{
+                //  list:[
+                //      {
+                //          "id":"100582",
+                //          "title":"生成年卡"
+                //      },
+                //      {
+                //          "id":"100587",
+                //          "title":"合同律师"
+                //      },
+                //      {
+                //          "id":"100583",
+                //          "title":"其它"
+                //      },
+                //      {
+                //          "id":"100588",
+                //          "title":"劳务律师"
+                //      },
+                //      {
+                //          "id":"100584",
+                //          "title":"行政律师"
+                //      },
+                //      {
+                //          "id":"100589",
+                //          "title":"房产律师"
+                //      },
+                //      {
+                //          "id":"100585",
+                //          "title":"侵权律师"
+                //      },
+                //      {
+                //          "id":"100590",
+                //          "title":"婚姻律师"
+                //      },
+                //      {
+                //          "id":"100586",
+                //          "title":"刑事律师"
+                //      },
+                //      {
+                //          "id":"100591",
+                //          "title":"财富律师"
+                //      },
+
+                //  ],
+                //  正式环境产品
+                 list:[
+                     {
+                         "id":"100578",
+                         "title":"生成年卡"
+                     },
+                     {
+                         "id":"100583",
+                         "title":"合同律师"
+                     },
+                     {
+                         "id":"100579",
+                         "title":"其它"
+                     },
+                     {
+                         "id":"100584",
+                         "title":"劳务律师"
+                     },
+                     {
+                         "id":"100580",
+                         "title":"行政律师"
+                     },
+                     {
+                         "id":"100585",
+                         "title":"房产律师"
+                     },
+                     {
+                         "id":"100581",
+                         "title":"侵权律师"
+                     },
+                     {
+                         "id":"100586",
+                         "title":"婚姻律师"
+                     },
+                     {
+                         "id":"100582",
+                         "title":"刑事律师"
+                     },
+                     {
+                         "id":"100587",
+                         "title":"财富律师"
+                     },
+
+                 ],
+                 product:"",
+                 code:"",
+                 callback_data:"",
+                 call_time:"",
+                 product_code:"",
+                 create_time:"",
+                 expire_time:"",
+                 mkey:"",
+                 mzh:""
+             },
+             methods:{
+                curentTime: function (){ 
+                    var now = new Date();
+                
+                    var year = now.getFullYear();       //年
+                    var month = now.getMonth() + 1;     //月
+                    var day = now.getDate();            //日
+                
+                    var hh = now.getHours();            //时
+                    var mm = now.getMinutes();          //分
+                    var ss = now.getSeconds();          //秒
+                
+                    var clock = year + "-";
+                
+                    if(month < 10)
+                        clock += "0";
+                
+                    clock += month + "-";
+                
+                    if(day < 10)
+                        clock += "0";
+                    
+                    clock += day + " ";
+                
+                    if(hh < 10)
+                        clock += "0";
+                    
+                    clock += hh + ":";
+                    if (mm < 10)
+                       clock += '0'; 
+                       
+                    clock += mm + ":"; 
+                    if (ss < 10)
+                       clock += '0'; 
+                       
+                    clock += ss; 
+                    return(clock); 
+                } ,
+                 change:function(id){
+                     this.product=id
+                 },
+                 cp:function(){
+                     var input = document.getElementById('textcode')
+                     input.select()
+                     document.execCommand('copy',true)
+                     alert("成功复制到剪切板")
+                 },
+                 pro:function(){
+                    
+                     var _this=this
+                     var json={
+                     }
+                     if(_this.product){
+                          json['product_code']=_this.product
+                      }
+                     if(_this.mkey){
+                          json['channel_key']=_this.mkey
+                      }
+                      if(_this.mzh){
+                          json['channel_id']=_this.mzh
+                      }
+                    //   if(!_this.mzh){
+                    //       json={
+                    //         channel_key:_this.mkey,
+                    //         channel_id:_this.mzh,
+                    //         product_code:_this.product,
+                    //         call_time:_this.curentTime(),
+                    //     }
+                    //   }
+                     APP.send("/PC/ChangYou/getDiscountCode.json",json,function(res){
+                         console.log(res)
+                         if(res.status==1){
+                             _this.code=res.data.code
+                            //  _this.call_time=res.data.data.call_time
+                            //  _this.product_code=res.data.data.product_code
+                            //  _this.create_time=res.data.data.create_time
+                            //  _this.expire_time =res.data.data.expire_time
+                         _this.callback_data=res.data.data
+                         }else{
+                             $.toast(res.status+","+res.msg, "text")
+                         }
+                     })
+                 }
+             }
+        })  
+       
+    </script>
+</body>
+
+</html>

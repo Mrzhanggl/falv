@@ -261,11 +261,19 @@
                     var _this = this;
                     var _id = APP.getParam("id");
                     var channel= APP.getOrderChannel();
-                    APP.send('/PC/Product/info.json?id='+_id+"&channel="+channel, function(res) {
-                        if (res.errno == '0') {
-                            _this.product = res.data;
-                        }
-                    });
+                    if(channel){
+                        APP.send('/PC/Product/info.json?id='+_id+"&channel="+channel, function(res) {
+                            if (res.errno == '0') {
+                                _this.product = res.data;
+                            }
+                        });
+                    }else{
+                        APP.send('/PC/Product/info.json?id='+_id, function(res) {
+                            if (res.errno == '0') {
+                                _this.product = res.data;
+                            }
+                        });
+                    }
                 },
                 add: function() {
                     var _this = this;

@@ -69,9 +69,9 @@
                 </div>
                 <a @click="$('#time').popup();" href="javascript:;" class="s4-orderAddChannel-item s4-orderAddChannel-bt clearfix">
                     <div class="item-w3">
-                        <p class="item-w3-d1"><span class="item-w1-hidden colf12">* </span>{{ APP.getParam('id') == '100566'|| APP.getParam('id') == '100573' ? '回访时间' : '服务时间' }}</p>
+                        <p class="item-w3-d1"><span class="item-w1-hidden colf12">* </span>{{ APP.getParam('id') == '100566'|| APP.getParam('id') == '100573' || APP.getParam('id') == '100582' ? '回访时间' : '服务时间' }}</p>
 
-                        <p class="item-w3-d2"><span class="item-w1-hidden colf12">* </span>{{ APP.getParam('id') == '100566' || APP.getParam('id') == '100573' ? '请留意接听回访电话' : '请留意接听客服来电' }}</p>
+                        <p class="item-w3-d2"><span class="item-w1-hidden colf12">* </span>{{ APP.getParam('id') == '100566' || APP.getParam('id') == '100573' || APP.getParam('id') == '100582' ? '请留意接听回访电话' : '请留意接听客服来电' }}</p>
                     </div>
                     <div class="item-w4">
                         <div class="item-w4-table">
@@ -103,12 +103,13 @@
                 <a @click="add()" href="javascript:;" class="weui-tabbar__item s-orderAdd-btn2">去付款</a>
             </div>
 
-            <!--壹钱包-->
-            <div v-else-if="APP.getOrderChannel() == '12'||APP.getOrderChannel() == '13'" class="weui-tabbar s-orderAdd-tabbar s6-orderAdd-tabbar">
+            <!--壹钱包 华夏  通用渠道 黑卡-->
+            <div v-else-if="APP.getOrderChannel() == '12'||APP.getOrderChannel() == '13'||APP.getOrderChannel() == '16'||APP.getOrderChannel() == '23'" class="weui-tabbar s-orderAdd-tabbar s6-orderAdd-tabbar">
                 <!--<a href="javascript:;" class="weui-tabbar__item s-orderAdd-btn1">
                     <strong>¥{{ goods.flprice }}</strong>
                 </a>-->
-                <a @click="nextYQB()" href="javascript:;" class="weui-tabbar__item s-orderAdd-btn2">去兑换</a>
+                <a v-if="APP.getOrderChannel() == '23'" @click="nextYQB()" href="javascript:;" class="weui-tabbar__item s-orderAdd-btn2">提交咨询</a>
+                <a v-else @click="nextYQB()" href="javascript:;" class="weui-tabbar__item s-orderAdd-btn2">去兑换</a>
             </div>
 
             <div v-else class="weui-tabbar s-orderAdd-tabbar s4-orderAdd-tabbar">
@@ -711,7 +712,12 @@
                             if (res.errno == '0') {
                                 //统计
                                 sessionStorage.setItem("yqb_orderAdd", JSON.stringify(_json));
-                                window.location.href = "/Member/orderAddChannel.html?id=" + APP.getParam("id") + "&type=yqb";
+                                if(APP.getOrderChannel()=="23"){
+                                    _this.addYQB()
+                                }else{
+                                    window.location.href = "/Member/orderAddChannel.html?id=" + APP.getParam("id") + "&type=yqb";
+                                }
+                                
                             } else {
                                 $.toast(res.msg, "text")
                             }
@@ -719,7 +725,11 @@
 
                     } else {
                         sessionStorage.setItem("yqb_orderAdd", JSON.stringify(_json));
-                        window.location.href = "/Member/orderAddChannel.html?id=" + APP.getParam("id") + "&type=yqb";
+                        if(APP.getOrderChannel()=="23"){
+                            _this.addYQB()
+                        }else{
+                            window.location.href = "/Member/orderAddChannel.html?id=" + APP.getParam("id") + "&type=yqb";
+                        }
                     }
 
                     
@@ -756,12 +766,14 @@
                         order_type: 1,
                         discount_code: _this.yqb_coupon.code, //优惠码
                         customer_selected_supplier_id: '', //供应商id
+                        custom_source:APP.getCustomerSourceChannel() //客户来源
                     }
 
-                    if (!_json.discount_code) {
-                        $.toast("请输入兑换码", "text")
-                        return;
-                    }
+                        if (APP.getOrderChannel()!="23" && !_json.discount_code) {
+                            $.toast("请输入兑换码", "text")
+                            return;
+                        }
+                    
 
 
                     APP.sendHm({action: 'click', object: "DD_choose_sure", chinese_object: "确定按钮", chinese_url: '输入兑换码'})
@@ -776,6 +788,7 @@
                             if (res.errno == '0') {
                                 //统计
                                 // return;
+                               
                                 window.location.href = "/Member/orderGoPay.html?oid=" + res.data;
                             } else {
                                 $.toast(res.msg, "text")

@@ -11,8 +11,8 @@ $.toast.prototype.defaults.duration = 1500;
 var ajax_url = "http://www.falv58.com";
 var src_url = "http://www.falv58.com";
 if (window.location.host!=="www.falv58.com") {
-    ajax_url = "http://mest.7anb.com";
-    src_url = "http://mest.7anb.com";
+    ajax_url = "http://mest.falv58.com";
+    src_url = "http://mest.falv58.com";
 }
 
 var APP = {
@@ -59,15 +59,16 @@ var APP = {
             return result[2];
         }
     },
-    send: function(url, data, callback) {
+    send: function(url, data, callback,type) {
         var _callback = typeof(data) == 'function' ? data : callback;
         var _data = typeof(data) != 'function' ? data : {};
         var _type = _data ? 'post' : 'get';
-        var _url = ajax_url + url;
+        var _url = type?url:(ajax_url + url);
         $.ajax({
             type: _type,
             url: _url,
             data: _data,
+            timeout :100000,
             xhrFields: {
                 withCredentials: true
             },
@@ -632,6 +633,17 @@ var APP = {
     } 
 }
 
+// 通用渠道兑换
+APP.setCommonChannel = function() {
+    sessionStorage.setItem("Common_channel", "true");
+}
+APP.getCommonChannel = function() {
+    var is_common = sessionStorage.getItem("Common_channel") ? sessionStorage.getItem("Common_channel") : '';
+    return is_common;
+}
+
+
+
 // APP.init();
 
 //订单来源
@@ -655,6 +667,21 @@ APP.getFromChannel = function() {
     var _channel = sessionStorage.getItem("reg_from_channel") ? sessionStorage.getItem("reg_from_channel") : '15';
     return _channel;
 }
+
+//通用渠道来源区分
+APP.setCustomerSourceChannel= function(type) {
+    var _channel = type ? type : '';
+    sessionStorage.setItem("CustomerSourceChannel", _channel);
+}
+
+APP.getCustomerSourceChannel = function() {
+    var _channel = sessionStorage.getItem("CustomerSourceChannel") ? sessionStorage.getItem("CustomerSourceChannel") : '';
+    return _channel;
+}
+
+
+
+
 
 //推广链接来源fromchannel
 APP.setParamChannel = function() {

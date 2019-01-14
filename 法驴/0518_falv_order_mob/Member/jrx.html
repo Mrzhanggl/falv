@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/member/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=58">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
+
+</head>
+
+<body>
+    <div v-cloak id="app" class="main">
+        <span @click="code='1'">1</span>
+         <span @click="code='2'">2</span>
+          <span @click="code='3'">3</span>
+          <span @click="code='888'">888</span>
+        <div v-if="code=='1'">
+            1
+        </div>
+        <div v-else-if="code=='2'">
+            2
+        </div>
+        <div v-else-if="code=='3'">
+            3
+        </div>
+        <div v-else>
+            else
+        </div>
+    </div>
+    <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+               code:"1"
+                
+            },
+            created: function() {
+                
+
+                
+            },
+            mounted: function() {
+            },
+            watch: {
+                
+            },
+            methods: {
+
+                   
+                
+                
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

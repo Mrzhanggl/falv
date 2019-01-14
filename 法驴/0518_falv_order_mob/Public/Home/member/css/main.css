@@ -2437,16 +2437,21 @@ canvas {
 
 
 
-
+.bgbgbg{
+    background-color: #fff;
+}
 
 .s5-orderPay-info-d1 {
     height: 3.61rem;
     text-align: center;
     padding-top: .88rem;
-    background: url('../img/m118.png') no-repeat;
+     background-color: #fff;
+    background-image: url('../img/m118.png');
+    background-repeat: no-repeat;
     background-size: 100% 100%;
     box-sizing: border-box;
     position: relative;
+   
 }
 .s5-orderPay-info-d1 .i1 {
     width: 2rem;
@@ -3581,7 +3586,7 @@ canvas {
     min-height: 2.46rem;
     padding: .3rem;
     box-sizing: border-box;
-    margin-bottom: 1.35rem;
+    margin-bottom: .5rem;
     position: relative;
 }
 .s6-goodsList-item .item-cover {
@@ -4043,15 +4048,25 @@ canvas {
     background-size: 100%;
         
 }
+.newcommon{
+    height: 12.28rem;
+    position: relative;
+    background: url('../img/bgcommon.png') no-repeat;
+    background-size: 100%;
+        
+}
 .s7-goodsList-bd {
     /*margin-top: -5.9rem;*/
     margin-top: -6.75rem;
     position: relative;
     z-index: 2;
 }
+.new-s7-goodsList-bd{
+    margin-top: -7.7rem;
+}
 .s7-goodsList-footer {
     position: relative;
-    margin-top: -.95rem;
+    margin-top: -.1rem;
     z-index: 10;
 }
 .s7-goodsList-footer-text {
@@ -4060,8 +4075,20 @@ canvas {
     line-height: 1;
     color: #2b9cff;
     text-align: center;
+    background: url('../img/m139.png') bottom no-repeat;
+    background-size: 100%;
+}
+.s7-goodsList-footer-texta {
+    padding: 0 .3rem 2.2rem;
+    font-size: .18rem;
+    line-height: 1;
+    color: #2b9cff;
+    text-align: center;
     /*background: url('../img/m139.png') bottom no-repeat;*/
     background-size: 100%;
+}
+.new-s7-goodsList-footer-text{
+    padding: 0 .3rem 1.7rem;
 }
 .s7-goodsList-footer-bg{
     position: fixed;
@@ -4215,12 +4242,13 @@ canvas {
 .hx_four{
     font-size: 0;
     padding-bottom: .3rem;
-    
+    overflow: hidden;
 }
 .hx_four>li{
     width: 25%;
     text-align: center;
-    display: inline-block;
+    display:block;
+    float: left;
 }
 .hx_four>li>img{
     width: .52rem;
@@ -4277,4 +4305,118 @@ canvas {
 }
 .hx_new{
     overflow: hidden;
+}
+
+
+.bg-brc{
+     background-color: #0c0604;
+}
+.brc_head{
+       height: 7.34rem;
+    position: relative;
+    background: url('../img/brchead.png') no-repeat;
+    background-size: 100%;
+}
+.brc_main{
+    margin-top: 0;
+    background-color: #0c0604;
+    overflow: hidden;
+}
+.brc_tt{
+    width: 6.32rem;
+    padding: .78rem 0 .4rem;
+}
+.brc_box{
+    padding: 0;
+    margin: auto;
+    width:6.90rem;
+    height:3.90rem;
+    background: url('../img/brcborder.png') no-repeat;
+    background-size: 100%;
+    overflow: hidden;
+}
+.brc_box_m{
+    width:6.50rem;
+    margin:auto;
+    height:2.45rem;
+background:linear-gradient(90deg,rgba(236,208,160,1),rgba(209,171,108,1));
+border-radius:.12rem;
+margin-top: .61rem;
+}
+.s6-goodsList-item .brc_content-d1{
+    font-size:.30rem;
+    font-family:MicrosoftYaHei;
+    font-weight:bold;
+    color:rgba(74,41,8,1);
+    line-height:1;
+}
+.s6-goodsList-item .brc-d2-text{
+    font-size:.22rem;
+    font-family:PingFang-SC-Medium;
+font-weight:500;
+color:rgba(74,41,8,1);
+line-height:1;
+border:.01rem solid rgba(74,41,8,1);
+border-radius:.04rem;
+}
+.s6-goodsList-item .brc_tjzx{
+    width: 2.18rem;
+    height: .62rem;
+    background: url("../img/brcbutton.png");
+    background-size: 100% 100%;
+    top: .23rem;
+}
+.s6-goodsList-item .brc-content-d2{
+    padding-bottom: .22rem;
+}
+.s6-goodsList-item .brc-d3-text {
+    font-weight: bold;
+    font-size: .26rem;
+    color: #4A2908;
+    position: relative;
+    line-height: 1;
+}
+.brc-d3-text>strong{
+    font-size: .48rem;
+    line-height: 1;
+}
+.brc-d3-text>del{
+    display: block;
+    margin-top: .14rem;
+}
+.brc-sj{
+    font-size:.24rem;
+    font-family:MicrosoftYaHei;
+    font-weight:400;
+    color:rgba(252,231,187,1);
+    line-height:1;
+    text-align: center;
+    margin-top: .19rem;
+}
+.brc-fwlc{
+    width: 6.9rem;
+    height: 9.22rem;
+    margin: auto;
+}
+.brc-footer{
+    padding-top: .25rem;
+    padding-bottom: .29rem;
+}
+.brc-footer-logo{
+    width: 1.92rem;
+    height: .7rem;
+    margin: auto;
+}
+.brc-footer-text{
+    margin-top: .21rem;
+    font-size:.18rem;
+    font-family:MicrosoftYaHei;
+    font-weight:400;
+    color:rgba(236,208,160,1);
+    line-height:1;
+    text-align: center;
+}
+.brc-goodsList-per{
+    background:linear-gradient(90deg,rgba(236,208,160,1),rgba(209,171,108,1));
+    color: #4A2908;
 }

@@ -25,7 +25,7 @@
 
 
             <!--钉钉 壹钱包 华夏 安居客-->
-            <div v-if="APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12'|| APP.getOrderChannel() == '13'|| APP.getOrderChannel() == '14'" class="s6-goodsDetails-dd">
+            <div v-if="APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12'|| APP.getOrderChannel() == '13'|| APP.getOrderChannel() == '14' || APP.getOrderChannel() == '16' || APP.getOrderChannel() == '23'" class="s6-goodsDetails-dd">
 
                 <div class="s-goodsDetails-info">
                     <div class="s-goodsDetails-box">
@@ -47,7 +47,7 @@
                                 </div>
                                 <div v-if="!user_marketing_id" class="s-goodsDetails-price-item clearfix">
                                     <span class="price-w1">法驴价格</span>
-                                    <div v-if="sessionStorage.getItem('order_from_channel')" class="price-t1 clearfix">
+                                    <div v-if="sessionStorage.getItem('order_from_channel') || APP.getCommonChannel()" class="price-t1 clearfix">
                                         <del>￥{{ goods_info.flprice }}{{ goods_info.fl_unit }}</del>
                                     </div>
                                     <div v-else class="price-t1 price-c1 clearfix">
@@ -55,11 +55,12 @@
                                     </div>
 
                                 </div>
-                                <div v-if="sessionStorage.getItem('order_from_channel')" class="s-goodsDetails-price-item clearfix">
+                                <div v-if="sessionStorage.getItem('order_from_channel') || APP.getCommonChannel()" class="s-goodsDetails-price-item clearfix">
                                     <span v-if="APP.getOrderChannel() == '11'" class="price-w1">钉钉特惠价</span>
                                      <span v-if="APP.getOrderChannel() == '14'" class="price-w1">特惠价</span>
+                                     <span v-if="APP.getOrderChannel() == '23'" class="price-w1">渠道特惠价</span>
                                     <!--<span v-if="APP.getOrderChannel() == '12'||APP.getOrderChannel() == '13'" class="price-w1">优惠价</span>-->
-                                    <div v-if="APP.getOrderChannel() == '11'||APP.getOrderChannel() == '14'" class="price-t1 price-c1 clearfix">
+                                    <div v-if="APP.getOrderChannel() == '11'||APP.getOrderChannel() == '14'||APP.getOrderChannel() == '23'" class="price-t1 price-c1 clearfix">
                                         ￥{{ goods_info.channel_specification ? goods_info.channel_specification.price : '' }}{{ goods_info.channel_specification ? goods_info.channel_specification.unit : '' }}
                                     </div>
                                 </div>
@@ -79,7 +80,8 @@
                         <div class="d1"><img src="/Public/Home/member/img/m132.png" alt=""></div>
                         <div class="d2">联系客服</div>
                     </a>
-                    <a @click="checkAddDd()" old-click="checkAdd(),$.closePopup()" href="javascript:;" class="weui-tabbar__item s6-goodsDetailsTabbar-btn2"><strong>{{ APP.getOrderChannel() == '12'||APP.getOrderChannel() == '13' ? '立即兑换' :  '立即购买'}}</strong></a>
+                    <a v-if="APP.getOrderChannel() == '23'" @click="checkAddDd()" old-click="checkAdd(),$.closePopup()" href="javascript:;" class="weui-tabbar__item s6-goodsDetailsTabbar-btn2"><strong>提交咨询</strong></a>
+                    <a v-else @click="checkAddDd()" old-click="checkAdd(),$.closePopup()" href="javascript:;" class="weui-tabbar__item s6-goodsDetailsTabbar-btn2"><strong>{{ APP.getOrderChannel() == '12'||APP.getOrderChannel() == '13'||APP.getOrderChannel() == '16' ? '立即兑换' :  '立即购买'}}</strong></a>
                 </div>
 
                 <!--钉钉-->
@@ -146,7 +148,7 @@
                                 </div>
                             </div>
 
-                            <div class="s6-goodsDetailsPop-list s7-goodsDetailsPop-list clearfix">
+                            <div v-if="APP.getOrderChannel()=='12'" class="s6-goodsDetailsPop-list s7-goodsDetailsPop-list clearfix">
                                 <div @click="selectProduct('100557', '财富')" :class="{'active': dd_product.selectText == '财富'}" class="s6-goodsDetailsPop-object-item"><strong>财富</strong></div>
                                 <div @click="selectProduct('100558', '婚姻')" :class="{'active': dd_product.selectText == '婚姻'}" class="s6-goodsDetailsPop-object-item"><strong>婚姻</strong></div>
                                 <div @click="selectProduct('100559', '房产')" :class="{'active': dd_product.selectText == '房产'}" class="s6-goodsDetailsPop-object-item"><strong>房产</strong></div>
@@ -156,6 +158,28 @@
                                 <div @click="selectProduct('100563', '侵权')" :class="{'active': dd_product.selectText == '侵权'}" class="s6-goodsDetailsPop-object-item"><strong>侵权</strong></div>
                                 <div @click="selectProduct('100564', '行政')" :class="{'active': dd_product.selectText == '行政'}" class="s6-goodsDetailsPop-object-item"><strong>行政</strong></div>
                                 <div @click="selectProduct('100565', '其他')" :class="{'active': dd_product.selectText == '其他'}" class="s6-goodsDetailsPop-object-item"><strong>其他</strong></div>                               
+                            </div>
+
+                            <div v-if="APP.getOrderChannel()=='16'" class="s6-goodsDetailsPop-list s7-goodsDetailsPop-list clearfix">
+                                <!--<div @click="selectProduct('100591', '财富')" :class="{'active': dd_product.selectText == '财富'}" class="s6-goodsDetailsPop-object-item"><strong>财富</strong></div>
+                                <div @click="selectProduct('100590', '婚姻')" :class="{'active': dd_product.selectText == '婚姻'}" class="s6-goodsDetailsPop-object-item"><strong>婚姻</strong></div>
+                                <div @click="selectProduct('100589', '房产')" :class="{'active': dd_product.selectText == '房产'}" class="s6-goodsDetailsPop-object-item"><strong>房产</strong></div>
+                                <div @click="selectProduct('100588', '劳务')" :class="{'active': dd_product.selectText == '劳务'}" class="s6-goodsDetailsPop-object-item"><strong>劳务</strong></div>
+                                <div @click="selectProduct('100587', '合同')" :class="{'active': dd_product.selectText == '合同'}" class="s6-goodsDetailsPop-object-item"><strong>合同</strong></div>
+                                <div @click="selectProduct('100586', '刑事')" :class="{'active': dd_product.selectText == '刑事'}" class="s6-goodsDetailsPop-object-item"><strong>刑事</strong></div> 
+                                <div @click="selectProduct('100585', '侵权')" :class="{'active': dd_product.selectText == '侵权'}" class="s6-goodsDetailsPop-object-item"><strong>侵权</strong></div>
+                                <div @click="selectProduct('100584', '行政')" :class="{'active': dd_product.selectText == '行政'}" class="s6-goodsDetailsPop-object-item"><strong>行政</strong></div>
+                                <div @click="selectProduct('100583', '其他')" :class="{'active': dd_product.selectText == '其他'}" class="s6-goodsDetailsPop-object-item"><strong>其他</strong></div>     
+                                                          -->
+                                <div @click="selectProduct('100587', '财富')" :class="{'active': dd_product.selectText == '财富'}" class="s6-goodsDetailsPop-object-item"><strong>财富</strong></div>
+                                <div @click="selectProduct('100586', '婚姻')" :class="{'active': dd_product.selectText == '婚姻'}" class="s6-goodsDetailsPop-object-item"><strong>婚姻</strong></div>
+                                <div @click="selectProduct('100585', '房产')" :class="{'active': dd_product.selectText == '房产'}" class="s6-goodsDetailsPop-object-item"><strong>房产</strong></div>
+                                <div @click="selectProduct('100584', '劳务')" :class="{'active': dd_product.selectText == '劳务'}" class="s6-goodsDetailsPop-object-item"><strong>劳务</strong></div>
+                                <div @click="selectProduct('100583', '合同')" :class="{'active': dd_product.selectText == '合同'}" class="s6-goodsDetailsPop-object-item"><strong>合同</strong></div>
+                                <div @click="selectProduct('100582', '刑事')" :class="{'active': dd_product.selectText == '刑事'}" class="s6-goodsDetailsPop-object-item"><strong>刑事</strong></div> 
+                                <div @click="selectProduct('100581', '侵权')" :class="{'active': dd_product.selectText == '侵权'}" class="s6-goodsDetailsPop-object-item"><strong>侵权</strong></div>
+                                <div @click="selectProduct('100580', '行政')" :class="{'active': dd_product.selectText == '行政'}" class="s6-goodsDetailsPop-object-item"><strong>行政</strong></div>
+                                <div @click="selectProduct('100579', '其他')" :class="{'active': dd_product.selectText == '其他'}" class="s6-goodsDetailsPop-object-item"><strong>其他</strong></div>       
                             </div>
 
 
@@ -486,7 +510,7 @@
 
                     if (APP.getOrderChannel() == "11") {
                         APP.sendHm({action: 'click', object: hm_para[_text]["text"], chinese_object: hm_para[_text]["textChinese"], chinese_url: '产品详情页'})
-                    } else if (APP.getOrderChannel() == "12"||APP.getOrderChannel() == "13") {
+                    } else if (APP.getOrderChannel() == "12"||APP.getOrderChannel() == "13"||APP.getOrderChannel() == '16') {
                         APP.sendHm({action: 'click', object: hm_para_yqb[_text]["text"], chinese_object: hm_para_yqb[_text]["textChinese"], chinese_url: '产品详情页'})
                     }
                     
@@ -507,11 +531,18 @@
                 checkAddDd: function() {
                     //
                     var _id = APP.getParam("id");
+                    if(_id == "common" && APP.getCustomerSourceChannel()=="42"){
+                        _id = '100579'
+                    }
                     if (_id == "ddzx") {
                         $('#JS_product').popup();
                     } else if (_id == "yqbzx") {
                        $('#JS_product_yqb').popup();
-                    } else {
+                    } 
+                    else if (_id == "common" && APP.getCustomerSourceChannel()!="42") {
+                       $('#JS_product_yqb').popup();
+                    } 
+                    else {
                         window.location.href = "/Member/orderAddChannel.html?id="+_id;
                     }
                 },
@@ -564,6 +595,9 @@
                     if (_id == "yqbzx") {
                         _json["id"] = "100565"
                     }
+                    if (_id == "common") {
+                        _json["id"] = "100579"
+                    }
 
 
                    if (APP.getOrderChannel()) {
@@ -583,7 +617,13 @@
                                 _this.goods_info.name = "不限时电话咨询丨远程法律维权管家";
                                 _this.goods_info.introduce = "精准匹配相关律师，跨地域获取畅聊服务。";
                                 
-                            } else {
+                            }else if (_id == "common") {
+                                _this.goods_info = res.data;
+                                _this.goods_info.name = "不限时电话咨询丨远程法律维权管家";
+                                _this.goods_info.introduce = "精准匹配相关律师，跨地域获取畅聊服务。";
+                                
+                            } 
+                            else {
                                 _this.goods.re_product.push(_this.goods);
                                 _this.setSelectGoods();
                                 _this.getWxQrcode(res.data.name.replace(/\-/g, "—"), res.data.flprice);

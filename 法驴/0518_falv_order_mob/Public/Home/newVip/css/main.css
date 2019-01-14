@@ -458,7 +458,7 @@ margin-left: .20rem;
     color: #FFFFFF;
 }
 .popbox-cl{
-    width:.78rem;
+    /*width:.78rem;*/
     height:.36rem;
     font-size:.26rem;
     font-family:MicrosoftYaHei;
@@ -466,4 +466,5 @@ margin-left: .20rem;
     color:rgba(153,153,153,1);
     line-height:.36rem;
     margin: auto;
+    text-align: center;
 }

@@ -83,7 +83,7 @@
                                         <a @click="showTips();" href="javascript:;" class="j-timeDetails-question-btn"></a>
                                     </div>
                                 </span>
-                                <span class="item-r">010-53153478</span>
+                                <span class="item-r">022-60624788</span>
                             </div>
                             <p class="item-tips">*对律师隐藏您的真实手机号，保护您的隐私</p>
                         </div>
@@ -201,7 +201,7 @@
     <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
     <script src="/Public/Home/topic/js/vue.min.js"></script>
     <script src="/Public/Home/topic/js/circle-progress.js"></script>
-    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/common.js?v=059"></script>
     <script src="/Public/Home/topic/js/main.js?v=086"></script>
     <script>
 
@@ -233,6 +233,7 @@
                 lawyer_sum_intr: null,
                 lawyer_sum: null,
                 count_down: 1,
+                lvshi_man:false
 
             },
             created: function () {
@@ -270,7 +271,7 @@
                 showTips: function () {
                     var _t =
                         "<p class='p1'>号码保护服务不会向您额外收费，费用由平台承担。</p>\
-                            <p class='p1 p1-b'>当号码保护服务的通讯商根据政策需要有特殊调整时，呼入号码将临时变更为<span class='p1-c1'>022-60624788</span>，请放心使用。</p>";
+                            <p class='p1 p1-b'>当号码保护服务的通讯商根据政策需要有特殊调整时，呼入号码将临时变更为<span class='p1-c1'>0510-80562346</span>，请放心使用。</p>";
                     APP.modal.showTimeTips({
                         title: '注意事项',
                         btn: ['知道了'],
@@ -394,7 +395,7 @@
                     }
 
                 },
-                getDetails: function () {
+                getDetails: function () {  
                     var _this = this;
                     var _id = APP.getParam("oid");
                     APP.send('/PC/NEWOrder/info.json?order_id=' + _id, function (res) {
@@ -408,6 +409,24 @@
                                 '0' && APP.calcCount(_data.create_time) < 60) {
                                 _this.page.show = 'matching';
                                 document.title = '匹配律师中';
+                                //内部律师推送
+                                var _json = {
+                                    order_id: _id
+                                }
+
+                                 var ajax_url = "http://session.falv58.com";
+
+                                if (window.location.host !== "www.falv58.com") {
+                                    ajax_url = "http://mest.falv58.com";
+                                }
+
+
+                                APP.send(ajax_url + '/PC/Lawyer/insideOrderPush.json?connect_redirect=1',_json,function(res){
+                                        if(res.errno != 0 && res.msg!="重复请求"){
+                                            _this.lvshi_man = true;
+                                        }
+                                },true)
+
                                 //轮循订单信息
                                 _this.getOrderState();
                                 _this.getLawyerSum();
@@ -557,7 +576,7 @@
                             if (res.errno == '0') {
                                 //console.log(res);
                                 _this.order = res.data;
-
+                                
                                 if (res.data.state == '8' && res.data.clock_state == '1') {
                                     //继续请求
                                     setIntState = true;
@@ -615,7 +634,7 @@
                             return
                         }
                         getState();
-                    }, 3000)
+                    }, 2000)
 
                     function getState() {
                         var _oid = APP.getParam("oid");
@@ -626,9 +645,11 @@
                         APP.sendTimeOut("/PC/NEWOrder/info.json", _json, function (res) {
                             setIntCallState = true;
                             if (res.errno == '0') {
-                                //console.log(res)
+                                //console.log(res)  
                                 var _data = res.data;
                                 _this.order = _data;
+                                // 获取律师详情
+                                _this.getLawyerInfo(res.data.lawyer_id);
                                 //已接单未接通
                                 if (_data.state == '8' && _data.clock_state == '2' && _data.call_record &&
                                     parseInt(_data.call_record.byetype) < 0) {
@@ -650,15 +671,32 @@
                                             //window.location.href = "/Member/jTimeDetails.html?id="+_this.order.products[0]['id'];
                                         }
 
-                                    } else {
-                                        //律师未接
+                                    }else if(APP.calcCount(_data.create_time)>= 80 || _this.lvshi_man){
+                                        _this.lvshi_man = false;
                                         setIntCallState = false;
                                         clearInterval(_this.order_call_intr);
                                         _this.page.show = 'busy_matching';
                                         console.log("7")
+                                    
                                         document.title = '律师正忙';
+                                    } else {
+                                        //律师未接
+                                        // setIntCallState = false;
+                                        // clearInterval(_this.order_call_intr);
+                                        // _this.page.show = 'busy_matching';
+                                        // console.log("7")
+                                        // document.title = '律师正忙';
                                     }
 
+                                }
+                                //订单取消
+                                if(_data.state == '4'&&_this.lvshi_man){
+                                         _this.lvshi_man = false;
+                                        setIntCallState = false;
+                                        clearInterval(_this.order_call_intr);
+                                        _this.page.show = 'busy_matching';
+                                        console.log("8")
+                                        document.title = '律师正忙';
                                 }
                                 //已接单已接通
                                 if (_data.state == '0' && _data.clock_state == '2' && _data.call_record &&

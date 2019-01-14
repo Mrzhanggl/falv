@@ -12,7 +12,7 @@
     <script src="/Public/Home/Mob/js/flexible.js"></script>
     <link rel="stylesheet" href="/Public/Home/Mob/css/weui.min.css">
     <link rel="stylesheet" href="/Public/Home/Mob/css/jquery-weui.min.css">
-    <link rel="stylesheet" href="/Public/Home/Mob/css/quick-supplier.css?v=19">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/quick-supplier.css?v=16">
     <script src="/Public/Home/Mob/js/jquery-3.1.1.min.js"></script>
     <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
@@ -33,17 +33,17 @@
                             <div class="s-home-intr-item">
                                 <div class="item-icon item-icon_1"></div>
                                 <p class="item-p1"><strong>收益加速</strong></p>
-                                <p class="item-p2">线下业务分成由80%提升为90%</p>
+                                <p class="item-p2">分成由80%提<br>升为90%</p>
                             </div>
                             <div class="s-home-intr-item">
                                 <div class="item-icon item-icon_2"></div>
                                 <p class="item-p1"><strong>收益保障</strong></p>
-                                <p class="item-p2">保障用户平台流水达到10万元</p>
+                                <p class="item-p2">保障用户平台<br>流水达到10万<br>元</p>
                             </div>
                             <div class="s-home-intr-item">
                                 <div class="item-icon item-icon_3"></div>
                                 <p class="item-p1"><strong>叠加保障</strong></p>
-                                <p class="item-p2">未达到收益保障，按比例退还卡金</p>
+                                <p class="item-p2">未达到收益保<br>障，按比例退<br>还卡金</p>
                             </div>
                         </div>
                     </div>
@@ -54,11 +54,10 @@
                 </div>
             </div>
             <div class="s-tabbar s-home-tabbar">
-                <div class="s-tabbar-main clearfix" style="padding-left: 0">
-                    <div :class="{'active' : !weixin.state}" class="tabbar-d1" data-wx="active" style="padding-right:0 ">
+                <div class="s-tabbar-main clearfix">
+                    <div :class="{'active' : !weixin.state}" class="tabbar-d1" data-wx="active">
                          <a @click="nextLogin()" href="javascript:;" class="s-btn s-btn_1">立即注册成为法驴供应商</a>
                     </div>
-                    <!--<a @click="weiXinTab(true)"  class="tabbar-d2" href="javascript:;"></a>-->
                     <a @click="weiXinTab(true)" v-if="weixin.state" class="tabbar-d2" href="javascript:;"></a>
                 </div>
             </div>
@@ -67,15 +66,15 @@
                 <div class="s-share-icon"></div>
                 <div class="s-share-text">从微信中分享</div>
             </div>
-            <a @click="weiXinTab(true)"  class="tabbar-d2" href="javascript:;"></a>
+
         </div>
         <!--权益卡 卡-->
         <div v-show="page.show=='home_card'" class="main-page main-page-homeCard">
-            <!--<header class="s-header">
+            <header class="s-header">
                 <div class="s-header-main">
                     <a @click="page.show='add'" href="javascript:;" class="s-header-colse"></a>
                 </div>
-            </header>-->
+            </header>
             <div class="s-home-top s-home-top2">
                 <a href="javascript:;" class="s-logo"><img src="/Public/Home/Mob/supplier/slogo.png" alt=""></a>
             </div>
@@ -87,17 +86,17 @@
                             <div class="s-home-intr-item">
                                 <div class="item-icon item-icon_1"></div>
                                 <p class="item-p1"><strong>收益加速</strong></p>
-                                <p class="item-p2">线下业务分成由80%提升为90%</p>
+                                <p class="item-p2">分成由80%提<br>升为90%</p>
                             </div>
                             <div class="s-home-intr-item">
                                 <div class="item-icon item-icon_2"></div>
                                 <p class="item-p1"><strong>收益保障</strong></p>
-                                <p class="item-p2">保障用户平台流水达到10万元</p>
+                                <p class="item-p2">保障用户平台<br>流水达到10万<br>元</p>
                             </div>
                             <div class="s-home-intr-item">
                                 <div class="item-icon item-icon_3"></div>
                                 <p class="item-p1"><strong>叠加保障</strong></p>
-                                <p class="item-p2">未达到收益保障，按比例退还卡金</p>
+                                <p class="item-p2">未达到收益保<br>障，按比例退<br>还卡金</p>
                             </div>
                         </div>
                     </div>
@@ -145,24 +144,24 @@
                     <a @click="login()" class="s-btn s-btn_1" href="javascript:;">登录</a>
                 </div>
                 <div class="s1-login-tips">
-                    点击登录，即表示已阅读并同意<a @click="nexAgreement()" href="javascript:;">《法律合作协议》</a>
+                    点击下一步，即表示已阅读并同意<a @click="nexAgreement()" href="javascript:;">《法律合作协议》</a>
                 </div>
             </div>
         </div>
         <!--设置密码-->
         <div v-show="page.show=='set_pass'" class="main-page">
-            <!--<header class="s-header">
+            <header class="s-header">
                 <div class="s-header-main">
                     <a @click="nextHome()" href="javascript:;" class="s-header-colse"></a>
                 </div>
-            </header>-->
+            </header>
             <div class="wrap-main">
-                <div class="s-title sszmm">
+                <div class="s-title">
                     <h2>设置密码</h2>
                 </div>
-                <!--<div class="s-login-intr">
+                <div class="s-login-intr">
                     <p>设置密码可登陆法驴APP</p>
-                </div>-->
+                </div>
                 <div class="s-setPass-form">
                     <div class="s-input-item s-input-item2 clearfix">
                         <span class="item-d1">设置密码</span>
@@ -219,7 +218,7 @@
                         详情咨询法驴平台客服（400-0183-693）
                     </p>
                     <div class="s2-payEnd-action">
-                        <a @click="nextbu()" href="javascript:;" class="s-btn s-btn_1">下一步</a>
+                        <a href="javascript:window.history.go(-1);" class="s-btn s-btn_1">返回</a>
                     </div>
                 </div>
             </div>
@@ -230,7 +229,7 @@
             <div class="s2-header-tips">信息仅用于审核，绝不外泄!</div>
 
             <div class="wrap-main">
-                <div class="s-title slszc">
+                <div class="s-title">
                     <h2>律师注册</h2>
                 </div>
 
@@ -510,7 +509,7 @@
                                 <input id="JS_form_info_city" class="item-input textR" placeholder="选择执业城市" type="text" autocomplete="off">
                             </div>
                         </div>
-                        <div @click="page.show = 'field_language';document.title='擅长语言'" class="s-info-item s-info-item-link">
+                        <div @click="page.show = 'field_language'" class="s-info-item s-info-item-link">
                             <div class="item-d1">
                                 <span class="s1">*</span>擅长语言
                                 <div class="item-d1-field clearfix">
@@ -532,7 +531,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div @click="page.show = 'field_enterprise';document.title='企业领域'" class="s-info-item s-info-item-link">
+                        <div @click="page.show = 'field_enterprise'" class="s-info-item s-info-item-link">
                             <div class="item-d1">
                                 <span class="s1">*</span>企业端擅长领域
                                 <div class="item-d1-field clearfix">
@@ -543,7 +542,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div @click="page.show = 'field_other';document.title='熟悉行业'" class="s-info-item s-info-item-link">
+                        <div @click="page.show = 'field_other'" class="s-info-item s-info-item-link">
                             <div class="item-d1">
                                 <span class="s1 c1">*</span>熟悉的行业
                                 <div class="item-d1-field clearfix">
@@ -656,36 +655,28 @@
 
             </div>
             <div v-if="info_login" class="s-tabbar s-index-tabbar s2-index-tabbar">
-                <div v-if="form_info.page == 0 " class="s-tabbar-main clearfix">
-                    <div class="tabbar-d1 onlyd1">
-                         <a @click="nextSubmit()" href="javascript:;" class="s-btn s-btn_2 jcsbt2">下一步</a>
-                    </div>
-                </div>
-                <div v-else class="s-tabbar-main clearfix">
+                <div class="s-tabbar-main clearfix">
                     <div class="tabbar-d1">
                          <a @click="blackSumbit()" href="javascript:;" class="s-btn s-btn_2 s2-btn_2">上一步</a>
                     </div>
                     <div class="tabbar-d1">
-                         <a @click="nextSubmit()" href="javascript:;" class="s-btn s-btn_2 jcsbt2">下一步</a>
+                         <a @click="nextSubmit()" href="javascript:;" class="s-btn s-btn_2">下一步</a>
                     </div>
                 </div>
             </div>
 
-            
-
         </div>
         <!--个人选择领域-->
         <div v-show="page.show=='field'" class="main-page">
-            <!--<header class="s-header">
+            <header class="s-header">
                 <div class="s-header-main">
                     <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
                 </div>
-            </header>-->
-            <div class="s2-header-tips">信息仅用于审核，绝不外泄!</div>
+            </header>
             <div class="wrap-main">
-                <div class="s-title slszc new-s-title">
+                <div class="s-title">
                     <h2>选择擅长领域</h2>
-                    <h3>说明：只能接到所选择领域的订单</h3>
+                    <h3>说明：只能接收到所选领域的订单</h3>
                 </div>
                 <div class="s-field-box clearfix">
                     <div v-for="(list, index) in form_info.field_div" class="s-field-item">
@@ -713,11 +704,8 @@
 
             <div class="s-tabbar s-field-tabbar">
                 <div class="s-tabbar-main clearfix">
-                    <!--<div class="field-tabbar-d1">
+                    <div class="field-tabbar-d1">
                         押金合计<span>￥{{ form_info.total_price }}</span>
-                    </div>-->
-                    <div class="field-tabbar-d2">
-                        <a @click="page.show='info';document.title='服务信息'" href="javascript:;" class="s-btn s-btn_2 new-s-btn_2">返回</a>
                     </div>
                     <div class="field-tabbar-d2">
                         <a @click="confirmNavExt()" href="javascript:;" class="s-btn s-btn_2">确定</a>
@@ -730,13 +718,12 @@
         <!--企业选择领域-->
         <div v-show="page.show=='field_enterprise'" class="main-page">
             <header class="s-header">
-                <!--<div class="s-header-main">
+                <div class="s-header-main">
                     <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
-                </div>-->
-                <div class="s2-header-tips">信息仅用于审核，绝不外泄!</div>
+                </div>
             </header>
             <div class="wrap-main">
-                <div class="s-title slszc new-s-title">
+                <div class="s-title">
                     <h2>企业端擅长领域</h2>
                 </div>
                 <div class="s-field-box clearfix">
@@ -789,13 +776,10 @@
 
             </div>
 
-            <div class="s-tabbar s-index-tabbar s-field-tabbar">
+            <div class="s-tabbar s-index-tabbar">
                 <div class="s-tabbar-main clearfix">
-                    <div class="field-tabbar-d2">
-                        <a @click="page.show='info';document.title='服务信息'" href="javascript:;" class="s-btn s-btn_2 new-s-btn_2">返回</a>
-                    </div>
-                    <div class="field-tabbar-d2">
-                         <a @click="confirmNavList('JS_item_field_enterprise', 'field_enterprise')" href="javascript:;" class="s-btn s-btn_2 jcsbt2">确定</a>
+                    <div class="tabbar-d1">
+                         <a @click="confirmNavList('JS_item_field_enterprise', 'field_enterprise')" href="javascript:;" class="s-btn s-btn_2">确定</a>
                     </div>
                 </div>
             </div>
@@ -804,13 +788,12 @@
         <!--熟悉行业-->
         <div v-show="page.show=='field_other'" class="main-page">
             <header class="s-header">
-                <!--<div class="s-header-main">
+                <div class="s-header-main">
                     <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
-                </div>-->
-                <div class="s2-header-tips">信息仅用于审核，绝不外泄!</div>
+                </div>
             </header>
             <div class="wrap-main">
-                <div class="s-title slszc new-s-title">
+                <div class="s-title">
                     <h2>选择熟悉行业</h2>
                 </div>
                 <div class="s-field-box">
@@ -899,13 +882,10 @@
 
             </div>
 
-            <div class="s-tabbar s-index-tabbar s-field-tabbar">
+            <div class="s-tabbar s-index-tabbar">
                 <div class="s-tabbar-main clearfix">
-                    <div class="field-tabbar-d2">
-                        <a @click="page.show='info';document.title='服务信息'" href="javascript:;" class="s-btn s-btn_2 new-s-btn_2">返回</a>
-                    </div>
-                    <div class="field-tabbar-d2">
-                         <a @click="confirmNavList('JS_item_field_other', 'field_know')" href="javascript:;" class="s-btn s-btn_2 jcsbt2">确定</a>
+                    <div class="tabbar-d1">
+                         <a @click="confirmNavList('JS_item_field_other', 'field_know')" href="javascript:;" class="s-btn s-btn_2">确定</a>
                     </div>
                 </div>
             </div>
@@ -914,13 +894,12 @@
         <!--擅长语言-->
         <div v-show="page.show=='field_language'" class="main-page">
             <header class="s-header">
-                <!--<div class="s-header-main">
+                <div class="s-header-main">
                     <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
-                </div>-->
-                <div class="s2-header-tips">信息仅用于审核，绝不外泄!</div>
+                </div>
             </header>
             <div class="wrap-main">
-                <div class="s-title slszc new-s-title">
+                <div class="s-title">
                     <h2>选择擅长语言</h2>
                 </div>
                 <div class="s-field-box clearfix">
@@ -948,13 +927,10 @@
 
             </div>
 
-            <div class="s-tabbar s-index-tabbar s-field-tabbar">
+            <div class="s-tabbar s-index-tabbar">
                 <div class="s-tabbar-main clearfix">
-                    <div class="field-tabbar-d2">
-                        <a @click="page.show='info';document.title='服务信息'" href="javascript:;" class="s-btn s-btn_2 new-s-btn_2">返回</a>
-                    </div>
-                    <div class="field-tabbar-d2">
-                         <a @click="confirmNavList('JS_item_field_language', 'language')" href="javascript:;" class="s-btn s-btn_2 jcsbt2">确定</a>
+                    <div class="tabbar-d1">
+                         <a @click="confirmNavList('JS_item_field_language', 'language')" href="javascript:;" class="s-btn s-btn_2">确定</a>
                     </div>
                 </div>
             </div>
@@ -962,13 +938,13 @@
         </div>
         <!--律师执业证上传 范例 :class="{'s-disabled-state' : info_type !='1' }"-->
         <div v-show="page.show=='lawyerFile_example'" class="main-page">
-            <!--<header class="s-header">
+            <header class="s-header">
                 <div class="s-header-main">
                     <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
                 </div>
-            </header>-->
+            </header>
             <div class="wrap-main">
-                <div class="s-title slszc">
+                <div class="s-title">
                     <h2>查看范例</h2>
                 </div>
                 <div class="s-lawyerUpload-box">
@@ -976,7 +952,7 @@
                         <img class="s-lawyerUpload-pic" src="/Public/Home/Mob/supplier/sexample-2.jpg">
                     </div>
                 </div>
-                <div class="s-lawyerUpload-tips s-lawyerUpload-tips0">
+                <div class="s-lawyerUpload-tips">
                     上传要求：图片清晰，无涂改、遮盖痕迹。
                 </div>
                 <div class="s-lawyerUpload-action">
@@ -986,13 +962,13 @@
         </div>
         <!--年审照片上传 范例-->
         <div v-show="page.show=='limited_example'" class="main-page">
-            <!--<header class="s-header">
+            <header class="s-header">
                 <div class="s-header-main">
                     <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
                 </div>
-            </header>-->
+            </header>
             <div class="wrap-main">
-                <div class="s-title slszc">
+                <div class="s-title">
                     <h2>查看范例</h2>
                 </div>
                 <div class="s-lawyerUpload-box">
@@ -1000,7 +976,7 @@
                         <img class="s-lawyerUpload-pic" src="/Public/Home/Mob/supplier/sexample-1.jpg">
                     </div>
                 </div>
-                <div class="s-lawyerUpload-tips s-lawyerUpload-tips0" >
+                <div class="s-lawyerUpload-tips">
                     上传要求：图片清晰，无涂改、遮盖痕迹。
                 </div>
                 <div class="s-lawyerUpload-action">
@@ -1015,11 +991,11 @@
                     <a @click="page.show='info'" href="javascript:;" class="s-header-black"></a>
                 </div>
             </header>-->
-            <!--<div class="s2-header-tips">信息仅用于审核，绝不外泄!</div>-->
+            <div class="s2-header-tips">信息仅用于审核，绝不外泄!</div>
             <div class="wrap-main">
-                <!--<div class="s-title">
+                <div class="s-title">
                     <h2>支付费用</h2>
-                </div>-->
+                </div>
                 <div class="s-addOrder-box">
                     <div :class="{'unactive': !form_add.state }" class="s-addOrder-item s-addOrder-item_1">
                         <div class="item-d1 clearfix">
@@ -1047,7 +1023,7 @@
                         ￥{{ form_add.total_price }}
                     </div>
                     <div class="addOrder-tabbar-d2">
-                        <a :class="{'unactive': !form_add.state && form_add.checked == '0'}" @click="addOrder()" href="javascript:;" class="s-btn s-btn_2 jcsbt2">提交</a>
+                        <a :class="{'unactive': !form_add.state && form_add.checked == '0'}" @click="addOrder()" href="javascript:;" class="s-btn s-btn_2">提交</a>
                     </div>
                 </div>
             </div>
@@ -1055,11 +1031,11 @@
         </div>
         <!--支付订单 确认付费-->
         <div v-show="page.show=='goPay'" class="main-page">
-            <!--<header class="s-header">
+            <header class="s-header">
                 <div class="s-header-main">
                     <a href="javascript:history.back(-1);" class="s-header-black"></a>
                 </div>
-            </header>-->
+            </header>
             <div class="wrap-main">
                 <div class="s-title">
                     <h2>确认付费</h2>
@@ -1078,7 +1054,7 @@
                                 <div class="item-label-text">微信支付</div>
                             </div>
                         </a>
-                        <!--<a @click="form_goPay.mode='1'" :class="{'active': form_goPay.mode=='1'}" href="javascript:;" class="s-goPayMode-item">
+                        <a @click="form_goPay.mode='1'" :class="{'active': form_goPay.mode=='1'}" href="javascript:;" class="s-goPayMode-item">
                             <div class="item-label clearfix">
                                 <div class="item-label-radio"></div>
                                 <div class="item-label-icon item-label-icon_2"></div>
@@ -1131,7 +1107,7 @@
                                     <textarea v-model="form_goPay.remarks" class="s-goPayQt-item-textarea" maxlength="100" placeholder="输入留言信息..."></textarea>
                                 </div>
                             </div>
-                        </a>-->
+                        </a>
                     </div>
                     <div class="s-goPay-action">
                         <a v-show="!form_goPay.wx_pay_link && form_goPay.mode=='0' || form_goPay.mode!='0'" @click="goPay()" href="javascript:;" class="s-btn s-btn_2">确定</a>
@@ -1140,12 +1116,6 @@
 
                 </div>
             </div>
-            <div class="kfdh">
-                客服电话：400-0183-693
-
-            </div>  
-      
-      
         </div>
         <!--支付失败-->
         <div v-show="page.show=='pay_fail'" class="main-page">
@@ -1258,15 +1228,6 @@
     <script src="/Public/Home/Mob/js/city.js"></script>
     <script src="/Public/Home/Mob/js/city-picker.min.js"></script>
     <script>
-
-         var browserRule = /^.*((iPhone)|(iPad)|(Safari))+.*$/;
-            if (browserRule.test(navigator.userAgent)) {
-                window.onpageshow = function(event) {
-                    if (event.persisted) {
-                        window.location.reload()
-                    }
-                };
-            }
         //toast 显示时间
         $.toast.prototype.defaults.duration = 1000;
         var ajax_url = "http://www.falv58.com";
@@ -1287,6 +1248,7 @@
                 return pattern.test(emial);
             },
             isLicenseNumber: function(num) {
+                //律师执业证号验证
                 var pattern = /^[0-9]*$/;
                 if (!pattern.test(num)) {
                     return false;
@@ -2125,41 +2087,6 @@
 
             },
             methods: {
-                nextbu:function(){
-                    var _this=this
-                    if(_this.form_info.field_arr.length==0){
-                        for(var i=0;i<_this.form_info.field_buy.length;i++){
-                            _this.form_info.field_arr.push({
-                                id: _this.form_info.field_buy[i]
-                            });
-
-                        }
-                    }
-                    var _fid = '';
-                    for (var i=0, len=_this.form_info.field_arr.length; i<len; i++) {
-                        if (i==_this.form_info.field_arr.length-1) {
-                            _fid += _this.form_info.field_arr[i]['id'];
-                        } else {
-                            _fid += _this.form_info.field_arr[i]['id'] + ','
-                        }
-                    }
-
-                    var js=_this.info.id
-                    
-                    APP.send('/PC/NEWOrder/checkLawyerHavePay.json?lawyer_id='+js,function(r){
-                        if(r.data=="1"){
-                            window.location.href ="/h5/lawyerreg/jLawyerMatching.html"
-                        }else{
-                            window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=add&fid='+_fid;
-                        }
-                    })
-
-                    // if(_this.info.cash_pledge>0){
-                    //     window.location.href ="/h5/lawyerreg/jLawyerMatching.html"
-                    // }else{
-                    //     window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=add&fid='+_fid;
-                    // }
-                },
                 init: function() {
                     //console.log( APP.getParam('lawyer_cash_pledge'));
                     var _this = this;
@@ -2173,8 +2100,7 @@
                             _this.getOrderState();
                         }
                     } else if (APP.getParam('tab') == 'payEnd') {
-                        // this.page.show = 'pay_succ_wx_zfb';
-                        window.location.href="/h5/lawyerreg/jLawyerMatching.html"
+                        this.page.show = 'pay_succ_wx_zfb';
                     } else if (APP.getParam('tab') == 'payEndQt') {
                         this.page.show = 'pay_succ_qt';
                     } else if (APP.getParam('tab') == 'payEndLy') {
@@ -2182,12 +2108,9 @@
                     } else if (APP.getParam('tab') == 'add') {
                         var _id = APP.getParam('fid') ? APP.getParam('fid').split(",") : [];
                         this.form_info.field_arr = _id;
-                        document.title = "支付费用"
                         this.nextAdd();
                     } else if (APP.getParam('tab') == 'info') {
-                        if( this.form_info.page==0){
-                            document.title="个人资料"
-                        }
+                        
                     } else {
                         this.page.show = 'home';
                     }
@@ -2198,10 +2121,9 @@
                                 _callback();
                             });
                         })
-                       
+                    
                         if (res.data) {
                             _this.page.show = 'set_pass';
-                            document.title="设置密码"
                         }
                     })
                     this.getNavExtRule();
@@ -2214,7 +2136,6 @@
                     var _this = this;
                     this.logout(function() {
                         _this.page.show = 'login';
-                        document.title="登录"
                     });
                 },
                 nextHome: function() {
@@ -2233,7 +2154,6 @@
                 nextSelectField: function() {
                     this.initSelectNavExt();
                     this.page.show = 'field';
-                    document.title="个人领域"
                 },
                 nextAdd: function() {
                     if (this.form_info.field_arr && this.form_info.field_arr.length == 0) {
@@ -2247,16 +2167,17 @@
                     this.page.show = 'add';
                 },
                 nextSuper: function() {
-                    // this.page.show='super_user';
-                    window.location.href="/h5/lawyerreg/jLawyerMatching.html"
+                    this.page.show='super_user';
                 },
                 checkIsSetPassword: function(callback) {
+                    //是否设置过密码
                     var callback = callback ? callback : function(){};
                     APP.send('/PC/User/passwordIsEmpty.json', function(res) {
                         callback(res);
                     });
                 },
                 getInfo: function(callback) {
+                    //个人信息
                     var _this = this;
                     var _callback = callback ? callback : function() {};
                     APP.send("/PC/User/userInfo.json", function(res) {
@@ -2267,6 +2188,7 @@
                     })
                 },
                 getLoginLawyerInfo: function(callback) {
+                    //律师信息
                     var _this = this;
                     var callback = callback ? callback : function() {};
                     APP.send('/V2/Lawyer/showLawyer.json', function(res) {
@@ -2291,7 +2213,6 @@
                                  _this.info_type = '2';
                                  if (APP.getParam('tab') == 'info') {
                                     _this.page.show = 'info_examine';
-                                    document.title="提交成功"
                                 }
                                  //console.log(233)
                                 // if (APP.getParam('tab') == 'info') {
@@ -2360,6 +2281,7 @@
                     });
                 },
                 getNavExtRule: function() {
+                    //押金费用规则
                     var _this = this;
                     APP.send('/V2/Public/config.json?key=deposit_expense_rule', function(res) {
                         //console.log(res)
@@ -2495,26 +2417,15 @@
                             _this.info = _data;
                             _this.getInfo();
                             //_this.getLoginLawyerInfo();
-                            
 
                             if (_data.password_is_null) {
                                 _this.page.show = 'set_pass';
-                                document.title="设置密码"
                             } else {
-                                
-
-                                if (parseFloat(_data.lawyer_info.cash_pledge) > 0 && _data.lawyer_info.rights_protection.length > 0 && _data.lawyer_info.is_approval== '1') {
+                                if (parseFloat(_data.cash_pledge) > 0 && _data.rights_protection.length > 0 && _data.is_approval== '1') {
                                     _this.nextSuper();
-
-                                } 
-                                else if (  _data.lawyer_info.is_approval== '1'|| _data.lawyer_info.is_approval== '0'){
-                                     window.location.href = '/h5/lawyerreg/jLawyerMatching.html'
-                                }
-                                
-                                else {
-                                    console.log(_data)
+                                } else {
                                     window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=info';
-                                    _this.nextInfo(_data.is_approval);
+                                    //_this.nextInfo(_data.is_approval);
                                 }
                             }
                             
@@ -2627,7 +2538,7 @@
                         width=height;
                     }
                     if (height>width) {
-                        height = width;
+                        width=height;
                     }
 
                     //如果图片大于四百万像素，计算压缩比并将大小压至400万以下
@@ -2925,7 +2836,7 @@
                     } else {
                         ctx.drawImage(img, 0, 0, width, height);
                     }
-   ctx.drawImage(img, 0, 0, width, height);
+
                     //进行最小压缩
                     var ndata = canvas.toDataURL('image/jpeg', 0.8);
 
@@ -3063,6 +2974,7 @@
                     }
                 },
                 getNavExt: function() {
+                    //获取可选律师擅长领域
                     var _this = this;
                     APP.send('/V2/Public/navExt.json', function(res) {
                         //console.log(res)
@@ -3087,19 +2999,18 @@
                     });
                 },
                 selectNavExt: function(id, nav_title, index) {
+                    //选择擅长领域
                     var data_buy_length  = this.form_info.field_buy.length;
                     var data_length  = this.form_info.field_temporary.length;
                     // console.log(data_buy_length)
                     // console.log(id)
                     // console.log(index)
-                    // data_buy_length+
-                    if (data_length >=3 && !$(".JS_field_item").eq(index).hasClass('active')) {
+                    if (data_buy_length+data_length >=3 && !$(".JS_field_item").eq(index).hasClass('active')) {
                         $.toast("最多可添加3个领域", "text")
                         return;
                     }
 
                     var _data = this.form_info.field_temporary;
-                    console.log(_data)
                     if (_data.length > 0 ) {
                         for (var i=0, len=_data.length; i<len; i++) {  
                             if (_data[i]['id'] == id && !$(".JS_field_item").eq(index).attr("data-checked")) {
@@ -3109,8 +3020,7 @@
                                 return;
                             }
                         }
-                    }
-                    // 点击的按钮不是已购
+                    } 
                     if (!$(".JS_field_item").eq(index).attr("data-checked")) {
                         this.form_info.field_temporary.push({
                             id: id,
@@ -3123,6 +3033,7 @@
                     //console.log(this.form_info.field);
                 },
                 selectNavList: function(div, index) {
+                    //选中企业擅长领域
                     var _all_div = $("."+div);
                     if (div == 'JS_item_field_enterprise') {
                         var _sum = 0;
@@ -3198,29 +3109,19 @@
                     this.page.show = 'info';
                 },
                 initSelectNavExt: function() {
-                    var self = this;
                     var _data = this.form_info.field_buy;
-                    if(self.form_info.field_temporary.length){
-                        return
-                    }
-                   self.form_info.field_temporary = [];
-                    
                     var _div = $(".JS_field_item");
                     for (var i=0, len=_data.length; i<len; i++) {
                         for (var a=0, lenA=_div.length; a<lenA; a++) {
                             if ($(_div[a]).attr("data-id") == _data[i]) {
                                 $(_div[a]).addClass("active");
-                                // $(_div[a]).attr("data-checked", "checked");
-                                self.form_info.field_temporary.push({
-                                    nav_title:$(_div[a]).find('.item-label-text').text(),
-                                    id: _data[i]
-                                })
-
+                                $(_div[a]).attr("data-checked", "checked");
                             }
                         }
                     }
                 },
                 initSelectNavList: function(div, type) {
+                    //企业擅长领域
                     var _data = this.form_info[type].split(",");
                     var _div = $("."+div);
 
@@ -3252,6 +3153,7 @@
 
                 },
                 calcNavExtPrice: function() {
+                    //领域价格计算
                     var _this = this;
                     var _data = [];
                     var data_temporary  = this.form_info.field_temporary;
@@ -3279,10 +3181,8 @@
                         window.history.go(-1);
                     } else if (this.form_info.page == 1) {
                         this.form_info.page = 0;
-                        document.title="个人资料"
                     } else if (this.form_info.page == 2) {
                         this.form_info.page = 1;
-                        document.title="执业信息"
                     }
                     $(document).scrollTop(0)
                 },
@@ -3300,6 +3200,7 @@
                     }
                 },
                 checkFirstSumbit: function() {
+                    //第一页资料填写验证
                     if (!this.form_info.name) {
                         $.toast("请输入姓名", "text");
                         return;
@@ -3325,10 +3226,10 @@
                         return;
                     }
                     this.form_info.page = 1;
-                    document.title="执业信息"
                     $(document).scrollTop(0)
                 },
                 checkSecondSumbit: function() {
+                    //第二页资料填写验证
                     if (!APP.isLicenseNumber(this.form_info.license_number)) {
                         $.toast("执业证号格式不正确", "text");
                         return;
@@ -3349,30 +3250,18 @@
                         $.toast("请上年审照片", "text");
                         return;
                     }
-                    document.title="服务信息"
                     this.form_info.page = 2;
                     $(document).scrollTop(0)
 
                 },
                 submit: function() {
-                     var _this = this;
-
-                    if(_this.form_info.field_arr.length==0){
-                        for(var i=0;i<_this.form_info.field_buy.length;i++){
-                            _this.form_info.field_arr.push({
-                                id: _this.form_info.field_buy[i]
-                            });
-
-                        }
-                    }
-
-
-                   
+                    //第三页资料填写验证及所有资料提交审核
+                    var _this = this;
                     var _json = {
                         headimgurl: _this.form_info.upload_headPic_url,//头像照片
                         name: _this.form_info.name,                         //姓名
                         id_no: _this.form_info.id_card,                         //身份证号
-                        sex: _this.form_info.sex,                         //性别
+                        sex: _this.form_info.sex,                         //身份证号
                         birthday: $("#JS_form_info_data").val(),                 //生日
                         phone: _this.form_info.phone,                       //联系电话
                         email: _this.form_info.email,                       //邮箱
@@ -3385,11 +3274,10 @@
                         lawyer_certificate: _this.form_info.lawyerFile_url,     //执业证照片
                         lawyer_annual: _this.form_info.limitedFile_url,     //年审照片
                         other_practice_certificates: '',                    //其它执业证书
-                        
+
                         business_type: _this.form_info.business_type,       //业务类型
                         practice_city: $("#JS_form_info_city").attr("data-codes"),                //城市
                         language: _this.form_info.language,                //擅长语言
-                        cash_pledge_lawyer_rights: _this.form_info.field_arr,   //擅长领域
                         areas_of_expertise_to_b: _this.form_info.field_enterprise,  //企业擅长领域
                         familiar_with_the_industry: _this.form_info.field_know,  //熟悉行业
                         charge_interval: _this.form_info.toll_range,  //收费区间
@@ -3403,6 +3291,7 @@
                         timing_price: 0,
                         proxy_price: 4000
                     }
+
                     //其它执业证书
                     var _other_practice_certificates = _this.form_info.otherFile_url;
                     var _other_practice_certificates_json = [];
@@ -3499,15 +3388,7 @@
                     APP.send('/V2/Lawyer/joinLawyer.json', function(res) {
                         //console.log(res)
                         if (res.errno == '0') {
-
-                            // if(_this.info.cash_pledge>0){
-                            //      window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=info'
-                            // }else{
-                            //     window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=add&fid='+_fid;
-                            // }
-                            
-                                 window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=info'
-
+                            window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=add&fid='+_fid;
                             // _this.nextAdd();
                             // _this.getLoginLawyerInfo();
                         } else {
@@ -3517,6 +3398,7 @@
                     }, _json);
                 },
                 calcAddOrderPrice: function() {
+                    //价格计算
                     // var deposit = parseFloat(this.form_add.deposit);
                     // var card_price = parseFloat(this.form_add.card_price);
                     // if (!this.form_add.state) {
@@ -3550,6 +3432,7 @@
 
                 },
                 selectCard: function() {
+                    //收益加速保障卡
                     this.form_add.checked = this.form_add.checked == '1' ? '0' : '1';
                     if (this.form_add.checked == '0') {
                         this.form_add.total_price = this.form_add.deposit;
@@ -3558,6 +3441,8 @@
                     }
                 },
                 addOrder: function() {
+                    //订单提交
+
                     //没选择新领域 没选择购买保障卡
                     if (!this.form_add.state && this.form_add.checked == '0') {
                         return;
@@ -3582,10 +3467,6 @@
                         lawyer_cash_pledge.push(_data[i]);
                     }
 
-                    //产品id 
-                    //100580  押金
-                    //100581  保障卡
-                    
                     var _json = {
                         lawyer_cash_pledge: lawyer_cash_pledge,  //新领域id[]
                         is_rights_protection: is_rights_protection // 0不购买保障卡 1购买
@@ -3664,11 +3545,10 @@
 
                                 //未支付 state：STATE_ING 显示支付页
                                 _this.page.show = 'goPay';
-                                document.title="支付费用"
+                                
                                 ////已经支付 STATE_SUCCESS 显示支付成功
                                 if (_data.state == 'STATE_SUCCESS') {
-                                    // _this.page.show = 'pay_succ_wx_zfb';
-                                    window.location.href="/h5/lawyerreg/jLawyerMatching.html"
+                                    _this.page.show = 'pay_succ_wx_zfb';
                                     _this.form_goPay.state_text = '已完成';
                                 } else {
                                     _this.form_goPay.state_text = '审核中';
@@ -3700,6 +3580,7 @@
                     }
                 },
                 goPayZfb: function(uuid) {
+                    //支付宝支付
                     if (this.weixin.state) {
                         $.toast("从浏览器中打开以完成支付宝付款");
                     } else {
@@ -3707,6 +3588,7 @@
                     }
                 },
                 goPayWx: function(uuid) {
+                    //微信h5支付
                     var _this = this;
                     var _json = {
                         uuid: uuid,
@@ -3728,6 +3610,7 @@
                     //window.location.href = ajax_url+'/V2/Lawyer/wxPay.json?'+lawyer_cash_pledge+'is_rights_protection='+is_rights_protection;
                 },
                 goPayWxJssdk: function(uuid) {
+                    //微信支付
                     var _this = this;
                     var _json = {
                         uuid: uuid,
@@ -3750,8 +3633,7 @@
                                     // 支付成功后的回调函数
                                     if (res.errMsg == "chooseWXPay:ok") {
                                         //支付成功
-                                        // _this.page.show = 'pay_succ_wx_zfb';
-                                        window.location.href="/h5/lawyerreg/jLawyerMatching.html"
+                                        _this.page.show = 'pay_succ_wx_zfb';
                                         //window.location.href = "my-order.html?sta=0";
                                     } else {
                                         _this.page.show = 'pay_fail';
@@ -3774,6 +3656,7 @@
 
                 },
                 goPayQt: function(uuid) {
+                    //其它支付
                     var _this = this;
                     var _json = {
                         uuid: uuid,
@@ -3812,7 +3695,7 @@
         
                 },
                 getOrderState: function() {
-                    //微信H5支付 需要轮循查看订单详情
+                    //微信H5支付 需要轮循查看订单详情判断是否支付完成
                     var _this = this;
                     if (!_this.form_goPay.timest_state) return;
                     _this.form_goPay.timeset = setTimeout(function() {
@@ -3823,9 +3706,8 @@
                             if (res.errno == '0') {
                                 var _data = res.data;
                                 if (_data.state == 'STATE_SUCCESS') {
-                                    // _this.page.show = 'pay_succ_wx_zfb';
+                                    _this.page.show = 'pay_succ_wx_zfb';
                                     _this.form_goPay.state_text = '已完成';
-                                    window.location.href="/h5/lawyerreg/jLawyerMatching.html"
                                     clearTimeout( _this.form_goPay.timeset)
                                 } else {
                                     _this.form_goPay.state_text = '审核中';

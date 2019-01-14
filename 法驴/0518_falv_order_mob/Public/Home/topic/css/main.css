@@ -3620,6 +3620,10 @@ i.icon.icon-next, i.icon.icon-prev {
     color: #878787;
     line-height: 1rem;
 }
+.newauto{
+    color:rgba(255,255,255,1);
+    background:linear-gradient(84deg,rgba(255,110,31,1),rgba(255,147,31,1));
+}
 .j-orderDetails-tabbar-btn2 {
     font-size: .34rem;
     color: #fff;
