@@ -4307,7 +4307,7 @@ canvas {
     overflow: hidden;
 }
 
-
+/*黑卡样式*/
 .bg-brc{
      background-color: #0c0604;
 }
@@ -4419,4 +4419,47 @@ border-radius:.04rem;
 .brc-goodsList-per{
     background:linear-gradient(90deg,rgba(236,208,160,1),rgba(209,171,108,1));
     color: #4A2908;
+}
+
+/*统一购买样式*/
+.cb-bg{
+    height:100%;
+    background-color:#d9332e;
+}
+.cbuy_bg{
+    height: 12.28rem;
+    position: relative;
+    background: url('../img/commonbuybg.png') no-repeat;
+    background-size: 100%;
+}
+.cbuy-foot{
+    background: none;
+    padding: 0;
+    color: #FFDBA3;
+}
+.s6-goodsList-item .cb-text{
+    color: #999999;
+    border: .01rem solid #999999;
+}
+
+.s6-goodsList-item .cb-d3-text:after{
+    content: "";
+    position: absolute;
+    width: .32rem;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: url(../img/cbuyicon.png) center no-repeat;
+    background-size: 100%;
+}
+.s6-goodsList-item .cb-d3-text{
+    color: #E43731;
+}
+.s6-goodsList-item .cb-item-d3-btn{
+background:linear-gradient(90deg,rgba(224,54,48,1),rgba(247,61,55,1));
+
+}
+.cb-per{
+    color: #D8332E;
+    background: #fff;
 }

@@ -192,7 +192,7 @@ APP.init = function(callback, url) {
     _this.send("/PC/Wx/getOpenid.json?source=1", function(res) {
         if (res.errno != '0') {
             //钉钉
-            if (APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12'||APP.getOrderChannel() == '16'||APP.getOrderChannel() == '23') {
+            if (APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12'||APP.getOrderChannel() == '16'||APP.getOrderChannel() == '23'||APP.getOrderChannel() == '25') {
                 _this.authorization = true;
                 _callback();
             } else {

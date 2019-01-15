@@ -668,7 +668,7 @@ APP.getFromChannel = function() {
     return _channel;
 }
 
-//通用渠道来源区分
+//通用兑换渠道客户来源区分
 APP.setCustomerSourceChannel= function(type) {
     var _channel = type ? type : '';
     sessionStorage.setItem("CustomerSourceChannel", _channel);
@@ -676,6 +676,17 @@ APP.setCustomerSourceChannel= function(type) {
 
 APP.getCustomerSourceChannel = function() {
     var _channel = sessionStorage.getItem("CustomerSourceChannel") ? sessionStorage.getItem("CustomerSourceChannel") : '';
+    return _channel;
+}
+
+//通用购买  渠道来源区分
+APP.setNewChannel= function(type) {
+    var _channel = type ? type : '';
+    sessionStorage.setItem("NewChannel", _channel);
+}
+
+APP.getNewChannel = function() {
+    var _channel = sessionStorage.getItem("NewChannel") ? sessionStorage.getItem("NewChannel") : '';
     return _channel;
 }
 

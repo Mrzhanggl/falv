@@ -95,8 +95,8 @@
                 </a>
                 <a @click="add()" href="javascript:;" class="weui-tabbar__item s-orderAdd-btn2">去付款</a>
             </div>
-            <!--安居客-->
-            <div v-else-if="APP.getOrderChannel() == '14'" class="weui-tabbar s-orderAdd-tabbar s6-orderAdd-tabbar">
+            <!--安居客 统一购买-->
+            <div v-else-if="APP.getOrderChannel() == '14'||APP.getOrderChannel() == '25'" class="weui-tabbar s-orderAdd-tabbar s6-orderAdd-tabbar">
                 <a href="javascript:;" class="weui-tabbar__item s-orderAdd-btn1">
                     <span><strong>¥{{ goods.channel_specification.price }}</strong></span>
                 </a>
@@ -502,6 +502,10 @@
                     if (_tab_channel) {
                         _json['channel'] = _tab_channel
                     }
+                    //判断是否为通用购买  覆盖渠道id
+                    if(APP.getNewChannel()){
+                        _json['channel'] = APP.getNewChannel()
+                    }
                     // _json['channel'] = 11;
                     APP.send('/PC/Product/info.json', _json, function(res) {
                         //console.log(res);
@@ -526,7 +530,10 @@
                 add: function() {
                     var _this = this;
                     var _channel = APP.getOrderChannel();
-                    
+                    //判断是否为通用购买  覆盖渠道id
+                    if(APP.getNewChannel()){
+                        _channel = APP.getNewChannel()
+                    }
                     var _json = {
                         product_data: [{id: _this.goods.id, count: 1}],
                         buyer_message: _this.no_login_form.remarks,
@@ -549,7 +556,7 @@
                         order_type: 1,
                         discount_code: '', //优惠码
                         customer_selected_supplier_id: '', //供应商id
-
+                        custom_source:APP.getCustomerSourceChannel() //客户来源
                     }
 
                     //性别 

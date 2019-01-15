@@ -34,7 +34,7 @@
                     <div class="info-name overflows">{{ info.wechat_nickname }}</div>
                     <span class="info-phone">{{ info.phone }}</span>
                 </div>
-                <div v-else-if="APP.getOrderChannel() == '23'" class="s-personal-info">
+                <div v-else-if="APP.getOrderChannel() == '23'||APP.getOrderChannel() == '25'" class="s-personal-info">
                     <div class="info-headpic"><img src="../Public/Home/newVip/img/alltx.png" alt=""></div>
                     <div class="info-name overflows">{{ info.wechat_nickname }}</div>
                     <span class="info-phone">{{ info.name }}</span>

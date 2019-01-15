@@ -19,22 +19,22 @@
 </head>
 
 <body>
-    <div v-cloak id="app" class="main bg-dd">
+    <div v-cloak id="app" class="main bg-dd  cb-bg">
         <!--首页-->
         <div v-show="page.show == 'home'">
 
-            <div class="newcommon">
-                <a @click="next('fall-center', '', '/Member/personal.html')" v-if="info_login" href="javascript:;" style="top: .3rem" class="s6-goodsList-per s7-goodsList-per"><strong>个人中心</strong></a>
+            <div class="newcommon cbuy_bg">
+                <a @click="next('fall-center', '', '/Member/personal.html')" v-if="info_login" href="javascript:;" style="top: .3rem" class="s6-goodsList-per s7-goodsList-per cb-per"><strong>个人中心</strong></a>
             </div>
 
             <div class="s7-goodsList-bd new-s7-goodsList-bd">
 
                 <div class="s6-goodsList-title">
-                    <img src="/Public/Home/member/img/m123.png">
+                    <img src="/Public/Home/member/img/cb_jxcp.png">
                 </div>
 
                 <div class="wrap-main s6-goodsList-content">
-                    <div @click="next('exchange_call', '兑换电话咨询', '/Member/goodsDetails.html?id=common')" class="s6-goodsList-item clearfix">
+                    <div @click="next('exchange_call', '兑换电话咨询', '/Member/goodsDetails.html?id=100601')" class="s6-goodsList-item clearfix">
                         <div class="item-cover">
                             <img src="/Public/Home/member/img/m124@2x.png">
                         </div>
@@ -43,22 +43,22 @@
                                 <strong>不限时法律电话咨询</strong>
                             </div>
                             <div class="item-content-d2 clearfix">
-                                <span class="item-d2-text">不限时</span>
-                                <span class="item-d2-text">远程</span>
-                                <span class="item-d2-text">全领域</span>
+                                <span class="item-d2-text cb-text">不限时</span>
+                                <span class="item-d2-text cb-text">远程</span>
+                                <span class="item-d2-text cb-text">全领域</span>
                             </div>
                             <div class="item-content-d3">
-                                <div class="item-d3-text">
+                                <div class="item-d3-text cb-d3-text">
                                     <strong>108</strong><span class="c1">/次</span>
                                 </div>
-                                <div class="item-d3-btn">
-                                    <strong>立即兑换</strong>
+                                <div class="item-d3-btn cb-item-d3-btn">
+                                    <strong>立即购买</strong>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div old-id="100566" @click="next('exchange_VIPC', '兑换个人年卡', '/Member/goodsDetails.html?id=100578')" class="s6-goodsList-item clearfix">
+                    <div old-id="100566" @click="next('exchange_VIPC', '兑换个人年卡', '/Member/goodsDetails.html?id=100602')" class="s6-goodsList-item clearfix">
                         <div class="item-cover">
                             <img src="/Public/Home/member/img/m125@2x.png">
                         </div>
@@ -67,16 +67,16 @@
                                 <strong>个人法律咨询年卡</strong>
                             </div>
                             <div class="item-content-d2 clearfix">
-                                <span class="item-d2-text">个人权益</span>
-                                <span class="item-d2-text">24小时</span>
-                                <span class="item-d2-text">全领域</span>
+                                <span class="item-d2-text cb-text">个人权益</span>
+                                <span class="item-d2-text cb-text">24小时</span>
+                                <span class="item-d2-text cb-text">全领域</span>
                             </div>
                             <div class="item-content-d3">
-                                <div class="item-d3-text">
+                                <div class="item-d3-text cb-d3-text">
                                     <strong>666</strong><span class="c1">/年</span>
                                 </div>
-                                <div class="item-d3-btn">
-                                    <strong>立即兑换</strong>
+                                <div class="item-d3-btn cb-item-d3-btn">
+                                    <strong>立即购买</strong>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
             </div>
 
             <div class="s7-goodsList-footer">
-                <div class="s7-goodsList-footer-text new-s7-goodsList-footer-text">
+                <div class="s7-goodsList-footer-text new-s7-goodsList-footer-text cbuy-foot">
                     本页面由阿方提法律咨询（上海）有限公司提供技术支持
                 </div>
             </div>
@@ -128,11 +128,12 @@
                 
 
                 //设置来源
-                APP.setOrderChannel("16");
+                APP.setOrderChannel("25");
                 // APP.setFromChannel("35");
                 APP.setCustomerSourceChannel(APP.getParam("customersource"))
+                APP.setNewChannel(APP.getParam("newchannel"))
 
-                APP.sendHm({action: "visits", chinese_url: "统一兑换落地页"});
+                APP.sendHm({action: "visits", chinese_url: "统一购买落地页"});
             },
             mounted: function() {
                 
@@ -144,7 +145,7 @@
                         action: "click", 
                         object: type,
                         chinese_object: type_chinese,
-                        chinese_url: "统一兑换落地页"
+                        chinese_url: "统一购买落地页"
                     }, function() {
                         // $.closePopup()
                         window.location.href = url;

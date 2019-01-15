@@ -24,8 +24,8 @@
         <div v-show="page.show == 'home'" class="main-page">
 
 
-            <!--钉钉 壹钱包 华夏 安居客-->
-            <div v-if="APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12'|| APP.getOrderChannel() == '13'|| APP.getOrderChannel() == '14' || APP.getOrderChannel() == '16' || APP.getOrderChannel() == '23'" class="s6-goodsDetails-dd">
+            <!--钉钉 壹钱包 华夏 安居客 统一兑换  青黑  统一购买-->
+            <div v-if="APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12'|| APP.getOrderChannel() == '13'|| APP.getOrderChannel() == '14' || APP.getOrderChannel() == '16' || APP.getOrderChannel() == '23'|| APP.getOrderChannel() == '25'" class="s6-goodsDetails-dd">
 
                 <div class="s-goodsDetails-info">
                     <div class="s-goodsDetails-box">
@@ -58,9 +58,9 @@
                                 <div v-if="sessionStorage.getItem('order_from_channel') || APP.getCommonChannel()" class="s-goodsDetails-price-item clearfix">
                                     <span v-if="APP.getOrderChannel() == '11'" class="price-w1">钉钉特惠价</span>
                                      <span v-if="APP.getOrderChannel() == '14'" class="price-w1">特惠价</span>
-                                     <span v-if="APP.getOrderChannel() == '23'" class="price-w1">渠道特惠价</span>
+                                     <span v-if="APP.getOrderChannel() == '23'|| APP.getOrderChannel() == '25'" class="price-w1">渠道特惠价</span>
                                     <!--<span v-if="APP.getOrderChannel() == '12'||APP.getOrderChannel() == '13'" class="price-w1">优惠价</span>-->
-                                    <div v-if="APP.getOrderChannel() == '11'||APP.getOrderChannel() == '14'||APP.getOrderChannel() == '23'" class="price-t1 price-c1 clearfix">
+                                    <div v-if="APP.getOrderChannel() == '11'||APP.getOrderChannel() == '14'||APP.getOrderChannel() == '23'|| APP.getOrderChannel() == '25'" class="price-t1 price-c1 clearfix">
                                         ￥{{ goods_info.channel_specification ? goods_info.channel_specification.price : '' }}{{ goods_info.channel_specification ? goods_info.channel_specification.unit : '' }}
                                     </div>
                                 </div>
@@ -599,9 +599,12 @@
                         _json["id"] = "100579"
                     }
 
-
                    if (APP.getOrderChannel()) {
                         _json['channel'] = APP.getOrderChannel()
+                    }
+                    //判断是否为通用购买  覆盖渠道id
+                    if(APP.getNewChannel()){
+                        _json['channel'] = APP.getNewChannel()
                     }
                     APP.send('/PC/Product/info.json', _json, function(res) {
                         //console.log(res);

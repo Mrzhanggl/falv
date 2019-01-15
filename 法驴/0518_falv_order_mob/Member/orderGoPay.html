@@ -155,7 +155,7 @@
                         <div class="item-label-text">微信支付</div>
                     </div>
                 </a>
-                <a v-if="APP.getOrderChannel() == '11'||APP.getOrderChannel() == '14'" @click="form_goPay.mode='1'" :class="{'active': form_goPay.mode=='1'}" href="javascript:;"  class="s-orderPay-item s5-orderPay-item">
+                <a v-if="APP.getOrderChannel() == '11'||APP.getOrderChannel() == '14'||APP.getOrderChannel() == '25'" @click="form_goPay.mode='1'" :class="{'active': form_goPay.mode=='1'}" href="javascript:;"  class="s-orderPay-item s5-orderPay-item">
                     <div class="item-label clearfix">
                         <div class="item-label-radio"></div>
                         <div class="item-label-icon item-label-icon_2"></div>
@@ -355,7 +355,12 @@
                 },
                 goPay: function() {
                     if (this.form_goPay.mode == '0') {
-                        this.goPayWxJssdk();
+                        if(APP.getOrderChannel() == "25"){
+                             this.goPayHwx();
+                        }else{
+                            this.goPayWxJssdk();
+                        }
+                        
                     } else if (this.form_goPay.mode == '1') {
                         this.goPayZFB();
                     }
@@ -412,6 +417,35 @@
                             $.toast(res.msg, "text");
                         }
                     });
+
+                },
+                // 微信H5支付
+                goPayHwx:function(){
+                    var _this = this
+                    var _json = {
+                        uuid: APP.getParam("oid"),
+                        type: 4                   
+                    }
+                    $.showLoading("数据提交中");
+                    APP.send("/V2/Lawyer/wxPay.json", _json, function(res) {
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            //mweb_url 获取跳转链接 生成a标签按钮 用户再次点击跳转微信支付
+                            // _this.form_goPay.wx_pay_link = _data.mweb_url;
+                            window.location.href = _data.mweb_url;
+                        } else {
+                            $.toast(res.msg, "text");
+                        }
+                    });
+
+                    APP.sendHm({
+                        action: "click",
+                        object: "confirm_to_pay",
+                        chinese_object: "确认支付",
+                        chinese_url: "支付订单",
+                        parameter: _json.uuid
+                    })
 
                 },
                 nextYQB: function() {
