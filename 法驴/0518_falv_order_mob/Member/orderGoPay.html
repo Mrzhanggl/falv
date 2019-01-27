@@ -287,7 +287,7 @@
     <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
     <script src="/Public/Home/member/js/vue.min.js"></script>
     <script src="/Public/Home/topic/js/common.js?v=088"></script>
-    <script src="/Public/Home/member/js/main.js?v=082"></script>
+    <script src="/Public/Home/member/js/main.js?v=051"></script>
     <script>
         var vm = new Vue({
             el: '#app',
@@ -305,7 +305,9 @@
 
             },
             created: function() {
-                
+                if(APP.getParam("wx") && APP.getParam("wx") == 1){
+                    APP.setOrderChannel("25")
+                }
                 //钉钉渠道显示支付宝支付
                 if (APP.getOrderChannel() == "11") {
                     this.form_goPay.mode = "1";
@@ -333,25 +335,48 @@
                     var _json = {
                         order_id: APP.getParam("oid"),
                     }
-                    APP.send("/PC/NEWOrder/info.json", _json, function(res) {
-                        if (res.errno == '0') {
-                            //console.log(res);
-                            _this.order = res.data;
-                            //壹钱包
-                            if (res.data.channel == "12"||res.data.channel == "13"||APP.getOrderChannel() == "16"||APP.getOrderChannel() == "23") {
-                                _this.page.show = 'home';
-                                document.title = "兑换成功"
-                            } else {
-                                document.title = "支付";
-                                if (res.data.state == '0' || res.data.state == '2') {
-                                    _this.page.show = 'home'
+                    var getState=setInterval(function(){
+                        APP.send("/PC/NEWOrder/info.json", _json, function(res) {
+                            if (res.errno == '0') {
+                                //console.log(res);
+                                _this.order = res.data;
+                                //壹钱包
+                                if (APP.getOrderChannel() == "12"||APP.getOrderChannel() == "13"||APP.getOrderChannel() == "16"||APP.getOrderChannel() == "23") {
+                                    _this.page.show = 'home';
+                                    document.title = "兑换成功"
                                 } else {
-                                    _this.page.show = 'pay_succ'
+                                    document.title = "支付";
+                                    if (res.data.state == '0' || res.data.state == '2') {
+                                        _this.page.show = 'home'
+                                    } else {
+                                        _this.page.show = 'pay_succ'
+                                    }
                                 }
-                            }
 
-                        }
-                    })
+                            }
+                        })
+                    },1000)
+                    // APP.send("/PC/NEWOrder/info.json", _json, function(res) {
+                    //     if (res.errno == '0') {
+                    //         //console.log(res);
+                    //         _this.order = res.data;
+                    //         //壹钱包
+                    //         if (APP.getOrderChannel() == "12"||APP.getOrderChannel() == "13"||APP.getOrderChannel() == "16"||APP.getOrderChannel() == "23") {
+                    //             _this.page.show = 'home';
+                    //             document.title = "兑换成功"
+                    //         } else {
+                    //             document.title = "支付";
+                    //             if (res.data.state == '0' || res.data.state == '2') {
+                    //                 _this.page.show = 'home'
+                    //             } else {
+                    //                 _this.page.show = 'pay_succ'
+                    //             }
+                    //         }
+
+                    //     }
+                    // })
+
+
                 },
                 goPay: function() {
                     if (this.form_goPay.mode == '0') {
@@ -438,6 +463,35 @@
                             $.toast(res.msg, "text");
                         }
                     });
+
+                //     $.ajax({
+                        
+                //         beforeSend: function(xhr) {
+                //             xhr.setRequestHeader("Referer");
+                //         },
+                //         headers: {
+                //             'Referer':"www.falv58.com/test://"
+                //         },
+                //         url:"/V2/Lawyer/wxPay.json",
+                //         data: _json,
+                //         type:'POST',
+                //         success: function(res) {
+                //             $.hideLoading();
+                //             if (res.errno == '0') {
+                //                 var _data = res.data;
+                //                 //mweb_url 获取跳转链接 生成a标签按钮 用户再次点击跳转微信支付
+                //                 // _this.form_goPay.wx_pay_link = _data.mweb_url;
+                //                 window.location.href = _data.mweb_url;
+                //             } else {
+                //                 $.toast(res.msg, "text");
+                //             }
+                //         },
+                //         error: function(err) {
+                //         },
+                //         complete: function(XMLHttpRequest, status) {
+                //         }
+                //  });
+
 
                     APP.sendHm({
                         action: "click",

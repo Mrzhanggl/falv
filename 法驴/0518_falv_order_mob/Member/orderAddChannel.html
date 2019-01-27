@@ -29,9 +29,10 @@
                     </div>
                     <div class="s4-orderAddChannel-info-content">
                         <div class="d1">{{ goods.name }}</div>
-                        <!--<div class="d2">
-                            优惠价：<span>￥</span>{{ goods.flprice }}{{ goods.fl_unit }}
-                        </div>-->
+                        <div class="d2" v-if="APP.getOrderChannel()=='25'"> 
+                            <!--优惠价：<span>￥</span>{{ goods.flprice }}{{ goods.fl_unit }}-->
+                            渠道优惠价:<span>￥</span>{{ goods.channel_specification.price }}{{ goods.channel_specification.unit}}
+                        </div>
                     </div>
                 </div>
                 <div class="s4-orderAddChannel-item s4-orderAddChannel-item2">
@@ -594,7 +595,12 @@
                         if (res.errno == '0') {
                             //统计
                             // return;
-                            window.location.href = "/Member/orderGoPay.html?oid=" + res.data;
+                            if( APP.getOrderChannel()=="25"){
+                                 window.location.href = "/Member/orderGoPay.html?oid=" + res.data + "&wx=1";
+                            }else{
+                                window.location.href = "/Member/orderGoPay.html?oid=" + res.data;
+                            }
+                            
                         } else {
                             $.toast(res.msg, "text")
                         }
@@ -633,7 +639,11 @@
                         if (res.errno == '0') {
                             //统计
                              //return;
-                            window.location.href = "/Member/orderGoPay.html?oid=" + res.data;
+                           if( APP.getOrderChannel()=="25"){
+                                 window.location.href = "/Member/orderGoPay.html?oid=" + res.data + "&wx=1";
+                            }else{
+                                window.location.href = "/Member/orderGoPay.html?oid=" + res.data;
+                            }
                         } else {
                             // _this.service.max = 0;
                             // _this.getDayTimes(_this.service.date[0]['date'])

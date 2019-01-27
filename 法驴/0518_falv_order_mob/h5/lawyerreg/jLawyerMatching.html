@@ -412,11 +412,11 @@
                 //去交押金
                 goCash: function () {
                     var _fid = '';
-                    for (var i = 0, len = this.info.cash_pledge_lawyer_rights.length; i < len; i++) {
-                        if (i == this.info.cash_pledge_lawyer_rights.length - 1) {
-                            _fid += this.info.cash_pledge_lawyer_rights[i];
+                    for (var i = 0, len = this.info.knowledge_domain.length; i < len; i++) {
+                        if (i == this.info.knowledge_domain.length - 1) {
+                            _fid += this.info.knowledge_domain[i];
                         } else {
-                            _fid += this.info.cash_pledge_lawyer_rights[i] + ','
+                            _fid += this.info.knowledge_domain[i] + ','
                         }
                     }
                     console.log(_fid)

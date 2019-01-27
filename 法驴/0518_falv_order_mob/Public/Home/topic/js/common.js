@@ -968,6 +968,10 @@ $.smartScroll = function(container, selectorScrollable) {
     container.data('isBindScroll', true);
 };
 
+//监控脚本
+!(function(c,b,d,a){c[a]||(c[a]={});c[a].config={pid:"ip6vuhqbfi@9695f9654c72a69",imgUrl:"https://arms-retcode.aliyuncs.com/r.png?",sendResource:true,enableSPA:true,useFmp:true};
+with(b)with(body)with(insertBefore(createElement("script"),firstChild))setAttribute("crossorigin","",src=d)
+})(window,document,"https://retcode.alicdn.com/retcode/bl.js","__bl");
 
 
 /*

@@ -102,22 +102,25 @@
                        <div class="j-comment-addService clearfix">
                             <div @click="form.lawyer_willingness='打官司'" :class="{'active': form.lawyer_willingness=='打官司'}" class="j-timeDetails-object-item"><strong>打官司</strong></div>
                             <div @click="form.lawyer_willingness='律师见面'" :class="{'active': form.lawyer_willingness=='律师见面'}" class="j-timeDetails-object-item"><strong>律师见面</strong></div>
-                            <div @click="form.lawyer_willingness='文书起草'" :class="{'active': form.lawyer_willingness=='文书起草'}" class="j-timeDetails-object-item"><strong>文书起草</strong></div>
-                            <div @click="form.lawyer_willingness='律师函'" :class="{'active': form.lawyer_willingness=='律师函'}" class="j-timeDetails-object-item"><strong>律师函</strong></div>
+                            <div @click="form.lawyer_willingness='律师起草'" :class="{'active': form.lawyer_willingness=='律师起草'}" class="j-timeDetails-object-item"><strong>律师起草</strong></div>
+                            <div @click="form.lawyer_willingness='其它需求'" :class="{'active': form.lawyer_willingness=='其它需求'}" class="j-timeDetails-object-item"><strong>其它需求</strong></div>
                         </div>
-                        <div class="clearfix">
+                        <!--<div class="clearfix">
                             <div @click="form.willingness_of_user = form.willingness_of_user ? false : true" :class="{'active': form.willingness_of_user }" class="j-comment-addService-label">
                                 我愿意承接客户的这项业务
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                     <div @click="editWill()" :class="{'unactive': !form.lawyer_willingness}" class="s4-timePop-action"><strong>确定</strong></div>
 
                 </div>
             </div>
+            <div class="continue_mactch" @click="window.location.href='/h5/lawyerreg/jLawyerMatching.html'">
+                继续抢单
+            </div>
 
         </div>
-
+        
     </div>
     <script src="/Public/Home/Mob/js/jquery-3.1.1.min.js"></script>
     <script src="/Public/Home/Mob/js/jquery-weui.min.js"></script>
@@ -226,10 +229,10 @@
                         APP.sendHm('click', 'lawyer_lawSuit', '客户意愿-打官司', '律师端订单详情')
                     } else if (_json.lawyer_willingness == '律师见面') {
                         APP.sendHm('click', 'lawyer_lawMeet', '客户意愿-律师见面', '律师端订单详情')
-                    } else if (_json.lawyer_willingness == '文书起草') {
-                        APP.sendHm('click', 'lawyer_lawDoc', '客户意愿-文书起草', '律师端订单详情')
-                    } else if (_json.lawyer_willingness == '律师函') {
-                        APP.sendHm('click', 'lawyer_lawLetter', '客户意愿-律师函', '律师端订单详情')
+                    } else if (_json.lawyer_willingness == '律师起草') {
+                        APP.sendHm('click', 'lawyer_lawDoc', '客户意愿-律师起草', '律师端订单详情')
+                    } else if (_json.lawyer_willingness == '其它需求') {
+                        APP.sendHm('click', 'lawyer_lawLetter', '客户意愿-其它需求', '律师端订单详情')
                     }
 
                     if (_this.form.willingness_of_user) {

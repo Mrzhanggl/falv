@@ -63,18 +63,18 @@
                 <div class="j-comment-addService clearfix">
                     <div @click="form.user_willingness='打官司'" :class="{'active': form.user_willingness=='打官司'}" class="j-timeDetails-object-item"><strong>打官司</strong></div>
                     <div @click="form.user_willingness='律师见面'" :class="{'active': form.user_willingness=='律师见面'}" class="j-timeDetails-object-item"><strong>律师见面</strong></div>
-                    <div @click="form.user_willingness='文书起草'" :class="{'active': form.user_willingness=='文书起草'}" class="j-timeDetails-object-item"><strong>文书起草</strong></div>
-                    <div @click="form.user_willingness='律师函'" :class="{'active': form.user_willingness=='律师函'}" class="j-timeDetails-object-item"><strong>律师函</strong></div>
+                    <div @click="form.user_willingness='律师起草'" :class="{'active': form.user_willingness=='律师起草'}" class="j-timeDetails-object-item"><strong>律师起草</strong></div>
+                    <div @click="form.user_willingness='其它需求'" :class="{'active': form.user_willingness=='其它需求'}" class="j-timeDetails-object-item"><strong>其它需求</strong></div>
                 </div>
-                <div class="clearfix">
+                <!--<div class="clearfix">
                     <div @click="form.willingness_of_lawyer = form.willingness_of_lawyer ? false : true" :class="{'active': form.willingness_of_lawyer }" class="j-comment-addService-label">
                         希望{{ order.lawyer_id !='0' ? order.lawyer_info.name.slice(0,1) + '律师' : '' }}继续为我服务
                     </div>
-                </div>
+                </div>-->
             </div>
 
-            <div class="j-comment-action">
-                <a @click="comment()" href="javascript:;" class="m-btn m-btn_1">提交</a>
+            <div class="j-comment-action" style="padding:0">
+                <a @click="comment()" href="javascript:;" class="m-btn m-btn_1" style="position: fixed;bottom: 0;border-radius:0">提交</a>
             </div>
 
         </div>

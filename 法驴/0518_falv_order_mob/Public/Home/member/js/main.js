@@ -268,6 +268,7 @@ APP.getWxUrl = function() {
         '/Member/goodsHx.html',
         '/Member/goodsCommon.html',
         '/Member/goodsBRC.html',
+        "/Member/orderGoPay.html",
     ]
     var _loca_url = window.location.pathname;
     for (var i=0,len=_data.length; i<len; i++) {
@@ -306,7 +307,7 @@ APP.init = function(callback, url) {
     _this.send("/PC/Wx/getOpenid.json?source=1", function(res) {
         if (res.errno != '0') {
             //钉钉 壹钱包
-            if (APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12' ||  APP.getOrderChannel() == '16'||  APP.getOrderChannel() == '23'||  APP.getOrderChannel() == '25') {
+            if (APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12' ||  APP.getOrderChannel() == '16'||  APP.getOrderChannel() == '23'||  APP.getOrderChannel() == '25' || window.location.href=="/Member/orderGoPay.html") {
                 _this.authorization = true;
                 _callback();
                 

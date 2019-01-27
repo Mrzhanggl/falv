@@ -1457,3 +1457,15 @@ canvas {
 .b1-dialog__btn3 {
     
 }
+.continue_mactch{
+    width:100%;
+    height:1rem;
+    background:rgba(40,167,225,1);
+    color: #fff;
+    text-align: center;
+    font-size: .34rem;
+    line-height: 1rem;
+    font-weight: bold;
+    position: fixed;
+    bottom: 0;
+}

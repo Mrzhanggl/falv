@@ -12,7 +12,7 @@
     <script src="/Public/Home/member/js/flexible.js"></script>
     <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
     <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
-    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=48">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=18">
     <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
 
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="wrap-main s6-goodsList-content">
-                    <div @click="next('exchange_call', '兑换电话咨询', '/Member/goodsDetails.html?id=100601')" class="s6-goodsList-item clearfix">
+                    <div @click="next('exchange_call', '兑换电话咨询', '/Member/goodsDetails.html?id=100605')" class="s6-goodsList-item clearfix">
                         <div class="item-cover">
                             <img src="/Public/Home/member/img/m124@2x.png">
                         </div>
@@ -49,7 +49,7 @@
                             </div>
                             <div class="item-content-d3">
                                 <div class="item-d3-text cb-d3-text">
-                                    <strong>108</strong><span class="c1">/次</span>
+                                    <strong>{{ ordera.channel_specification ? ordera.channel_specification.price : '108' }}</strong><span class="c1">/次</span>
                                 </div>
                                 <div class="item-d3-btn cb-item-d3-btn">
                                     <strong>立即购买</strong>
@@ -58,7 +58,7 @@
                         </div>
                     </div>
 
-                    <div old-id="100566" @click="next('exchange_VIPC', '兑换个人年卡', '/Member/goodsDetails.html?id=100602')" class="s6-goodsList-item clearfix">
+                    <div old-id="100566" @click="next('exchange_VIPC', '兑换个人年卡', '/Member/goodsDetails.html?id=100604')" class="s6-goodsList-item clearfix">
                         <div class="item-cover">
                             <img src="/Public/Home/member/img/m125@2x.png">
                         </div>
@@ -73,7 +73,7 @@
                             </div>
                             <div class="item-content-d3">
                                 <div class="item-d3-text cb-d3-text">
-                                    <strong>666</strong><span class="c1">/年</span>
+                                    <strong>{{ orderb.channel_specification ? orderb.channel_specification.price : '666' }}</strong><span class="c1">/年</span>
                                 </div>
                                 <div class="item-d3-btn cb-item-d3-btn">
                                     <strong>立即购买</strong>
@@ -104,8 +104,8 @@
     <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
     <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
     <script src="/Public/Home/member/js/vue.min.js"></script>
-    <script src="/Public/Home/topic/js/common.js?v=088"></script>
-    <script src="/Public/Home/member/js/main.js?v=080"></script>
+    <script src="/Public/Home/topic/js/common.js?v=018"></script>
+    <script src="/Public/Home/member/js/main.js?v=020"></script>
     <script>
         var vm = new Vue({
             el: '#app',
@@ -115,7 +115,8 @@
                 page: {
                     show: '',
                 },  
-
+                ordera:{},
+                orderb:{}
                 // `state`    '优惠码状态 0未激活 1未使用 2已使用 3已过期',
             },
             created: function() {
@@ -126,26 +127,57 @@
                     // console.log(_this.page.show)
                 });
                 
-
+               
                 //设置来源
                 APP.setOrderChannel("25");
                 // APP.setFromChannel("35");
                 APP.setCustomerSourceChannel(APP.getParam("customersource"))
                 APP.setNewChannel(APP.getParam("newchannel"))
 
-                APP.sendHm({action: "visits", chinese_url: "统一购买落地页"});
+                APP.sendHm({action: "visits", newchannel:APP.getParam("newchannel"), chinese_url: "统一购买落地页"});
+                 _this.details()
             },
             mounted: function() {
                 
             },
             methods: {
+                details: function() {
+                    var _this = this;
+                    var _json = {
+                        id: 100605
+                    }
+                    if(APP.getNewChannel()){
+                        _json['channel'] = APP.getNewChannel()
+                    }
+                    APP.send("/PC/Product/info.json", _json, function(res) {
+                        if (res.errno == '0') {
+                            //console.log(res);
+                            _this.ordera = res.data;
+                        }
+                    })
+                    var _jsonb = {
+                        id: 100604
+                    }
+                    if(APP.getNewChannel()){
+                        _jsonb['channel'] = APP.getNewChannel()
+                    }
+                    APP.send("/PC/Product/info.json", _jsonb, function(res) {
+                        if (res.errno == '0') {
+                            //console.log(res);
+                            _this.orderb = res.data;
+                        }
+                    })
+
+
+                },
                 next: function(type, type_chinese, url) {
                     
                     APP.sendHm({
                         action: "click", 
                         object: type,
                         chinese_object: type_chinese,
-                        chinese_url: "统一购买落地页"
+                        chinese_url: "统一购买落地页",
+                        newchannel:APP.getParam("newchannel"), 
                     }, function() {
                         // $.closePopup()
                         window.location.href = url;

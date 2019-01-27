@@ -12,7 +12,7 @@
     <script src="/Public/Home/Mob/js/flexible.js"></script>
     <link rel="stylesheet" href="/Public/Home/Mob/css/weui.min.css">
     <link rel="stylesheet" href="/Public/Home/Mob/css/jquery-weui.min.css">
-    <link rel="stylesheet" href="/Public/Home/Mob/css/quick-supplier.css?v=31">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/quick-supplier.css?v=19">
     <script src="/Public/Home/Mob/js/jquery-3.1.1.min.js"></script>
     <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
@@ -523,7 +523,7 @@
                         </div>
                         <div @click="nextSelectField()" class="s-info-item s-info-item-link">
                             <div class="item-d1">
-                                <span class="s1">*</span>擅长领域
+                                <span class="s1">*</span>个人端擅长领域
                                 <div class="item-d1-field clearfix">
                                     <div class="item-d1-field-text">
                                         <span v-if="form_info.field">{{ form_info.field }}</span>
@@ -1287,16 +1287,16 @@
         <div v-cloak v-show="wxBindTip.sta === 'phone'" class="wxbd">
             <div class="weui-mask weui-mask--visible"></div>
             <div class="b6-dialog">
-                <div class="b6-dialog__bd">该手机已绑定了其他微信号，<br>是否解绑并重新绑定当前账号？</div>
+                <div class="b6-dialog__bd">该微信号已绑定了其他账号，<br>是否解绑并重新绑定当前账号？</div>
                 <div class="b6-dialog__ft clearfix">
                     <a @click="getHref()" href="javascript:;" class="b6-dialog__btn default">暂不处理</a>
-                    <a @click="bindl()" href="javascript:;" class="b6-dialog__btn primary">解除绑定</a>
+                    <a @click="reBind()" href="javascript:;" class="b6-dialog__btn primary">解除绑定</a>
                 </div>
             </div>
         </div>
 
         <div v-cloak v-show="lycheak == 'yes'" class="lyck-box">
-            <div class="weui-mask weui-mask--visible lyck-x"></div>
+            <div class="weui-mask weui-mask--visible"></div>
             <div class="lyck-box-main">
                 <div class="lyck-box-title">请选择擅长领域
                     <div class="lyck-box-cha" @click="lycheak = 'no'">
@@ -1471,15 +1471,18 @@
                     link: _link,
                     imgUrl: 'http://www.falv58.com/Public/Home/Mob/supplier/slogo.jpg',
                     success: function() {
+                        //alert('success')
                         //console.log("success");
                     },
                     cancel: function() {
+                        //alert('cancel');
                         //console.log("cancel");
                     }
                 }
             
                 wx.ready(function() {
                     //分享给朋友
+                    //alert('ready')
                     wx.onMenuShareAppMessage(_configAll);
                     //QQ
                     wx.onMenuShareQQ(_configAll);5
@@ -1728,17 +1731,17 @@
 
     <script>
         //微信授权
-        // if (APP.isWeiXin()) {
-        //     APP.send("/PC/Wx/authorizedStatusForFaLv.json", function(res) {
-        //         //  alert(JSON.stringify(res))
-        //         if (res.errno != '0') {
-        //              window.location.href = ajax_url+'/PC/Wx/authorizedForFaLv.json?type=snsapi_userinfo&url='+encodeURIComponent(window.location.href);
-        //         } else {
-        //             APP.getJssdk();
-        //         }
-        //     });
+        if (APP.isWeiXin()) {
+            APP.send("/PC/Wx/authorizedStatusForFaLv.json", function(res) {
+                 alert(JSON.stringify(res))
+                if (res.errno != '0') {
+                     window.location.href = ajax_url+'/PC/Wx/authorizedForFaLv.json?type=snsapi_userinfo&url='+encodeURIComponent(window.location.href);
+                } else {
+                    APP.getJssdk();
+                }
+            });
            
-        // }
+        }
 
 
         //营销链接
@@ -1953,10 +1956,8 @@
                 }
             },
             created: function() {
-                
                 this.weixin.state =  APP.isWeiXin();
                 this.init();
-                this.checkLoginInfo()
             },
             watch: {
                 form_info_city: function (curVal, oldVal) {
@@ -2439,7 +2440,6 @@
                     var _this = this;
                     var _callback = callback ? callback : function() {};
                     APP.send("/PC/User/userInfo.json", function(res) {
-                        // alert("/PC/User/userInfo返回的数据"+JSON.stringify(res))
                         if (res.errno == '0') {
                             _this.form_info.phone = res.data.username;
                         }
@@ -2664,67 +2664,9 @@
                         customer_source_parameter: localStorage.getItem('customer_source_parameter'),
                         pre_registration_page: document.referrer
                     };
-                    
-                    if(APP.isWeiXin()){
-                                _this.checkBindInfo();
-                        }else{
-                            APP.send('/PC/UserLogin/login.json', function(res) {
-                                //console.log(res)
-                                $.hideLoading();
-                                if (res.errno == '0') {
-                                    var _data = res.data;
-                                    //获取账号律师信息
-                                    _this.info_login = true;
-                                    _this.info = _data;
-                                    _this.getInfo();
-                                    //_this.getLoginLawyerInfo();
-                                        if (_data.password_is_null) {
-                                            _this.page.show = 'set_pass';
-                                            document.title="设置密码"
-                                        } else {
-                                            
-                                                if (parseFloat(_data.lawyer_info.cash_pledge) > 0 && _data.lawyer_info.rights_protection.length > 0 && _data.lawyer_info.is_approval== '1') {
-                                                    _this.nextSuper();
-
-                                                } 
-                                                else if (  _data.lawyer_info.is_approval== '1'|| _data.lawyer_info.is_approval== '0'){
-                                                    window.location.href = '/h5/lawyerreg/jLawyerMatching.html'
-                                                }
-                                                
-                                                else {
-                                                    console.log(_data)
-                                                    window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=info';
-                                                    _this.nextInfo(_data.is_approval);
-                                                }
-
-                                        }
-
-                                    
-                                    
-                                } else {
-                                    $.toast(res.msg, "text");
-                                }
-                            },_json);
-
-
-                        }
-                    
-
-                },
-                autoLogin:function(){
-                     var _this = this;
-                    var _json = {
-                        phone: _this.form_login.phone,
-                        // code: _this.form_login.code,
-                        type: 3,
-                        customer_source: localStorage.getItem('customer_source'),
-                        customer_source_parameter: localStorage.getItem('customer_source_parameter'),
-                        pre_registration_page: document.referrer,
-                    };
                     $.showLoading('数据提交中');
-                    // alert(JSON.stringify(_json))
                     APP.send('/PC/UserLogin/login.json', function(res) {
-                        // alert("自动登录获取数据"+JSON.stringify(res))
+                        //console.log(res)
                         $.hideLoading();
                         if (res.errno == '0') {
                             var _data = res.data;
@@ -2733,7 +2675,30 @@
                             _this.info = _data;
                             _this.getInfo();
                             //_this.getLoginLawyerInfo();
-                           
+                            if(APP.isWeiXin()){
+                                _this.checkBindInfo(function(){
+                                         if (_data.password_is_null) {
+                                                _this.page.show = 'set_pass';
+                                                document.title="设置密码"
+                                            } else {
+                                                
+                                                    if (parseFloat(_data.lawyer_info.cash_pledge) > 0 && _data.lawyer_info.rights_protection.length > 0 && _data.lawyer_info.is_approval== '1') {
+                                                        _this.nextSuper();
+
+                                                    } 
+                                                    else if (  _data.lawyer_info.is_approval== '1'|| _data.lawyer_info.is_approval== '0'){
+                                                        window.location.href = '/h5/lawyerreg/jLawyerMatching.html'
+                                                    }
+                                                    
+                                                    else {
+                                                        console.log(_data)
+                                                        window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=info';
+                                                        _this.nextInfo(_data.is_approval);
+                                                    }
+
+                                            }
+                                     });
+                            }else{
                                 if (_data.password_is_null) {
                                     _this.page.show = 'set_pass';
                                     document.title="设置密码"
@@ -2745,7 +2710,7 @@
                                         } 
                                         else if (  _data.lawyer_info.is_approval== '1'|| _data.lawyer_info.is_approval== '0'){
                                             window.location.href = '/h5/lawyerreg/jLawyerMatching.html'
-                                        } 
+                                        }
                                         
                                         else {
                                             console.log(_data)
@@ -2754,221 +2719,80 @@
                                         }
 
                                 }
+                            }
+
+                            
                             
                         } else {
                             $.toast(res.msg, "text");
                         }
                     },_json);
+
                 },
-                checkLoginInfo: function() {
+                checkBindInfo: function(callback) {
                     var vm = this;
-                     if (APP.isWeiXin()) {
-                    APP.send("/PC/Wx/authorizedStatusForFaLv.json", function(res) {
-                            //  alert(JSON.stringify(res))
-                            if (res.errno != '0') {
-                                window.location.href = ajax_url+'/PC/Wx/authorizedForFaLv.json?type=snsapi_userinfo&url='+encodeURIComponent(window.location.href);
-                            } else {
-                                APP.getJssdk();
-                            }
-                            APP.send('/PC/UserLogin/clearSession.json',function(){
-                                if(APP.isWeiXin() && !sessionStorage.getItem("wxInfoSta")){
-                                APP.send('/PC/Wx/getOpenid.json?source=1', function(res) {
-                                    // alert("检测微信是否有绑定账号"+JSON.stringify(res))
-                                    //防止全局WXLogin重复登陆
-                                    sessionStorage.setItem('wxInfoSta', '1');
-                                    // alert(res.data)
-                                    if (res.errno == '0') {
-                                        var _wxData = res.data;
-                                        //微信有绑定账号                      
-                                        if (_wxData&&_wxData.user_id) {         
-                                            //提示是否重新绑定此微信号
-                                            vm.form_login.phone=_wxData.data.username
-                                            vm.autoLogin()                       
-                                        } else {                      
-                                            return 
-                                        }
-                                    } else {
-                                        // $.toast(res.msg, 'text');
-                                    }
-                                });
-                            }
-                            })
-                            
-
-                        });
-                    
-                    }
-                    
-                    
-                },   
-                checkBindInfo: function() {
-                    var _this = this;
-                    
-                    APP.send('/PC/UserLogin/checkOpenid?phone='+_this.form_login.phone, function(res) {
-                        // alert("非自动登录检测手机号是否绑定过微信"+JSON.stringify(res))
+                    APP.send('/PC/Wx/getOpenid.json?source=1', function(res) {
+                        alert(JSON.stringify(res))
                         //防止全局WXLogin重复登陆
-                        sessionStorage.setItem('wxInfoSta', '1');
+                        sessionStorage.setItem('wxInfoSta', 'true');
                         // alert(res.data)
-                        if (res.data == '1') {
-                            _this.wxBindTip.sta = 'phone';
-                        }else if(res.data == '0'){
-                            var _json = {
-                                phone: _this.form_login.phone,
-                                code: _this.form_login.code,
-                                type: 1,
-                                customer_source: localStorage.getItem('customer_source'),
-                                customer_source_parameter: localStorage.getItem('customer_source_parameter'),
-                                pre_registration_page: document.referrer
-                            };
-                            $.showLoading('数据提交中');
-                            APP.send('/PC/UserLogin/login.json', function(res) {
-                                        //console.log(res)
-                                        $.hideLoading();
-                                        if (res.errno == '0') {
-                                            var _data = res.data;
-                                            //获取账号律师信息
-                                            _this.info_login = true;
-                                            _this.info = _data;
-                                            _this.getInfo();
-                                            //_this.getLoginLawyerInfo();
-                                            _this.reBind()
-
-                                            
-                                            
-                                        } else {
-                                            $.toast(res.msg, "text");
-                                        }
-                                    },_json);
-                        }
-                         else {
+                        if (res.errno == '0') {
+                            var _wxData = res.data;
+                            //微信有绑定账号                      
+                            if (_wxData.user_id) {         
+                                //提示是否重新绑定此微信号
+                                vm.wxBindTip.sta = 'phone';
+                                vm.wxBindTip.url = _url;                                             
+                            } else {                      
+                                //默认绑定当前微信号
+                                vm.reBind(callback);
+                            }
+                        } else {
                             $.toast(res.msg, 'text');
                         }
                     });
- 
                 },
                 getHref: function() {
                     var _this = this;
-                    vm.wxBindTip.sta = ''
-                    // APP.send('/PC/UserLogin/clearSession.json',function(){
-
-                    // })
-                    // if (_this.info.password_is_null) {
-                    //     _this.page.show = 'set_pass';
-                    //     document.title="设置密码"
-                    // } else {
+                    if (_this.info.password_is_null) {
+                        _this.page.show = 'set_pass';
+                        document.title="设置密码"
+                    } else {
                         
-                    //         if (parseFloat(_this.info.lawyer_info.cash_pledge) > 0 && _this.info.lawyer_info.rights_protection.length > 0 && _this.info.lawyer_info.is_approval== '1') {
-                    //             _this.nextSuper();
+                            if (parseFloat(_this.info.lawyer_info.cash_pledge) > 0 && _this.info.lawyer_info.rights_protection.length > 0 && _this.info.lawyer_info.is_approval== '1') {
+                                _this.nextSuper();
 
-                    //         } 
-                    //         else if (  _this.info.lawyer_info.is_approval== '1'|| _this.info.lawyer_info.is_approval== '0'){
-                    //             window.location.href = '/h5/lawyerreg/jLawyerMatching.html'
-                    //         }
+                            } 
+                            else if (  _this.info.lawyer_info.is_approval== '1'|| _this.info.lawyer_info.is_approval== '0'){
+                                window.location.href = '/h5/lawyerreg/jLawyerMatching.html'
+                            }
                             
-                    //         else {
-                    //             console.log(_this.info)
-                    //             window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=info';
-                    //             _this.nextInfo(_this.info.is_approval);
-                    //         }
+                            else {
+                                console.log(_this.info)
+                                window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=info';
+                                _this.nextInfo(_this.info.is_approval);
+                            }
 
-                    // }
+                    }
                     // window.location.href = flurl + '/PC/User/loginJump?username=' + this.form.phone + '&password=' + this.form.password + '&url=' + encodeURIComponent(this.wxBindTip.url);
                 },
-                reBind: function(t) {
+                reBind: function(callback) {
                     var vm = this;
                     var data = {
                         username: vm.form_login.phone,
-                        type:0,
                         // password: vm.form.password
                     }   
                     var _url = vm.wxBindTip.url;
                     $.showLoading();
                     APP.send('/PC/Wx/bindLogin.json', function(res) {
                         //$.toast(res.errno, 'text');
-                        // alert(JSON.stringify(res))
                         $.hideLoading();
                         if (res.errno == '0') {
-                            if(t && t== '1'){
-                                $.toast("重新绑定成功", "success", function(){
-                                vm.wxBindTip.sta = ''
-                                if (vm.info.password_is_null) {
-                                        vm.page.show = 'set_pass';
-                                        document.title="设置密码"
-                                    } else {
-                                        
-                                            if (parseFloat(vm.info.lawyer_info.cash_pledge) > 0 && vm.info.lawyer_info.rights_protection.length > 0 && vm.info.lawyer_info.is_approval== '1') {
-                                                vm.nextSuper();
-
-                                            } 
-                                            else if (  vm.info.lawyer_info.is_approval== '1'|| vm.info.lawyer_info.is_approval== '0'){
-                                                window.location.href = '/h5/lawyerreg/jLawyerMatching.html'
-                                            }
-                                            
-                                            else {
-                                                console.log(vm.info)
-                                                window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=info';
-                                                vm.nextInfo(vm.info.is_approval);
-                                            }
-
-                                    }
-                            });
-                            }else{
-                                vm.wxBindTip.sta = ''
-                                if (vm.info.password_is_null) {
-                                        vm.page.show = 'set_pass';
-                                        document.title="设置密码"
-                                    } else {
-                                        
-                                            if (parseFloat(vm.info.lawyer_info.cash_pledge) > 0 && vm.info.lawyer_info.rights_protection.length > 0 && vm.info.lawyer_info.is_approval== '1') {
-                                                vm.nextSuper();
-
-                                            } 
-                                            else if (  vm.info.lawyer_info.is_approval== '1'|| vm.info.lawyer_info.is_approval== '0'){
-                                                window.location.href = '/h5/lawyerreg/jLawyerMatching.html'
-                                            }
-                                            
-                                            else {
-                                                console.log(vm.info)
-                                                window.location.href = '/h5/lawyerreg/quick_supplier.html?tab=info';
-                                                vm.nextInfo(vm.info.is_approval);
-                                            }
-
-                                    }
-                            }
+                           $.toast("重新绑定成功", "success", callback());
                         } else {
                             $.toast(res.msg, 'text');
                         }
                     }, data);
-                },
-                bindl:function(){
-                    var _this = this
-                    var _json = {
-                                phone: _this.form_login.phone,
-                                code: _this.form_login.code,
-                                type: 1,
-                                customer_source: localStorage.getItem('customer_source'),
-                                customer_source_parameter: localStorage.getItem('customer_source_parameter'),
-                                pre_registration_page: document.referrer
-                            };
-                            $.showLoading('数据提交中');
-                            APP.send('/PC/UserLogin/login.json', function(res) {
-                                        //console.log(res)
-                                        $.hideLoading();
-                                        if (res.errno == '0') {
-                                            var _data = res.data;
-                                            //获取账号律师信息
-                                            _this.info_login = true;
-                                            _this.info = _data;
-                                            _this.getInfo();
-                                            //_this.getLoginLawyerInfo();
-                                            _this.reBind("1")
-
-                                            
-                                            
-                                        } else {
-                                            $.toast(res.msg, "text");
-                                        }
-                                    },_json);
                 },
                 loginCountDown: function() {
                     var _this = this;
@@ -3376,7 +3200,7 @@
                     var ndata = canvas.toDataURL('image/jpeg', 0.8);
 
                     // console.log('压缩前：' + initSize);
-                    // console.log('压缩后：' + ndata.length); 
+                    // console.log('压缩后：' + ndata.length);
                     // console.log('压缩率：' + ~~(100 * (initSize - ndata.length) / initSize) + "%");
 
                     tCanvas.width = tCanvas.height = canvas.width = canvas.height = 0;
@@ -3881,6 +3705,7 @@
 
 
                     for (var p=0; p<_this.form_info.field_arr.length; p++) {
+                                    alert(_this.form_info.field_arr.length)
                                     for (var a=0, lenA=_this.Personal_service.length; a<lenA; a++) {
                                         if (_this.form_info.field_arr[p].id == _this.Personal_service[a].id) {
                                             gerenly.push({
@@ -3890,15 +3715,14 @@
                                     }
                                     for (var j=0, lenB=_this.Enterprise_service.length; j<lenB; j++) {
                                         if (_this.form_info.field_arr[p].id == _this.Enterprise_service[j].id) {
-                                            if(qiyely==""){
-                                                qiyely += _this.form_info.field_arr[p].id;
-                                            }else{
-                                                qiyely += ","+_this.form_info.field_arr[p].id;
-                                            }
-                                           
+                                           qiyely += _this.form_info.field_arr[p].id + ",";
+                                           alert(_this.form_info.field_arr[p].id)
                                         }
                                     }
                      }
+                     console.log(gerenly)
+                     console.log(qiyely)
+                     alert(qiyely)
 
                    
                     var _json = {
@@ -3976,10 +3800,10 @@
                         }
                     }
                     //企业领域
-                    // if (!_this.form_info.field_enterprise) {
-                    //     $.toast("请选择企业端擅长领域", "text");
-                    //     return;
-                    // }
+                    if (!_this.form_info.field_enterprise) {
+                        $.toast("请选择企业端擅长领域", "text");
+                        return;
+                    }
                     if (_this.form_info.toll_range == 'defalut') {
                         $.toast("请选择收费区间", "text");
                         return;
@@ -4121,8 +3945,7 @@
                     
                     var _json = {
                         lawyer_cash_pledge: lawyer_cash_pledge,  //新领域id[]
-                        is_rights_protection: is_rights_protection, // 0不购买保障卡 1购买
-                        total_price:_this.form_add.total_price      //订单总额
+                        is_rights_protection: is_rights_protection // 0不购买保障卡 1购买
                     }
 
                     var _json_change = {
