@@ -8,11 +8,11 @@
 
 //toast 显示时间
 $.toast.prototype.defaults.duration = 1500;
-var ajax_url = "http://www.falv58.com";
-var src_url = "http://www.falv58.com";
+var ajax_url = "https://www.falv58.com";
+var src_url = "https://www.falv58.com";
 if (window.location.host!=="www.falv58.com") {
-    ajax_url = "http://mest.falv58.com";
-    src_url = "http://mest.falv58.com";
+    ajax_url = "https://mest.falv58.com";
+    src_url = "https://mest.falv58.com";
 }
 
 var APP = {
@@ -740,6 +740,7 @@ APP.initChannel = function() {
     //注册来源对应订单来源 channel
     var _order_channel = {
         "24": "0",  //邮政
+        "25": "4",  //短信营销
         "22": "1",  //东家会
         "26": "5",  //联璧
         "27": "6",  //收银宝特惠
@@ -969,7 +970,7 @@ $.smartScroll = function(container, selectorScrollable) {
 };
 
 //监控脚本
-!(function(c,b,d,a){c[a]||(c[a]={});c[a].config={pid:"ip6vuhqbfi@9695f9654c72a69",imgUrl:"https://arms-retcode.aliyuncs.com/r.png?",sendResource:true,enableSPA:true,useFmp:true};
+!(function(c,b,d,a){c[a]||(c[a]={});c[a].config={pid:"ip6vuhqbfi@9695f9654c72a69",imgUrl:"https://arms-retcode.aliyuncs.com/r.png?",sendResource:true,useFmp:true};
 with(b)with(body)with(insertBefore(createElement("script"),firstChild))setAttribute("crossorigin","",src=d)
 })(window,document,"https://retcode.alicdn.com/retcode/bl.js","__bl");
 

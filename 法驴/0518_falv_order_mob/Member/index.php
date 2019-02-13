@@ -109,10 +109,12 @@ $page = curPageURL();
 	<META NAME="Author" CONTENT="晓法网络科技">
 	<META NAME="Keywords" CONTENT="<?php echo $keyword?>">
 	<META NAME="Description" CONTENT="<?php echo $description?>">
+    
     <title>首页</title>
     <!-- <link type="text/css" rel="stylesheet" href="/App//newPC/css/style.css?v=02" /> -->
     <link rel="stylesheet" href="/newPC/css/animate.css">
     <link rel="stylesheet" href="/newPC/css/swiper.min.css">
+    <link href="/newPC/img/bitbug_favicon.ico" rel="icon" type="image/x-icon" />
 	<script>
 		var kfJson = {
 			promotion_party: '<?php echo $word["from"]?>' ? 'sem' : 'seo',
@@ -213,6 +215,7 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
         }
 
         .top_main_right {
+            letter-spacing:2px;
             font-size: 18px;
             font-family: ArialMT;
             font-weight: 400;
@@ -237,7 +240,6 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
 
         .sy {
             display: inline-block;
-            width: 35px;
             height: 70px;
             font-size: 16px;
             font-family: MicrosoftYaHei;
@@ -265,7 +267,6 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
         .qyyh {
             cursor: pointer;
             display: inline-block;
-            width: 69px;
             height: 70px;
             font-size: 16px;
             font-family: MicrosoftYaHei;
@@ -274,6 +275,7 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
             line-height: 70px;
             margin-left: 100px;
             text-decoration: none;
+            letter-spacing: 2px;
         }
 
         .banner {
@@ -638,7 +640,7 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
             margin-left: 66px;
             padding-bottom: 35px;
             margin-bottom: 40px;
-            border-bottom: 1px solid #646F85;
+            border-bottom: 1px solid rgba(100,111,133,0.2);
         }
 
         .mainpn {
@@ -726,7 +728,7 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
         }
 
         .footer-tr {
-            border-bottom: 1px solid #D6D6D9;
+            border-bottom: 1px solid rgba(214,214,217,.4);
             font-size: 14px;
             font-family: MicrosoftYaHei;
             font-weight: 400;
@@ -819,6 +821,7 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
             color: rgba(16, 22, 47, 1);
             line-height: 1;
             margin-bottom: 22px;
+            letter-spacing: 6px;
         }
 
         .banner-leftb {
@@ -827,15 +830,19 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
             color: rgba(16, 22, 47, 1);
             line-height: 1;
             margin-bottom: 62px;
+            letter-spacing: 6px;
+            white-space: nowrap;
         }
 
         .banner-pull {
+            background:linear-gradient(0deg,rgba(54,55,63,1),rgba(87,88,99,1));
+            border:1px solid;
+            border-image:linear-gradient(0deg, rgba(31,31,35,1), rgba(80,81,92,1)) 10 10;
+            box-shadow:0px 6px 14px 0px rgba(16,22,47,0.14),inset -1px -1px 0 0 rgba(44,45,51,1);
             vertical-align: top;
             box-sizing: border-box;
             display: inline-block;
             width: 160px;
-            background:linear-gradient(0deg,rgba(54,55,63,1),rgba(87,88,99,1));
-            box-shadow: 0px 2px 4px 0px rgba(16, 22, 47, 0.2);
             border-radius: 3px;
             line-height: 50px;
             font-size: 14px;
@@ -844,11 +851,12 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
             color: rgba(255, 255, 255, 1);
             margin-right: 30px;
             cursor: pointer;
-            border-image:linear-gradient(0deg,rgba(54,55,63,1),rgba(87,88,99,1));
         }
 
         .banner-pull-text {
             margin-left: 35px;
+            letter-spacing: 2px;
+
         }
 
         .banner-qr {
@@ -858,7 +866,7 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
             height: 20px;
             display: inline-block;
             margin-top: 15px;
-            margin-left: 34px;
+            margin-left: 20px;
         }
 
         .banner-er {
@@ -905,14 +913,40 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
         }
 
         .swp-ljty {
+    border:1px solid;
+border-image:linear-gradient(0deg, rgba(255,223,136,1),rgba(255,178,82,1)) 10 10;
+    color: #11172D;
+    font-size: 14px;
+    border-radius: 3px;
+    background:linear-gradient(0deg,rgba(255,209,85,1),rgba(255,212,96,1));
+    -webkit-box-shadow: 0px 6px 14px 0px rgba(16,22,47,0.14), inset 0px -3px 0 0 #FFC45B;
+    box-shadow: 0px 6px 14px 0px rgba(16,22,47,0.14), inset 0px -3px 0 0 #FFC45B;
+    text-align: center;
+    font-weight: 500;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    transition: all 0.2s;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+            letter-spacing: 2px;
             margin-left: 119px;
             margin-top: 30px;
             width: 160px;
             height: 50px;
-            background: rgba(255, 196, 91, 1);
+            /*background: rgba(255, 196, 91, 1);
             border-image: linear-gradient(0deg, rgba(255, 178, 82, 1), rgba(255, 223, 136, 1)) 10 10;
             box-shadow: 0px 2px 4px 0px rgba(16, 22, 47, 0.2);
-            border-radius: 3px;
+            border-radius: 3px;*/
             line-height: 50px;
             cursor: pointer;
         }
@@ -1008,6 +1042,9 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
                transition: width 5s;
             width: 100%;
         }
+        .jianju{
+            letter-spacing: 2px;
+        }
     </style>
 
     <div class="all" id='app'>
@@ -1020,7 +1057,7 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
                     </span> 400-0183-693
                 </div>
                 <div class="top_main_m">
-                    <div class="sy">首页</div>
+                    <div class="sy jianju">首页</div>
                     <a class="qyyh" href="http://www.7anb.com/">
                         企业用户
                     </a>
@@ -1383,7 +1420,7 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
         <div class="footer">
             <div class="common-m">
                 <div class="f-logo">
-                    <img src="/newPC/img/falv_logo .png" alt="">
+                    <img src="/newPC/img/falv_logo .png" alt="" style="border-radius: 3px;">
                     <p>法驴</p>
                 </div>
                 <div class="mainpn-futt footer-tr">
@@ -1474,8 +1511,7 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
         var vm = new Vue({
             el: '#app',
             data: {
-                num: {
-                    pay_money_num: "5683596"
+                num: {      
                 },
             },
             created: function () {
@@ -1506,9 +1542,9 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
                 },
                 get: function () {
                     var _this = this
-                    var ajax_url = "http://www.falv58.com";
-                    if (window.location.host !== "www.falv58.com") {
-                        ajax_url = "http://mest.falv58.com";
+                    var ajax_url = "https://www.falv58.com";
+                    if (window.location.host !== "www.falv58.com" && window.location.host !== "www.falv58app.com"  ) {
+                        ajax_url = "https://mest.falv58.com";
                     }
 
                     $.ajax({
@@ -1575,21 +1611,12 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
         })
     </script>
 
-    <script>
-        !(function (c, b, d, a) {
-            c[a] || (c[a] = {});
-            c[a].config = {
-                pid: "ip6vuhqbfi@9695f9654c72a69",
-                imgUrl: "https://arms-retcode.aliyuncs.com/r.png?",
-                sendResource: true,
-                enableSPA: true,
-                useFmp: true
-            };
-            with(b) with(body) with(insertBefore(createElement("script"), firstChild)) setAttribute("crossorigin",
-                "", src = d)
-        })(window, document, "https://retcode.alicdn.com/retcode/bl.js", "__bl");
-    </script>
-	
+    
+	<script>
+!(function(c,b,d,a){c[a]||(c[a]={});c[a].config={pid:"ip6vuhqbfi@9695f9654c72a69",imgUrl:"https://arms-retcode.aliyuncs.com/r.png?",sendResource:true,useFmp:true};
+with(b)with(body)with(insertBefore(createElement("script"),firstChild))setAttribute("crossorigin","",src=d)
+})(window,document,"https://retcode.alicdn.com/retcode/bl.js","__bl");
+</script>
 	<!--<script src="http://www.falv58app.com/Public/common/im.js"></script>-->
 	<!--cnzz统计代码
 	<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1262056358'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1262056358%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script>-->

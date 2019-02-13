@@ -8,11 +8,11 @@
 
 //toast 显示时间
 $.toast.prototype.defaults.duration = 1000;
-var ajax_url = "http://www.falv58.com";
-var src_url = "http://www.falv58.com";
+var ajax_url = "https://www.falv58.com";
+var src_url = "https://www.falv58.com";
 if (window.location.host!=="www.falv58.com") {
-    ajax_url = "http://mest.falv58.com";
-    src_url = "http://mest.falv58.com";
+    ajax_url = "https://mest.falv58.com";
+    src_url = "https://mest.falv58.com";
 }
 
 var APP = {
