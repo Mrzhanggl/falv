@@ -17,49 +17,228 @@
     <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
 
 </head>
+<style type="text/css">
+*{
+    -webkit-touch-callout:none;  /*系统默认菜单被禁用*/
+    -webkit-user-select:none; /*webkit浏览器*/
+    -khtml-user-select:none; /*早期浏览器*/
+    -moz-user-select:none;/*火狐*/
+    -ms-user-select:none; /*IE10*/
+    user-select:none;
+}
+			@keyframes yuying1{
+				0%{
+					height: 100%;
+				}
+				11%{
+					height: 88%;
+				}
+				22%{
+					height: 76%;
+				}
+				33%{
+					height: 64%;
+				}
+				44%{
+					height: 52%;
+				}
+                55%{
+                    height: 52%;
+                }
+                66%{
+                    height: 64%;
+                }
+                77%{
+                    height: 76%;
+                }
+                88%{
+                    height: 88%;
+                }
+                100%{
+                    height: 100%;
+                }
+			}	
+			.b_container{
+				width: 300px;
+				height: 18px;
+				margin: 200px auto;	
+                font-size: 0;
+			}
+			.b_container .one{
+				animation:yuying1 1s infinite 0.1s;
+			   -webkit-animation:yuying1 1s infinite 0.1s;
+			}
+			.b_container .two{
+				animation:yuying1 1s infinite 0.2s;
+			   -webkit-animation:yuying1 1s infinite 0.2s;
+			}
+			.b_container .three{
+				animation:yuying1 1s infinite 0.3s;
+			   -webkit-animation:yuying1 1s infinite 0.3s;
+			}
+			.b_container .four{
+				animation:yuying1 1s infinite 0.4s;
+			   -webkit-animation:yuying1 1s infinite 0.4s;
+			}
+			.b_container .five{
+				animation:yuying1 1s infinite 0.5s;
+			   -webkit-animation:yuying1 1s infinite 0.5s;
+			}
+            .b_container .six{
+				animation:yuying1 1s infinite 0.6s;
+			   -webkit-animation:yuying1 1s infinite 0.6s;
+			}
+			.b_container .seven{
+				animation:yuying1 1s infinite 0.7s;
+			   -webkit-animation:yuying1 1s infinite 0.7s;
+			}
+			.b_container .eig{
+				animation:yuying1 1s infinite 0.8s;
+			   -webkit-animation:yuying1 1s infinite 0.8s;
+			}
+			.b_container .nig{
+				animation:yuying1 1s infinite 0.9s;
+			   -webkit-animation:yuying1 1s infinite 0.9s;
+			}
+			.b_container .ten{
+				animation:yuying1 1s infinite 1s;
+			   -webkit-animation:yuying1 1s infinite 1s;
+			}
+			
+			.one,.two,.three,.four,.five,.six,.eig,.seven,.nig,.ten{
+				width:6px;
+				height: 100%;
+				margin-left: 4px;
+				border-radius: 50px;
+				background-color: #999;
+				vertical-align: middle;
+				display: inline-block;
+			}
+		</style>
 
 <body>
     <div v-cloak id="app" class="main">
-        <span @click="code='1'">1</span>
-         <span @click="code='2'">2</span>
-          <span @click="code='3'">3</span>
-          <span @click="code='888'">888</span>
-        <div v-if="code=='1'">
-            1
+       <textarea  class="pdes-input" on-touch-start="return:false;" v-model="v_message"></textarea>
+         <div class="pdes-longtalk">
+                       <div v-if="enzhutext=='1'" class="b_container">
+                            <div class="one"></div>
+                            <div class="two"></div>
+                            <div class="three"></div>
+                            <div class="four"></div>
+                            <div class="five"></div>
+                            <div class="six"></div>
+                            <div class="seven"></div>
+                            <div class="eig"></div>
+                            <div class="nig"></div>
+                            <div class="ten"></div>
+                        </div>
+                        <div  v-if="enzhutext=='1'"  class="b_container c_container">
+                            <div class="one"></div>
+                            <div class="two"></div>
+                            <div class="three"></div>
+                            <div class="four"></div>
+                            <div class="five"></div>
+                            <div class="six"></div>
+                            <div class="seven"></div>
+                            <div class="eig"></div>
+                            <div class="nig"></div>
+                            <div class="ten"></div>
+                        </div>
+                       <img v-if="enzhutext=='0'" src="/Public/Home/newVip/img/microphone_icon_default.png" alt="">{{enzhutext=="0"? "长摁描述" : "松开结束"}}
         </div>
-        <div v-else-if="code=='2'">
-            2
-        </div>
-        <div v-else-if="code=='3'">
-            3
-        </div>
-        <div v-else>
-            else
-        </div>
+
     </div>
     <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
     <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
     <script src="/Public/Home/member/js/vue.min.js"></script>
+    <script src="./js/circleChart.min.js"></script>
+    <script src="./js/HZRecorder.js"></script>
+    <script>
+     
+    </script>
     <script>
         var vm = new Vue({
             el: '#app',
             data: {
+                v_message:"00000000",
+                enzhutext:"0",
                code:"1"
                 
             },
             created: function() {
                 
-
+                // this.time()
                 
             },
             mounted: function() {
+                this.time()
+                $(".pdes-longtalk").on({
+                    touchstart: function(e){
+                        
+                        start = new Date().getTime();
+
+                        timeOutEvent = setTimeout(function(){
+                        //此处为长按事件-----
+                            self.enzhutext="1"
+                            wx.startRecord({
+                                success: function(){
+                                    localStorage.rainAllowRecord = 'true';
+                                },
+                                cancel: function () {
+                                    alert('用户拒绝授权录音');
+                                }
+                            });
+                        },300);
+                       
+                    },
+                    touchmove: function(e){
+                        clearTimeout(timeOutEvent);
+                        timeOutEvent = 0;
+                        e.preventDefault();
+                    },
+                    touchend: function(e){
+                        clearTimeout(timeOutEvent);
+                        end = new Date().getTime();
+                        self.enzhutext="0"
+                        alert((end - start))
+                        if((end - start) < 1000){
+                            end = 0;
+                            start = 0;
+                            //小于1000ms，不录音
+                            $.toast("说话时间太短", 'text');
+                            clearTimeout(recordTimer);
+                            
+                        }else{
+                            wx.stopRecord({
+                                success: function (res) {
+                                    // alert("微信给我的东西"+JSON.stringify(res))
+                                    self.localId = res.localId;
+                                    self.uploadVoice();
+                                },
+                                fail: function (res) {
+                                    alert("录入失败，请重试"+JSON.stringify(res));
+                                }
+                            });
+                        }
+                    }
+                });
             },
             watch: {
                 
             },
             methods: {
 
-                   
+                   time:function(){
+                
+                        //  $("#circle1").circleChart({
+                        //     startAngle:75,
+                        //     size:50,
+                        //     value:75,
+                        // });    
+
+                         
+
+                }
                 
                 
             }

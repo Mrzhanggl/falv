@@ -3011,13 +3011,13 @@ i.icon.icon-next, i.icon.icon-prev {
     float: left;
     width: 2.4rem;
     background: #f0f0f0;    
-    height: 4.5rem;
+    height: 7.6rem;
 }
 .s4-timePop-hourBox {
     padding-left: 2.4rem;
 }
 .s4-timePop-hourBd {
-    height: 4.5rem;
+    height: 7.6rem;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -3036,10 +3036,20 @@ i.icon.icon-next, i.icon.icon-prev {
     display: block;
     height: .9rem;
     line-height: .9rem;
-    font-size: .26rem;
-    color: #333;
-    padding-left: .6rem;
+    font-size: .3rem;
     position: relative;
+    color: rgba(54,54,54,1);
+    padding-left: .39rem;
+    position: relative;
+    width: 4.60rem;
+    height: 1rem;
+    border: 1px solid rgba(224,224,224,1);
+    border-radius: 6px;
+    margin-left: .2rem;
+    font-family: Arial-BoldMT;
+    font-weight: bold;
+    margin-bottom: .1rem;
+    box-sizing: border-box;
 }
 .s4-timePop-hourBd .hourBd-item .w2 {
     padding-left: .25rem;
@@ -3048,17 +3058,20 @@ i.icon.icon-next, i.icon.icon-prev {
     color: #b2b2b2;
 }
 .s4-timePop-hourBd .hourBd-item.active {
-    color: #41b57d;
+    color: rgba(255,100,0,1);
+    border: .02rem solid rgba(255,100,0,1);
+    background: rgba(255,100,0,0.04);
+
 }
 .s4-timePop-hourBd .hourBd-item.active:after {
-    content: "";
+    /*content: "";
     width: .27rem;
     height: 100%;
     background: url('../img/m107.png') center no-repeat;
     background-size: 100%;
     position: absolute;
     top: 0;
-    right: .7rem;
+    right: .7rem;*/
 }
 .noscroll,
 .noscroll body {
@@ -4165,3 +4178,28 @@ i.icon.icon-next, i.icon.icon-prev {
     border: .01rem solid #E0E0E0;
     padding: .13rem .2rem;
 }
+.nhx-s4-timePop-head {
+    font-size: .36rem;
+    font-family: MicrosoftYaHei-Bold;
+    font-weight: bold;
+    color: rgba(54,54,54,1);
+    text-align: left;
+    padding-left: .3rem;
+}
+.nhx-poptime-submit-box{
+        background: white;
+        padding: .16rem 0;
+    }
+    .nhx-poptime-submit{
+        width:6.90rem;
+        height:.88rem;
+        background:linear-gradient(84deg,rgba(255,99,0,1),rgba(255,142,0,1));
+        border-radius:.44rem;
+        font-size:.34rem;
+        font-family:MicrosoftYaHei;
+        font-weight:bold;
+        color:rgba(255,255,255,1);
+        line-height:.88rem;
+        text-align: center;
+        margin: auto;
+    }

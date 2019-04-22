@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html class="ai-reset">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>法驴咨询</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=30">
+    <link rel="stylesheet" href="/Public/Home/newVip/css/main.css?v=90">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body class="ai-reset">
+    <div v-cloak id="app" class="pdes">
+        <div v-show="page.show == 'home'">
+            <div class="ai-all">
+                <div class="ai-mes-box">
+                    <div class="ai-mes">
+                         <span class="ai-mesa-conten">
+                             您好！请问可以做些什么帮助您？
+                         </span>
+                    </div>
+                   <!--<div class="ai-mes clearfix">
+                         <span class="ai-mesb-conten">
+                             您好！请问可以做些什么帮助您？您好！请问可以做些什么帮助您？您好！请问可以做些什么帮助您？您好！请问可以做些什么帮助您？
+                         </span>
+                    </div>
+                   <div class="ai-mes">   
+                       <div class="ai-mesc ">
+                           <h3 class="ai-mesc-tt">这个问题没理,还请换个问法</h3>
+                            <div class="ai-mesc-exp ai-mesc-active">您是想问如下问题吗？
+                                <img  class="ai-mesc-img ai-mesc-img-active" src="/Public/Home/newVip/img/more_icon_up.png" alt=""> 
+                                <img  class="ai-mesc-img ai-mesc-img-de" src="/Public/Home/newVip/img/more_icon_down.png" alt="">                      
+                            </div>
+                            <div class="ai-mesc-box">
+                                <div class="ai-mesc-box-i">不签订劳动合同</div>
+                                <div class="ai-mesc-box-i">劳动合同遗失</div>
+                                <div class="ai-mesc-box-i">未约定试用期录用条件</div>
+                            </div>
+                        </div>        
+                   </div>
+                   <div class="ai-mes">   
+                        <div class="ai-mesd" >
+                            <p class="ai-mesd-ans">单位应当为试用期内的劳动者缴纳社会保险。根据《劳动合同法》规定，试用期包含在劳动合同期限内。既然试用期属于劳动合同期限的范围，员工就有权享受各项社会保障，即养老保险、工商保险、医疗保险等等。如果单位没有在职工试用期期内缴纳社会保险，可以在正式签订劳动合同之后为职工补缴。或是去当地</p>
+                            <div class="ai-mesd-fg">相关法律法规</div>
+                            <p class="ai-mesd-ans">
+                            《中华人民共和国劳动合同法》第二十九条用人单位与劳动者应当按照劳动合同的约定，全面履行各自的义务。
+                            </p>
+                            <div class="ai-mesd-box">
+                                <div class="ai-mesd-box-s">和您相似案件
+                                        <img  class="ai-mesd-img" src="/Public/Home/newVip/img/more_icon_right.png" alt=""> 
+                                </div>
+                                <div class="ai-mesd-box-f">找律师
+                                    <img  class="ai-mesd-img" src="/Public/Home/newVip/img/more_icon_right.png" alt="">
+                                     <img class="ai-mesd-tj" src="/Public/Home/newVip/img/tuijian_label_default.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+                   </div>-->
+                </div>
+
+                <div class="ai-bt">
+                    <div @click="qiehuan()" class="ai-bt-logo">
+                        <img v-if="openbt" src="/Public/Home/newVip/img/talkphone.png" alt="">
+                        <img v-else src="/Public/Home/newVip/img/pkey.png" alt="">
+                    </div>
+                    <form v-show="openbt" class="ai-bt-form" action>
+                         <input v-model="v_message" class="ai-bt-input  ai-bt-inputa" type="text">
+                    </form>
+                    <div v-show="!openbt"  class="ai-bt-input">
+                         <div class="pdes-longtalk ai-pdes-longtalk">
+                            <div v-if="enzhutext=='1'" class="b_container">
+                                    <div class="one"></div>
+                                    <div class="two"></div>
+                                    <div class="three"></div>
+                                    <div class="four"></div>
+                                    <div class="five"></div>
+                                    <div class="six"></div>
+                                    <div class="seven"></div>
+                                    <div class="eig"></div>
+                                    <div class="nig"></div>
+                                    <div class="ten"></div>
+                                </div>
+                                <div v-if="enzhutext=='1'"   class="b_container c_container d_container">
+                                    <div class="one"></div>
+                                    <div class="two"></div>
+                                    <div class="three"></div>
+                                    <div class="four"></div>
+                                    <div class="five"></div>
+                                    <div class="six"></div>
+                                    <div class="seven"></div>
+                                    <div class="eig"></div>
+                                    <div class="nig"></div>
+                                    <div class="ten"></div>
+                                </div>
+                            <img v-if="enzhutext=='0'" src="/Public/Home/newVip/img/microphone_icon_default.png" alt="">{{enzhutext=="0"? "长摁描述" : "松开结束"}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/swiper-3.4.2.jquery.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=089"></script>
+    <script>
+       var docmHeight=document.documentElement.clientHeight
+       $(".ai-all").css("height",docmHeight)
+    
+function ask(question){
+                   var _this = vm
+                    if(question){
+                        _this.v_message=question
+                    }
+                    var text1 = `<div class="ai-mes clearfix"><span class="ai-mesb-conten">${_this.v_message}</span></div>`
+                    
+                   
+
+                    $(".ai-mes-box").append(text1);
+                     $(".ai-all").scrollTop($(".ai-all")[0].scrollHeight)
+                    var _Json={
+                        question:_this.v_message,
+                        token:sessionStorage.getItem("bxhToken"),
+                        user_id:_this.info.id?_this.info.id:"",
+                    }
+                    _this.v_message=''
+                    APP.send("/V2/SZGenerateOrder/sZConsult.json",_Json,function(res){
+                        // alert(JSON.stringift(res))
+                        if(res.errno && res.errno==0){
+                            _this.v_answer=res.data.data.answer;
+                            var text3=`<div class="ai-mes">   
+                                    <div class="ai-mesd" >
+                                        <p class="ai-mesd-ans">${_this.v_answer}</p>
+                                        <div class="ai-mesd-fg">相关法律法规</div>
+                                        <p class="ai-mesd-ans">
+                                        《中华人民共和国劳动合同法》第二十九条用人单位与劳动者应当按照劳动合同的约定，全面履行各自的义务。
+                                        </p>
+                                        <div class="ai-mesd-box">
+                                            <div class="ai-mesd-box-s">和您相似案件
+                                                    <img  class="ai-mesd-img" src="/Public/Home/newVip/img/more_icon_right.png" alt=""> 
+                                            </div>
+                                            <div onclick="jump()" class="ai-mesd-box-f">找律师
+                                                <img  class="ai-mesd-img" src="/Public/Home/newVip/img/more_icon_right.png" alt="">
+                                                <img class="ai-mesd-tj" src="/Public/Home/newVip/img/tuijian_label_default.png" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>`
+                            $(".ai-mes-box").append(text3);
+                            
+                            $(".ai-all").scrollTop($(".ai-all")[0].scrollHeight)
+                        }else{
+                            var text2=`<div class="ai-mes">   
+                                        <div class="ai-mesc ">
+                                            <h3 class="ai-mesc-tt">这个问题没理解,还请换个问法</h3>
+                                                <div class="ai-mesc-exp ai-mesc-active">您是想问如下问题吗？
+                                                    <img  class="ai-mesc-img ai-mesc-img-active" src="/Public/Home/newVip/img/more_icon_up.png" alt=""> 
+                                                    <img  class="ai-mesc-img ai-mesc-img-de" src="/Public/Home/newVip/img/more_icon_down.png" alt="">                      
+                                                </div>
+                                                <div class="ai-mesc-box">
+                                                    <div onclick="ask('不签订劳动合同')" class="ai-mesc-box-i">不签订劳动合同</div>
+                                                    <div  onclick="ask('劳动合同遗失')" class="ai-mesc-box-i">劳动合同遗失</div>
+                                                    <div  onclick="ask('未约定试用期录用条件')" class="ai-mesc-box-i">未约定试用期录用条件</div>
+                                                </div>
+                                            </div>        
+                                    </div>`
+                            $(".ai-mes-box").append(text2);
+                            console.log($(".ai-mes-box").scrollTop)
+                            console.log($(".ai-mes-box").scrollHeight)
+                            $(".ai-all").scrollTop($(".ai-all")[0].scrollHeight)
+                        }
+                    })
+                }
+
+            function jump(){
+                window.location.href="/Member/goodsDetails.html?id=1006080"
+            }
+        
+    </script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                v_answer:"",
+                openbt:false,
+                v_message:"",
+                enzhutext:"0",
+                ulckid:'1',
+                peoplesum:"",
+                tabshow:false,
+                poptitle:"",
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                    navShow: false
+                },
+                pg_ck:'1',
+                isOrderPay: {
+                    state: false,
+                    data: ''
+                },
+                new_state: false,     //新消息
+
+                subject: [],    //专题
+                collection: [],     //视频
+                product: {
+                    channel_specification:{}
+                },     //产品
+            },
+            created: function() {
+                var _this = this;
+                
+                APP.setOrderChannel("48");
+                APP.setFromChannel("48");
+                // APP.getInfo(this, function(res) {
+                    
+                // });
+                // APP.init();
+                 _this.page.show = 'home';
+                 _this.getToken();
+                APP.getJssdk();
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "包小黑"
+                })
+
+                
+
+            },
+            mounted: function() {
+                //this.initBan();
+                        var self = this;
+                        var start = 0;
+                        var end = 0;
+                $(".pdes-longtalk").on({
+                    touchstart: function(e){
+                        
+                        start = new Date().getTime();
+
+                        timeOutEvent = setTimeout(function(){
+                        //此处为长按事件-----
+                            self.enzhutext="1"
+                            wx.startRecord({
+                                success: function(){
+                                    localStorage.rainAllowRecord = 'true';
+                                },
+                                cancel: function () {
+                                    alert('用户拒绝授权录音');
+                                }
+                            });
+                        },300);
+                       
+                    },
+                    touchmove: function(e){
+                        clearTimeout(timeOutEvent);
+                        timeOutEvent = 0;
+                        e.preventDefault();
+                    },
+                    touchend: function(e){
+                        clearTimeout(timeOutEvent);
+                        end = new Date().getTime();
+                        self.enzhutext="0"
+                        alert((end - start))
+                        if((end - start) < 1000){
+                            end = 0;
+                            start = 0;
+                            //小于1000ms，不录音
+                            $.toast("说话时间太短", 'text');
+                            clearTimeout(recordTimer);
+                            
+                        }else{
+                            wx.stopRecord({
+                                success: function (res) {
+                                    // alert("微信给我的东西"+JSON.stringify(res))
+                                    self.localId = res.localId;
+                                    self.uploadVoice();
+                                },
+                                fail: function (res) {
+                                    alert("录入失败，请重试"+JSON.stringify(res));
+                                }
+                            });
+                        }
+                    }
+                });
+
+                 $(".ai-mesc-img-active").click(function() {
+                   $(this).parent().toggleClass('ai-mesc-active');
+                });
+                $(".ai-mesc-img-de").click(function() {
+                    $(this).parent().toggleClass('ai-mesc-active');
+                });
+
+                $('form').on('submit', function(e){
+                     self.ask();
+                    return false;
+                    });
+                
+            },
+            methods: {
+                ask:function(question){
+                    var _this =this
+                    if(question){
+                        _this.v_message=question
+                    }
+                    var text1 = `<div class="ai-mes clearfix"><span class="ai-mesb-conten">${_this.v_message}</span></div>`
+                    var text2=`<div class="ai-mes">   
+                       <div class="ai-mesc ">
+                           <h3 class="ai-mesc-tt">这个问题没理解,还请换个问法</h3>
+                            <div class="ai-mesc-exp ai-mesc-active">您是想问如下问题吗？
+                                <img  class="ai-mesc-img ai-mesc-img-active" src="/Public/Home/newVip/img/more_icon_up.png" alt=""> 
+                                <img  class="ai-mesc-img ai-mesc-img-de" src="/Public/Home/newVip/img/more_icon_down.png" alt="">                      
+                            </div>
+                            <div class="ai-mesc-box">
+                                <div onclick="ask('不签订劳动合同')" class="ai-mesc-box-i">不签订劳动合同</div>
+                                <div  onclick="ask('劳动合同遗失')" class="ai-mesc-box-i">劳动合同遗失</div>
+                                <div  onclick="ask('未约定试用期录用条件')" class="ai-mesc-box-i">未约定试用期录用条件</div>
+                            </div>
+                        </div>        
+                   </div>`
+                   
+
+                    $(".ai-mes-box").append(text1);
+                     $(".ai-all").scrollTop($(".ai-all")[0].scrollHeight)
+                    var _Json={
+                        question:_this.v_message,
+                        token:sessionStorage.getItem("bxhToken"),
+                        user_id:_this.info.id?_this.info.id:"",
+                    }
+                    _this.v_message=''
+                    APP.send("/V2/SZGenerateOrder/sZConsult.json",_Json,function(res){
+                        // alert(JSON.stringift(res))
+                        if(res.errno && res.errno==0){
+                            _this.v_answer=res.data.data.answer;
+                            var text3=`<div class="ai-mes">   
+                                    <div class="ai-mesd" >
+                                        <p class="ai-mesd-ans">${_this.v_answer}</p>
+                                        <div class="ai-mesd-fg">相关法律法规</div>
+                                        <p class="ai-mesd-ans">
+                                        《中华人民共和国劳动合同法》第二十九条用人单位与劳动者应当按照劳动合同的约定，全面履行各自的义务。
+                                        </p>
+                                        <div class="ai-mesd-box">
+                                            <div class="ai-mesd-box-s">和您相似案件
+                                                    <img  class="ai-mesd-img" src="/Public/Home/newVip/img/more_icon_right.png" alt=""> 
+                                            </div>
+                                            <div onclick="jump()" class="ai-mesd-box-f">找律师
+                                                <img  class="ai-mesd-img" src="/Public/Home/newVip/img/more_icon_right.png" alt="">
+                                                <img class="ai-mesd-tj" src="/Public/Home/newVip/img/tuijian_label_default.png" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>`
+                            $(".ai-mes-box").append(text3);
+                            
+                            $(".ai-all").scrollTop($(".ai-all")[0].scrollHeight)
+                        }else{
+                            $(".ai-mes-box").append(text2);
+                            console.log($(".ai-mes-box").scrollTop)
+                            console.log($(".ai-mes-box").scrollHeight)
+                            $(".ai-all").scrollTop($(".ai-all")[0].scrollHeight)
+                        }
+                    })
+                },
+                getToken:function(){
+                    APP.send("/V2/SZGenerateOrder/getAccessToken.json",function(res){
+                            sessionStorage.setItem("bxhToken",res.data.token)
+                    })
+                },
+                qiehuan:function(){
+                    if(this.openbt){
+                        this.openbt=false
+                    }else{
+                        this.openbt=true
+                    }
+                },
+                nextOne:function(){
+                     $("#popde_loading").popup();
+                },
+                openpop: function(tl,id_){
+                    var _this =this
+                    $("#popde").popup();
+                    
+
+                },
+                uploadVoice:function(){
+                    var _this =this
+                    //调用微信的上传录音接口把本地录音先上传到微信的服务器
+                    //不过，微信只保留3天，而我们需要长期保存，我们需要把资源从微信服务器下载到自己的服务器
+                    wx.uploadVoice({
+                        localId: _this.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+                        isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {
+                            var _Json = {
+                                media_id:res.serverId,
+                            }
+                              $.showLoading("语音识别中");
+                            // alert("我给你的东西"+JSON.stringify(res))
+                            //把录音在微信服务器上的id（res.serverId）发送到自己的服务器供下载。
+                            // $.ajax({
+                            //     url: 'http://test.h2hlife.com/Calorie/CalorieProduct/test.json',
+                            //     type: 'post',
+                            //     data: _Json,
+                            //     dataType: "json",
+                            //     xhrFields: {
+                            //         withCredentials: true
+                            //     },
+                            //     success: function (obj) {
+                            //        alert(JSON.stringify(obj))
+                            //     },
+                            //     error: function (xhr, errorType, error) {
+                            //         alert(xhr)
+                            //     }
+                            // });
+                           APP.send("/V2/SZGenerateOrder/baiDuAir.json",_Json,function(obj){
+                                $.hideLoading();
+                                if(obj.errno=='0'){
+                                    _this.v_message=obj.data
+                                    _this.ask()
+                                }
+                            })
+                        }
+                    });
+                }
+            
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

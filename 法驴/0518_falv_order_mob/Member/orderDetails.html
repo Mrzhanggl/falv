@@ -30,18 +30,22 @@
                 </div>
                 <div class="j-orderDetails-productInfo clearfix">
                     <div class="productInfo-cover">
-                        <img :src="product.type != '9' && product.type != '10' ? src_url+product.icon : src_url+product.cover_image">
+                        <img :src="product.type != '9' && product.type != '10' ? src_url+product.icon : src_url+order.collection_data.image">
                     </div>
                     <div class="productInfo-content">
                         <div class="productInfo-content-d1 overText_2">{{ product.name }}</div>
                         <div class="productInfo-content-d2">
-                            <span v-if="order.channel=='12'||order.channel=='13'" class="t2">￥{{ product.flprice }}</span>
+                            <span v-if="order.channel=='12'" class="t2">￥{{ product.flprice }}</span>
+                            <span v-else-if="order.channel=='13'" class="t2">￥{{ order.channel_info.price  }}</span>
                             <span v-else class="t2">￥{{ order.money }}</span>
                             <span v-if="product.type == '11' && order.call_record && order.call_record.duration" class="t1">{{ APP.formatSeconds(order.call_record.duration) }}</span>
                             <span v-if="product.type == '11' && order.call_record && !order.call_record.duration" class="t1">未接通</span>
                         </div>
-                        <div v-if="product.type == '11'&& order.channel!='14'" class="productInfo-content-d3">
+                        <div v-if="product.type == '11'&& order.channel!='14'&& order.channel!='13'" class="productInfo-content-d3">
                             {{ product.flprice }}元/分钟
+                        </div>
+                        <div v-if="product.type == '11'&& order.channel=='13'" class="productInfo-content-d3">
+                            {{ order.channel_info.price}}元/分钟
                         </div>
                         <div v-if="product.type == '11'&& order.channel=='14'"  class="productInfo-content-d3">
                             ￥{{ order.channel_info.price }}{{order.channel_info.unit}}
@@ -49,8 +53,8 @@
                     </div>
                 </div>
 
-                <!--壹钱包-->
-                <div v-if="order.channel == '12'||order.channel=='13'" class="j-orderDetails-coupon clearfix">
+                <!--壹钱包 华夏-->
+                <div v-if="order.channel == '12'" class="j-orderDetails-coupon clearfix">
                     <div class="item-l">
                         <span class="i1">减</span><span class="item-l-text">兑换码</span>
                     </div>
@@ -60,9 +64,17 @@
                 </div>
 
                 <div class="j-orderDetails-price">
-                    <span v-if="order.channel == '12'||order.channel=='13'">已优惠<strong style="color: #F9334B">￥{{ product.flprice }}</strong></span>&emsp;合计
+                    <span v-if="order.channel == '12'">
+                        已优惠
+                        <strong style="color: #F9334B">￥{{ product.flprice }}</strong>
+                    </span>
+                    <span v-if="(order.channel=='13'&& order.payment=='13')">
+                        已优惠
+                        <strong style="color: #F9334B">￥{{  order.channel_info.price }}</strong>
+                    </span>
+                    &emsp;合计
                     <span class="c1">
-                        <strong v-if="order.channel == '12'||order.channel=='13'">￥0.00</strong>
+                        <strong v-if="order.channel == '12'||(order.channel=='13'&& order.payment=='13')">￥0.00</strong>
                         <strong v-else>￥{{ order.money }}</strong>
                     </span>
                 </div>
@@ -110,7 +122,7 @@
                 </div>
                 <div v-if="order.state != '0' && order.state != '4' && order.state != '8'" class="j-orderDetails-item clearfix">
                     <div class="item-l">支付方式</div>
-                    <div class="item-r">{{ pay_mode[order.latest_payment_channel] }}</div>
+                    <div class="item-r">{{ pay_mode[order.latest_payment_channel?order.latest_payment_channel:order.payment] }}</div>
                 </div>
                 <div v-if="product.type != '9' && product.type != '10'" class="j-orderDetails-item clearfix">
                     <div class="clearfix">
@@ -124,12 +136,15 @@
             </div>
 
             <!--产品-->
-            <div v-if="product.type == '0' && checkMainTabbar()" class="weui-tabbar s-tabbar j-orderDetails-tabbar">
+            <div v-if="(product.type == '0' && checkMainTabbar())||product.id=='100608'" class="weui-tabbar s-tabbar j-orderDetails-tabbar">
                 <a @click="cancal()" v-if="order.state == '0'" href="javascript:;" class="weui-tabbar__item j-orderDetails-tabbar-btn1">
                     取消订单
                 </a>
                 <a v-if="order.state == '0' || order.state == '2'" :href="'/Member/orderGoPay.html?oid='+order.order_id" class="weui-tabbar__item j-orderDetails-tabbar-btn2">
                     <strong>支付</strong>
+                </a>
+                <a @click="checkOrder()" v-if="order.state == '3'" href="javascript:;" class="weui-tabbar__item j-orderDetails-tabbar-btn2">
+                    <strong>继续问</strong>
                 </a>
                 <a @click="complete()" v-if="order.state == '1'" href="javascript:;" class="weui-tabbar__item j-orderDetails-tabbar-btn1 newauto">
                     <strong>确认完成</strong>
@@ -192,6 +207,7 @@
                     '1': '银行卡转账',
                     '2': '余额',
                     '3': '微信支付',
+                    '13':'兑换码支付'
                 },
 
                 isOrderPay: {
@@ -330,7 +346,11 @@
                 },
                 checkOrder: function() {
                     if (this.isOrderPay.state) {
-                        this.add();
+                        if(APP.getOrderChannel()=='13'){
+                            window.location.href='/Member/goodsDetails.html?id=100608&bindOrderId='+this.order.order_id
+                            }else{
+                                this.add(index);
+                            }
                     } else {
                         window.location.href = '/Member/orderDetails.html?oid='+this.isOrderPay.data.order_id;
                     }
@@ -365,7 +385,10 @@
                         _json.channel = 14;
                         _json.source = 19
                     }
-
+                    if (APP.getOrderChannel() == '13') {
+                        _json.channel = 13;
+                        _json.source = 18
+                    }
 
                     // console.log(_json)
                     // return

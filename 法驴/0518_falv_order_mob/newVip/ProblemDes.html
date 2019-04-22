@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>问题描述</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=30">
+    <link rel="stylesheet" href="/Public/Home/newVip/css/main.css?v=10">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body onselectstart="return false;"  onpaste="return false;" oncopy="return false;" oncut="return false;">
+    <div v-cloak id="app" class="pdes">
+        <div v-show="page.show == 'home'">
+           <div class="pdes-all">
+               <textarea id="wby"  class="pdes-input" on-touch-start="return:false;" v-model="v_message"></textarea>
+               <div class="pdes-tip">
+                   <span>选择意愿 : </span>{{texttpl}}
+               </div>
+               <div class="pdes-bt-box">
+                   <div class="pdes-longtalk">
+                       <div v-if="enzhutext=='1'" class="b_container">
+                            <div class="one"></div>
+                            <div class="two"></div>
+                            <div class="three"></div>
+                            <div class="four"></div>
+                            <div class="five"></div>
+                            <div class="six"></div>
+                            <div class="seven"></div>
+                            <div class="eig"></div>
+                            <div class="nig"></div>
+                            <div class="ten"></div>
+                        </div>
+                        <div  v-if="enzhutext=='1'"  class="b_container c_container">
+                            <div class="one"></div>
+                            <div class="two"></div>
+                            <div class="three"></div>
+                            <div class="four"></div>
+                            <div class="five"></div>
+                            <div class="six"></div>
+                            <div class="seven"></div>
+                            <div class="eig"></div>
+                            <div class="nig"></div>
+                            <div class="ten"></div>
+                        </div>
+                       <img v-if="enzhutext=='0'" src="/Public/Home/newVip/img/microphone_icon_default.png" alt="">{{enzhutext=="0"? "长摁描述" : "松开结束"}}
+                    </div>
+                   <div @click="openpop()" class="pdes-submitpg">提交评估</div>
+                </div>  
+           </div>
+           <div id="popde" class="weui-popup__container" >
+                <div class="weui-popup__overlay" id="popde_over"></div>
+                <div class="weui-popup__modal bxh-wtms-weui-popup__modal">
+                   <div class="bxh-wtms-popup-tt">  
+                       根据您的情况，建议争取如下权益
+                       <div @click="$.closePopup();" class="bxh-wtms-popup-cl">
+                           <img src="/Public/Home/newVip/img/cancel_icon.png" alt="">
+                       </div>
+                   </div>
+                  <div class="bxh-wtms-popup-ck-box">
+                      <div v-for="(i,index) in appeals" class="wtms-popup-item" :class="{'wtms-popup-item-active':i.active}" @click="submitAppeals(i,index)">{{i.name}}</div>
+
+                      <!--<div class="wtms-popup-item">监护权</div>
+                      <div class="wtms-popup-item">探望权</div>
+                      <div class="wtms-popup-item">离婚</div>
+                      <div class="wtms-popup-item">婚姻无效</div>
+                      <div class="wtms-popup-item">抚养费</div>
+                      <div class="wtms-popup-item">赡养费</div>
+                      <div class="wtms-popup-item">解除收养关系</div>
+                      <div class="wtms-popup-item">财产分割</div>
+                      <div class="wtms-popup-item">返还彩礼</div>
+                        <div class="wtms-popup-item">抚养权</div>-->
+                  </div>
+                   <div @click="submitPg()" class="bxh-wtms-popup-sb">
+                       确定
+                   </div>
+                   
+                </div>
+            </div>
+            <div id="popde_loading" class="weui-popup__container" >
+                <div class="weui-popup__overlay" id="popde_over"></div>
+                <div class="weui-popup__modal pging-loading">
+                   <img class="robot-loading" src="/Public/Home/newVip/img/robotmove.png" alt="">
+                   <div class="pging-loading-tt">法驴正在为您评估...</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/swiper-3.4.2.jquery.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=029"></script>
+    <script>
+       var docmHeight=document.documentElement.clientHeight
+       $(".pdes-all").css("height",docmHeight)
+    
+
+        
+    </script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                appeals:[],
+                appeals_submit:[],
+                texttpl:'',
+                v_message:"描述越全面评估越准确",
+                enzhutext:"0",
+                ulckid:'1',
+                peoplesum:"",
+                tabshow:false,
+                poptitle:"",
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                    navShow: false
+                },
+                pg_ck:'1',
+                isOrderPay: {
+                    state: false,
+                    data: ''
+                },
+                new_state: false,     //新消息
+
+                subject: [],    //专题
+                collection: [],     //视频
+                product: {
+                    channel_specification:{}
+                },     //产品
+            },
+            created: function() {
+                var _this = this;
+                
+                APP.setOrderChannel("48");
+                APP.setFromChannel("48");
+                // APP.getInfo(this, function(res) {
+                    
+                // });
+                // APP.init();
+                 _this.page.show = 'home';
+                APP.getJssdk();
+                _this.getTpl();
+                _this.getsq();
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "包小黑"
+                })
+
+                
+
+            },
+            mounted: function() {
+                //this.initBan();
+                        var self = this;
+                        var start = 0;
+                        var end = 0;
+                $(".pdes-longtalk").on({
+                    touchstart: function(e){
+                         document.getElementById('wby').blur()
+                        start = new Date().getTime();
+
+                        timeOutEvent = setTimeout(function(){
+                        //此处为长按事件-----
+                            self.enzhutext="1"
+                            wx.startRecord({
+                                success: function(){
+                                    localStorage.rainAllowRecord = 'true';
+                                },
+                                cancel: function () {
+                                    alert('用户拒绝授权录音');
+                                }
+                            });
+                        },300);
+                       
+                    },
+                    touchmove: function(e){
+                        clearTimeout(timeOutEvent);
+                        timeOutEvent = 0;
+                        e.preventDefault();
+                    },
+                    touchend: function(e){
+                        clearTimeout(timeOutEvent);
+                        end = new Date().getTime();
+                        self.enzhutext="0"
+                        alert((end - start))
+                        if((end - start) < 1000){
+                            end = 0;
+                            start = 0;
+                            //小于1000ms，不录音
+                            $.toast("说话时间太短", 'text');
+                            clearTimeout(recordTimer);
+                            
+                        }else{
+                            wx.stopRecord({
+                                success: function (res) {
+                                    // alert("微信给我的东西"+JSON.stringify(res))
+                                    self.localId = res.localId;
+                                    self.uploadVoice();
+                                },
+                                fail: function (res) {
+                                    alert("录入失败，请重试"+JSON.stringify(res));
+                                }
+                            });
+                        }
+                    }
+                });
+                $('.wtms-popup-item').on('click',function(){
+                    $(this).toggleClass('wtms-popup-item-active')
+                })
+
+                let oTextarea = document.querySelector('textarea')
+                oTextarea.addEventListener('contextmenu', function(e){ 
+                e.preventDefault(); 
+                });
+
+
+                window.addEventListener('contextmenu', function(e){ 
+                    e.preventDefault(); 
+                }); 
+            },
+            methods: {
+                submitAppeals:function(item,index){
+                     var _this= this
+                     var hav = false;
+                     if(item.active){
+                        Vue.set(item,'active',false);//为item添加不存在的属性，需要使用vue提供的Vue.set( object, key, value )方法。 
+                    }else{
+                        Vue.set(item,'active',true);
+                    }
+                     for(var i=0;i<_this.appeals_submit.length;i++){
+                              if(_this.appeals_submit[i].id == _this.appeals[index].id ){
+                                  hav = true
+                                  _this.appeals_submit.splice(i,1)
+                              }
+                     }
+                     if(hav){
+                     }else{
+                         _this.appeals_submit.push(_this.appeals[index])
+                     }
+                     
+                     console.log(_this.appeals_submit)
+                },
+                getsq:function(){
+                     var _this= this
+                    var _Json= {
+                        'problemId':APP.getParam('problemId'),
+                        token:sessionStorage.getItem("bxhToken"),
+                    }
+                    APP.send("/V2/SZGenerateOrder/disputeAppealList.json",_Json,function(res){
+                                _this.appeals=res.data.appeals
+                            })
+                },
+                getTpl:function(){
+                    var _this= this
+                    var _Json= {
+                        'reasonId':APP.getParam('reasonId'),
+                        token:sessionStorage.getItem("bxhToken"),
+                    }
+                    APP.send("/V2/SZGenerateOrder/disputeAppealTemplate.json",_Json,function(obj){
+                                _this.texttpl=obj.data.tpl
+                            })
+                },
+                submitPg:function(){
+                        
+                         var _this= this
+                            var _Json= {
+                                'reasonId':APP.getParam('reasonId'),
+                                token:sessionStorage.getItem("bxhToken"),
+                                caseFact:_this.v_message,
+                                appeal:_this.appeals_submit
+                            }
+                            if(_this.appeals_submit==0){
+                                 $.toast('请选择诉求', 'text');
+                                return 
+                            }
+                            $("#popde_loading").popup();
+                            APP.send("/V2/SZGenerateOrder/disputeAppealInit.json",_Json,function(res){
+                                 console.log(res)
+                                  $.closePopup()
+                            })
+                },
+                openpop: function(tl,id_){
+                    var _this =this
+                    $("#popde").popup();
+
+                },
+                uploadVoice:function(){
+                    var _this =this
+                    //调用微信的上传录音接口把本地录音先上传到微信的服务器
+                    //不过，微信只保留3天，而我们需要长期保存，我们需要把资源从微信服务器下载到自己的服务器
+                    wx.uploadVoice({
+                        localId: _this.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+                        isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {
+                            var _Json = {
+                                media_id:res.serverId,
+                            }
+                              $.showLoading("语音识别中");
+                            // alert("我给你的东西"+JSON.stringify(res))
+                            //把录音在微信服务器上的id（res.serverId）发送到自己的服务器供下载。
+                            // $.ajax({
+                            //     url: 'http://test.h2hlife.com/Calorie/CalorieProduct/test.json',
+                            //     type: 'post',
+                            //     data: _Json,
+                            //     dataType: "json",
+                            //     xhrFields: {
+                            //         withCredentials: true
+                            //     },
+                            //     success: function (obj) {
+                            //        alert(JSON.stringify(obj))
+                            //     },
+                            //     error: function (xhr, errorType, error) {
+                            //         alert(xhr)
+                            //     }
+                            // });
+                           APP.send("/V2/SZGenerateOrder/baiDuAir.json",_Json,function(obj){
+                                $.hideLoading();
+                                if(obj.errno=='0'){
+                                    _this.v_message+=obj.data
+                                }
+                            })
+                        }
+                    });
+                }
+            
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

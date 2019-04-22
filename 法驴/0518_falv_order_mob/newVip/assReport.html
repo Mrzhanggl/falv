@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html class="rest">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>评估报告</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=30">
+    <link rel="stylesheet" href="/Public/Home/newVip/css/main.css?v=10">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body class="rest">
+    <div v-cloak id="app" >
+        <div v-show="page.show == 'home'">
+           <div class="weui-tab repord-all" >
+                    <div class="weui-navbar report-navbar">
+                        <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+                            专属评估报告
+                        </a>
+                        <a class="weui-navbar__item" href="#tab2">
+                            和您相似的案例
+                        </a>
+                        <a class="weui-navbar__item" href="#tab3">
+                            相关法律法规
+                        </a>
+                    </div>
+                    <div class="weui-tab__bd">
+                        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+                            <div class="tab1_main">
+                                <div class="tab1_main-top">
+                                    <img src="/Public/Home/newVip/img/pgbanner.png" alt="">
+                                    <div class="pg-top-box">
+                                        Hello,您好</br>
+                                                            根据您的描述，法驴参考千万份法院裁判文书、查阅相关法律法规，结合法律专家意见，智能生成该评估报告，供您参考！
+                                    </div>
+                                </div>
+                                
+                                <div class="tab1-alfx"> 
+                                    <div class="tab1-alfx-tt">案例分析
+                                        <div @click="nextOne()" class="tab1-alfx-download">下载报告</div>
+                                    </div>
+                                    <div class="tab1-alfx-main">
+                                        <div class="tab1-alfx-item">
+                                            <div class="tab1-alfx-item-box">
+                                                <div class="alfx-item-box-t1">诉求1</div>
+                                                 <div class="alfx-item-box-t2">婚姻无效</div>
+                                            </div>
+                                            <div class="tab1-alfx-item-jd">
+                                                <div class="tab1-alfx-item-jdtt">可争取</div>
+                                                <div class="tab1-alfx-item-jdsolid"></div>
+                                            </div>
+                                            <div class="tab1-alfx-item-lsty"></div>
+                                            <div class="tab1-alfx-item-more">
+                                                <img src="/Public/Home/newVip/img/more_icon_default.png" alt="">
+                                                <!--<img src="/Public/Home/newVip/img/more_icon_selected.png" alt="">-->
+                                            </div>
+                                        </div>
+                                        <div class="tab1-alfx-item">
+                                            <div class="tab1-alfx-item-box">
+                                                <div class="alfx-item-box-t1">诉求1</div>
+                                                 <div class="alfx-item-box-t2">婚姻无效</div>
+                                            </div>
+                                            <div class="tab1-alfx-item-jd">
+                                                <div class="tab1-alfx-item-jdtt">可争取</div>
+                                                <div class="tab1-alfx-item-jdsolid"></div>
+                                            </div>
+                                            <div class="tab1-alfx-item-lsty"></div>
+                                            <div class="tab1-alfx-item-more">
+                                                <img src="/Public/Home/newVip/img/more_icon_default.png" alt="">
+                                                <!--<img src="/Public/Home/newVip/img/more_icon_selected.png" alt="">-->
+                                            </div>
+                                            <div class="tab1-alfx-item-k">
+                                                评估理由：因为你们属于
+                                                <span>「男女双方自愿/不自愿（不自愿的原因）登记结婚」</span>
+                                                的情形，所以您与对方存在婚姻关系/事 实婚姻关系。存在婚姻关系是婚姻关系无效的前提。现实中，可能出现登记错误/错证登记/借名登记的情形。
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab2" class="weui-tab__bd-item  tab-pla">
+                            <div class="tab2-main">
+                                <div class="tab2-main-box">
+                                    <div class="tab2-main-box-tt">
+                                        <span>#胜诉#</span>&nbsp&nbsp&nbsp刘某与宫某甲离婚纠纷一审民事判决书
+                                    </div>
+                                    <div class="tab2-main-box-de">
+                                        昌乐县人民法院
+                                        <span>2016-04-28</span>
+                                    </div>
+                                    <div class="tab2-main-box-lg">
+                                        <div class="tab2-main-box-lg-i">女孩</div>
+                                        <div class="tab2-main-box-lg-i">女孩</div>
+                                        <div class="tab2-main-box-lg-i">女孩</div>
+                                    </div>
+                                    <div class="tab2-main-box-seem">
+                                        相似度: <span> 90%</span>
+                                    </div>
+                                </div>
+                                <div class="tab2-main-box">
+                                    <div class="tab2-main-box-tt">
+                                        <span>#胜诉#</span>&nbsp&nbsp&nbsp刘某与宫某甲离婚纠纷一审民事判决书
+                                    </div>
+                                    <div class="tab2-main-box-de">
+                                        昌乐县人民法院
+                                        <span>2016-04-28</span>
+                                    </div>
+                                    <div class="tab2-main-box-lg">
+                                        <div class="tab2-main-box-lg-i">女孩</div>
+                                        <div class="tab2-main-box-lg-i">女孩</div>
+                                        <div class="tab2-main-box-lg-i">女孩</div>
+                                    </div>
+                                    <div class="tab2-main-box-seem">
+                                        相似度: <span> 90%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div id="tab3" class="weui-tab__bd-item">
+                            <div class="tab3-main">
+                                <h2 class="tab3-main-tt">刘某与宫某甲离婚纠纷一审民事判决书</h2>
+                                <div class="tab3-main-content">【离婚诉讼】男女一方要求离婚的，可由有关部门进行调解或直接向人民法院提出离婚诉讼。人民法院审理离婚案件，应当进行调解；如感情确已破裂，调解无效，应准予离婚。有下列情形之一，调解无效的，应准予离婚：（一）重婚或有配偶者与他人同居的；（二）实施家庭暴力或者虐待、遗弃家庭成员的；（三）有赌博、吸毒等恶习屡教不改的；（四）因感情不和分居满二年的；（五）其他导致夫妻感情破裂的情形。一方被宣告失踪，另一方面提出离婚诉讼的，应准予离婚。
+
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+            </div>
+           <div class="foot-bt-box">
+               <div class="foot-bt">
+                    找律师
+                </div>
+           </div>
+            <div id="popde_loading" class="weui-popup__container" >
+                <div class="weui-popup__overlay" id="popde_over"></div>
+                <div class="weui-popup__modal pging-loading downloadreport">
+                   <div class="pging-loading-tt">
+                            关注公众号，</br>
+                            下载详细评估报告
+                    </div>
+                </div>
+            </div>
+        
+        
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/swiper-3.4.2.jquery.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=089"></script>
+    <script>
+       var docmHeight=document.documentElement.clientHeight
+       $(".pdes-all").css("height",docmHeight)
+    
+
+        
+    </script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                enzhutext:"长摁描述",
+                ulckid:'1',
+                peoplesum:"",
+                tabshow:false,
+                poptitle:"",
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                    navShow: false
+                },
+                pg_ck:'1',
+                isOrderPay: {
+                    state: false,
+                    data: ''
+                },
+                new_state: false,     //新消息
+
+                subject: [],    //专题
+                collection: [],     //视频
+                product: {
+                    channel_specification:{}
+                },     //产品
+            },
+            created: function() {
+                var _this = this;
+                
+                APP.setOrderChannel("48");
+                APP.setFromChannel("48");
+                // APP.getInfo(this, function(res) {
+                    
+                // });
+                // APP.init();
+                 _this.page.show = 'home';
+                APP.getJssdk();
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "包小黑"
+                })
+
+                
+
+            },
+            mounted: function() {
+                //this.initBan();
+                        var self = this;
+              
+
+            },
+            methods: {
+                nextOne:function(){
+                     $("#popde_loading").popup();
+                },
+                openpop: function(tl,id_){
+                    var _this =this
+                    $("#popde").popup();
+                    
+
+                },
+            
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

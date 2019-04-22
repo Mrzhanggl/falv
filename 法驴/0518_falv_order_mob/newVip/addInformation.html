@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>信息补充</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=30">
+    <link rel="stylesheet" href="/Public/Home/newVip/css/main.css?v=10">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="pdes">
+        <div v-show="page.show == 'home'">
+            <div class="pdes-all">
+                <div class="ifm-tt">
+                    离精准的评估报告更近了一步
+                    <img class="ifm-next-icon-l" src="/Public/Home/newVip/img/next_icon_default.png" alt="">
+                    <img class="ifm-next-icon-r" src="/Public/Home/newVip/img/next_icon_default_r.png" alt="">
+                    <img class="ifm-next-moj-l" src="/Public/Home/newVip/img/emojione.png" alt="">
+                    <img class="ifm-next-moj-r" src="/Public/Home/newVip/img/emojifour.png" alt="">
+                </div>
+                <div class="ifm-jdt">
+                    <div v-for="(item,index) in pblInfo.value.qnrL1" class="ifm-jdt-item" :class="{'ifm-jdt-item-active':index<=qus_page}"></div>
+                    
+                </div>
+
+
+                <!--
+                    先渲染一级问题列表与答案
+                    然后区别单选与多选
+                    根据所选答案是否渲染此问题的二级问题与答案
+                -->
+                <div v-if="qus_page==index" v-for="(item,index) in pblInfo.value.qnrL1"  class="ifm-main">
+                    <template  v-if="item.answerNode && item.answerNode[item.selectedAnswer]" >
+                        <div class="ifm-main-qus">{{item.answerNode[item.selectedAnswer].question}}</div>
+                        <div class="ifm-main-ans">
+                            <div v-for="(itemc,indexc) in item.answerNode[item.selectedAnswer].answers" :class="{'ifm-main-ans-ck-oder':indexc%2!=0}" @click="difficultCk(item.answerNode[item.selectedAnswer],itemc,indexc)"  class="ifm-main-ans-ck">{{itemc}}
+                                <template v-if="item.answerNode[item.selectedAnswer].questionType=='1'">
+                                    <img v-if="item.answerNode[item.selectedAnswer].selectedAnswer==itemc" class="ifm-main-ans-ck-img" src="/Public/Home/newVip/img/check_box_icon_selected.png" alt="">
+                                    <img v-else class="ifm-main-ans-ck-img" src="/Public/Home/newVip/img/check_box_icon_default.png" alt="">    
+                                </template>
+                                <template v-else>
+                                    <img v-if="Array.isArray(item.answerNode[item.selectedAnswer].selectedAnswer) && item.answerNode[item.selectedAnswer].selectedAnswer.indexOf(itemc)!='-1'" class="ifm-main-ans-ck-img" src="/Public/Home/newVip/img/check_box_icon_selected.png" alt="">
+                                    <img v-else class="ifm-main-ans-ck-img" src="/Public/Home/newVip/img/check_box_icon_default.png" alt="">    
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else >
+                        <div class="ifm-main-qus">{{item.question}}</div>
+                        <div class="ifm-main-ans">
+                            <div v-for="(itemb,indexb) in item.answers" :class="{'ifm-main-ans-ck-oder':indexb%2!=0}" @click="difficultCk(item,itemb,indexb)"  class="ifm-main-ans-ck">{{itemb}}
+                                <template v-if="item.questionType=='1'">
+                                    <img v-if="item.selectedAnswer==itemb" class="ifm-main-ans-ck-img" src="/Public/Home/newVip/img/check_box_icon_selected.png" alt="">
+                                    <img v-else class="ifm-main-ans-ck-img" src="/Public/Home/newVip/img/check_box_icon_default.png" alt="">    
+                                </template>
+                                <template v-else>
+                                    <img v-if="Array.isArray(item.selectedAnswer) && item.selectedAnswer.indexOf(itemb)!='-1'" class="ifm-main-ans-ck-img" src="/Public/Home/newVip/img/check_box_icon_selected.png" alt="">
+                                    <img v-else class="ifm-main-ans-ck-img" src="/Public/Home/newVip/img/check_box_icon_default.png" alt="">    
+                                </template>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <div class="ifm-main-sub">
+                        <div @click="backOne()" class="ifm-main-sub-it ifm-main-sub-it-l">上一步</div>
+                        <div v-if="qus_page==(pblInfo.value.qnrL1.length-1)" @click="nextsubmit()" class="ifm-main-sub-it">提交评估</div>
+                        <div v-else @click="nextOne()" class="ifm-main-sub-it">下一步</div>
+                        <div class="ifm-main-sub-mid"></div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div id="popde_loading" class="weui-popup__container">
+                <div class="weui-popup__overlay" id="popde_over"></div>
+                <div class="weui-popup__modal pging-loading">
+                    <img class="robot-loading" src="/Public/Home/newVip/img/robotmove.png" alt="">
+                    <div class="pging-loading-tt">法驴正在为您评估...</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/swiper-3.4.2.jquery.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=089"></script>
+    <script>
+        var docmHeight = document.documentElement.clientHeight
+        $(".pdes-all").css("height", docmHeight)
+    </script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                enzhutext: "长摁描述",
+                ulckid: '1',
+                peoplesum: "",
+                tabshow: false,
+                poptitle: "",
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                    navShow: false
+                },
+                qus_page:'0',
+                pblInfo: {
+                    nextPage: "2",
+                    value: {
+                        qnrL1: [{
+                                id: 2104,
+                                question: "双方是否就抚养权的归属达成协议或已由法院判决确定？",
+                                answers: [
+                                    "是",
+                                    "否"
+                                ],
+                                questionType: 1,
+                                answerNode: {
+                                    是: {
+                                        id: 2105,
+                                        question: "抚养权归属一方存在以下未尽抚养义务的情形？",
+                                        answers: [
+                                            "与子女共同生活的一方因患严重疾病或因伤残无力继续抚养子女",
+                                            "与子女共同生活的一方不尽抚养义务或有虐待子女行为",
+                                            "与子女共同生活对子女身心健康确有不利影响",
+                                            "十周岁以上未成年子女，愿随另一方生活，该方又有抚养能力",
+                                            "以上都不是"
+                                        ],
+                                        questionType: 2,
+                                        answerNode: [],
+                                        parentByAnswer: 2104,
+                                        selectedAnswer: null
+                                    }
+                                },
+                                parentByAnswer: null,
+                                selectedAnswer: null
+                            },
+                            {
+                                id: 2106,
+                                question: "孩子是否为两周岁以下？",
+                                answers: [
+                                    "是",
+                                    "否"
+                                ],
+                                questionType: 1,
+                                answerNode: [],
+                                parentByAnswer: null,
+                                selectedAnswer: null
+                            }
+                        ],
+                        additional: [{
+                                question: "双方是否就抚养权的归属达成协议或已由法院判决确定？",
+                                answer: [
+                                    "是",
+                                    "否"
+                                ],
+                                question_type: 1
+                            },
+                            {
+                                question: "抚养权归属一方存在以下未尽抚养义务的情形？",
+                                answer: [
+                                    "与子女共同生活的一方因患严重疾病或因伤残无力继续抚养子女",
+                                    "与子女共同生活的一方不尽抚养义务或有虐待子女行为",
+                                    "与子女共同生活对子女身心健康确有不利影响",
+                                    "十周岁以上未成年子女，愿随另一方生活，该方又有抚养能力",
+                                    "以上都不是"
+                                ],
+                                question_type: 2
+                            },
+                            {
+                                question: "孩子是否为两周岁以下？",
+                                answer: [
+                                    "是",
+                                    "否"
+                                ],
+                                question_type: 1
+                            }
+                        ],
+                        qnrL2: [{
+                            id: 2105,
+                            question: "抚养权归属一方存在以下未尽抚养义务的情形？",
+                            answers: [
+                                "与子女共同生活的一方因患严重疾病或因伤残无力继续抚养子女",
+                                "与子女共同生活的一方不尽抚养义务或有虐待子女行为",
+                                "与子女共同生活对子女身心健康确有不利影响",
+                                "十周岁以上未成年子女，愿随另一方生活，该方又有抚养能力",
+                                "以上都不是"
+                            ],
+                            questionType: 2,
+                            answerNode: [],
+                            parentByAnswer: null,
+                            selectedAnswer: null
+                        }],
+                        id: 8618
+                    }
+                },
+                pg_ck: '1',
+                isOrderPay: {
+                    state: false,
+                    data: ''
+                },
+                new_state: false, //新消息
+
+                subject: [], //专题
+                collection: [], //视频
+                product: {
+                    channel_specification: {}
+                }, //产品
+            },
+            created: function () {
+                var _this = this;
+
+                APP.setOrderChannel("48");
+                APP.setFromChannel("48");
+                // APP.getInfo(this, function(res) {
+
+                // });
+                // APP.init();
+                _this.page.show = 'home';
+                APP.getJssdk();
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "包小黑"
+                })
+
+
+
+            },
+            mounted: function () {
+                //this.initBan();
+                var self = this;
+
+
+            },
+            methods: {
+                difficultCk:function(item,itemb,indexb){
+                    console.log(item)
+                     console.log(itemb)
+                      console.log(indexb)
+                    //单选
+                    if(item.questionType==1 ){
+                       if(!Array.isArray(item.selectedAnswer)){
+                            item.selectedAnswer=Array()
+                        }
+                        item.selectedAnswer.splice(0,1)
+                        item.selectedAnswer.push(itemb)
+                    }
+                    //多选
+                    if(item.questionType==2){
+                        //非数组先转化成数组
+                        if(!Array.isArray(item.selectedAnswer)){
+                            item.selectedAnswer=Array()
+                        }
+                        //数组里没有就添加  有就删除
+                        if( item.selectedAnswer.indexOf(itemb)=='-1'){
+                            item.selectedAnswer.push(itemb)
+                        }else{
+                             item.selectedAnswer.splice(item.selectedAnswer.indexOf(itemb),1)
+                        }
+                        
+                    }
+
+
+                },
+                backOne:function(){
+                    var _this = this
+                    // $("#popde_loading").popup();
+                    if( _this.qus_page>0){
+                        _this.qus_page--;
+                    }
+                },
+                nextOne: function () {
+                    var _this = this
+                    // $("#popde_loading").popup();
+                    if(_this.qus_page<_this.pblInfo.value.qnrL1.length-1 ){
+                        if(!_this.pblInfo.value.qnrL1[_this.qus_page].selectedAnswer){
+                            $.toast("请选择答案",'text')
+                             return false;
+                        }
+                        _this.qus_page++;
+                    }
+
+                    
+                },
+                openpop: function (tl, id_) {
+                    var _this = this
+                    $("#popde").popup();
+
+
+                },
+
+            }
+        });
+    </script>
+</body>
+
+</html>

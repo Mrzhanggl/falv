@@ -62,6 +62,13 @@ APP.setShare = function() {
     if (window.location.pathname == '/Member/goodsDetails.html') {
         _path_url = window.location.pathname + window.location.search;
     }
+    if (APP.getOrderChannel() == '25' && APP.getNewChannel()=='49') {
+        _path_url = '/Member/goodsCommonBuy.html?customersource=49&newchannel=49';
+    }
+    if (APP.getOrderChannel() == '25' && APP.getNewChannel()=='50') {
+        _path_url = '/Member/goodsCommonBuy.html?customersource=50&newchannel=50';
+    }
+
 
     var _link = window.location.origin + _path_url;
     
@@ -144,8 +151,14 @@ APP.setGoodsListShare = function() {
     }
     if (_tab_channel == '13') {
         _reg_channel = '36';
-        _path_url = "/Member/goodsHx.html";
+        _path_url = "/newVip/newHx.html";
         _title = '法驴，专业解决法律烦恼！';
+        if(window.location.pathname == '/Member/orderAddChannel.html'){
+            _path_url = '/Member/goodsDetails.html?id=100608&reg_from_channel='+_reg_channel;
+        }
+        if(window.location.pathname == '/Member/orderGoPay.html'){
+            _path_url = '/Member/goodsDetails.html?id=100608&reg_from_channel='+_reg_channel;
+        }
     }
     if(_tab_channel == '14'){
          _reg_channel = '37';
@@ -307,7 +320,7 @@ APP.init = function(callback, url) {
     _this.send("/PC/Wx/getOpenid.json?source=1", function(res) {
         if (res.errno != '0') {
             //钉钉 壹钱包
-            if (APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12' ||  APP.getOrderChannel() == '16'||  APP.getOrderChannel() == '23'||  APP.getOrderChannel() == '25' || window.location.href=="/Member/orderGoPay.html") {
+            if (APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12' ||  APP.getOrderChannel() == '16'||  APP.getOrderChannel() == '20'||  APP.getOrderChannel() == '23'||  APP.getOrderChannel() == '25' || window.location.href=="/Member/orderGoPay.html") {
                 _this.authorization = true;
                 _callback();
                 
@@ -554,7 +567,9 @@ APP.WXLogin =  function(vm, url) {
     if (_orther_url[window.location.pathname]) {
         _url = window.location.pathname + window.location.search;
     }
-
+    if (APP.getOrderChannel() == '25' ) {
+        _url = window.location.pathname + window.location.search;
+    }
     //登录页调起自动登录时判断是否来源着陆页 old
     var _return_url = decodeURIComponent(APP.getParam("from"));
     var _index_url = {

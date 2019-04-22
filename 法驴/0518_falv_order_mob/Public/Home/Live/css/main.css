@@ -796,10 +796,16 @@ canvas {
 }
 .s-live-item-class {
     position: absolute;
-    width: 1.06rem;
-    height: .4rem;
+    /*width: 1.06rem;*/
+    height: .38rem;
     left: -.03rem;
     bottom: .01rem;
+    color: #648EF9;
+    padding: 0 .11rem;
+        background: #E8EEFE;
+        font-size:.22rem;
+        line-height:.38rem;
+    letter-spacing:.01rem;
 }
 .s-live-item-class img {
     height: .4rem;

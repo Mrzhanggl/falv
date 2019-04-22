@@ -15,6 +15,7 @@
     <script src="/Public/Home/topic/js/flexible.js"></script>
     <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
     <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+       <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=54">
     <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=40">
     <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 </head>
@@ -63,7 +64,7 @@
 
                     
                         <div v-show="page.commentShow || !page.commentShow && index < 2" v-for="(list, index) in comment.data" class="m-comment-item j-comment-item clearfix">
-                            <div class="item-headpic">
+                            <div style="position: relative;margin-top: 0;" class="item-headpic">
                                 <img :src="list.user_info.wechat_headimgurl">
                             </div>
                             <div class="item-box">
@@ -98,14 +99,56 @@
 
             <div class="weui-tabbar s-tabbar j-timeDetails-tabbar">
                 <div class="j-timeDetails-bar__item">
-                    <strong>限时特惠{{ product.flprice }}元/分钟</strong>
+                    <strong v-if="APP.getOrderChannel()!='13'">限时特惠{{ product.flprice }}元/分钟</strong>
+                    <strong v-else>限时特惠{{ product.channel_specification?product.channel_specification.price:'' }}元/分钟</strong>
                 </div>
-                <a @click="checkLogin()" href="javascript:;" class="j-timeDetails-bar__btn">
+                <a v-if="APP.getOrderChannel()=='13'" @click=" $('#JS_product_yqb').popup();" href="javascript:;" class="j-timeDetails-bar__btn">
+                    <strong>开始咨询</strong>
+                </a>
+                <a v-else @click="checkLogin()" href="javascript:;" class="j-timeDetails-bar__btn">
                     <strong>开始咨询</strong>
                 </a>
 
             </div>
 
+
+            <div id="JS_product_yqb" class="weui-popup__container popup-bottom">
+                    <div class="weui-popup__overlay s6-popup__overlay"></div>
+                    <div class="weui-popup__modal">
+                        <div class="s6-goodsDetailsPop-head">
+                            请选择咨询场景
+                            <a @click.stop="APP.sendHm({action: 'click', object: 'DD_chooseSKU_close', chinese_object: '关闭按钮', chinese_url: '产品详情页'});$.closePopup()" class="s6-goodsDetailsPop-close" href="javascript:;"></a>
+                        </div>
+                        <div class="s6-goodsDetailsPop-content s7-goodsDetailsPop-content">
+                            <div class="s6-goodsDetailsPop-product clearfix">
+                                <div class="item-cover">
+                                    <img :src="src_url+ product.icon">
+                                </div>
+                                <div class="item-content">
+                                    <div class="item-content-d1">计时电话咨询</div>
+                                    <div class="item-content-d2">华夏优惠价：<span>￥{{ product.channel_specification?product.channel_specification.price:'' }}元/分钟</span></div>
+                                </div>
+                            </div>
+                            <div class="s6-goodsDetailsPop-title">
+                                个人用户
+                            </div>
+                            <div v-if="APP.getOrderChannel()=='13'" class="s6-goodsDetailsPop-list s7-goodsDetailsPop-list clearfix">
+                                <!--<div @click="selectProduct('100557', '财富')" :class="{'active': dd_product.selectText == '财富'}" class="s6-goodsDetailsPop-object-item"><strong>财富</strong></div>-->
+                                <div @click="getPd('100648', '婚姻家事')" :class="{'active': selectText == '婚姻家事'}" class="s6-goodsDetailsPop-object-item"><strong>婚姻家事</strong></div>
+                                <div @click="getPd('100652', '劳动纠纷')" :class="{'active': selectText == '劳动纠纷'}" class="s6-goodsDetailsPop-object-item"><strong>劳动纠纷</strong></div>
+                                <div @click="getPd('100651', '消费者权益')" :class="{'active': selectText == '消费者权益'}" class="s6-goodsDetailsPop-object-item"><strong>消费者权益</strong></div>
+                                <div @click="getPd('100650', '房屋产权')" :class="{'active': selectText == '房屋产权'}" class="s6-goodsDetailsPop-object-item"><strong>房屋产权</strong></div>
+                                <div @click="getPd('100649', '交通')" :class="{'active': selectText == '交通'}" class="s6-goodsDetailsPop-object-item"><strong>交通</strong></div>
+                                <div @click="getPd('100647', '其它')" :class="{'active': selectText == '其它'}" class="s6-goodsDetailsPop-object-item"><strong>其它</strong></div>
+                             </div>
+
+                            <div class="s7-goodsDetailsPop-action">
+                                <a @click="checkLogin()" href="javascript:;" class="s-btn s-btn_4"><strong>确定</strong></a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             
         </div>
 
@@ -140,7 +183,7 @@
                     show: '',
                     commentShow: false,
                 },
-                
+                selectText:'婚姻家事',
 
                 isOrderPay: {
                     state: false,
@@ -172,13 +215,22 @@
                 this.getVerificationOrder();
                 this.getDetails();
                 this.getCommentList(_this.comment.page)
-
+                //华夏
+                 if(APP.getOrderChannel()=='13'){
+                        _this.getCommentList(_this.comment.page,function(){},'100647')
+                        _this.getCommentList(_this.comment.page,function(){},'100649')
+                        _this.getCommentList(_this.comment.page,function(){},'100650')
+                        _this.getCommentList(_this.comment.page,function(){},'100651')
+                        _this.getCommentList(_this.comment.page,function(){},'100652')
+                    }
 
 
 
                 APP.sendHm({
                     action: "visits",
-                    chinese_url: "开始咨询"
+                    chinese_url: "开始咨询",
+                     productionid: _this.product.id,
+                     parameter:  _this.product.name
                 })
 
             },
@@ -187,6 +239,39 @@
                 
             },
             methods: {
+                getPd: function(id,text) {
+                    var _this = this;
+                    var _id =id;
+                    _this.selectText=text
+
+                    var _json={
+                        id:_id,
+                        channel:APP.getOrderChannel()
+                    }
+                    APP.send('/PC/Product/info.json', _json,function(res) {
+                        if (res.errno == '0') {
+                            _this.product = res.data;
+                        }
+                        //微信分享
+                        //console.log(_data.introduce)
+                        // var _title = res.data.title;
+                        // var _desc = res.data.share_title;
+                        // var _share_link = window.location.href;
+                        // var _imgUrl = res.data.share_icon;
+                        // //console.log(_share_link)
+                        // APP.setShare({
+                        //     title: _title,
+                        //     desc: _desc,
+                        //     link: _share_link,
+                        //     imgUrl: src_url+_imgUrl,
+                        //     success: function() {},
+                        //     cancel: function() {}
+                        // })
+                         APP.sendHm({action: "visits", chinese_url: "开始咨询弹窗", productionid:_id, parameter: res.data.name});   
+
+                    });
+                    
+                },
                 init: function() {
                     var _this = this;
                     APP.init(function() {
@@ -224,7 +309,7 @@
 
                         if (this.isOrderPay.state) {
                             //判断工作时间
-                            if (this.checkTime("9:00", "17:30")) {
+                            if (this.checkTime("9:00", "23:58")) {
                                 this.add();
                             } else {
                                 window.location.href = '/Member/jAppointTime.html?id='+this.product.id;
@@ -279,7 +364,16 @@
                 getDetails: function() {
                     var _this = this;
                     var _id = APP.getParam("id");
-                    APP.send('/PC/Product/info.json?id='+_id, function(res) {
+                    if(_id=='comment'){
+                        _id = 100633
+                    }
+                    var _json={
+                        id:_id,
+                    }
+                    if(APP.getOrderChannel()=='13'){
+                        _json['channel']='13'
+                    }
+                    APP.send('/PC/Product/info.json',_json, function(res) {
                         if (res.errno == '0') {
                             _this.product = res.data;
                     
@@ -316,11 +410,14 @@
                     });
                     
                 },
-                getCommentList: function(page, callback) {
+                getCommentList: function(page, callback, productid) {
                     var _this = this;
 
                     var _callback = callback ? callback : function(){};
                     var _id = APP.getParam("id");
+                    if(productid){
+                        _id=productid
+                    }
                     var _json = {
                         product_id: _id,
                         page: page, //页
@@ -370,6 +467,7 @@
 
                         _callback();
                     });
+                   
 
                 },
                 initPage: function(page) {
@@ -433,7 +531,10 @@
                         _json.channel = 14;
                         _json.source = 19
                     }
-
+                    if (APP.getOrderChannel() == '13') {
+                        _json.channel = 13;
+                        _json.source = 18
+                    }
                     $.showLoading("数据提交中");
                     APP.send("/PC/NEWOrder/create.json", _json, function(res) {
                         //console.log(res)

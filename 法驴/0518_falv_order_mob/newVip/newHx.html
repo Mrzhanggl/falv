@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>法律服务</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=30">
+    <link rel="stylesheet" href="/Public/Home/newVip/css/main.css?v=10">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'home'">
+            <!--轮播图-->
+            <div class="new-banner">
+                <div class="nvip-swiper-container" >
+                    <div class="nvip-swiper-wrapper swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/Public/Home/newVip/img/banner1.png" alt="">    
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/Public/Home/newVip/img/banner3.png" alt="">    
+                        </div>
+                    </div>
+                   
+                </div>
+                 <div class="swiper-pagination"></div>
+            </div>
+            
+            <div class="new-de newhx-tj">
+              <h2 class="nhx-title">专属推荐
+                  <img class="nhx-tt-img" src="/Public/Home/newVip/img/Extremespeedresponse_label_default.png" alt="">
+              </h2>
+              <img  @click="window.location.href='/Member/jTimeDetails.html?id=100648'" class="nhx-img" src="/Public/Home/newVip/img/jishitalk.png" alt="">
+              <h2 class="nhx-title">家庭法律服务专区
+              </h2>
+              <div class="nhx-homefuwu clearfix">
+                  <div style="float: left" @click="nextde('购买无忧卡', '/Member/goodsDetails.html?id=100606')"><img class="nhx-home-img"  src="/Public/Home/newVip/img/nothingcard.png" alt=""> </div>
+                   <div style="float: left" @click="nextde('购买年卡', '/Member/goodsDetails.html?id=100573')"><img class="nhx-home-img"  src="/Public/Home/newVip/img/yearcard.png" alt=""></div>
+                   <div style="float: left" @click="nextde('购买单次卡', '/Member/goodsDetails.html?id=100608')"><img class="nhx-home-img"  src="/Public/Home/newVip/img/oncecard.png" alt=""></div>
+              </div>
+              <h2 class="nhx-title">行业资讯
+              </h2>
+              <div class="nhx-hyzx">
+                  <div class="nhx-hyzx-item" @click="window.location.href='https://mp.weixin.qq.com/s/nezGfofKZftaQ7GkAjGf6g'">
+                      <img class="nhx-hyzx-item-img" src="/Public/Home/newVip/img/3a4a36dd35b0.jpg" alt="">
+                      <div class="nhx-hyzx-item-main">
+                          <p class="nhx-hyzx-item-p">离婚不分，欠债不还丨保险怎么做到的？</p>
+                      </div>
+                  </div>
+                  <div class="nhx-hyzx-item" @click="window.location.href='https://mp.weixin.qq.com/s/CjTrHQhWqg-ukFxF2Yyeqw'">
+                       <img class="nhx-hyzx-item-img" src="/Public/Home/newVip/img/901add91c236.jpg" alt="">
+                      <div class="nhx-hyzx-item-main">
+                          <p class="nhx-hyzx-item-p">杀妻骗保！他竟用这样的方式让妻子赴约终老！</p>
+                      </div>
+                  </div>
+              </div>
+            </div>
+
+            
+            <div class="weui-tabbar s-tabbar s-tabbar-more">
+                <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+                    <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
+                    <p class="weui-tabbar__label">首页</p>
+                </a>
+               
+                <a href="/Member/mPersonal.html?fromtype=ajk" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon4"></div>
+                    <p class="weui-tabbar__label">我的</p>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/swiper-3.4.2.jquery.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=089"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                peoplesum:"",
+                tabshow:false,
+                poptitle:"",
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                    navShow: false
+                },
+
+                isOrderPay: {
+                    state: false,
+                    data: ''
+                },
+                new_state: false,     //新消息
+
+                subject: [],    //专题
+                collection: [],     //视频
+                product: {
+                    channel_specification:{}
+                }     //产品
+
+
+
+            },
+            created: function() {
+                var _this = this;
+                
+                APP.setOrderChannel("13");
+                APP.setFromChannel("36");
+                // _this.getpeople();
+                // _this.getNewState();
+                _this.getVerificationOrder();
+                // _this.getHome();
+             
+                APP.getInfo(this, function(res) {
+                    _this.page.show='home'
+                       setTimeout(function(){
+                            _this.initBan();
+                        }, 500)
+                    
+                });
+                // APP.init();
+                APP.getJssdk();
+
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "华夏"
+                })
+
+            },
+            mounted: function() {
+                // this.initBan();
+                 
+            },
+            methods: {
+                nextde: function(type_chinese, url) {
+                    
+                    APP.sendHm({
+                        action: "click", 
+                        chinese_object: type_chinese,
+                        chinese_url: "华夏"
+                    }, function() {
+                        // $.closePopup()
+                        window.location.href = url;
+                    });
+                    
+                },
+                getVerificationOrder: function() {
+                    //获取用户存在【待支付】状态的电话咨询订单
+                    var _this = this;
+                    var _id = APP.getParam("id");
+                    APP.send('/PC/WxUser/verificationOrder.json', function(res) {
+                        if (res.errno == '0') {
+                            _this.isOrderPay.data = res.data;   
+                        } else {
+                            _this.isOrderPay.state = true;
+                        }
+                    });
+                    
+                },
+                checkTime: function(beginTime, endTime) {
+                    var strb = beginTime.split(":");
+                    if (strb.length != 2) {
+                        return false;
+                    }
+
+                    var stre = endTime.split(":");
+                    if (stre.length != 2) {
+                        return false;
+                    }
+
+                    var b = new Date ();
+                    var e = new Date ();
+                    var n = new Date ();
+
+                    b.setHours (strb[0]);
+                    b.setMinutes (strb[1]);
+                    e.setHours (stre[0]);
+                    e.setMinutes (stre[1]);
+
+                    if (n.getTime () - b.getTime () >= 0 && n.getTime () - e.getTime () < 0) {
+                        return true;
+                    } else {
+                        console.log("当前时间是：" + n.getHours () + ":" + n.getMinutes () + "，不在该时间范围内！");
+                        return false;
+                    }
+                },
+                checkLogin: function() {
+                    var _this = this;
+                    if (this.info_login) {
+                        //window.location.href = "/Member/jMatching.html?oid=";
+
+                        if (this.isOrderPay.state) {
+                            //判断工作时间
+                            if (this.checkTime("9:00", "17:30")) {
+                                this.add();
+                            } else {
+                                window.location.href = '/Member/jAppointTime.html?id='+this.product.id+"&fromtype=ajk";
+                                //this.add();
+                            }
+                        } else {
+                            //有未付款订单
+                            window.location.href = '/Member/orderDetails.html?oid='+this.isOrderPay.data.order_id;
+                        }
+                        
+                    } else {
+                        // window.location.href = '/Member/login.html?from=' + encodeURIComponent(window.location.pathname+window.location.search);
+                        APP.getInfo(this, function(res) {
+                            if (_this.isOrderPay.state) {
+                            //判断工作时间
+                                if (_this.checkTime("9:00", "17:30")) {
+                                    console.log("跳")
+                                    _this.add();
+                                } else {
+                                    window.location.href = '/Member/jAppointTime.html?id='+_this.product.id+"&fromtype=ajk";
+                                    //this.add();
+                                }
+                            } else {
+                                //有未付款订单
+                                window.location.href = '/Member/orderDetails.html?oid='+_this.isOrderPay.data.order_id;
+                            }
+                        });
+                    }
+
+
+                    APP.sendHm({
+                        action: "click",
+                        object: "Begin-consulting",
+                        chinese_object: "开始咨询",
+                        chinese_url: "开始咨询"
+                    })
+
+
+                },
+                add: function() {
+                    var _this = this;
+                    if(!_this.info.username)return;
+                    var _json = {
+                        product_data: [{id: _this.product.id, count: 1}],
+                        note: "",
+                        invoice_state: 0,
+                        invoice: {
+                            header_content_type: '',
+                            header_content: '',
+                            identification_number: '',
+                            name: '',
+                            telephone: '',
+                            address: '',
+                        },
+                        company_name: '',
+                        customer_name: _this.info.name,
+                        phone: _this.info.username,
+                        channel: 14, //渠道 0 邮政 1 东家会 2 环球黑卡 3腾讯
+                        source: 19,
+                        order_type: 1,
+                        discount_code: '', //优惠码
+                        customer_selected_supplier_id: '', //供应商id
+                        customer_source: localStorage.getItem('customer_source'),
+                        customer_source_parameter: localStorage.getItem('customer_source_parameter'),
+                        pre_registration_page: document.referrer
+                    }
+
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/create.json", _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //统计
+                            //return;
+                            window.location.href = "/Member/jMatching.html?oid=" + res.data+"&fromtype=ajk";
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                
+                },
+                getpeople: function(){
+
+                    var myDate = new Date();
+                    var nowHours = myDate.getHours()-8
+
+                    if(nowHours>0 && nowHours<=9){
+                        this.peoplesum =(82+(2*nowHours+80))*nowHours/2
+                        console.log("zc",this.peoplesum)
+                    }else{
+                        this.peoplesum =  810
+                        console.log("no",this.peoplesum)
+                    }
+                    
+
+                },
+                tShow: function(){
+                    if(this.tabshow==false){
+                        this.tabshow=true
+                    }else{
+                        this.tabshow=false
+                    }
+                },
+                openpop: function(tl,id_){
+                    var _this =this
+                    this.poptitle=tl
+                    var id=id_
+                    function  getDetails(id) {
+                        var that = _this;
+                        var _id = id;
+                        APP.send('/PC/Product/info.json?id='+_id+"&channel=14", function(res) {
+                            if (res.errno == '0') {
+                                _this.product = res.data;
+                                console.log(_this.product)
+                            }
+                            //微信分享
+                            //console.log(_data.introduce)
+                            // var _title = res.data.title;
+                            // var _desc = res.data.share_title;
+                            // var _share_link = window.location.href;
+                            // var _imgUrl = res.data.share_icon;
+                            // //console.log(_share_link)
+                            // APP.setShare({
+                            //     title: _title,
+                            //     desc: _desc,
+                            //     link: _share_link,
+                            //     imgUrl: src_url+_imgUrl,
+                            //     success: function() {},
+                            //     cancel: function() {}
+                            // })
+                            $("#popde").popup();
+
+                        });
+                    }
+                    getDetails(id);
+                    
+
+                },
+                openMoreNav: function() {
+                    $('#JS_more').popup();
+                    APP.sendHm({
+                        action: "click",
+                        object: "Ask-all",
+                        chinese_object: "问律师",
+                        chinese_url: "首页"
+                    })
+
+                },
+                closeMoreNav: function () {
+                    $.closePopup();
+                    APP.sendHm({
+                        action: "click",
+                        object: "Ask-cancel",
+                        chinese_object: "问律师-取消",
+                        chinese_url: "首页"
+                    })
+
+                },
+                nextPage: function(type, type_text, param, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "法驴会员首页2.0",
+                        parameter: param
+                    }, function() {
+                        window.location.href = url;
+                    })
+
+                },
+                nextPageTime: function(type, type_text, param, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "首页",
+                        parameter: param
+                    }, function() {
+                        window.location.href = url;
+                    })
+                },
+                getNewState: function() {
+                    //获取消息
+                    var _this = this;
+                    var _json = {
+                        page: 1, //页
+                    }
+                    APP.send("/PC/WxUser/message.json", _json, function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            if (parseFloat(res.data.unread) > 0) {
+                                _this.new_state = true;
+                            }
+                        }
+                    });
+
+                },
+                getHome: function() {
+                   
+                },
+                initBan: function() {
+                    var w = new Swiper('.nvip-swiper-container', {
+                        autoplay : 3000,
+                        pagination : '.swiper-pagination',
+                        autoplayDisableOnInteraction : false,
+                    }); 
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

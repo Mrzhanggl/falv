@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>包小黑</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=30">
+    <link rel="stylesheet" href="/Public/Home/newVip/css/main.css?v=10">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'home'">
+            <!--法驴问答-->
+            <div @click="window.location.href='/newVip/consultAI.html'" class="flwenda">
+                <img src="/Public/Home/newVip/img/falvwenda.png" alt="">
+            </div>
+            <!--轮播图-->
+            <div class="new-banner">
+                <div class="nvip-swiper-container" >
+                    <div class="nvip-swiper-wrapper swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/Public/Home/newVip/img/zhushoubanner.png" alt="">    
+                        </div>
+                        <div class="swiper-slide">
+                            <img src="/Public/Home/newVip/img/flsbanner.png" alt="">    
+                        </div>
+                        
+                    </div>
+                   
+                </div>
+                 <div class="swiper-pagination"></div>
+            </div>
+            
+            <div class="new-de">
+                <div class="clearfix">
+                    <div class="bxh-znpg-tt">
+                        智能评估
+                        <img @click="openpop()" src="/Public/Home/newVip/img/content_icon_more_default.png" alt="">
+                    </div>
+                    <div class="bxh-znpg-ck clearfix">
+                        <div class="bxh-ck-item" @click="pg_ck='1'">
+                            <img v-if="pg_ck=='1'" src="/Public/Home/newVip/img/loan_icon_selected.png" alt="">
+                            <img v-else src="/Public/Home/newVip/img/loan_icon_default.png" alt="">
+                            <p :class="{'bxh-p':pg_ck=='1'}">银行借贷</p>
+                        </div>
+                        <div class="ck-xian"></div>
+                        <div class="bxh-ck-item" @click="pg_ck='2'">
+                            <img v-if="pg_ck=='2'" src="/Public/Home/newVip/img/contract_icon_selected.png" alt="">
+                            <img v-else src="/Public/Home/newVip/img/contract_icon_default.png" alt="">
+                            <p :class="{'bxh-p':pg_ck=='2'}">合同纠纷</p>
+                        </div>
+                        <div class="ck-xian"></div>
+                        <div class="bxh-ck-item" @click="pg_ck='3'">
+                            <<img v-if="pg_ck=='3'" src="/Public/Home/newVip/img/tort_icon_selected.png" alt="">
+                            <img v-else src="/Public/Home/newVip/img/tort_icon_default.png" alt="">
+                            <p  :class="{'bxh-p':pg_ck=='3'}">侵权纠纷</p>
+                        </div>
+                        <div class="ck-xian"></div>
+                        <div class="bxh-ck-item" @click="pg_ck='4'">
+                            <img v-if="pg_ck=='4'" src="/Public/Home/newVip/img/marriage_icon_selected.png" alt="">
+                            <img v-else src="/Public/Home/newVip/img/marriage_icon_default.png" alt="">
+                            <p :class="{'bxh-p':pg_ck=='4'}">婚姻继承</p>
+                        </div>
+                        <div class="ck-xian"></div>
+                        <div class="bxh-ck-item" @click="pg_ck='5'">
+                            <img v-if="pg_ck=='5'" src="/Public/Home/newVip/img/work_icon_selected.png" alt="">
+                            <img v-else src="/Public/Home/newVip/img/work_icon_default.png" alt="">
+                            <p :class="{'bxh-p':pg_ck=='5'}">劳务劳动</p>
+                        </div>
+                        <div class="ck-xian"></div>
+                        <div class="bxh-ck-item" @click="pg_ck='6'">
+                            <img v-if="pg_ck=='6'" src="/Public/Home/newVip/img/traffic_icon_selected.png" alt="">
+                            <img v-else src="/Public/Home/newVip/img/traffic_icon_default.png" alt="">
+                            <p :class="{'bxh-p':pg_ck=='6'}">交通事故</p>
+                        </div>
+                         <div class="ck-xian"></div>
+                        <div class="bxh-ck-item" @click="pg_ck='7'">
+                            <img v-if="pg_ck=='7'" src="/Public/Home/newVip/img/house property_icon_selected.png" alt="">
+                            <img v-else src="/Public/Home/newVip/img/house property_icon_default.png" alt="">
+                            <p :class="{'bxh-p':pg_ck=='7'}">房产物业</p>
+                        </div>
+                        <div class="ck-xian"></div>
+                        <div class="bxh-ck-item" @click="pg_ck='8'">
+                            <img v-if="pg_ck=='8'" src="/Public/Home/newVip/img/building_icon_selected.png" alt="">
+                            <img v-else src="/Public/Home/newVip/img/building_icon_default.png" alt="">
+                            <p :class="{'bxh-p':pg_ck=='8'}">建设工程</p>
+                        </div>
+                    </div>
+                    <ul v-if="pg_ck=='1'" class="bxh-znpg-car">
+                        <li   v-for="item in groupList[2].groupList.slice(0,8)" @click="window.location.href='/newVip/ProblemDes.html?problemId='+item.id+'&reasonId='+item.reasonId">{{item.problem}}</li>
+                    </ul>
+                    <ul v-if="pg_ck=='2'"  class="bxh-znpg-car">
+                        <li  v-for="item in groupList[4].groupList.slice(0,8)" @click="window.location.href='/newVip/ProblemDes.html?problemId='+item.id+'&reasonId='+item.reasonId">{{item.problem}}</li>
+                    </ul>
+                    <ul v-if="pg_ck=='3'" class="bxh-znpg-car">
+                        <li  v-for="item in groupList[6].groupList.slice(0,8)" @click="window.location.href='/newVip/ProblemDes.html?problemId='+item.id+'&reasonId='+item.reasonId">{{item.problem}}</li>
+                    </ul>
+                    <ul v-if="pg_ck=='4'" class="bxh-znpg-car">
+                        <li  v-for="item in groupList[0].groupList.slice(0,8)" @click="window.location.href='/newVip/ProblemDes.html?problemId='+item.id+'&reasonId='+item.reasonId">{{item.problem}}</li>
+                    </ul>
+                    <ul v-if="pg_ck=='5'" class="bxh-znpg-car">
+                        <li  v-for="item in groupList[1].groupList.slice(0,8)" @click="window.location.href='/newVip/ProblemDes.html?problemId='+item.id+'&reasonId='+item.reasonId">{{item.problem}}</li>
+                    </ul>
+                    <ul v-if="pg_ck=='6'" class="bxh-znpg-car">
+                        <li  v-for="item in groupList[3].groupList.slice(0,8)" @click="window.location.href='/newVip/ProblemDes.html?problemId='+item.id+'&reasonId='+item.reasonId">{{item.problem}}</li>
+                    </ul>
+                    <ul v-if="pg_ck=='7'" class="bxh-znpg-car">
+                        <li  v-for="item in groupList[5].groupList.slice(0,8)" @click="window.location.href='/newVip/ProblemDes.html?problemId='+item.id+'&reasonId='+item.reasonId">{{item.problem}}</li>
+                    </ul>
+                    <ul v-if="pg_ck=='8'" class="bxh-znpg-car">
+                        <li  v-for="item in groupList[7].groupList.slice(0,8)" @click="window.location.href='/newVip/ProblemDes.html?problemId='+item.id+'&reasonId='+item.reasonId">{{item.problem}}</li>
+                    </ul>
+                    
+                </div>
+                
+    
+
+
+
+
+
+                <div class="new-renshu">
+                    
+                    <img src="/Public/Home/newVip/img/notice_icon_default.png" alt="">
+                
+                    
+
+                    <span>今日咨询人数<i>{{peoplesum}}</i>人</span>
+                </div>
+                <div class="xian">
+
+                </div>
+
+            </div>
+
+            <div class="new-lcpj"> 
+                <!--<div class="xianb"></div>-->
+                <div class="bxh-zls">
+                    <div>
+                        <div class="bxh-zls-tt">找律师</div>
+                        <div class="bxh-zls-img" @click="window.location.href='/Member/goodsDetails.html?id=1006080'">
+                            <img src="/Public/Home/newVip/img/flsbanner.png" alt="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="weui-tab wetab">
+                    <!--<div class="weui-navbar">-->
+                        
+                        <b class="bxh-hypj" href="#tab2">
+                            用户评价
+                        </b>
+                    <!--</div>-->
+                    <div class="weui-tab__bd">
+                        <div id="tab1" class="weui-tab__bd-item ">
+                            <div class="tab1top">
+                                <img src="/Public/Home/newVip/img/fulc.png" alt="">
+                            </div>
+                        </div>
+                        <div id="tab2" class="weui-tab__bd-item  weui-tab__bd-item--active tab-pla">
+                            <div class="tab-pl" v-for="(item,index) in pl_list" v-if="index<=3 || tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>{{item.professional_experience=='4'? '比较满意':'非常满意'}}</b>
+                                    <span>{{item.name}}</span>
+                                    <div>{{item.time}}</div>                                                                     
+                                    <p>{{item.note}}<span class=""></span></p>
+                                </div>
+                            </div>
+
+
+
+
+
+                            <div class="new-show" >
+                                <div><img src="/Public/Home/newVip/img/line-l.png" alt=""></div>
+                                <span v-if="!tabshow" @click="tShow()">查看全部评价</span>
+                                <span v-else @click="tShow()">收起评价</span>
+                                <div><img src="/Public/Home/newVip/img/line-r.png" alt=""></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="popde" class="weui-popup__container" >
+                <div class="weui-popup__overlay" id="popde_over"></div>
+                <div class="weui-popup__modal bxh-weui-popup__modal">
+                   <ul class="ul-ck">
+                       <li v-if="groupList" v-for="(item,index) in groupList" :class="{'ul-ck-active': ulckid == index,'clbordera':ulckid == '0' }"  @click="ulckid = index">{{item.groupName}}</li>
+                       <!--<li :class="{'ul-ck-active': ulckid == '2' }"  @click="ulckid = '2'">侵权纠纷</li>
+                       <li :class="{'ul-ck-active': ulckid == '3' }"  @click="ulckid = '3'">卡片盗刷</li>-->
+                   </ul>
+                   <div  v-for='(item,index) in groupList' v-if="ulckid == index" class="bxh-allsq-main">
+                       <h2>- {{item.groupName}} -</h2>
+                       <div class="bxh-allsq-main-box">
+                           <div  v-for="i in item.groupList" class="bxh-allsq-main-item" @click="window.location.href='/newVip/ProblemDes.html?problemId='+i.id+'&reasonId='+i.reasonId">{{i.problem}}</div>
+                           <!--<div class="bxh-allsq-main-item">社保补贴</div>
+                           <div class="bxh-allsq-main-item">生育补贴</div>
+                           <div class="bxh-allsq-main-item">电话欠费</div>
+                           <div class="bxh-allsq-main-item">信用卡年费扣除</div>
+                           <div class="bxh-allsq-main-item">信息泄露</div>
+                           <div class="bxh-allsq-main-item">恶意透支</div>
+                           <div class="bxh-allsq-main-item">涉及洗钱</div>-->
+                       </div>
+                   </div>
+                   <!--<div v-if="ulckid == '2'" class="bxh-allsq-main">
+                       <h2>- 侵权纠纷 -</h2>
+                       <div class="bxh-allsq-main-box">
+                           <div class="bxh-allsq-main-item">7天无理由退换货</div>
+                           <div class="bxh-allsq-main-item">三包</div>
+                           <div class="bxh-allsq-main-item">假货，退1罚N</div>
+                           <div class="bxh-allsq-main-item">虚假宣传</div>
+                       </div>
+                   </div>
+                   <div v-if="ulckid == '3'" class="bxh-allsq-main">
+                       <h2>- 卡片盗刷 -</h2>
+                       <div class="bxh-allsq-main-box">
+                           <div class="bxh-allsq-main-item">卡片未离身</div>
+                           <div class="bxh-allsq-main-item">盗刷举证</div>
+                           <div class="bxh-allsq-main-item">境外消费、短信</div>
+                           <div class="bxh-allsq-main-item">银行担责</div>
+                       </div>
+                   </div>-->
+                </div>
+            </div>
+
+            <div class="weui-tabbar s-tabbar s-tabbar-more">
+                <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+                    <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
+                    <p class="weui-tabbar__label">首页</p>
+                </a>
+                <!--<a href="/Member/liveIndex.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon2"></div>
+                    <p class="weui-tabbar__label">视频</p>
+                </a>
+                <a @click="openMoreNav()" href="javascript:;" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon">
+                        <div class="j-tabbar_iconMore"></div>
+                    </div>
+                    <p class="weui-tabbar__label">问律师</p>
+                </a>
+                <a href="/Member/mGoodsList.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon3"></div>
+                    <p class="weui-tabbar__label">产品</p>
+                </a>-->
+                <a href="/Member/mPersonal.html?fromtype=ajk" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon4"></div>
+                    <p class="weui-tabbar__label">我的</p>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/swiper-3.4.2.jquery.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=088"></script>
+    <script src="/Public/Home/topic/js/main.js?v=089"></script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                groupList:[],
+                ulckid:'0',
+                peoplesum:"",
+                tabshow:false,
+                poptitle:"",
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                    navShow: false
+                },
+                pg_ck:'',
+                isOrderPay: {
+                    state: false,
+                    data: ''
+                },
+                new_state: false,     //新消息
+
+                subject: [],    //专题
+                collection: [],     //视频
+                product: {
+                    channel_specification:{}
+                },     //产品
+                pl_list:[],
+                dp_list:[
+                    {
+                        name: "好久不见",
+                        note: "非常感谢郑律师这么专业的回答，很耐心的解答了我所有疑虑！",
+                        time: "2018/11/17 10:10",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "唯有努力",
+                        note: "非常感谢，这个律师很专业，挺好的一次体验 。",
+                        time: "2018/11/17 11:41",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "在巴黎塔顶看东京樱花",
+                        note: "解答很专业也很仔细，态度服务也很好，会继续关注，谢谢。",
+                        time: "2018/11/17 12:15",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "RainSounds",
+                        note: "服务很好，我想咨询的问题都得到了满意的解答。",
+                        time: "2018/11/17 16:17",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "星光坠落",
+                        note: "很及时的响应，给我的意见和建议很专业。下次有问题再仔细。",
+                        time: "2018/11/17 21:17",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "未央",
+                        note: "真的是帮了很大的忙，咨询完心里踏实了，也懂了法律上的知识，有法律上的问题还是会再咨询郭律师的，非常感谢，帮我们这些无助的人解决了法律难题。",
+                        time: "2018/11/17 22:58",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "水洗晴空",
+                        note: "律师回复非常专业吗，而且给了比较好的建议，非常感谢。",
+                        time: "2018/11/18 10:17",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "稳做枕边人",
+                        note: "法驴真的帮助很大，律师的建议起到了关键的作用。",
+                        time: "2018/11/18 12:30",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "一缕阳光",
+                        note: "帮朋友咨询信用卡逾期还款，第一次遇到这种情况。律师解释很专业。",
+                        time: "2018/11/18 14:41",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "夜未央",
+                        note: "谢谢，问了一下我就放心多了，就怕又被骗了。",
+                        time: "2018/11/18 14:15",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "青衫负雪",
+                        note: "律师讲的很好，第一次使用法驴，真的很棒！帮助了我朋友解决了问题。",
+                        time: "2018/11/18 17:17",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "风中流浪",
+                        note: "很仔细，我很清楚要了解的问题，并且给了我很好的建议。感谢发现这个平台，希望以后的官司之路一帆风顺。",
+                        time: "2018/11/18 20:30",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "夏日落",
+                        note: "感谢这位律师的解答，向所有法律工作者致敬！",
+                        time: "2018/11/19 21:37",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "别怕失去",
+                        note: "林律师很专业耐心，解答问题很周到细致，非常感谢，十分好评",
+                        time: "2018/11/19 9:36",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "听风看月",
+                        note: "律师很细心，回答的很专业，给出了具体的解决方案。",
+                        time: "2018/11/19 9:41",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "蓝天白云",
+                        note: "很快律师就联系我了，并且帮我很好的解答了问题，很好。",
+                        time: "2018/11/19 13:15",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "如若梦似彩虹",
+                        note: " 律师解答的非常精确，条理清楚，解决了我的问题。",
+                        time: "2018/11/19 13:17",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "衍夏成歌",
+                        note: "很好，心里终于有底了，谢谢这么晚了依旧耐心解答。",
+                        time: "2018/11/20 09:30",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "壹場煙雨",
+                        note: "谢谢律师的解答，我去了解一下具体情况，到时再联系王律师",
+                        time: "2018/11/20 09:59",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "指閒緑",
+                        note: "王律师说的很易懂，对于一个遇到困难不知如何用法律武器解决问题的人来说，真的是极大的帮助，感恩",
+                        time: "2018/11/20 11:56",
+                        professional_experience: "4"
+                    },
+                ]
+
+
+            },
+            created: function() {
+                var _this = this;
+                
+                APP.setOrderChannel("48");
+                APP.setFromChannel("48");
+                _this.getpeople();
+                _this.getNewState();
+                _this.getVerificationOrder();
+                // _this.getHome();
+                // APP.getInfo(this, function(res) {
+                    
+                // });
+                // APP.init();
+                _this.getToken();
+                _this.getGroupList();
+                _this.getPl();
+                APP.getJssdk();
+                console.log(_this.groupList)
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "包小黑"
+                })
+
+            },
+            mounted: function() {
+                //this.initBan();
+             document.getElementById("popde_over").addEventListener("touchstart",function(e){
+                    e.stopPropagation();
+                    e.preventDefault();
+                },false);
+                $.smartScroll($("#JS_more"), '.weui-popup__modal');
+            },
+            methods: {
+                getGroupList:function(){
+                    var _this = this
+                    var _Json={
+                        token:sessionStorage.getItem("bxhToken"),
+                    }
+                     APP.send("/V2/SZGenerateOrder/disputeSummary.json",_Json,function(res){
+                            _this.groupList = res.data
+                            _this.page.show = 'home';
+                             _this.pg_ck='1';
+                    })
+                },  
+                getToken:function(){
+                    var _this = this
+                    APP.send("/V2/SZGenerateOrder/getAccessToken.json",function(res){
+                        if(res.data.token){
+                            sessionStorage.setItem("bxhToken",res.data.token)
+                        }
+                            _this.getGroupList();
+                    })
+                },
+                // 获取四五星评论
+                getPl:function(){
+                    var _this = this
+                    
+                    APP.send('/V2/YZFApi/evaluationList.json', function(res) {
+                        if (res.errno == '0') {
+                            _this.pl_list = res.data;   
+                            console.log(_this.pl_list.length)
+                            if(_this.pl_list.length<20){
+                                for(var i=0;i<=20;i++){
+                                    if(_this.pl_list.length<20){
+                                        _this.pl_list.push(_this.dp_list[i])
+                                        console.log(_this.pl_list)
+                                    }
+                                }
+                            }
+                        } 
+                    });
+                },
+                nextde: function(type, type_chinese, url) {
+                    
+                    APP.sendHm({
+                        action: "click", 
+                        object: type,
+                        chinese_object: type_chinese,
+                        chinese_url: "安居客"
+                    }, function() {
+                        // $.closePopup()
+                        window.location.href = url;
+                    });
+                    
+                },
+                getVerificationOrder: function() {
+                    //获取用户存在【待支付】状态的电话咨询订单
+                    var _this = this;
+                    var _id = APP.getParam("id");
+                    APP.send('/PC/WxUser/verificationOrder.json', function(res) {
+                        if (res.errno == '0') {
+                            _this.isOrderPay.data = res.data;   
+                        } else {
+                            _this.isOrderPay.state = true;
+                        }
+                    });
+                    
+                },
+                checkTime: function(beginTime, endTime) {
+                    var strb = beginTime.split(":");
+                    if (strb.length != 2) {
+                        return false;
+                    }
+
+                    var stre = endTime.split(":");
+                    if (stre.length != 2) {
+                        return false;
+                    }
+
+                    var b = new Date ();
+                    var e = new Date ();
+                    var n = new Date ();
+
+                    b.setHours (strb[0]);
+                    b.setMinutes (strb[1]);
+                    e.setHours (stre[0]);
+                    e.setMinutes (stre[1]);
+
+                    if (n.getTime () - b.getTime () >= 0 && n.getTime () - e.getTime () < 0) {
+                        return true;
+                    } else {
+                        console.log("当前时间是：" + n.getHours () + ":" + n.getMinutes () + "，不在该时间范围内！");
+                        return false;
+                    }
+                },
+                checkLogin: function() {
+                    var _this = this;
+                    if (this.info_login) {
+                        //window.location.href = "/Member/jMatching.html?oid=";
+
+                        if (this.isOrderPay.state) {
+                            //判断工作时间
+                            if (this.checkTime("9:00", "17:30")) {
+                                this.add();
+                            } else {
+                                window.location.href = '/Member/jAppointTime.html?id='+this.product.id+"&fromtype=ajk";
+                                //this.add();
+                            }
+                        } else {
+                            //有未付款订单
+                            window.location.href = '/Member/orderDetails.html?oid='+this.isOrderPay.data.order_id;
+                        }
+                        
+                    } else {
+                        // window.location.href = '/Member/login.html?from=' + encodeURIComponent(window.location.pathname+window.location.search);
+                        APP.getInfo(this, function(res) {
+                            if (_this.isOrderPay.state) {
+                            //判断工作时间
+                                if (_this.checkTime("9:00", "17:30")) {
+                                    console.log("跳")
+                                    _this.add();
+                                } else {
+                                    window.location.href = '/Member/jAppointTime.html?id='+_this.product.id+"&fromtype=ajk";
+                                    //this.add();
+                                }
+                            } else {
+                                //有未付款订单
+                                window.location.href = '/Member/orderDetails.html?oid='+_this.isOrderPay.data.order_id;
+                            }
+                        });
+                    }
+
+
+                    APP.sendHm({
+                        action: "click",
+                        object: "Begin-consulting",
+                        chinese_object: "开始咨询",
+                        chinese_url: "开始咨询"
+                    })
+
+
+                },
+                add: function() {
+                    var _this = this;
+                    if(!_this.info.username)return;
+                    var _json = {
+                        product_data: [{id: _this.product.id, count: 1}],
+                        note: "",
+                        invoice_state: 0,
+                        invoice: {
+                            header_content_type: '',
+                            header_content: '',
+                            identification_number: '',
+                            name: '',
+                            telephone: '',
+                            address: '',
+                        },
+                        company_name: '',
+                        customer_name: _this.info.name,
+                        phone: _this.info.username,
+                        channel: 14, //渠道 0 邮政 1 东家会 2 环球黑卡 3腾讯
+                        source: 19,
+                        order_type: 1,
+                        discount_code: '', //优惠码
+                        customer_selected_supplier_id: '', //供应商id
+                        customer_source: localStorage.getItem('customer_source'),
+                        customer_source_parameter: localStorage.getItem('customer_source_parameter'),
+                        pre_registration_page: document.referrer
+                    }
+
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/create.json", _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //统计
+                            //return;
+                            window.location.href = "/Member/jMatching.html?oid=" + res.data+"&fromtype=ajk";
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                
+                },
+                getpeople: function(){
+
+                    var myDate = new Date();
+                    var nowHours = myDate.getHours()-8
+
+                    if(nowHours>0 && nowHours<=9){
+                        this.peoplesum =(82+(2*nowHours+80))*nowHours/2
+                        console.log("zc",this.peoplesum)
+                    }else{
+                        this.peoplesum =  810
+                        console.log("no",this.peoplesum)
+                    }
+                    
+
+                },
+                tShow: function(){
+                    if(this.tabshow==false){
+                        this.tabshow=true
+                    }else{
+                        this.tabshow=false
+                    }
+                },
+                openpop: function(tl,id_){
+                    var _this =this
+                    this.poptitle=tl
+                    var id=id_
+                    function  getDetails(id) {
+                        var that = _this;
+                        var _id = id;
+                        APP.send('/PC/Product/info.json?id='+_id+"&channel=14", function(res) {
+                            if (res.errno == '0') {
+                                _this.product = res.data;
+                                console.log(_this.product)
+                            }
+                            //微信分享
+                            //console.log(_data.introduce)
+                            // var _title = res.data.title;
+                            // var _desc = res.data.share_title;
+                            // var _share_link = window.location.href;
+                            // var _imgUrl = res.data.share_icon;
+                            // //console.log(_share_link)
+                            // APP.setShare({
+                            //     title: _title,
+                            //     desc: _desc,
+                            //     link: _share_link,
+                            //     imgUrl: src_url+_imgUrl,
+                            //     success: function() {},
+                            //     cancel: function() {}
+                            // })
+                            $("#popde").popup();
+
+                        });
+                    }
+                    getDetails(id);
+                    
+
+                },
+                openMoreNav: function() {
+                    $('#JS_more').popup();
+                    APP.sendHm({
+                        action: "click",
+                        object: "Ask-all",
+                        chinese_object: "问律师",
+                        chinese_url: "首页"
+                    })
+
+                },
+                closeMoreNav: function () {
+                    $.closePopup();
+                    APP.sendHm({
+                        action: "click",
+                        object: "Ask-cancel",
+                        chinese_object: "问律师-取消",
+                        chinese_url: "首页"
+                    })
+
+                },
+                nextPage: function(type, type_text, param, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "法驴会员首页2.0",
+                        parameter: param
+                    }, function() {
+                        window.location.href = url;
+                    })
+
+                },
+                nextPageTime: function(type, type_text, param, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "首页",
+                        parameter: param
+                    }, function() {
+                        window.location.href = url;
+                    })
+                },
+                getNewState: function() {
+                    //获取消息
+                    var _this = this;
+                    var _json = {
+                        page: 1, //页
+                    }
+                    APP.send("/PC/WxUser/message.json", _json, function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            if (parseFloat(res.data.unread) > 0) {
+                                _this.new_state = true;
+                            }
+                        }
+                    });
+
+                },
+                getHome: function() {
+                    //获取首页展示产品
+                    var _this = this;
+                    APP.send("/PC/WxUser/home.json", function(res) {
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.subject = _data.subject;
+                            _this.collection = _data.collection;
+                            _this.product = _data.product;
+                        }
+
+                        _this.page.show = 'home';
+                        setTimeout(function(){
+                            _this.initBan();
+                        }, 100)
+                        
+                    })
+                },
+                initBan: function() {
+                    var s = new Swiper('.nvip-swiper-container', {
+                        autoplay : 10000,
+                        pagination : '.swiper-pagination',
+                        autoplayDisableOnInteraction : false,
+                    }); 
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

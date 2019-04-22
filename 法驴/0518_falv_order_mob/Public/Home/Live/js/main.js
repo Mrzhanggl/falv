@@ -150,7 +150,6 @@ APP.initInfo = function(vm, callback) {
     var _callback = callback ? callback : function() {};
         _this.send("/PC/User/userInfo.json", function(res) {
         // alert(JSON.stringify(res))
-        //alert(JSON.stringify(res))
         if (res.errno == '0') {
             _vm.info_login = true;
             _this.send('/PC/Wx/getOpenid.json?source=1', function(res2) {

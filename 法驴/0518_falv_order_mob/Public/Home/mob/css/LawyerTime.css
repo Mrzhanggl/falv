@@ -1469,3 +1469,23 @@ canvas {
     position: fixed;
     bottom: 0;
 }
+.audit-jg-t4{
+    width: 1.56rem;
+    font-size:.26rem;
+    font-family:MicrosoftYaHei;
+    font-weight:400;
+    color:rgba(153,153,153,1);
+    line-height:1;
+    text-align: center;
+    margin-top: .20rem;
+    position: relative;
+    margin-left:auto; 
+    margin-right: auto;
+    right: .16rem;
+}
+.audit-jg-t4 > span{
+    position: absolute;
+    width: .13rem;
+    right: -.33rem;
+    top: 0.03rem;
+}

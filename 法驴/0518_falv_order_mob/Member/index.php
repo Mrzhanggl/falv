@@ -114,6 +114,7 @@ $page = curPageURL();
     <!-- <link type="text/css" rel="stylesheet" href="/App//newPC/css/style.css?v=02" /> -->
     <link rel="stylesheet" href="/newPC/css/animate.css">
     <link rel="stylesheet" href="/newPC/css/swiper.min.css">
+    <link rel="stylesheet" href="/newPC/css/mainindex.css?v=22">
     <link href="/newPC/img/bitbug_favicon.ico" rel="icon" type="image/x-icon" />
 	<script>
 		var kfJson = {
@@ -166,885 +167,7 @@ recordlog("<?php echo $iipp?>",fromchannel,"<?php echo $ua?>","visitor","<?php e
 </script>
 <body>
     <style>
-        img {
-            width: 100%;
-        }
-
-        * {
-            padding: 0;
-            margin: 0;
-        }
-
-        .all {
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .top {
-            width: 100%;
-            position: fixed;
-            z-index: 10;
-            background: #fff;
-        }
-
-        .topshadow {
-            box-shadow: 0px 3px 6px 0px rgba(8, 2, 88, 0.05);
-        }
-
-        .top_main {
-            width: 1223px;
-            margin: auto;
-        }
-
-        .top_main_left {
-            font-size: 20px;
-            font-family: MicrosoftYaHei;
-            font-weight: 400;
-            color: rgba(16, 22, 47, 1);
-            line-height: 70px;
-            float: left;
-        }
-
-        .shu {
-            display: inline-block;
-            width: 2px;
-            height: 18px;
-            background: rgba(16, 22, 47, 1);
-            line-height: 70px;
-            vertical-align: baseline
-        }
-
-        .top_main_right {
-            letter-spacing:2px;
-            font-size: 18px;
-            font-family: ArialMT;
-            font-weight: 400;
-            color: rgba(100, 111, 133, 1);
-            line-height: 70px;
-            float: right;
-            position: relative;
-        }
-
-        .dh {
-            width: 16px;
-            height: 16px;
-            position: absolute;
-            left: -26px;
-            top: 1px;
-        }
-
-        .top_main_m {
-            width: 100%;
-            height: 70px;
-        }
-
-        .sy {
-            display: inline-block;
-            height: 70px;
-            font-size: 16px;
-            font-family: MicrosoftYaHei;
-            font-weight: bold;
-            color: rgba(51, 51, 51, 1);
-            line-height: 70px;
-            margin-left: 450px;
-            position: relative;
-            cursor: pointer;
-        }
-
-        .sy::after {
-            position: absolute;
-            bottom: 0px;
-            left: 50%;
-            margin-left: -10px;
-            content: "";
-            display: block;
-            width: 20px;
-            height: 4px;
-            background: rgba(0, 0, 0, 1);
-            border-radius: 1px;
-        }
-
-        .qyyh {
-            cursor: pointer;
-            display: inline-block;
-            height: 70px;
-            font-size: 16px;
-            font-family: MicrosoftYaHei;
-            font-weight: 400;
-            color: rgba(100, 111, 133, 1);
-            line-height: 70px;
-            margin-left: 100px;
-            text-decoration: none;
-            letter-spacing: 2px;
-        }
-
-        .banner {
-            box-sizing: border-box;
-            padding-top: 50px;
-            height: 670px;
-            width: 1223px;
-            margin: auto;
-            margin-top: 70px;
-        }
-
-        .count {
-            width: 100%;
-            height: 140px;
-            background: rgba(64, 65, 74, 1);
-            position: relative;
-        }
-
-        .count-main {
-            font-size: 0;
-            position: absolute;
-            top: 41px;
-            left: 0;
-            right: 0;
-            width: 1223px;
-            margin: auto;
-        }
-
-        .count-main-item {
-            box-sizing: border-box;
-            padding-left: 60px;
-            width: 300px;
-            display: inline-block;
-            color: #fff;
-            font-size: 30px;
-            line-height: 1
-        }
-
-        .count-main-m {
-            font-size: 14px;
-        }
-
-        .count-main-b {
-            margin-bottom: 18px;
-        }
-
-        .count-main-shu {
-            margin-bottom: 8px;
-            display: inline-block;
-            margin-top: 0px;
-            width: 1px;
-            height: 40px;
-            background: rgba(214, 214, 217, 1);
-            opacity: 0.4;
-        }
-
-        .goup {
-            display: none;
-            position: fixed;
-            right: 0px;
-            padding-right: 40px;
-            bottom: 60px;
-            z-index: 1000;
-        }
-
-        .goup-item {
-            cursor: pointer;
-            position: relative;
-            width: 50px;
-            height: 97px;
-            background: linear-gradient(0deg, rgba(54, 55, 63, 1), rgba(87, 88, 99, 1));
-            box-shadow: 0px 2px 4px 0px rgba(16, 22, 47, 0.2);
-            border-radius: 3px;
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: #fff;
-            text-align: center;
-            padding-top: 1px;
-        }
-
-        .goup-itema:hover .goup-item-orda {
-            width: 100px;
-        }
-
-        .gpup-sp {
-            overflow: hidden;
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(0deg, rgba(54, 55, 63, 1), rgba(87, 88, 99, 1));
-            box-shadow: 0px 2px 4px 0px rgba(16, 22, 47, 0.2);
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-        .goup-item-qr {
-            width: 20px;
-            height: 20px;
-            margin: auto;
-            margin-top: 15px;
-            margin-bottom: 10px;
-        }
-
-        .goup-item-up {
-            width: 20px;
-            height: 12px;
-            margin: auto;
-            margin-top: 19px;
-            background-image: url(./newPC/img/top_icon.png)
-        }
-
-        .goup-item-ord {
-            position: absolute;
-            top: 0;
-            left: 3px;
-            width: 0px;
-            height: 98px;
-            background: linear-gradient(0deg, rgba(54, 55, 63, 1), rgba(87, 88, 99, 1));
-            box-shadow: 0px 2px 4px 0px rgba(16, 22, 47, 0.2);
-            border-radius: 3px;
-            padding: 10px 0px;
-            box-sizing: border-box;
-            transition: 0.8s all;
-            overflow: hidden;
-        }
-
-        .goup-item-ord>img {
-            width: 76px;
-            height: 76px;
-        }
-
-        .goup-itema:hover .goup-item-orda {
-            width: 100px;
-            left: -96px;
-            transition: 0.8s all;
-            padding: 10px;
-        }
-
-        .goup-itemb:hover .goup-item-ordb {
-            width: 100px;
-            left: -96px;
-            transition: 0.8s all;
-            padding: 10px;
-        }
-
-        .flfw {
-            text-align: center;
-            padding-top: 60px;
-            padding-bottom: 60px;
-        }
-
-        .title-typea {
-
-            position: relative;
-            height: 50px;
-            display: inline-block;
-            font-size: 24px;
-            font-family: MicrosoftYaHei;
-            font-weight: bold;
-            color: rgba(16, 22, 47, 1);
-            line-height: 50px;
-            padding: 0 60px;
-        }
-
-        .title-imga {
-            position: absolute;
-            top: 0;
-            left: -200px;
-            width: 200px;
-            height: 50px;
-            background-image: url(./newPC/img/lefttitle.png)
-        }
-
-        .title-imgb {
-            position: absolute;
-            top: 0;
-            right: -200px;
-            width: 200px;
-            height: 50px;
-            background-image: url(./newPC/img/righttitle.png)
-        }
-
-        .spnr {
-            background: #EFEFEF;
-            padding-top: 60px;
-            text-align: center;
-            padding-bottom: 60px;
-        }
-
-        .title-type-p {
-            height: 25px;
-            font-size: 24px;
-            font-family: MicrosoftYaHei;
-            font-weight: bold;
-            color: rgba(16, 22, 47, 1);
-            line-height: 25px;
-        }
-
-        .title-type-sm {
-            height: 15px;
-            font-size: 14px;
-            font-family: MicrosoftYaHei;
-            font-weight: 400;
-            color: rgba(100, 111, 133, 1);
-            line-height: 15px;
-            margin-top: 10px;
-        }
-
-        .common-m {
-            width: 1223px;
-            margin: auto;
-        }
-
-        .sp-box {
-            margin-top: 60px;
-            padding-left: 10px;
-            display: flex;
-        }
-
-        .sp-box-li {
-            width: 278px;
-            height: 369px;
-            background: rgba(255, 255, 255, 1);
-            border-radius: 3px;
-            margin-right: 30px;
-            list-style: none;
-        }
-
-        .sp-box-lg {
-            width: 238px;
-            height: 179px;
-            background: rgba(255, 255, 255, 1);
-            box-shadow: 0px 3px 20px 0px rgba(16, 22, 47, 0.06);
-            border-radius: 3px 3px 0px 0px;
-            margin: auto;
-            margin-top: 20px;
-            text-align: center;
-            position: relative;
-            margin-bottom: 40px;
-        }
-
-        .sp-box-imga {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            margin: auto;
-            width: 175px;
-            height: 63px;
-        }
-
-        .sp-box-imgb {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            margin: auto;
-            width: 150px;
-            height: 42px;
-        }
-
-        .sp-box-imgc {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            margin: auto;
-            width: 157px;
-            height: 40px;
-        }
-
-        .sp-box-imgd {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            margin: auto;
-            width: 121px;
-            height: 75px;
-        }
-
-        .sp-box-zi {
-            font-size: 20px;
-            font-family: MicrosoftYaHei;
-            font-weight: bold;
-            color: rgba(16, 22, 47, 1);
-            line-height: 1;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .sp-box-ft {
-            width: 238px;
-            margin: auto;
-            text-align: left;
-            font-size: 14px;
-            font-family: MicrosoftYaHei;
-            font-weight: 400;
-            color: rgba(100, 111, 133, 1);
-            line-height: 22px;
-        }
-
-        .jszc {
-            padding-top: 60px;
-            background-color: #fff;
-            text-align: center;
-            padding-bottom: 60px;
-        }
-
-        .jszc-img {
-            display: inline-block;
-            width: 767px;
-            height: 580px;
-        }
-
-        .jszc-main {
-            font-size: 0;
-            text-align: left;
-            margin-top: 60px;
-        }
-
-        .jszc-text {
-            vertical-align: top;
-            margin-left: 80px;
-            padding-top: 85px;
-            display: inline-block;
-        }
-
-        .jszc-text-item {
-            position: relative;
-        }
-
-        .jszc-icon {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 46px;
-            height: 46px;
-        }
-
-        .jszc-text-div {
-            height: 21px;
-            font-size: 20px;
-            font-family: MicrosoftYaHei;
-            font-weight: bold;
-            color: rgba(16, 22, 47, 1);
-            line-height: 1;
-            margin-left: 66px;
-            margin-bottom: 14px;
-        }
-
-        .jszc-text-p {
-            width: 310px;
-            font-size: 14px;
-            font-family: MicrosoftYaHei;
-            font-weight: 400;
-            color: rgba(100, 111, 133, 1);
-            line-height: 21px;
-            margin-left: 66px;
-            padding-bottom: 35px;
-            margin-bottom: 40px;
-            border-bottom: 1px solid rgba(100,111,133,0.2);
-        }
-
-        .mainpn {
-            background: #EFEFEF;
-            padding-top: 60px;
-            text-align: center;
-            padding-bottom: 30px;
-        }
-
-        .mainpn-futt {
-            width: 1200px;
-            border-bottom: 1px solid #40414A;
-            margin-top: 55px;
-            margin-bottom: 30px;
-            padding-bottom: 13px;
-            text-align: left;
-            font-size: 0;
-        }
-
-        .mainpn-futt-ston {
-            display: inline-block;
-            width: 4px;
-            height: 22px;
-            background: rgba(16, 22, 47, 1);
-            border-radius: 2px;
-            vertical-align: top;
-        }
-
-        .mainpn-futt-sp {
-            font-size: 20px;
-            font-family: MicrosoftYaHei;
-            font-weight: bold;
-            color: rgba(16, 22, 47, 1);
-            line-height: 1;
-            margin-left: 10px;
-            vertical-align: top;
-            margin-right: 404px;
-        }
-
-        .mainpn-li {
-            width: 1200px;
-            text-align: left;
-            font-size: 0;
-        }
-
-        .mainpn-li>li {
-            display: inline-block;
-            width: 280px;
-            height: 104px;
-            background: rgba(255, 255, 255, 1);
-            border-radius: 3px;
-            margin-right: 180px;
-            margin-bottom: 30px;
-            list-style: none;
-            text-align: center;
-        }
-
-        .mainpn-li>li:nth-child(3n) {
-            margin-right: 0;
-        }
-
-        .mainpn-li>li>span {
-            display: inline-block;
-            position: relative;
-            top: 50%;
-            /*偏移*/
-            transform: translateY(-50%);
-        }
-
-        .footer {
-            padding-top: 60px;
-            text-align: center;
-            padding-bottom: 60px;
-            background: rgba(64, 65, 74, 1);
-        }
-
-        .f-logo {
-            display: inline-block;
-            width: 60px;
-            font-size: 20px;
-            font-family: MicrosoftYaHei;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 1);
-            line-height: 36px;
-        }
-
-        .footer-tr {
-            border-bottom: 1px solid rgba(214,214,217,.4);
-            font-size: 14px;
-            font-family: MicrosoftYaHei;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 1);
-            line-height: 1;
-            text-align: center;
-        }
-
-        .footer-tr-l {
-            float: left;
-        }
-
-        .footer-tr-r {
-            float: right;
-        }
-
-        .footer-tr-m {
-            margin-left: 45px;
-        }
-
-        .footer-ban {
-            margin-top: 60px;
-            font-size: 12px;
-            font-family: MicrosoftYaHei;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 1);
-            line-height: 1;
-        }
-
-        .spnr-coverbox {
-            display: block;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 3px 3px 0px 0px;
-            display: none;
-            cursor: pointer;
-        }
-
-        .spnr-coverbox-op {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: rgba(64, 65, 74, 1);
-            opacity: 0.8;
-        }
-
-        .spnr-coverbox-t {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 14px;
-            font-family: MicrosoftYaHei;
-            font-weight: bold;
-            color: rgba(255, 255, 255, 1);
-            line-height: 179px;
-            opacity: 1;
-        }
-
-        .spnr-coverbox-icon {
-            display: inline-block;
-        }
-
-        .sp-box-hovea:hover .sp-box-cova {
-            display: block;
-        }
-
-        .sp-box-hoveb:hover .sp-box-covb {
-            display: block;
-        }
-
-        .sp-box-hovec:hover .sp-box-covc {
-            display: block;
-        }
-
-        .sp-box-hoved:hover .sp-box-covd {
-            display: block;
-        }
-
-        .banner-left {
-            margin-top: 71px;
-            width: 399px;
-            float: left;
-        }
-
-        .banner-lefta {
-            font-size: 46px;
-            font-family: MicrosoftYaHei;
-            font-weight: bold;
-            color: rgba(16, 22, 47, 1);
-            line-height: 1;
-            margin-bottom: 22px;
-            letter-spacing: 6px;
-        }
-
-        .banner-leftb {
-            font-size: 46px;
-            font-family: MicrosoftYaHeiLight;
-            color: rgba(16, 22, 47, 1);
-            line-height: 1;
-            margin-bottom: 62px;
-            letter-spacing: 6px;
-            white-space: nowrap;
-        }
-
-        .banner-pull {
-            background:linear-gradient(0deg,rgba(54,55,63,1),rgba(87,88,99,1));
-            border:1px solid;
-            border-image:linear-gradient(0deg, rgba(31,31,35,1), rgba(80,81,92,1)) 10 10;
-            box-shadow:0px 6px 14px 0px rgba(16,22,47,0.14),inset -1px -1px 0 0 rgba(44,45,51,1);
-            vertical-align: top;
-            box-sizing: border-box;
-            display: inline-block;
-            width: 160px;
-            border-radius: 3px;
-            line-height: 50px;
-            font-size: 14px;
-            font-family: MicrosoftYaHei;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 1);
-            margin-right: 30px;
-            cursor: pointer;
-        }
-
-        .banner-pull-text {
-            margin-left: 35px;
-            letter-spacing: 2px;
-
-        }
-
-        .banner-qr {
-            line-height: 0;
-            vertical-align: top;
-            width: 20px;
-            height: 20px;
-            display: inline-block;
-            margin-top: 15px;
-            margin-left: 20px;
-        }
-
-        .banner-er {
-            overflow: hidden;
-            width: 120px;
-            height: 0px;
-            margin: auto;
-            margin-bottom: 0px;
-            transition: all 1s;
-        }
-
-        .banner-pulla:hover .banner-era {
-            height: 120px;
-            margin-bottom: 15px;
-            transition: all 1s;
-        }
-
-        .banner-pullb:hover .banner-erb {
-            height: 120px;
-            margin-bottom: 15px;
-            transition: all .8s;
-        }
-
-        .banner-right {
-            float: right;
-        }
-
-        .swp-main {
-            margin-top: 60px;
-        }
-
-        .swp-main-phone {
-            width: 398px;
-            height: 803px;
-            position: relative;
-        }
-
-        .swp-main-phonebox {
-            width: 100%;
-            height: 100%;
-            background-image: url(./newPC/img/iphonex.png);
-            background-size: contain;
-            overflow: hidden;
-        }
-
-        .swp-ljty {
-    border:1px solid;
-border-image:linear-gradient(0deg, rgba(255,223,136,1),rgba(255,178,82,1)) 10 10;
-    color: #11172D;
-    font-size: 14px;
-    border-radius: 3px;
-    background:linear-gradient(0deg,rgba(255,209,85,1),rgba(255,212,96,1));
-    -webkit-box-shadow: 0px 6px 14px 0px rgba(16,22,47,0.14), inset 0px -3px 0 0 #FFC45B;
-    box-shadow: 0px 6px 14px 0px rgba(16,22,47,0.14), inset 0px -3px 0 0 #FFC45B;
-    text-align: center;
-    font-weight: 500;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -ms-border-radius: 3px;
-    -o-border-radius: 3px;
-    transition: all 0.2s;
-    -webkit-transition: all 0.2s;
-    -moz-transition: all 0.2s;
-    -ms-transition: all 0.2s;
-    -o-transition: all 0.2s;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-            letter-spacing: 2px;
-            margin-left: 119px;
-            margin-top: 30px;
-            width: 160px;
-            height: 50px;
-            /*background: rgba(255, 196, 91, 1);
-            border-image: linear-gradient(0deg, rgba(255, 178, 82, 1), rgba(255, 223, 136, 1)) 10 10;
-            box-shadow: 0px 2px 4px 0px rgba(16, 22, 47, 0.2);
-            border-radius: 3px;*/
-            line-height: 50px;
-            cursor: pointer;
-        }
-
-        .swp-ljty>span {
-            display: inline-block;
-        }
-
-        .swiper-container {
-            width: 350px;
-            margin-top: 22px;
-        }
-
-        .swp-zsq {
-            float: right;
-            padding-top: 162px
-        }
-
-        .swp-zsq-item {
-            position: relative;
-            text-align: left;
-            margin-bottom: 120px;
-            cursor: pointer;
-        }
-
-        .swp-zsq-num {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            left: 0;
-            width: 15px;
-            height: 13px;
-            font-size: 14px;
-            font-family: MicrosoftYaHei;
-            font-weight: 400;
-            color: rgba(16, 22, 47, 1);
-            line-height: 1;
-        }
-
-        .swp-zsq-r {
-            margin-left: 37px;
-        }
-
-        .swp-zsq-tt {
-            font-size: 20px;
-            font-family: MicrosoftYaHei;
-            font-weight: bold;
-            color: rgba(16, 22, 47, 1);
-            line-height: 33px;
-            line-height: 1;
-            margin-bottom: 19px;
-        }
-
-        .swp-zsq-ft {
-            margin-top: 19px;
-            font-size: 14px;
-            font-family: MicrosoftYaHei;
-            font-weight: 400;
-            color: rgba(100, 111, 133, 1);
-            line-height: 1;
-        }
-
-        .big .swp-zsq-tt {
-            font-size: 30px;
-            transition: .5s;
-        }
-
-        .swp-zsq-xian {
-            width: 199px;
-            position: relative;
-            height: 2px;
-            background: rgba(100, 111, 133, 0.5);
-        }
-
-        .swp-zsq-xian::before {
-            content: "";
-            position: absolute;
-            left:0;
-            top:0;
-            z-index: 9;
-            display: block;
-            width: 0%;
-            height: 100%;
-            opacity:1;
-            background: #030616;
-        }
-
-        .big .swp-zsq-xian {
-            width: 336px;
-        }
-
-        .big .swp-zsq-xian::before {
-               transition: width 5s;
-            width: 100%;
-        }
-        .jianju{
-            letter-spacing: 2px;
-        }
+        
     </style>
 
     <div class="all" id='app'>
@@ -1069,7 +192,7 @@ border-image:linear-gradient(0deg, rgba(255,223,136,1),rgba(255,178,82,1)) 10 10
                 <div class="banner-lefta">法驴</div>
                 <p class="banner-leftb">专业法律服务管家</p>
                 <div style="font-size: 0">
-                    <div class="banner-pull banner-pulla">
+                    <div class="banner-pull banner-pulla" @click="window.location.href='/Member/mIndex.html'">
                         <span class="banner-pull-text">法律服务</span>
                         <span class="banner-qr">
                             <img src="/newPC/img/QR Code_icon.png" alt="">
@@ -1078,7 +201,7 @@ border-image:linear-gradient(0deg, rgba(255,223,136,1),rgba(255,178,82,1)) 10 10
                             <img src="/newPC/img/falvfuwu.png" alt="">
                         </div>
                     </div>
-                    <div class="banner-pull banner-pullb">
+                    <div class="banner-pull banner-pullb" @click="window.location.href='/h5/lawyerreg/quick_supplier.html'">
                         <span class="banner-pull-text">律师入驻</span>
                         <span class="banner-qr">
                             <img src="/newPC/img/QR Code_icon.png" alt="">
@@ -1097,27 +220,27 @@ border-image:linear-gradient(0deg, rgba(255,223,136,1),rgba(255,178,82,1)) 10 10
             <div class="count-main">
                 <div class="count-main-item">
                     <p class="count-main-b">{{num.pay_money_num}}<span class="count-main-m">人</span></p>
-                    <div class="count-main-m">付费用户数</div>
+                    <div class="count-main-m count-main-m-fol">付费用户数</div>
                 </div>
                 <div class="count-main-shu"></div>
                 <div class="count-main-item">
                     <p class="count-main-b">{{num.today_time_long}}<span class="count-main-m">分钟</span></p>
-                    <div class="count-main-m">今日咨询时长</div>
+                    <div class="count-main-m count-main-m-fol">今日咨询时长</div>
                 </div>
                 <div class="count-main-shu"></div>
                 <div class="count-main-item">
                     <p class="count-main-b">{{num.all_service_time}}<span class="count-main-m">分钟</span></p>
-                    <div class="count-main-m">累计咨询时长</div>
+                    <div class="count-main-m count-main-m-fol">累计咨询时长</div>
                 </div>
                 <div class="count-main-shu"></div>
                 <div class="count-main-item">
                     <p class="count-main-b">{{num.lawyer_num}}<span class="count-main-m">人</span></p>
-                    <div class="count-main-m">平台律师数</div>
+                    <div class="count-main-m count-main-m-fol">平台律师数</div>
                 </div>
             </div>
         </div>
         <div class="goup" id="tup">
-            <div class="goup-item goup-itema">
+            <div class="goup-item goup-itema" @click="window.location.href='/Member/mIndex.html'">
                 <div class="goup-item-qr">
                     <img src="/newPC/img/QR Code_icon.png" alt="">
                 </div>
@@ -1127,7 +250,7 @@ border-image:linear-gradient(0deg, rgba(255,223,136,1),rgba(255,178,82,1)) 10 10
                     <img src="/newPC/img/falvfuwu.png" alt="">
                 </div>
             </div>
-            <div class="goup-item goup-itemb">
+            <div class="goup-item goup-itemb" @click="window.location.href='/h5/lawyerreg/quick_supplier.html'">
                 <div class="goup-item-qr">
                     <img src="/newPC/img/QR Code_icon.png" alt="">
                 </div>
@@ -1142,6 +265,7 @@ border-image:linear-gradient(0deg, rgba(255,223,136,1),rgba(255,178,82,1)) 10 10
                 </div>
             </div>
         </div>
+         
         <div class="flfw">
             <div class="common-m">
                 <div class="title-typea">
@@ -1217,7 +341,7 @@ border-image:linear-gradient(0deg, rgba(255,223,136,1),rgba(255,178,82,1)) 10 10
                             <div class="sp-box-imga">
                                 <img src="/newPC/img/logo.png" alt="">
                             </div>
-                            <div class="spnr-coverbox sp-box-cova" @click="window.location.href='http://v.qq.com/vplus/f479529d34d9ef857a828772ba0710bd/videos'">
+                            <div class="spnr-coverbox sp-box-cova" @click="window.open('http://v.qq.com/vplus/f479529d34d9ef857a828772ba0710bd/videos')">
                                 <div class="spnr-coverbox-op"></div>
                                 <div class="spnr-coverbox-t">
                                     查看更多
@@ -1253,7 +377,7 @@ border-image:linear-gradient(0deg, rgba(255,223,136,1),rgba(255,178,82,1)) 10 10
                             <div class="sp-box-imgc">
                                 <img src="/newPC/img/logo(2).png" alt="">
                             </div>
-                            <div class="spnr-coverbox sp-box-covc" @click="window.location.href='https://i.snssdk.com/rogue/ugc/profile/?version_code=7.0.6&version_name=70006&device_platform=iphone&user_id=6813289870&media_id=6813857490&request_source=1&active_tab=dongtai&visit_user_id=6813289870&device_id=60873905790&iid=58314878821&app_name=news_article'">
+                            <div class="spnr-coverbox sp-box-covc" @click="window.open('https://i.snssdk.com/rogue/ugc/profile/?version_code=7.0.6&version_name=70006&device_platform=iphone&user_id=6813289870&media_id=6813857490&request_source=1&active_tab=dongtai&visit_user_id=6813289870&device_id=60873905790&iid=58314878821&app_name=news_article') ">
                                 <div class="spnr-coverbox-op"></div>
                                 <div class="spnr-coverbox-t">
                                     查看更多
@@ -1271,7 +395,7 @@ border-image:linear-gradient(0deg, rgba(255,223,136,1),rgba(255,178,82,1)) 10 10
                             <div class="sp-box-imgd">
                                 <img src="/newPC/img/logo(3).png" alt="">
                             </div>
-                            <div class="spnr-coverbox sp-box-covd" @click="window.location.href='https://www.pearvideo.com/author_12066833?st=7'">
+                            <div class="spnr-coverbox sp-box-covd" @click="window.open('https://www.pearvideo.com/author_12066833?st=7')">
                                 <div class="spnr-coverbox-op"></div>
                                 <div class="spnr-coverbox-t">
                                     查看更多
@@ -1544,7 +668,7 @@ border-image:linear-gradient(0deg, rgba(255,223,136,1),rgba(255,178,82,1)) 10 10
                     var _this = this
                     var ajax_url = "https://www.falv58.com";
                     if (window.location.host !== "www.falv58.com" && window.location.host !== "www.falv58app.com"  ) {
-                        ajax_url = "https://mest.falv58.com";
+                        ajax_url = "http://mest.falv58.com";
                     }
 
                     $.ajax({

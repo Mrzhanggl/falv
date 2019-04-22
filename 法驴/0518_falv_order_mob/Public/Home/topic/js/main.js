@@ -4,6 +4,8 @@
 
 
 */
+//  BestpayHtml5.config(appid=0, debug=false, appType, subAppType) 
+
 APP.getJssdk = function(callback) {
     var _this = this;
     var _callback = callback ? callback : function(){};
@@ -25,7 +27,10 @@ APP.getJssdk = function(callback) {
                     'onMenuShareTimeline',
                     'onMenuShareWeibo',
                     'onMenuShareQQ',
-                    'onMenuShareQZone'
+                    'onMenuShareQZone',
+                    'startRecord',
+                    'stopRecord',
+                    'uploadVoice'
                 ]
             });
             
@@ -81,11 +86,30 @@ APP.setShare =  function(config) {
     }
     else if(APP.getOrderChannel()=='13'){
         console.log("华夏分享")
+        if (window.location.pathname == '/newVip/newHx.html') {
+            _path_url = "/newVip/newHx.html"; 
+        }
          if (window.location.pathname == '/Member/orderDetails.html') {
-            _path_url = "/Member/goodsHx.html"; 
+            _path_url = "/newVip/newHx.html"; 
         }
         if (window.location.pathname == '/Member/orderList.html') {
-            _path_url = window.location.pathname + window.location.search;
+            _path_url = '/newVip/newHx.html';
+        }
+        if (window.location.pathname == '/Member/mPersonal.html') {
+            _path_url = '/newVip/newHx.html';
+        }
+        if (window.location.pathname == '/Member/mInfo.html') {
+            _path_url = '/newVip/newHx.html';
+        }
+        if (window.location.pathname ==  '/Member/mSuggest.html') {
+            _path_url = '/newVip/newHx.html';
+        }
+        if (window.location.pathname == '/Member/orderDetails.html') {
+            _path_url = '/newVip/newHx.html';
+        }
+        if ( window.location.pathname == '/Member/jMatching.html' || window.location.pathname == '/Member/jAppointTime.html' || window.location.pathname == '/Member/jTimeGoPay.html'||window.location.pathname == '/Member/jTimeDetails.html' ) {
+            _path_url = "/newVip/newHx.html";
+            // alert(_path_url)
         }
     }
     else{
@@ -192,7 +216,7 @@ APP.init = function(callback, url) {
     _this.send("/PC/Wx/getOpenid.json?source=1", function(res) {
         if (res.errno != '0') {
             //钉钉
-            if (APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12'||APP.getOrderChannel() == '16'||APP.getOrderChannel() == '23'||APP.getOrderChannel() == '25') {
+            if (APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12'||APP.getOrderChannel() == '16'||APP.getOrderChannel() == '20'||APP.getOrderChannel() == '23'||APP.getOrderChannel() == '25') {
                 _this.authorization = true;
                 _callback();
             } else {
@@ -213,14 +237,63 @@ APP.getInfo = function(vm, callback) {
     }
     //是否授权页面
     if (_this.getWxUrl() || _this.authorization) {
-        _this.initInfo(vm, callback);
+        if(APP.getOrderChannel() == '20' && !sessionStorage.getItem('yzfInfo')){
+             _this.yzfInfo(vm, callback);
+        }else{
+             _this.initInfo(vm, callback);
+        }
+       
     } else {
         _this.init(function() {
-            _this.initInfo(vm, callback);
+            if(APP.getOrderChannel() == '20'&& !sessionStorage.getItem('yzfInfo')){
+                _this.yzfInfo(vm, callback);
+            }else{
+                _this.initInfo(vm, callback);
+            }
         });
     }
     _this.getJssdk();
 };
+
+//翼支付获取用户信息
+APP.yzfInfo = function(vm, callback) {
+    alert('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+    sessionStorage.setItem('yzfInfo','yes')
+    var _this = this;
+    var _vm = vm;
+    var _callback = callback ? callback : function() {};
+    BestpayHtml5.User.userAuth({
+        scope:"user_info",
+        clientId:"86000000102",
+        redirectUrl:"https://www.falv58.com/V2/YZFApi/yzfUserTokenNotifyUrl.json",
+        merchantCode:"3178032958457022",
+        state:"adsd5454561351",
+    
+}, 
+        function(res){
+                // alert("success" + JSON.stringify(res))
+                // var _json={
+                //     auth_code:res.code,
+                //     grantType:res.grantType,
+                //     yzf_data:JSON.stringify(res),
+                // }
+                
+                //  _this.send("/V2/YZFApi/getUserAccessToken.json",_json, function(ob) {
+                //      alert(JSON.stringify(ob))
+                //  })
+                  alert(JSON.stringify(res))
+                  _callback(res);
+        }, 
+        function(res){
+              alert("fail" + JSON.stringify(res))
+               _callback(res);
+        },
+        function(res){
+               alert("cancal"+ JSON.stringify(res))
+                _callback(res);
+        })
+}
+
 //用户信息
 APP.initInfo = function(vm, callback) {
     var _this = this;

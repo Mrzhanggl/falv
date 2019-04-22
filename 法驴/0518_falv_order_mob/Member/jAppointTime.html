@@ -34,6 +34,7 @@
                 <div class="j-matchingBusy-action">
                     <a @click="openTimePop()" href="javascript:;" class="m-btn m-btn_1">预约服务时间</a>
                     <a v-if="APP.getOrderChannel()=='14'" @click="nextPage('Rest-cancel', '取消', '', '/newVip/newmIndex.html')" href="javascript:;" class="m-btn m-btn_2" style="font-weight: normal">取消</a>
+                     <a v-else-if="APP.getOrderChannel()=='13'" @click="nextPage('Rest-cancel', '取消', '', '/newVip/newHx.html')" href="javascript:;" class="m-btn m-btn_2" style="font-weight: normal">取消</a>
                     <a v-else @click="nextPage('Rest-cancel', '取消', '', '/Member/mIndex.html')" href="javascript:;" class="m-btn m-btn_2" style="font-weight: normal">取消</a>
                 </div>
                 <div class="j-matchingBusy-tips">推荐咨询时间：9:00-17:30</div>
@@ -43,7 +44,7 @@
             <div id="time" class="weui-popup__container popup-bottom" >
                 <div @click.stop="$.closePopup()" class="weui-popup__overlay s4-weui-popup__overlay"></div>
                 <div class="weui-popup__modal s4-timePop__modal">
-                    <div class="s4-timePop-head">
+                    <div class="s4-timePop-head nhx-s4-timePop-head">
                         预约服务时间
                         <a @click.stop="$.closePopup()" class="s4-timePop-close" href="javascript:;"></a>
                     </div>
@@ -53,13 +54,21 @@
                         </div>
                         <div class="s4-timePop-hourBox">
                             <div id="JS_time_hour" class="s4-timePop-hourBd" style="-webkit-overflow-scrolling: touch;">
-                                <div v-show="service.index == index" v-for="(list, index) in service.date">
-                                    <a @click="selectServiceTime(list2.date, list2.result)" :class="{'unactive': list2.result == 0, 'active': service.select_time == service.select_day+ ' '+list2.date }" v-for="(list2, index2) in list.time" class="hourBd-item" href="javascript:;">{{ list2.date }}<span class="w2">{{ list2.result_text }}</span></a>
+                                <div style="padding-top: .3rem;" v-show="service.index == index" v-for="(list, index) in service.date">
+                                    <a @click="selectServiceTime(list2.date, list2.result)" :class="{'unactive': list2.result == 0, 'active': service.select_time == service.select_day+ ' '+list2.date }" v-for="(list2, index2) in list.time" class="hourBd-item" href="javascript:;">
+                                        {{ list2.date }}
+                                        <!--<span class="w2">{{ list2.result_text }}</span>-->
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div @click="add()" class="s4-timePop-action"><strong>确定下单</strong></div>
+                    <div class="nhx-poptime-submit-box" >   
+                        <div @click="add()" class="s4-timePop-action nhx-poptime-submit">
+                            <strong>确定下单</strong>
+                        </div>
+                    </div>
+                    
 
                 </div>
             </div>
@@ -74,7 +83,7 @@
     <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
     <script src="/Public/Home/topic/js/vue.min.js"></script>
     <script src="/Public/Home/topic/js/common.js?v=088"></script>
-    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script src="/Public/Home/topic/js/main.js?v=016"></script>
     <script>
         var vm = new Vue({
             el: '#app',
@@ -178,7 +187,7 @@
                         var date = new Date(arg.replace(/\-/g, "/"));
                         var month = date.getMonth() + 1;
                         var day = date.getDate();
-                        return getFormatDate(month) + '-' + getFormatDate(day);
+                        return month+ '月' + getFormatDate(day)+ '日';
                     }
                     function getWeek(arg) {
                         var date = new Date(arg.replace(/\-/g, "/"));
@@ -192,14 +201,14 @@
                         if (i == 0) {
                             _d.push({
                                 date: _t,
-                                text: '今天'+'【'+getWeek(_t)+'】',
+                                text: '今天'+'['+getWeek(_t)+']',
                                 state: true,
                                 time: []
                             })
                         } else {
                             _d.push({
                                 date: _t,
-                                text: getMonthDay(_t)+'【'+getWeek(_t)+'】',
+                                text: getMonthDay(_t)+'['+getWeek(_t)+']',
                                 state: false,
                                 time: []
                             })
@@ -216,7 +225,12 @@
                 getDayTimes: function(day) {
                     //获取预约时间段
                     var _this = this;
-                    APP.send('/PC/Public/contactTime.json?date='+day, function(res) {
+                    var _json={
+                        date:day,
+                        type:APP.getOrderChannel()=='13'?1:0  //1是新华夏  0为其它
+                    }
+
+                    APP.send('/PC/Public/contactTime.json',_json, function(res) {
                         //console.log(res);
                         //alert(JSON.stringify(res))
                         if (res.errno == '0') {
@@ -302,6 +316,10 @@
                      if (APP.getOrderChannel() == '14') {
                         _json.channel = 14;
                         _json.source = 19
+                    }
+                    if (APP.getOrderChannel() == '13') {
+                        _json.channel = 13;
+                        _json.source = 18
                     }
 
                     if (!_this.service.select_time) {

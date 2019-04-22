@@ -12,7 +12,7 @@
     <script src="/Public/Home/Mob/js/flexible.js"></script>
     <link rel="stylesheet" href="/Public/Home/Mob/css/weui.min.css">
     <link rel="stylesheet" href="/Public/Home/Mob/css/jquery-weui.min.css">
-    <link rel="stylesheet" href="/Public/Home/Mob/css/quick-supplier.css?v=31">
+    <link rel="stylesheet" href="/Public/Home/Mob/css/quick-supplier.css?v=32">
     <script src="/Public/Home/Mob/js/jquery-3.1.1.min.js"></script>
     <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 
@@ -287,7 +287,7 @@
                                 <input v-model="form_info.name" class="item-input textR" placeholder="输入名称" type="text" autocomplete="off">
                             </div>
                         </div>
-                        <div class="s-info-item">  
+                        <div class="s-info-item test-s-info-item">  
                             <div class="item-d2">
                                 <span class="s1 c1">*</span>身份证号
                             </div>
@@ -318,7 +318,7 @@
                                 <input id="JS_form_info_data" class="item-input textR" placeholder="选择日期" type="text" autocomplete="off">
                             </div>
                         </div>
-                        <div class="s-info-item">  
+                        <div class="s-info-item test-s-info-item">  
                             <div class="item-d2">
                                 <span class="s1">*</span>联系电话
                             </div>
@@ -334,7 +334,7 @@
                                 <input v-model="form_info.email" class="item-input textR" placeholder="输入邮箱地址" type="text" autocomplete="off">
                             </div>
                         </div>
-                        <div class="s-info-item s-info-item-link">  
+                        <div class="s-info-item s-info-item-link test-s-info-item">  
                             <div class="item-d2">
                                 <span class="s1">*</span>学历
                             </div>
@@ -372,7 +372,7 @@
                                 <input v-model="form_info.license_number" class="item-input textR" placeholder="输入执业证编号" type="number" pattern="[0-9]*" autocomplete="off">
                             </div>
                         </div>
-                        <div class="s-info-item">  
+                        <div class="s-info-item test-s-info-item">  
                             <div class="item-d2">
                                 <span class="s1">*</span>律所
                             </div>
@@ -1104,21 +1104,21 @@
                     </div>
                     <div class="s-goPay-mode">
                         <h2>支付方式</h2>
-                        <a @click="form_goPay.mode='0'" :class="{'active': form_goPay.mode=='0'}" href="javascript:;"  class="s-goPayMode-item">
+                        <a @click="form_goPay.mode='0'" :class="{'active': form_goPay.mode=='0'}" href="javascript:;"  class="s-goPayMode-item addxian">
                             <div class="item-label clearfix">
                                 <div class="item-label-radio"></div>
                                 <div class="item-label-icon item-label-icon_1"></div>
                                 <div class="item-label-text">微信支付</div>
                             </div>
                         </a>
-                        <!--<a @click="form_goPay.mode='1'" :class="{'active': form_goPay.mode=='1'}" href="javascript:;" class="s-goPayMode-item">
+                        <a @click="form_goPay.mode='1'" :class="{'active': form_goPay.mode=='1'}" href="javascript:;" class="s-goPayMode-item">
                             <div class="item-label clearfix">
                                 <div class="item-label-radio"></div>
                                 <div class="item-label-icon item-label-icon_2"></div>
                                 <div class="item-label-text">支付宝</div>
                             </div>
                         </a>
-                        <a @click="form_goPay.mode='2'" :class="{'active': form_goPay.mode=='2'}" href="javascript:;" class="s-goPayMode-item">
+                        <!--<a @click="form_goPay.mode='2'" :class="{'active': form_goPay.mode=='2'}" href="javascript:;" class="s-goPayMode-item">
                             <div class="item-label clearfix">
                                 <div class="item-label-radio"></div>
                                 <div class="item-label-icon item-label-icon_3"></div>
@@ -1341,8 +1341,8 @@
         var ajax_url = "https://www.falv58.com";
         var src_url = "https://www.falv58.com";
         if (window.location.host!=="www.falv58.com") {
-            ajax_url = "https://mest.falv58.com";
-            src_url = "https://mest.falv58.com";
+            ajax_url = "http://mest.falv58.com";
+            src_url = "http://mest.falv58.com";
         }
 
         var APP = {
@@ -1988,8 +1988,8 @@
                 var _this = this;
                 var Orientation = null; 
                 var head_src_url = 'http://120.55.165.146';
-                if (ajax_url ==="https://mest.falv58.com") {
-                    head_src_url = "https://mest.falv58.com";
+                if (ajax_url ==="http://mest.falv58.com") {
+                    head_src_url = "http://mest.falv58.com";
                 }
                 var maxsize = 100 * 1024;
 
@@ -2412,7 +2412,7 @@
                 nextSelectField: function() {
                     this.initSelectNavExt();
                     this.page.show = 'field';
-                    document.title="个人领域"
+                    document.title="擅长领域"
                 },
                 nextAdd: function() {
                     if (this.form_info.field_arr && this.form_info.field_arr.length == 0) {
@@ -2472,6 +2472,12 @@
                                  if (APP.getParam('tab') == 'info') {
                                     _this.page.show = 'info_examine';
                                     document.title="提交成功"
+                                }
+                                if(APP.getParam('tab') == 'info' && APP.getParam('reset') == '1' )
+                                {   
+                                     document.title="个人资料"
+                                     _this.info_type = '1';
+                                     _this.page.show = 'info';
                                 }
                                  //console.log(233)
                                 // if (APP.getParam('tab') == 'info') {
@@ -4234,11 +4240,17 @@
                     }
                 },
                 goPayZfb: function(uuid) {
-                    if (this.weixin.state) {
-                        $.toast("从浏览器中打开以完成支付宝付款");
-                    } else {
-                        window.location.href = ajax_url+'/V2/Lawyer/ailPay.json?uuid='+uuid;
-                    }
+                    // if (this.weixin.state) {
+                    //     $.toast("从浏览器中打开以完成支付宝付款");
+                    // } else {
+                    //     window.location.href = ajax_url+'/V2/Lawyer/ailPay.json?uuid='+uuid;
+                    // }
+                    window.location.href = ajax_url+'/V2/Lawyer/ailPay.json?uuid='+uuid;
+                    // var _liulanqi = '0' ;
+                    // if(this.weixin.state){
+                    //     _liulanqi = '1'
+                    // }
+                    // window.location.href = ajax_url + '/PC/NEWOrder/payment.json?order_id=' + uuid + '&payment=0&type=1&liulanqi='+_liulanqi;
                 },
                 goPayWx: function(uuid) {
                     var _this = this;

@@ -43,7 +43,10 @@
                             <span v-for="(list2, index2) in list.author">{{ index2==0 || index2==list.author.length-1 ? list2.author_name : list2.author_name +'、' }}</span><span v-show="list.author && list.author.length>0"> | </span><span>{{ APP.calcSum(list.view_counts) }}次播放</span>
                         </div>
                         <div class="s-live-item-price clearfix">
-                            <div class="s-live-item-class"><img :class="'bg'+list.category" :src="APP.getLiveClassIcon[list.category]"></div>
+                            <div class="s-live-item-class">
+                                <!--<img :class="'bg'+list.category" :src="APP.getLiveClassIcon[list.category]">-->
+                                {{list.category_name}}
+                                </div>
                             <span class="col999">{{ list.is_videos }}个视频</span></span>
                         </div>
                     </div>
@@ -140,7 +143,7 @@
                     }
                     _this.live.loadingEnd = 2;
 
-                    APP.send("/PC/Video/myVideo.json", _json, function(res) {
+                    APP.send("/PC/Video/myVideoNew.json", _json, function(res) {
                         //console.log(res)
                         if (res.errno == '0') {
                             var _data = res.data.list;

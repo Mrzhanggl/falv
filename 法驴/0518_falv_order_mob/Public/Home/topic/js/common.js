@@ -11,9 +11,19 @@ $.toast.prototype.defaults.duration = 1500;
 var ajax_url = "https://www.falv58.com";
 var src_url = "https://www.falv58.com";
 if (window.location.host!=="www.falv58.com") {
-    ajax_url = "https://mest.falv58.com";
-    src_url = "https://mest.falv58.com";
+    ajax_url = "http://mest.falv58.com";
+    src_url = "http://mest.falv58.com";
 }
+
+if (window.location.pathname=="/newVip/YzfIndex.html") {
+    sessionStorage.setItem('isZFY','true')
+}
+if(sessionStorage.getItem('isZFY')){
+    ajax_url = "http://mest.falv58.com";
+    src_url = "http://mest.falv58.com";
+}
+
+
 
 var APP = {
     authorization: false,
@@ -717,7 +727,7 @@ APP.setParamChannel();
     5 => "企安宝PC", 6 => "企安宝M站", 7 => "crm", 8 => "邮储", 9 => "联璧", 10 => "收银宝特惠", 11 => "收银宝优惠", 
     12 => "收银宝特选", 13 => "anyhelper", 14 => "falv会员", 15 => "钉钉");
 
-    注册来源
+    客户来源
     public static $customer_source_map = array(0 => "员工转介绍", 1 => "客户转介绍", 2 => "渠道置换", 3 => "红枫", 
     4 => "腾讯创服", 5 => "微信营销", 6 => "线下电销", 7 => "线下会销（PR）", 8 => "线下会销（SP）", 
     9 => "线下会销（PR和SP）", 10 => "智齿", 11 => "自主开发", 12 => "app", 13 => "web前端", 14 => "服务号", 
@@ -740,7 +750,6 @@ APP.initChannel = function() {
     //注册来源对应订单来源 channel
     var _order_channel = {
         "24": "0",  //邮政
-        "25": "4",  //短信营销
         "22": "1",  //东家会
         "26": "5",  //联璧
         "27": "6",  //收银宝特惠
@@ -784,7 +793,12 @@ APP.sendHm = function(object, callback) {
 
     var _paramChannel = APP.getParamChannel();
     var _channel = APP.getOrderChannel()
-
+    if(APP.getNewChannel()){
+         _channel = APP.getNewChannel()
+     }
+     if(APP.getNewChannel()){
+         _channel = APP.getNewChannel()
+     }
     var _fromchannel = _paramChannel ? _paramChannel : 'falvvip';
 
     //本地着陆页
@@ -804,6 +818,85 @@ APP.sendHm = function(object, callback) {
         _fromchannel = "壹钱包";
     }else if (_channel == '13') {
         _fromchannel = "华夏";
+    }else if (_channel == '14') {
+        _fromchannel = "安居客";
+    }else if (_channel == '16') {
+        var cover = APP.getCustomerSourceChannel()
+        var list={
+            "0":"员工转介绍",
+            "1":"客户转介绍",
+            "2":"渠道置换",
+            "3":"红枫",
+            "4":"腾讯创服",
+            "5":"微信营销",
+            "6":"线下电销",
+            "7":"线下会销（PR）",
+            "8":"线下会销（SP）",
+            "9":"线下会销（PR和SP）",
+            "10":"智齿",
+            "11":"自主开发",
+            "12":"app",
+            "13":"web前端",
+            "14":"服务号",
+            "15":"公众号",
+            "16":"微信",
+            "17":"线上活动",
+            "18":"小程序",
+            "19":"诉讼公司名单",
+            "20":"企安宝智能投顾管家",
+            "21":"汇桔网",
+            "22":"东家会",
+            "23":"环球黑卡",
+            "24":"邮政",
+            "25":"短信营销",
+            "26":"联璧",
+            "27":"收银宝特惠",
+            "28":"收银宝优惠",
+            "29":"收银宝特选",
+            "30":"anyhelper",
+            "31":"法驴会员（falv58)",
+            "32":"法驴会员服务号",
+            "33":"钉钉",
+            "34":"企业服务云",
+            "35":"壹钱包",
+            "36":"华夏",
+            "37":"安居客",
+            "39":"通用渠道",
+            "41":"易买买商城",
+            "42":"畅由积分商城",
+            "43":"翼支付",
+            "44":"联通积分商城",
+            "45":"中国人寿优惠券",
+            "46":"青黑",
+            "47":"返利网",
+            "48":"包小黑",
+            "49":"戊禾",
+            "50":"狮韵",
+        }
+
+        _fromchannel = list[cover];
+    }else if (_channel == '18') {
+        _fromchannel = "易买买商场";
+    }else if (_channel == '19') {
+        _fromchannel = "畅游积分商场";
+    }else if (_channel == '20') {
+        _fromchannel = "翼支付";
+    }else if (_channel == '21') {
+        _fromchannel = "联通积分商城";
+    }else if (_channel == '22') {
+        _fromchannel = "中国人寿优惠券";
+    }else if (_channel == '23') {
+        _fromchannel = "青黑";
+    }else if (_channel == '24') {
+        _fromchannel = "返利网";
+    }else if (_channel == '48') {
+        _fromchannel = "包小黑";
+    }else if (_channel == '49') {
+        _fromchannel = "戊禾";
+    }else if (_channel == '50') {
+        _fromchannel = "狮韵";
+    }else if (_channel == '53') {
+        _fromchannel = "华夏H5";
     }
 
     //快捷链接 falvvip法驴会员H5 falvfuwu法驴会员服务号
@@ -990,7 +1083,4 @@ with(b)with(body)with(insertBefore(createElement("script"),firstChild))setAttrib
 //         hm.onload = hm.onreadystatechange = null;
 //     }
 // })();
-
-
-
 

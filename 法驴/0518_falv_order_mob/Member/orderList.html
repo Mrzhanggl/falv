@@ -48,11 +48,12 @@
                         <div v-if="list.products[0]['type'] == '0' || list.products[0]['type'] == '9' || list.products[0]['type'] == '10'" class="item-content-action clearfix">
                             <a @click="nextPage('orderCenter-pay', '支付', '/Member/orderGoPay.html?oid='+list.order_id, list.order_id)" v-if="list.state == '0' || list.state == '2'" href="javascript:;" class="action-btn btn_2">支付</a>
                             <a @click="cancal(index)" v-if="list.state == '0'" href="javascript:;" class="action-btn btn_1">取消订单</a>
+                             <a @click="checkOrder(index)" v-if="list.state == '3' && list.products[0]['id'] == '100608'" href="javascript:;" class="action-btn btn_1">继续问</a>
                         </div>
-                        <div v-if="list.products[0]['type'] == '11'" class="item-content-action clearfix">
+                        <div v-if="list.products[0]['type'] == '11'  " class="item-content-action clearfix">
                             <a @click="nextPage('orderCenter-pay', '支付', '/Member/jTimeGoPay.html?oid='+list.order_id, list.order_id)" v-if="list.state == '0' || list.state == '2'" href="javascript:;" class="action-btn btn_2">支付</a>
                             <a @click="checkOrder(index)" v-if="list.state == '3'" href="javascript:;" class="action-btn btn_1">继续问</a>
-                            <a @click="nextPage('orderCenter-evaluation', '评价', '/Member/jComment.html?oid='+list.order_id, list.order_id)" v-if="list.state == '3' && !list.lawyer_evaluate" href="javascript:;" class="action-btn btn_1">评价</a>
+                            <a @click="nextPage('orderCenter-evaluation', '评价', '/Member/jComment.html?oid='+list.order_id, list.order_id)" v-if="list.state == '3' && !list.lawyer_evaluate && list.products[0]['id'] != '100608' " href="javascript:;" class="action-btn btn_1">评价</a>
                             <a @click="cancal(index)" v-if="list.state == '8' && list.select_service_time" href="javascript:;" class="action-btn btn_1">取消订单</a>
                         </div>
                     </div>
@@ -416,7 +417,12 @@
                             chinese_url: "订单中心",
                             parameter: _this.isOrderPay.data.order_id
                         }, function() {
-                            _this.add(index);
+                            if(APP.getOrderChannel()=='13'){
+                            window.location.href='/Member/goodsDetails.html?id=100608&bindOrderId='+_this.order.data[index]['order_id']
+                            }else{
+                                _this.add(index);
+                            }
+                            
                         })
 
                     } else {

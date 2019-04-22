@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>指尖律师</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <!--<link rel="shortcut icon" href="/Public/Home/Mob/img/favicon.ico">-->
+    <script src="/Public/Home/topic/js/flexible.js"></script>
+    <link rel="stylesheet" href="/Public/Home/topic/css/swiper-3.4.2.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=40">
+    <link rel="stylesheet" href="/Public/Home/newVip/css/main.css?v=30">
+    <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="https://h5.bestpay.com.cn/common/js/bestpay-html5-3.0.js"></script>
+</head>
+
+<body>
+    <div v-cloak id="app" class="main main-tabbar">
+        <div v-show="page.show == 'home'">
+            <!--轮播图-->
+            <div class="new-banner">
+                <div class="nvip-swiper-container" >
+                    <div class="nvip-swiper-wrapper swiper-wrapper">
+                        <div class="swiper-slide">
+                            <img src="/Public/Home/newVip/img/banner1.png" alt="">    
+                        </div>
+                        <!--<div class="swiper-slide">
+                            <img src="/Public/Home/newVip/img/banner2.png" alt="">    
+                        </div>-->
+                        <div class="swiper-slide">
+                            <img src="/Public/Home/newVip/img/banner3.png" alt="">    
+                        </div>
+                    </div>
+                   
+                </div>
+                 <div class="swiper-pagination"></div>
+            </div>
+            
+            <div class="new-de">
+                <div class="clearfix">
+                    <div class="new-de-left yzf-new-de-left">
+                        <div>计时电话咨询</div>
+                        <img src="/Public/Home/newVip/img/yzf_inbetweening.png" alt="">
+                    </div>
+                    <div class="new-de-r">
+                        <ul>
+                            <li @click="openpop('消费者权益','100576')" >
+                                <div>
+                                    <div>
+                                        <img src="/Public/Home/newVip/img/yzf_list_icon_xiaofei_default.png" alt="">
+                                    </div>
+                                    <span>
+                                        消费者权益
+                                    </span>
+                                </div>
+                            </li>
+                            <li @click="openpop('婚姻家事','100576')">
+                                <div>
+                                    <div>
+                                        <img src="/Public/Home/newVip/img/yzf_list_icon_hunyin_default.png" alt="">
+                                    </div>
+                                    <span>
+                                        婚姻家事
+                                    </span>
+                                </div>
+                            </li>
+                            <li @click="openpop('劳动纠纷','100576')">
+                                <div>
+                                    <div>
+                                        <img src="/Public/Home/newVip/img/yzf_list_icon_laodong_default.png" alt="">
+                                    </div>
+                                    <span>
+                                        劳动纠纷
+                                    </span>
+                                </div>
+                            </li>
+                            <li @click="openpop('交通纠纷','100576')">
+                                <div>
+                                    <div>
+                                        <img src="/Public/Home/newVip/img/yzf_list_icon_jiaotong_default.png" alt="">
+                                    </div>
+                                    <span>
+                                        交通纠纷
+                                    </span>
+                                </div>
+                            </li>
+                            <li @click="openpop('房屋产权','100576')">
+                                <div>
+                                    <div>
+                                        <img src="/Public/Home/newVip/img/yzf_list_icon_fangwu_default.png" alt="">
+                                    </div>
+                                    <span>
+                                        房屋产权
+                                    </span>
+                                </div>
+                            </li>
+                            <li @click="openpop('其它','100576')">
+                                <div>
+                                    <div>
+                                        <img src="/Public/Home/newVip/img/list_icon seven_default.png" alt="">
+                                    </div>
+                                    <span>
+                                        其它
+                                    </span>
+                                </div>
+                            </li>
+
+                        </ul>
+                        <!--<div class="seven" @click="openpop('其它问题','100577')">
+                            <div class="seven_logo">
+                                <img src="/Public/Home/newVip/img/list_icon seven_default.png" alt="">
+                            </div>
+                            <div class="seven_title">
+                                <p>其他问题</p>
+                                <span>婚姻家事、遗嘱继承、合同权益等...</span>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+                
+    
+
+
+
+
+
+                <div class="new-renshu">
+                    
+                    <img src="/Public/Home/newVip/img/notice_icon_default.png" alt="">
+                
+                    
+
+                    <span>今日咨询人数<i>{{peoplesum}}</i>人</span>
+                </div>
+                <div class="xian">
+
+                </div>
+                <div class="new-vipc"> 
+                    <p>
+                        精选会员套餐
+                    </p>
+                    <div class="new-vipc-tc"  @click="nextde('exchange_VIPC', '兑换个人年卡', '/Member/goodsDetails.html?id=100575')"> 
+                        <div>
+                            <img src="/Public/Home/newVip/img/bxszx.png" alt="">
+                            <img class="f" src="/Public/Home/newVip/img/hot_label_default.png" alt="">
+                        </div>
+                        <p>不限时咨询</p>
+                    </div>
+                    <div class="new-vipc-tc"  @click="nextde('exchange_VIPC', '兑换个人年卡', '/Member/goodsDetails.html?id=100574')"> 
+                        <div>
+                            <img src="/Public/Home/newVip/img/zxnk.png" alt="">
+                            <img class="f" src="/Public/Home/newVip/img/new_label_default.png" alt="">
+                        </div>
+                        <p>咨询年卡</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="new-lcpj"> 
+                <div class="xianb"></div>
+                <div class="weui-tab wetab">
+                    <div class="weui-navbar">
+                        <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+                            服务流程
+                        </a>
+                        <a class="weui-navbar__item" href="#tab2">
+                            用户评价
+                        </a>
+                    </div>
+                    <div class="weui-tab__bd">
+                        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+                            <div class="tab1top">
+                                <img src="/Public/Home/newVip/img/fulc.png" alt="">
+                            </div>
+                        </div>
+                        <div id="tab2" class="weui-tab__bd-item  tab-pla">
+                            <!--<div class="tab-pl">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>好久不见</span>
+                                    <div>2018/11/17 10:10</div>
+                                    <p>非常感谢郑律师这么专业的回答，很耐心的解答了我所有疑虑！<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>唯有努力</span>
+                                    <div>2018/11/17 11:41</div>
+                                    <p>非常感谢，这个律师很专业，挺好的一次体验 。<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>在巴黎塔顶看东京樱花</span>
+                                    <div>2018/11/17 12:15</div>
+                                    <p>解答很专业也很仔细，态度服务也很好，会继续关注，谢谢。 <span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>RainSounds</span>
+                                    <div>2018/11/17 16:17</div>
+                                    <p>服务很好，我想咨询的问题都得到了满意的解答。 <span class=""></span></p>
+                                </div>
+                            </div>
+
+
+                            
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>星光坠落</span>
+                                    <div>2018/11/17 21:17</div>
+                                    <p>很及时的响应，给我的意见和建议很专业。下次有问题再仔细。<span class=""></span></p>
+                                </div>
+                            </div>
+
+
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>未央</span>
+                                    <div>2018/11/17 22:58</div>
+                                    <p>真的是帮了很大的忙，咨询完心里踏实了，也懂了法律上的知识，有法律上的问题还是会再咨询郭律师的，非常感谢，帮我们这些无助的人解决了法律难题。<span class=""></span></p>
+                                </div>
+                            </div>
+
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>水洗晴空</span>
+                                    <div>2018/11/18 10:17</div>
+                                    <p>律师回复非常专业吗，而且给了比较好的建议，非常感谢。<span class=""></span></p>
+                                </div>
+                            </div>
+
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>稳做枕边人</span>
+                                    <div>2018/11/18 12:30</div>
+                                    <p>法驴真的帮助很大，律师的建议起到了关键的作用。<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>一缕阳光</span>
+                                    <div>2018/11/18 14:41</div>
+                                    <p>帮朋友咨询信用卡逾期还款，第一次遇到这种情况。律师解释很专业。<span class=""></span></p>
+                                </div>
+                            </div>
+
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>夜未央</span>
+                                    <div>2018/11/18 14:15</div>
+                                    <p>谢谢，问了一下我就放心多了，就怕又被骗了。<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>青衫负雪</span>
+                                    <div>2018/11/18 17:17</div>
+                                    <p>律师讲的很好，第一次使用法驴，真的很棒！帮助了我朋友解决了问题。<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>风中流浪</span>
+                                    <div>2018/11/18 20:30</div>
+                                    <p>很仔细，我很清楚要了解的问题，并且给了我很好的建议。感谢发现这个平台，希望以后的官司之路一帆风顺。<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>夏日落</span>
+                                    <div>2018/11/19 21:37</div>
+                                    <p>感谢这位律师的解答，向所有法律工作者致敬！<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>别怕失去</span>
+                                    <div>2018/11/19 9:36</div>
+                                    <p>林律师很专业耐心，解答问题很周到细致，非常感谢，十分好评<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>听风看月</span>
+                                    <div>2018/11/19 9:41</div>
+                                    <p> 律师很细心，回答的很专业，给出了具体的解决方案。<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>蓝天白云</span>
+                                    <div>2018/11/19 13:15</div>
+                                    <p> 很快律师就联系我了，并且帮我很好的解答了问题，很好。<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>如若梦似彩虹</span>
+                                    <div>2018/11/19 13:17</div>
+                                    <p> 律师解答的非常精确，条理清楚，解决了我的问题。<span class=""></span></p>
+                                </div>
+                            </div>
+                            
+
+
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>衍夏成歌</span>
+                                    <div>2018/11/20 09:30</div>
+                                    <p>很好，心里终于有底了，谢谢这么晚了依旧耐心解答。<span class=""></span></p>
+                                </div>
+                            </div>
+							<div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>壹場煙雨</span>
+                                    <div>2018/11/20 09:59</div>
+                                    <p>谢谢律师的解答，我去了解一下具体情况，到时再联系王律师<span class=""></span></p>
+                                </div>
+                            </div>
+							<div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>指閒緑</span>
+                                    <div>2018/11/20 11:56</div>
+                                    <p>王律师说的很易懂，对于一个遇到困难不知如何用法律武器解决问题的人来说，真的是极大的帮助，感恩<span class=""></span></p>
+                                </div>
+                            </div>                      
+							<div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>游鲤醉花</span>
+                                    <div>2018/11/20 11:56</div>
+                                    <p>律师很快速回复、很专业<span class=""></span></p>
+                                </div>
+                            </div>                             
+							<div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>北座城市</span>
+                                    <div>2018/11/20 13:15</div>
+                                    <p>感谢张律师，回答的很仔细，有需要还会再来咨询<span class=""></span></p>
+                                </div>
+                            </div>  
+                             <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>独舞天使</span>
+                                    <div>2018/11/20 13:53</div>                                  
+                                    <p>我一直联系郑律师咨询，他从各个方面帮我分析我的法律问题，让我有了解决一些问题的思路和信心，感谢一直耐心解答及帮助<span class=""></span></p>
+                                </div>
+                            </div> 
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>时光无声</span>
+                                    <div>2018/11/20 14:38</div>                                   
+                                    <p>很迅速的就联系上了律师，平常找律师很困难，还不知道靠不靠谱。要为郑律师点赞！<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>山雨欲來風滿樓</span>
+                                    <div>2018/11/20 21:30</div>                                   
+                                    <p>律师服务很耐心，没想到打电话就能解决我的法律问题，以后继续用法驴<span class=""></span></p>
+                                </div>
+                            </div>
+                           <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>风筝有风，海豚有海</span>
+                                    <div>2018/11/21 10:41</div>                                   
+                                    <p>第三次咨询郭律师 了，每次都很细心不浪费时间，说重点<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>姑娘只爱橄榄绿</span>
+                                    <div>2018/11/21 11:41</div>                                                                     
+                                    <p>黄律师根据我的情况具体分析，结合丰富的经验提供和对方谈判的技巧和意见，非常感谢<span class=""></span></p>
+                                </div>
+                            </div>
+                             <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>不想说再见</span>
+                                    <div>2018/11/21 17:11</div>                                                                     
+                                    <p>分析的很仔细，全面，不错<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>没有太阳的晴天</span>
+                                    <div>2018/11/21 17:19</div>                                                                     
+                                    <p>听了律师的话，放心了<span class=""></span></p>
+                                </div>
+                            </div>
+                             <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>比较满意</b>
+                                    <span>旋转的摩天轮，巴黎的印象</span>
+                                    <div>2018/11/24 23:30</div>                                                                     
+                                    <p>挺好的，钱花的挺值得的<span class=""></span></p>
+                                </div>
+                            </div> 
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>绿阴红影里的如风往事</span>
+                                    <div>2018/11/24 13:30</div>                                                                     
+                                    <p>谢谢律师为我们省了几万元没有必要花的钱<span class=""></span></p>
+                                </div>
+                            </div> 
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>撩起发的微风</span>
+                                    <div>2018/11/25 13:30</div>                                                                     
+                                    <p>专业的人做专业的事<span class=""></span></p>
+                                </div>
+                            </div> 
+							<div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>若爱只如初见</span>
+                                    <div>2018/11/25 13:30</div>                                                                     
+                                    <p>首次使用，非常好。以后有法律方面的问题不用到处找人了。可继续支持<span class=""></span></p>
+                                </div>
+                            </div> 
+                            							<div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>半岛未凉</span>
+                                    <div>2018/11/25 13:30</div>                                                                     
+                                    <p>律师的建议非常有针对性，帮我从各个方面分析，减少风险<span class=""></span></p>
+                                </div>
+                            </div> 
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>柚子味的诗</span>
+                                    <div>2018/11/25 13:30</div>                                                                     
+                                    <p>律师解释的非常清楚，把我的诉求都告知清楚了并且告知如何处理，法律责任也解释的非常明确<span class=""></span></p>
+                                </div>
+                            </div> 
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>一瞬间的火花</span>
+                                    <div>2018/11/25 23:01</div>                                                                     
+                                    <p>第一次通过网络与律师进行交流，没有我担心的那些沟通不方便等问题，交流很顺畅<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>午后阳光</span>
+                                    <div>2018/11/26 1:30</div>                                                                     
+                                    <p>讲的很清晰，分析到位，我也推荐给了身边需要的朋友<span class=""></span></p>
+                                </div>
+                            </div> 
+                           <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>彼岸星光</span>
+                                    <div>2018/11/26 11:07</div>                                                                     
+                                    <p>如果有需要，我会再次咨询，不错<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>青草香氕</span>
+                                    <div>2018/11/26 21:14</div>                                                                     
+                                    <p>我虽然说得不是很清楚，但是律师还是很耐心的为我拆解问题，进行解说，谢谢<span class=""></span></p>
+                                </div>
+                            </div>
+                            <div class="tab-pl" v-if="tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>非常满意</b>
+                                    <span>夜空已沉寂</span>
+                                    <div>2018/11/26 23:30</div>                                                                     
+                                    <p>从法律角度来讲，比较易懂的给我解释了一些问题，不仅让我有了法律意识，还知道用法律手段解决问题<span class=""></span></p>
+                                </div>
+                            </div>-->
+                            <div class="tab-pl" v-for="(item,index) in pl_list" v-if="index<=3 || tabshow">
+                                <img src="/Public/Home/newVip/img/alltx.png" alt="">
+                                <div>
+                                    <b>{{item.professional_experience=='4'? '比较满意':'非常满意'}}</b>
+                                    <span>{{item.name}}</span>
+                                    <div>{{item.time}}</div>                                                                     
+                                    <p>{{item.note}}<span class=""></span></p>
+                                </div>
+                            </div>
+
+
+
+
+
+                            <div class="new-show" >
+                                <div><img src="/Public/Home/newVip/img/line-l.png" alt=""></div>
+                                <span v-if="!tabshow" @click="tShow()">查看全部评价</span>
+                                <span v-else @click="tShow()">收起评价</span>
+                                <div><img src="/Public/Home/newVip/img/line-r.png" alt=""></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="popde" class="weui-popup__container" >
+                <div class="weui-popup__overlay" id="popde_over"></div>
+                <div class="weui-popup__modal ">
+                    <img src="/Public/Home/newVip/img/popban.png" alt="">
+                    <div class="popbox-tl">{{poptitle}}<span v-if="product.channel_specification">特惠价<i>{{product.channel_specification.price}}</i>元/分钟</span></div>
+                    <p class="popbox-p"><span></span>&nbsp律师精准匹配  提供专业领域意见</p>
+                    <p  class="popbox-p"><span></span>&nbsp质控层层把关  为您的权益保驾护航</p>
+                    <p  class="popbox-p"><span></span>&nbsp隐私信息保护  咨询更放心</>
+                    <div class="popbox-xy">点击开始咨询即表示你已同意<span @click="window.location.href='/Member/agreement.html'">《问律师用户服务协议》</span></div>
+                    <div class="popbox-st" @click="checkLogin()">开始咨询</div>
+                    <div onclick="$.closePopup();" class="close-popup popbox-cl" >再想想</div>
+                </div>
+            </div>
+
+            <div class="weui-tabbar s-tabbar s-tabbar-more">
+                <a href="javascript:;" class="weui-tabbar__item weui-bar__item--on">
+                    <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
+                    <p class="weui-tabbar__label">首页</p>
+                </a>
+                <!--<a href="/Member/liveIndex.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon2"></div>
+                    <p class="weui-tabbar__label">视频</p>
+                </a>
+                <a @click="openMoreNav()" href="javascript:;" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon">
+                        <div class="j-tabbar_iconMore"></div>
+                    </div>
+                    <p class="weui-tabbar__label">问律师</p>
+                </a>
+                <a href="/Member/mGoodsList.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon3"></div>
+                    <p class="weui-tabbar__label">产品</p>
+                </a>-->
+                <a href="/Member/mPersonal.html?fromtype=ajk" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon4"></div>
+                    <p class="weui-tabbar__label">我的</p>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/Public/Home/topic/js/jquery-3.1.1.min.js"></script>
+    <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
+    <script src="/Public/Home/topic/js/swiper-3.4.2.jquery.min.js"></script>
+    <script src="/Public/Home/topic/js/vue.min.js"></script>
+    <script src="/Public/Home/topic/js/common.js?v=098"></script>
+    <script src="/Public/Home/topic/js/main.js?v=012"></script>
+    <script>            
+        BestpayHtml5.config();
+    </script>
+    <script>
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                peoplesum:"",
+                tabshow:false,
+                poptitle:"",
+                info: {},
+                info_login: false,
+                page: {
+                    show: '',
+                    loading: 0,
+                    navShow: false
+                },
+
+                isOrderPay: {
+                    state: false,
+                    data: ''
+                },
+                new_state: false,     //新消息
+                pl_list:[],
+
+                subject: [],    //专题
+                collection: [],     //视频
+                product: {
+                    channel_specification:{}
+                },    //产品
+
+                dp_list:[
+                    {
+                        name: "好久不见",
+                        note: "非常感谢郑律师这么专业的回答，很耐心的解答了我所有疑虑！",
+                        time: "2018/11/17 10:10",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "唯有努力",
+                        note: "非常感谢，这个律师很专业，挺好的一次体验 。",
+                        time: "2018/11/17 11:41",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "在巴黎塔顶看东京樱花",
+                        note: "解答很专业也很仔细，态度服务也很好，会继续关注，谢谢。",
+                        time: "2018/11/17 12:15",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "RainSounds",
+                        note: "服务很好，我想咨询的问题都得到了满意的解答。",
+                        time: "2018/11/17 16:17",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "星光坠落",
+                        note: "很及时的响应，给我的意见和建议很专业。下次有问题再仔细。",
+                        time: "2018/11/17 21:17",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "未央",
+                        note: "真的是帮了很大的忙，咨询完心里踏实了，也懂了法律上的知识，有法律上的问题还是会再咨询郭律师的，非常感谢，帮我们这些无助的人解决了法律难题。",
+                        time: "2018/11/17 22:58",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "水洗晴空",
+                        note: "律师回复非常专业吗，而且给了比较好的建议，非常感谢。",
+                        time: "2018/11/18 10:17",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "稳做枕边人",
+                        note: "法驴真的帮助很大，律师的建议起到了关键的作用。",
+                        time: "2018/11/18 12:30",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "一缕阳光",
+                        note: "帮朋友咨询信用卡逾期还款，第一次遇到这种情况。律师解释很专业。",
+                        time: "2018/11/18 14:41",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "夜未央",
+                        note: "谢谢，问了一下我就放心多了，就怕又被骗了。",
+                        time: "2018/11/18 14:15",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "青衫负雪",
+                        note: "律师讲的很好，第一次使用法驴，真的很棒！帮助了我朋友解决了问题。",
+                        time: "2018/11/18 17:17",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "风中流浪",
+                        note: "很仔细，我很清楚要了解的问题，并且给了我很好的建议。感谢发现这个平台，希望以后的官司之路一帆风顺。",
+                        time: "2018/11/18 20:30",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "夏日落",
+                        note: "感谢这位律师的解答，向所有法律工作者致敬！",
+                        time: "2018/11/19 21:37",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "别怕失去",
+                        note: "林律师很专业耐心，解答问题很周到细致，非常感谢，十分好评",
+                        time: "2018/11/19 9:36",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "听风看月",
+                        note: "律师很细心，回答的很专业，给出了具体的解决方案。",
+                        time: "2018/11/19 9:41",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "蓝天白云",
+                        note: "很快律师就联系我了，并且帮我很好的解答了问题，很好。",
+                        time: "2018/11/19 13:15",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "如若梦似彩虹",
+                        note: " 律师解答的非常精确，条理清楚，解决了我的问题。",
+                        time: "2018/11/19 13:17",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "衍夏成歌",
+                        note: "很好，心里终于有底了，谢谢这么晚了依旧耐心解答。",
+                        time: "2018/11/20 09:30",
+                        professional_experience: "4"
+                    },
+                    {
+                        name: "壹場煙雨",
+                        note: "谢谢律师的解答，我去了解一下具体情况，到时再联系王律师",
+                        time: "2018/11/20 09:59",
+                        professional_experience: "5"
+                    },
+                    {
+                        name: "指閒緑",
+                        note: "王律师说的很易懂，对于一个遇到困难不知如何用法律武器解决问题的人来说，真的是极大的帮助，感恩",
+                        time: "2018/11/20 11:56",
+                        professional_experience: "4"
+                    },
+                ]
+
+
+            },
+            created: function() {
+                var _this = this;
+                
+                APP.setOrderChannel("20");
+                APP.setFromChannel("43");
+                _this.getpeople();
+                _this.getNewState();
+                _this.getVerificationOrder();
+                _this.getHome();
+                _this.getPl();
+                // _this.tes();
+                APP.getInfo(this, function(res) {
+                        // alert('aaaaaaaaaaaaaaaaaaaaaaa')
+                        BestpayHtml5.User.getProductNo({},
+                        function (obj) {
+                                var  _json={
+                                auth_code:res.code,
+                                grantType:res.grantType,
+                                yzf_data:JSON.stringify(res),
+                                phone:obj.productNo
+                            }
+                            
+                            APP.send("/V2/YZFApi/getUserAccessToken.json",_json, function(ob) {
+                                alert(JSON.stringify(ob))
+                            });
+                            // alert("success" + JSON.stringify(obj))
+
+                        }, function (obj) {
+
+                            alert("fail" + JSON.stringify(obj))
+
+                        }, function (obj) {
+
+                            alert("cancal"+ JSON.stringify(obj))
+
+                        })
+
+
+                });
+                // APP.init();
+                APP.getJssdk();
+                
+                APP.sendHm({
+                    action: "visits",
+                    chinese_url: "翼支付"
+                })
+
+
+            },
+            mounted: function() {
+                //this.initBan();
+                     document.getElementById("popde_over").addEventListener("touchstart",function(e){
+                    e.stopPropagation();
+                    e.preventDefault();
+                },false);
+                $.smartScroll($("#JS_more"), '.weui-popup__modal');
+            },
+            methods: {
+                tes:function(){
+                    var _json={
+                        // "clientId": "86000000102",
+                        // "grantType": "AUTH_CODE",
+                        // "merchantCode": "3178032958457022",
+                        // "version": "1.0",
+                        // "traceLogId": "20190301095514",
+                        // "timestamp": "2019-03-01 09:55:14",
+                        // "authCode": "223123",
+                    }
+                    $.ajax({
+                        type: 'POST',
+                        url: 'https://mapi.bestpay.com.cn/mapi/authorized/token',
+                        async:false,
+                        dataType:'json',
+                        contentType: 'application/json; charset=UTF-8',
+                        data:JSON.stringify(_json),
+                        // xhrFields: {
+                        //     withCredentials: true
+                        // },
+                        success: function(res) { alert('1') },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) { $.hideLoading();console.log(XMLHttpRequest, errorThrown, textStatus) },
+                 })
+                },
+                // 获取四五星评论
+                getPl:function(){
+                    var _this = this
+                    APP.send('/V2/YZFApi/evaluationList.json', function(res) {
+                        if (res.errno == '0') {
+                            _this.pl_list = res.data;   
+                            console.log(_this.pl_list.length)
+                            if(_this.pl_list.length<20){
+                                for(var i=0;i<=20;i++){
+                                    if(_this.pl_list.length<20){
+                                        _this.pl_list.push(_this.dp_list[i])
+                                        console.log(_this.pl_list)
+                                    }
+                                }
+                            }
+                        } 
+                    });
+                },
+                nextde: function(type, type_chinese, url) {
+                    
+                    APP.sendHm({
+                        action: "click", 
+                        object: type,
+                        chinese_object: type_chinese,
+                        chinese_url: "翼支付"
+                    }, function() {
+                        // $.closePopup()
+                        window.location.href = url;
+                    });
+                    
+                },
+                getVerificationOrder: function() {
+                    //获取用户存在【待支付】状态的电话咨询订单
+                    var _this = this;
+                    var _id = APP.getParam("id");
+                    APP.send('/PC/WxUser/verificationOrder.json', function(res) {
+                        if (res.errno == '0') {
+                            _this.isOrderPay.data = res.data;   
+                        } else {
+                            _this.isOrderPay.state = true;
+                        }
+                    });
+                    
+                },
+                checkTime: function(beginTime, endTime) {
+                    var strb = beginTime.split(":");
+                    if (strb.length != 2) {
+                        return false;
+                    }
+
+                    var stre = endTime.split(":");
+                    if (stre.length != 2) {
+                        return false;
+                    }
+
+                    var b = new Date ();
+                    var e = new Date ();
+                    var n = new Date ();
+
+                    b.setHours (strb[0]);
+                    b.setMinutes (strb[1]);
+                    e.setHours (stre[0]);
+                    e.setMinutes (stre[1]);
+
+                    if (n.getTime () - b.getTime () >= 0 && n.getTime () - e.getTime () < 0) {
+                        return true;
+                    } else {
+                        console.log("当前时间是：" + n.getHours () + ":" + n.getMinutes () + "，不在该时间范围内！");
+                        return false;
+                    }
+                },
+                checkLogin: function() {
+                    var _this = this;
+                    if (this.info_login) {
+                        //window.location.href = "/Member/jMatching.html?oid=";
+
+                        if (this.isOrderPay.state) {
+                            //判断工作时间
+                            if (this.checkTime("9:00", "17:30")) {
+                                this.add();
+                            } else {
+                                window.location.href = '/Member/jAppointTime.html?id='+this.product.id+"&fromtype=ajk";
+                                //this.add();
+                            }
+                        } else {
+                            //有未付款订单
+                            window.location.href = '/Member/orderDetails.html?oid='+this.isOrderPay.data.order_id;
+                        }
+                        
+                    } else {
+                        // window.location.href = '/Member/login.html?from=' + encodeURIComponent(window.location.pathname+window.location.search);
+                        APP.getInfo(this, function(res) {
+                            if (_this.isOrderPay.state) {
+                            //判断工作时间
+                                if (_this.checkTime("9:00", "17:30")) {
+                                    console.log("跳")
+                                    _this.add();
+                                } else {
+                                    window.location.href = '/Member/jAppointTime.html?id='+_this.product.id+"&fromtype=ajk";
+                                    //this.add();
+                                }
+                            } else {
+                                //有未付款订单
+                                window.location.href = '/Member/orderDetails.html?oid='+_this.isOrderPay.data.order_id;
+                            }
+                        });
+                    }
+
+
+                    APP.sendHm({
+                        action: "click",
+                        object: "Begin-consulting",
+                        chinese_object: "开始咨询",
+                        chinese_url: "开始咨询"
+                    })
+
+
+                },
+                add: function() {
+                    var _this = this;
+                    if(!_this.info.username)return;
+                    var _json = {
+                        product_data: [{id: _this.product.id, count: 1}],
+                        note: "",
+                        invoice_state: 0,
+                        invoice: {
+                            header_content_type: '',
+                            header_content: '',
+                            identification_number: '',
+                            name: '',
+                            telephone: '',
+                            address: '',
+                        },
+                        company_name: '',
+                        customer_name: _this.info.name,
+                        phone: _this.info.username,
+                        channel: 14, //渠道 0 邮政 1 东家会 2 环球黑卡 3腾讯
+                        source: 19,
+                        order_type: 1,
+                        discount_code: '', //优惠码
+                        customer_selected_supplier_id: '', //供应商id
+                        customer_source: localStorage.getItem('customer_source'),
+                        customer_source_parameter: localStorage.getItem('customer_source_parameter'),
+                        pre_registration_page: document.referrer
+                    }
+
+                    $.showLoading("数据提交中");
+                    APP.send("/PC/NEWOrder/create.json", _json, function(res) {
+                        //console.log(res)
+                        $.hideLoading();
+                        if (res.errno == '0') {
+                            //统计
+                            //return;
+                            window.location.href = "/Member/jMatching.html?oid=" + res.data+"&fromtype=ajk";
+                        } else {
+                            $.toast(res.msg, "text")
+                        }
+                    });
+                
+                },
+                getpeople: function(){
+
+                    var myDate = new Date();
+                    var nowHours = myDate.getHours()-8
+
+                    if(nowHours>0 && nowHours<=9){
+                        this.peoplesum =(82+(2*nowHours+80))*nowHours/2
+                        console.log("zc",this.peoplesum)
+                    }else{
+                        this.peoplesum =  810
+                        console.log("no",this.peoplesum)
+                    }
+                    
+
+                },
+                tShow: function(){
+                    if(this.tabshow==false){
+                        this.tabshow=true
+                    }else{
+                        this.tabshow=false
+                    }
+                },
+                openpop: function(tl,id_){
+                    var _this =this
+                    this.poptitle=tl
+                    var id=id_
+                    function  getDetails(id) {
+                        var that = _this;
+                        var _id = id;
+                        APP.send('/PC/Product/info.json?id='+_id+"&channel=14", function(res) {
+                            if (res.errno == '0') {
+                                _this.product = res.data;
+                                console.log(_this.product)
+                            }
+                            //微信分享
+                            //console.log(_data.introduce)
+                            // var _title = res.data.title;
+                            // var _desc = res.data.share_title;
+                            // var _share_link = window.location.href;
+                            // var _imgUrl = res.data.share_icon;
+                            // //console.log(_share_link)
+                            // APP.setShare({
+                            //     title: _title,
+                            //     desc: _desc,
+                            //     link: _share_link,
+                            //     imgUrl: src_url+_imgUrl,
+                            //     success: function() {},
+                            //     cancel: function() {}
+                            // })
+                            $("#popde").popup();
+
+                        });
+                    }
+                    getDetails(id);
+                    
+
+                },
+                openMoreNav: function() {
+                    $('#JS_more').popup();
+                    APP.sendHm({
+                        action: "click",
+                        object: "Ask-all",
+                        chinese_object: "问律师",
+                        chinese_url: "首页"
+                    })
+
+                },
+                closeMoreNav: function () {
+                    $.closePopup();
+                    APP.sendHm({
+                        action: "click",
+                        object: "Ask-cancel",
+                        chinese_object: "问律师-取消",
+                        chinese_url: "首页"
+                    })
+
+                },
+                nextPage: function(type, type_text, param, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "法驴会员首页2.0",
+                        parameter: param
+                    }, function() {
+                        window.location.href = url;
+                    })
+
+                },
+                nextPageTime: function(type, type_text, param, url) {
+                    APP.sendHm({
+                        action: "click",
+                        object: type,
+                        chinese_object: type_text,
+                        chinese_url: "首页",
+                        parameter: param
+                    }, function() {
+                        window.location.href = url;
+                    })
+                },
+                getNewState: function() {
+                    //获取消息
+                    var _this = this;
+                    var _json = {
+                        page: 1, //页
+                    }
+                    APP.send("/PC/WxUser/message.json", _json, function(res) {
+                        //console.log(res)
+                        if (res.errno == '0') {
+                            if (parseFloat(res.data.unread) > 0) {
+                                _this.new_state = true;
+                            }
+                        }
+                    });
+
+                },
+                getHome: function() {
+                    //获取首页展示产品
+                    var _this = this;
+                    APP.send("/PC/WxUser/home.json", function(res) {
+                        if (res.errno == '0') {
+                            var _data = res.data;
+                            _this.subject = _data.subject;
+                            _this.collection = _data.collection;
+                            _this.product = _data.product;
+                        }
+
+                        _this.page.show = 'home';
+                        setTimeout(function(){
+                            _this.initBan();
+                        }, 100)
+                        
+                    })
+                },
+                initBan: function() {
+                    var s = new Swiper('.nvip-swiper-container', {
+                        autoplay : 3000,
+                        pagination : '.swiper-pagination',
+                        autoplayDisableOnInteraction : false,
+                    }); 
+                }
+            }
+        });      
+
+    </script>
+</body>
+
+</html>

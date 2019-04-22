@@ -24,16 +24,16 @@
         <div v-show="page.show == 'home'" class="main-page">
 
 
-            <!--钉钉 壹钱包 华夏 安居客 统一兑换  青黑  统一购买-->
-            <div v-if="APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12'|| APP.getOrderChannel() == '13'|| APP.getOrderChannel() == '14' || APP.getOrderChannel() == '16' || APP.getOrderChannel() == '23'|| APP.getOrderChannel() == '25'" class="s6-goodsDetails-dd">
+            <!--钉钉 壹钱包 华夏 安居客 统一兑换  青黑  统一购买 翼支付-->
+            <div v-if="APP.getOrderChannel() == '11' || APP.getOrderChannel() == '12'|| APP.getOrderChannel() == '13'|| APP.getOrderChannel() == '14' || APP.getOrderChannel() == '16'|| APP.getOrderChannel() == '20' || APP.getOrderChannel() == '23'|| APP.getOrderChannel() == '25'" class="s6-goodsDetails-dd">
 
-                <div class="s-goodsDetails-info">
+                <div v-if="APP.getOrderChannel()!='13'" class="s-goodsDetails-info">
                     <div class="s-goodsDetails-box">
                         <div class="box-bd">
                             <div class="s-goodsDetails-name s6-goodsDetails-name clearfix">
                                 <img src="/Public/Home/member/img/m131.png">
                                 <div class="name-d1">
-                                    <p class="name-p1"><strong v-text="goods_info.name"></strong></p>
+                                    <p class="name-p1"><strong>{{ goods_info.channel_specification ? goods_info.channel_specification.product_name : goods_info.name }}</strong></p>
                                     <p class="name-p2" v-text="goods_info.introduce"></p>
                                 </div>
                             </div>
@@ -57,10 +57,10 @@
                                 </div>
                                 <div v-if="sessionStorage.getItem('order_from_channel') || APP.getCommonChannel()" class="s-goodsDetails-price-item clearfix">
                                     <span v-if="APP.getOrderChannel() == '11'" class="price-w1">钉钉特惠价</span>
-                                     <span v-if="APP.getOrderChannel() == '14'" class="price-w1">特惠价</span>
+                                     <span v-if="APP.getOrderChannel() == '14'|| APP.getOrderChannel() == '20'" class="price-w1">特惠价</span>
                                      <span v-if="APP.getOrderChannel() == '23'|| APP.getOrderChannel() == '25'" class="price-w1">渠道特惠价</span>
                                     <!--<span v-if="APP.getOrderChannel() == '12'||APP.getOrderChannel() == '13'" class="price-w1">优惠价</span>-->
-                                    <div v-if="APP.getOrderChannel() == '11'||APP.getOrderChannel() == '14'||APP.getOrderChannel() == '23'|| APP.getOrderChannel() == '25'" class="price-t1 price-c1 clearfix">
+                                    <div v-if="APP.getOrderChannel() == '11'||APP.getOrderChannel() == '14'|| APP.getOrderChannel() == '20'||APP.getOrderChannel() == '23'|| APP.getOrderChannel() == '25'|| APP.getOrderChannel() == '53'" class="price-t1 price-c1 clearfix">
                                         ￥{{ goods_info.channel_specification ? goods_info.channel_specification.price : '' }}{{ goods_info.channel_specification ? goods_info.channel_specification.unit : '' }}
                                     </div>
                                 </div>
@@ -69,13 +69,18 @@
                     </div>
                 </div>
 
+                <div v-if="APP.getOrderChannel()=='13'" class="nxhs-goodsDetails-info">
+                    <img class="nxhs-goodsDetails-info-img" v-if="APP.getParam('id')=='100606'" src="/Public/Home/member/img/wycarddetail.png" alt="">
+                    <img class="nxhs-goodsDetails-info-img" v-if="APP.getParam('id')=='100608'" src="/Public/Home/member/img/onecarddetail.png" alt="">
+                    <img class="nxhs-goodsDetails-info-img" v-if="APP.getParam('id')=='100573'" src="/Public/Home/member/img/yearcarddetails.png" alt="">
+                </div>
                 <div v-html="goods_info.mobile_details ? goods_info.mobile_details : goods_info.details" class="s6-goodsDetails-box">
                     
                 </div>
 
 
 
-                <div class="weui-tabbar s6-goodsDetails-tabbar">
+                <div v-if="APP.getOrderChannel()!='13'" class="weui-tabbar s6-goodsDetails-tabbar">
                     <a @click="APP.showActionKf()" href="javascript:;" class="weui-tabbar__item s6-goodsDetailsTabbar-btn1">
                         <div class="d1"><img src="/Public/Home/member/img/m132.png" alt=""></div>
                         <div class="d2">联系客服</div>
@@ -83,6 +88,10 @@
                     <a v-if="APP.getOrderChannel() == '23'" @click="checkAddDd()" old-click="checkAdd(),$.closePopup()" href="javascript:;" class="weui-tabbar__item s6-goodsDetailsTabbar-btn2"><strong>提交咨询</strong></a>
                     <a v-else @click="checkAddDd()" old-click="checkAdd(),$.closePopup()" href="javascript:;" class="weui-tabbar__item s6-goodsDetailsTabbar-btn2"><strong>{{ APP.getOrderChannel() == '12'||APP.getOrderChannel() == '13'||APP.getOrderChannel() == '16' ? '立即兑换' :  '立即购买'}}</strong></a>
                 </div>
+                <div v-if="APP.getOrderChannel()=='13'" class="weui-tabbar s6-goodsDetails-tabbar">
+                    <a  @click="checkAddDd()" old-click="checkAdd(),$.closePopup()" href="javascript:;" class="weui-tabbar__item s6-goodsDetailsTabbar-btn2"><strong>现在下单</strong></a>
+                </div>
+
 
                 <!--钉钉-->
                 <div id="JS_product" class="weui-popup__container popup-bottom">
@@ -543,7 +552,12 @@
                        $('#JS_product_yqb').popup();
                     } 
                     else {
-                        window.location.href = "/Member/orderAddChannel.html?id="+_id;
+                        if(APP.getParam('bindOrderId')){
+                             window.location.href = "/Member/orderAddChannel.html?id="+_id+"&bindOrderId="+APP.getParam('bindOrderId');
+                        }else{
+                            window.location.href = "/Member/orderAddChannel.html?id="+_id;
+                        }
+                        
                     }
                 },
                 getWxQrcode: function(name, money, callback) {
@@ -606,6 +620,9 @@
                     if(APP.getNewChannel()){
                         _json['channel'] = APP.getNewChannel()
                     }
+                    if(APP.getParam("reg_from_channel")=='25'){
+                        APP.setCustomerSourceChannel('25')
+                    }
                     APP.send('/PC/Product/info.json', _json, function(res) {
                         //console.log(res);
                         if (res.errno == '0') {
@@ -635,7 +652,7 @@
                             _this.goods_info['channel_specification_price'] = res.data.channel_specification ? res.data.channel_specification.price : '';
                             _this.goods_info['channel_specification_unit'] = res.data.channel_specification ? res.data.channel_specification.unit : '';
                             
-                            APP.sendHm({action: "visits", chinese_url: "产品详情页", parameter: res.data.name});                          
+                            APP.sendHm({action: "visits", chinese_url: "产品详情页", productionid: _this.goods.id, parameter: res.data.name});                          
                         }
                     });
                 },
@@ -741,7 +758,7 @@
                         '100481': true
                     }
                     //&& _id[this.goods_info.id]
-                    if (!APP.getOrderChannel()) {
+                    if (!APP.getOrderChannel()||APP.getOrderChannel()=='48') {
                         return true;
                     } else {
                         return false;

@@ -12,14 +12,14 @@
     <script src="/Public/Home/member/js/flexible.js"></script>
     <link rel="stylesheet" href="/Public/Home/member/css/weui.min.css">
     <link rel="stylesheet" href="/Public/Home/member/css/jquery-weui.min.css">
-    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=18">
+    <link rel="stylesheet" href="/Public/Home/member/css/main.css?v=22">
     <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
     <script src="//g.alicdn.com/dingding/open-develop/1.9.0/dingtalk.js"></script>
 
 </head>
 
 <body>
-    <div v-cloak id="app" class="main bg-dd  cb-bg">
+    <div v-cloak id="app" class="main bg-dd  cb-bg" style="position: relative;">
         <!--首页-->
         <div v-show="page.show == 'home'">
 
@@ -33,7 +33,7 @@
                     <img src="/Public/Home/member/img/cb_jxcp.png">
                 </div>
 
-                <div class="wrap-main s6-goodsList-content">
+                <div v-if="APP.getNewChannel()=='24'||APP.getNewChannel()=='49'||APP.getNewChannel()=='50'" class="wrap-main s6-goodsList-content">
                     <div @click="next('exchange_call', '兑换电话咨询', '/Member/goodsDetails.html?id=100605')" class="s6-goodsList-item clearfix">
                         <div class="item-cover">
                             <img src="/Public/Home/member/img/m124@2x.png">
@@ -58,7 +58,7 @@
                         </div>
                     </div>
 
-                    <div old-id="100566" @click="next('exchange_VIPC', '兑换个人年卡', '/Member/goodsDetails.html?id=100604')" class="s6-goodsList-item clearfix">
+                    <div v-if="APP.getNewChannel()=='24'" old-id="100566" @click="next('exchange_VIPC', '兑换个人年卡', '/Member/goodsDetails.html?id=100604')" class="s6-goodsList-item clearfix">
                         <div class="item-cover">
                             <img src="/Public/Home/member/img/m125@2x.png">
                         </div>
@@ -85,11 +85,7 @@
                 </div>
             </div>
 
-            <div class="s7-goodsList-footer">
-                <div class="s7-goodsList-footer-text new-s7-goodsList-footer-text cbuy-foot">
-                    本页面由阿方提法律咨询（上海）有限公司提供技术支持
-                </div>
-            </div>
+            
 
 
 
@@ -98,14 +94,18 @@
 
 
         </div>
-
+        <div class="s7-goodsList-footer combuyfoot">
+                <div class="s7-goodsList-footer-text new-s7-goodsList-footer-text cbuy-foot">
+                    本页面由阿方提法律咨询（上海）有限公司提供技术支持
+                </div>
+        </div>
 
     </div>
     <script src="/Public/Home/member/js/jquery-3.1.1.min.js"></script>
     <script src="/Public/Home/member/js/jquery-weui.min.js"></script>
     <script src="/Public/Home/member/js/vue.min.js"></script>
     <script src="/Public/Home/topic/js/common.js?v=018"></script>
-    <script src="/Public/Home/member/js/main.js?v=020"></script>
+    <script src="/Public/Home/member/js/main.js?v=025"></script>
     <script>
         var vm = new Vue({
             el: '#app',
@@ -122,6 +122,13 @@
             created: function() {
                 var _this = this;
                 APP.getInfo(this, function(res) {
+                    //微信内打开就授权  浏览器就不授权
+                    // if(APP.isWeiXin() && !sessionStorage.getItem('wxshouquan')){
+                    //     sessionStorage.setItem("wxshouquan", "true");
+                    //     var _url =  window.location.href;
+                    //     window.location.href = ajax_url+'/PC/Wx/authorizedForFaLv.json?type=snsapi_userinfo&url='+encodeURIComponent(_url);
+                    // }
+                     
                     _this.page.show = 'home';
                     //console.log(res.errno)
                     // console.log(_this.page.show)

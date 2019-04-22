@@ -25,7 +25,7 @@
             <div class="m-main j-timeGoPay-info clearfix">
                 <div class="j-timeGoPay-item item-line">
                     <p class="item-d1"><strong>{{ order_time }}分钟</strong></p>
-                    <p v-if="APP.getOrderChannel()=='14'" class="item-d2">通话（{{ order.channel_info.price}}元/分钟）</p>
+                    <p v-if="APP.getOrderChannel()=='14'||APP.getOrderChannel()=='13'" class="item-d2">通话（{{ order.channel_info.price}}元/分钟）</p>
                     <p v-else class="item-d2">通话（{{ product['flprice']}}元/分钟）</p>
                 </div>
                 <div class="j-timeGoPay-item">
@@ -42,7 +42,7 @@
                 </div>
             </div>
             
-            <div  v-if="APP.getOrderChannel()=='14'" class="s5-orderPay-info-d3">
+            <div  v-if="APP.getOrderChannel()=='14'||APP.getOrderChannel()=='13'" class="s5-orderPay-info-d3">
                 <div class="info-d3-title">支付方式</div>
                 <a v-if="APP.getOrderChannel() != '11'" @click="form_goPay.mode='0'" :class="{'active': form_goPay.mode=='0'}" href="javascript:;"  class="s-orderPay-item s5-orderPay-item">
                     <div class="item-label clearfix">

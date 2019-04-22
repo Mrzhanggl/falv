@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/Public/Home/topic/css/jquery-weui.min.css">
     <link rel="stylesheet" href="/Public/Home/topic/css/main.css?v=24">
     <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+    <script src="https://h5.bestpay.com.cn/common/js/bestpay-html5-3.0.js"></script>
 </head>
 
 <body class="ffffff">
@@ -104,7 +105,22 @@
             </div>
 
             <div class="weui-tabbar s-tabbar" v-else>
-                <a href="/newVip/newmIndex.html" class="weui-tabbar__item">
+                <!--安居客-->
+                <a v-if="APP.getOrderChannel()=='14'" href="/newVip/newmIndex.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
+                    <p class="weui-tabbar__label">首页</p>
+                </a>
+                <!--包小黑-->
+                <a v-if="APP.getOrderChannel()=='48'" href="/newVip/BxhIndex.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
+                    <p class="weui-tabbar__label">首页</p>
+                </a>
+                <!--翼支付-->
+                 <a v-if="APP.getOrderChannel()=='20'" href="/newVip/YzfIndex.html" class="weui-tabbar__item">
+                    <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
+                    <p class="weui-tabbar__label">首页</p>
+                </a>
+                <a v-if="APP.getOrderChannel()=='13'" href="/newVip/newHx.html" class="weui-tabbar__item">
                     <div class="weui-tabbar__icon weui-tabbar__icon1"></div>
                     <p class="weui-tabbar__label">首页</p>
                 </a>
@@ -126,37 +142,37 @@
 
                     <div class="j-navPopup-nav clearfix">
                         <div class="j-navPopup-item">
-                            <a href="/Member/jTimeDetails.html?id=100491">
+                            <a href="/Member/jTimeDetails.html?id=100136">
                                 <img class="item-d1" src="/Public/Home/topic/img/18.png">
                                 <div class="item-d2">婚姻家事</div>
                             </a>
                         </div>
                         <div class="j-navPopup-item">
-                            <a href="/Member/jTimeDetails.html?id=100493">
+                            <a href="/Member/jTimeDetails.html?id=100537">
                                 <img class="item-d1" src="/Public/Home/topic/img/19.png">
                                 <div class="item-d2">房屋产权</div>
                             </a>
                         </div>
                         <div class="j-navPopup-item">
-                            <a href="/Member/jTimeDetails.html?id=100494">
+                            <a href="/Member/jTimeDetails.html?id=100538">
                                 <img class="item-d1" src="/Public/Home/topic/img/20.png">
                                 <div class="item-d2">劳动纠纷</div>
                             </a>
                         </div>
                         <div class="j-navPopup-item">
-                            <a href="/Member/jTimeDetails.html?id=100495">
+                            <a href="/Member/jTimeDetails.html?id=100539">
                                 <img class="item-d1" src="/Public/Home/topic/img/40.png">
                                 <div class="item-d2">交通</div>
                             </a>
                         </div>
                         <div class="j-navPopup-item">
-                            <a href="/Member/jTimeDetails.html?id=100496">
+                            <a href="/Member/jTimeDetails.html?id=100540">
                                 <img class="item-d1" src="/Public/Home/topic/img/21.png">
                                 <div class="item-d2">消费者权益</div>
                             </a>
                         </div>
                         <div class="j-navPopup-item">
-                            <a href="/Member/jTimeDetails.html?id=100497">
+                            <a href="/Member/jTimeDetails.html?id=100541">
                                 <img class="item-d1" src="/Public/Home/topic/img/22.png">
                                 <div class="item-d2">其他</div>
                             </a>
@@ -176,7 +192,10 @@
     <script src="/Public/Home/topic/js/jquery-weui.min.js"></script>
     <script src="/Public/Home/topic/js/vue.min.js"></script>
     <script src="/Public/Home/topic/js/common.js?v=088"></script>
-    <script src="/Public/Home/topic/js/main.js?v=086"></script>
+    <script src="/Public/Home/topic/js/main.js?v=016"></script>
+     <script>            
+        BestpayHtml5.config();
+    </script>
     <script>
         var vm = new Vue({
             el: '#app',

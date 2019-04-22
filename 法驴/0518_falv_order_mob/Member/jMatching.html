@@ -52,7 +52,7 @@
 
             <div class="j-matchingStart-bd">
                 <div class="j-matchingStart-head">
-                    <strong>预计来电时间{{ order_lawyer.receipt_time }}</strong>
+                    <strong>预计来电时间{{ order_lawyer.receipt_time?order_lawyer.receipt_time:'' }}</strong>
                 </div>
                 <div class="j-matchingStart-content">
                     <div class="j-matchingStart-info">
@@ -110,6 +110,8 @@
                 <a @click="addOrder('0');" href="javascript:;" class="m-btn m-btn_1">推荐其他律师</a>
                 <a v-if="APP.getOrderChannel()=='14'" @click="nextPage('another_time', '稍后再咨询', '律师正忙', '/newVip/newmIndex.html')" href="javascript:;"
                     class="m-btn m-btn_2" style="font-weight: normal">稍后再咨询</a>
+                <a v-else-if="APP.getOrderChannel()=='13'" @click="nextPage('another_time', '稍后再咨询', '律师正忙', '/newVip/newHx.html')" href="javascript:;"
+                class="m-btn m-btn_2" style="font-weight: normal">稍后再咨询</a>
                 <a v-else @click="nextPage('another_time', '稍后再咨询', '律师正忙', '/Member/mIndex.html')" href="javascript:;" class="m-btn m-btn_2"
                     style="font-weight: normal">稍后再咨询</a>
             </div>
@@ -414,10 +416,10 @@
                                     order_id: _id
                                 }
 
-                                 var ajax_url = "https://session.falv58.com";
+                                 var ajax_url = "https://www.falv58.com";
 
                                 if (window.location.host !== "www.falv58.com") {
-                                    ajax_url = "https://mest.falv58.com";
+                                    ajax_url = "http://mest.falv58.com";
                                 }
 
 
@@ -671,7 +673,7 @@
                                             //window.location.href = "/Member/jTimeDetails.html?id="+_this.order.products[0]['id'];
                                         }
 
-                                    }else if(APP.calcCount(_data.create_time)>= 80 || _this.lvshi_man){
+                                    }else if(APP.calcCount(_data.create_time)>= 100 || _this.lvshi_man){
                                         _this.lvshi_man = false;
                                         setIntCallState = false;
                                         clearInterval(_this.order_call_intr);
@@ -847,6 +849,10 @@
                     if (APP.getOrderChannel() == '14') {
                         _json.channel = 14;
                         _json.source = 19
+                    }
+                    if (APP.getOrderChannel() == '13') {
+                        _json.channel = 13;
+                        _json.source = 18
                     }
 
                     $.showLoading("数据提交中");

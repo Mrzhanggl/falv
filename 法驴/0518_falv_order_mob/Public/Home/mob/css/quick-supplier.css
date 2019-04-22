@@ -1529,7 +1529,7 @@ color: #878787;
 .s-goPayMode-item .item-label {
     display: block;
     position: relative;
-    padding: .15rem 0;
+    padding: .39rem 0;
     cursor: pointer;
 }
 .s-goPayMode-item .item-label > div {
@@ -2129,4 +2129,21 @@ margin-bottom: .29rem;
 }
 .lyck-x{
     position: absolute;
+}
+
+.test-s-info-item .item-d2{
+    float: none;
+}
+.test-s-info-item .item-d3{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.test-s-info-item .item-d6{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.addxian{
+    border-bottom: .01rem solid #DDDDDD;
 }

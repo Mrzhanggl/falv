@@ -42,7 +42,10 @@
                             <span v-for="(list2, index2) in list.author">{{ index2==0 || index2==list.author.length-1 ? list2.author_name : list2.author_name +'、' }}</span><span v-show="list.author && list.author.length>0"> | </span><span>{{ APP.calcSum(list.view_counts) }}次播放</span>
                         </div>
                         <div class="s-live-item-price clearfix">
-                            <div class="s-live-item-class"><img :class="'bg'+list.category" :src="APP.getLiveClassIcon[list.category]"></div>
+                            <div class="s-live-item-class">
+                                <!--<img :class="'bg'+list.category" :src="APP.getLiveClassIcon[list.category]">-->
+                                {{list.category_name}}
+                                </div>
                             <span v-if="list.pstate != '2'" class="col999">已停播</span>
                             <span v-if="list.pstate == '2' && !list.order_state || list.pstate == '2' && list.order_state && list.order_state == '0'" class="colff7">￥{{ list.flprice }}</span>
                             <span v-if="list.pstate == '2' && list.order_state && list.order_state!='0'" class="colff7">已购</span></span>

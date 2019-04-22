@@ -342,6 +342,7 @@ canvas {
     padding-bottom: .3rem;
 }
 .main-page.main-page_b {
+    background: white;
     padding-bottom: .88rem;
 }
 .s-header {
@@ -2279,6 +2280,10 @@ canvas {
     background: url('../img/m135.png') center no-repeat;
     background-size: 100%;
 }
+.s-orderPay-item .item-label-icon.item-label-icon_3 {
+    background: url('../img/yzfpayLOGO.png') center no-repeat;
+    background-size: 100%;
+}
 .s-orderPay-action {
     margin-top: .58rem;
     padding: 0 .3rem;
@@ -3444,13 +3449,13 @@ canvas {
     float: left;
     width: 2.4rem;
     background: #f0f0f0;    
-    height: 4.5rem;
+    height: 7.6rem;
 }
 .s4-timePop-hourBox {
     padding-left: 2.4rem;
 }
 .s4-timePop-hourBd {
-    height: 4.5rem;
+    height: 7.6rem;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -3467,12 +3472,19 @@ canvas {
 }
 .s4-timePop-hourBd .hourBd-item {
     display: block;
-    height: .9rem;
-    line-height: .9rem;
-    font-size: .26rem;
-    color: #333;
-    padding-left: .6rem;
+    line-height: .95rem;
+    font-size: .3rem;
+    color: rgba(54,54,54,1);
+    padding-left: .39rem;
     position: relative;
+    width: 4.60rem;
+    height: 1rem;
+    border: .01rem solid rgba(224,224,224,1);
+    border-radius: 6px;
+    margin-left: .2rem;
+    font-weight: bold;
+    margin-bottom: .1rem;
+    box-sizing: border-box;
 }
 .s4-timePop-hourBd .hourBd-item .w2 {
     padding-left: .25rem;
@@ -3486,17 +3498,19 @@ canvas {
     color: #b2b2b2;
 }
 .s4-timePop-hourBd .hourBd-item.active {
-    color: #41b57d;
+    color: rgba(255,100,0,1);
+    border: .02rem solid rgba(255,100,0,1);
+    background: rgba(255,100,0,0.04);
 }
 .s4-timePop-hourBd .hourBd-item.active:after {
-    content: "";
+    /*content: "";
     width: .27rem;
     height: 100%;
     background: url('../img/m107.png') center no-repeat;
     background-size: 100%;
     position: absolute;
     top: 0;
-    right: .5rem;
+    right: .5rem;*/
 }
 .noscroll,
 .noscroll body {
@@ -4463,3 +4477,200 @@ background:linear-gradient(90deg,rgba(224,54,48,1),rgba(247,61,55,1));
     color: #D8332E;
     background: #fff;
 }
+.combuyfoot{
+    position: absolute;
+    bottom: 39px;
+    left: 50%;
+    margin-left: -110px;
+}
+.sendpr-tt{
+    width:100%;
+    height:.86rem;
+    background:rgba(240,240,240,1);
+    font-size:.26rem;
+    font-family:MicrosoftYaHei;
+    font-weight:400;
+    color:rgba(135,135,135,1);
+    line-height:.86rem;
+    text-align: center;
+    margin-bottom: .6rem;
+}
+  .nxhs-goodsDetails-info{
+        width: 100%;
+        height: 3.5rem;
+        margin-bottom: .4rem;
+        background: white;
+        padding-top: .5rem;
+        text-align: center;
+    }
+    .nxhs-goodsDetails-info-img{
+        display: inline-block;
+        width: 7.1rem;
+        height: 3.3rem;
+        margin: auto;
+    }
+    .nhx-s4-orderAddChannel-info-cover{
+            float: left;
+            width: 1.3rem;
+            height: 1.38rem;
+            overflow: hidden;
+            position: relative;
+            border-radius: .08rem;
+            margin-top: -.1rem;
+    }
+    .nxhback{
+        background: #f0f0f0;
+    }
+    .nxh-yhm{
+        margin-top: .3rem;
+        background: white;
+        padding: 0 .3rem;
+    }
+    .nobott{
+        border-bottom: none;
+    }
+    .nhx-item-w1{
+        display: inline-block;
+        margin-left: .19rem;
+        height:1.11rem;
+        font-size:.26rem;
+        font-family:MicrosoftYaHei;
+        font-weight:400;
+        color:rgba(54,54,54,1);
+        line-height:1.11rem;
+        position: relative;
+        float: left;
+    }
+    .nhx-item-w2{
+        position: absolute;
+        width:.68rem;
+        top: .4rem;
+        right: -.8rem;
+        height:.36rem;
+        background:linear-gradient(90deg,rgba(255,80,80,1) 0%,rgba(255,59,48,1) 100%);
+        border-radius:0rem .18rem .18rem .18rem;
+        font-size:.22rem;
+        font-family:SourceHanSansCN-Normal;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        line-height:.36rem;
+        text-shadow:0rem .02rem .04rem rgba(173,11,0,1);
+        text-align: center;
+    }
+    .nhx-switch{
+        /*width: 1.02rem;
+        height: .62rem;*/
+        float: right;
+        margin-top: .24rem;
+        /*border: .01rem solid #dfdfdf;
+        outline: 0;
+        border-radius: .28rem;*/
+    }
+    .nxh-xian{
+        width:100%;
+        height:.01rem;
+        background:rgba(221,221,221,1);
+    }
+    .nhx-item-w4{
+        margin-top: .22rem;
+    }
+    .nxh-s4-timePop-head{
+font-size:.36rem;
+font-family:MicrosoftYaHei-Bold;
+font-weight:bold;
+color:rgba(54,54,54,1);
+text-align: left;
+padding-left: .3rem;
+padding-right: .3rem;
+height: 1.2rem;
+line-height: 1.2rem;
+border-bottom: none;
+    }
+    .nhx-input-main{
+        padding: 0 .3rem;
+    }
+    .nhx-input-tt{
+        height:.27rem;
+        font-size:.26rem;
+        font-family:MicrosoftYaHei;
+        font-weight:400;
+        color:rgba(255,110,31,1);
+        line-height:1;
+        margin-top: .6rem;
+    }
+    .nhx-input-input{
+        border: none;
+        width: 6.76rem;
+        padding-left: .15rem;
+        letter-spacing: .59rem;
+        font-weight: bold;
+         caret-color: transparent;
+        font-size:.34rem;
+        font-family:MicrosoftYaHei;
+        margin: .45rem 0 .25rem;
+    }
+    .nhx-input-img{
+        width: .34rem;
+        height: .34rem;
+        position: absolute;
+        right: 0;
+        top: .53rem;
+    }
+    .numxian{
+        float: left;
+        width:.52rem;
+        height:.02rem;
+        margin-right: .3rem;
+        background:rgba(54,54,54,1);
+    }
+    .nhx-input-submit{
+        width:6.90rem;
+        height:.88rem;
+        background:linear-gradient(84deg,rgba(255,99,0,1),rgba(255,142,0,1));
+        border-radius:.44rem;
+        font-size:.34rem;
+        font-family:MicrosoftYaHei;
+        font-weight:bold;
+        color:rgba(255,255,255,1);
+        line-height:.88rem;
+        text-align: center;
+        margin: 1.05rem 0 .6rem;
+
+    }
+    .weui-switch-cp__box:after, .weui-switch:after{
+        /*width: .6rem;
+        height: .6rem;
+        border-radius: 50%;
+        background-color: #fff;
+        box-shadow: 0 .01rem .03rem rgba(0,0,0,.4);*/
+    }
+    .weui-switch-cp__box:before, .weui-switch:before{
+        /*width: 1.0rem;
+        height: .6rem;
+        border-radius: .28rem;*/
+    }
+    .nhx-s4-timePop-head{
+        font-size:.36rem;
+        font-family:MicrosoftYaHei-Bold;
+        font-weight:bold;
+        color:rgba(54,54,54,1);
+        text-align: left;
+        padding-left: .3rem;
+    }
+    .nhx-poptime-submit-box{
+        background: white;
+        padding: .16rem 0;
+    }
+    .nhx-poptime-submit{
+        width:6.90rem;
+        height:.88rem;
+        background:linear-gradient(84deg,rgba(255,99,0,1),rgba(255,142,0,1));
+        border-radius:.44rem;
+        font-size:.34rem;
+        font-family:MicrosoftYaHei;
+        font-weight:bold;
+        color:rgba(255,255,255,1);
+        line-height:.88rem;
+        text-align: center;
+        margin: auto;
+    }
